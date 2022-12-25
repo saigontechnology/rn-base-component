@@ -11,11 +11,7 @@ npm install rn-base-component
 ## Usage
 
 ```js
-import { multiply } from 'rn-base-component';
 
-// ...
-
-const result = await multiply(3, 7);
 ```
 
 ## Contributing
