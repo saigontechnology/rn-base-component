@@ -71,4 +71,3 @@ lib/
 # Jest
 #
 .jest/
-__snapshots__/

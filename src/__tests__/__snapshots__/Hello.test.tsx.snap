@@ -1,0 +1,144 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly with defaults 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "alignSelf": "center",
+    }
+  }
+>
+  <Text
+    style={
+      {
+        "color": "#999",
+        "fontWeight": "bold",
+      }
+    }
+  >
+    Hello 
+    World!
+  </Text>
+  <View
+    style={
+      {
+        "alignItems": "stretch",
+        "alignSelf": "center",
+        "borderWidth": 5,
+        "flexDirection": "row",
+        "minHeight": 70,
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "flex": 1,
+          "paddingVertical": 0,
+        }
+      }
+    >
+      <View
+        accessibilityLabel="decrement"
+        accessibilityRole="button"
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "opacity": 1,
+          }
+        }
+      >
+        <View
+          style={
+            [
+              {},
+            ]
+          }
+        >
+          <Text
+            style={
+              [
+                {
+                  "color": "#007AFF",
+                  "fontSize": 18,
+                  "margin": 8,
+                  "textAlign": "center",
+                },
+                {
+                  "color": "red",
+                },
+              ]
+            }
+          >
+            -
+          </Text>
+        </View>
+      </View>
+    </View>
+    <View
+      style={
+        {
+          "flex": 1,
+          "paddingVertical": 0,
+        }
+      }
+    >
+      <View
+        accessibilityLabel="increment"
+        accessibilityRole="button"
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "opacity": 1,
+          }
+        }
+      >
+        <View
+          style={
+            [
+              {},
+            ]
+          }
+        >
+          <Text
+            style={
+              [
+                {
+                  "color": "#007AFF",
+                  "fontSize": 18,
+                  "margin": 8,
+                  "textAlign": "center",
+                },
+                {
+                  "color": "blue",
+                },
+              ]
+            }
+          >
+            +
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;
