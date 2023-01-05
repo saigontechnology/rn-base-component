@@ -31,6 +31,7 @@ project.xcworkspace
 
 # Android/IJ
 #
+build/
 .classpath
 .cxx
 .gradle
@@ -72,3 +73,7 @@ lib/
 #
 .jest/
 coverage/
+
+# Ruby / CocoaPods
+/ios/Pods/
+/vendor/bundle/
