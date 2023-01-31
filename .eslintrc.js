@@ -6,11 +6,12 @@ module.exports = {
     sourceType: 'module',
     project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'import', 'unused-imports'],
   overrides: [
     {
       files: ['*.js', '*.ts', '*.tsx'],
       rules: {
+        semi: 'off',
         '@typescript-eslint/no-shadow': ['error'],
         'no-shadow': 'off',
         'no-undef': 'off',
