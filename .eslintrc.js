@@ -4,12 +4,12 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     sourceType: 'module',
-    tsconfigRootDir: './tsconfig.json',
+    project: './tsconfig.json',
   },
   plugins: ['@typescript-eslint'],
   overrides: [
     {
-      files: ['*.ts', '*.tsx'],
+      files: ['*.js', '*.ts', '*.tsx'],
       rules: {
         '@typescript-eslint/no-shadow': ['error'],
         'no-shadow': 'off',
@@ -18,7 +18,7 @@ module.exports = {
         'unused-imports/no-unused-imports': 'error',
         'import/first': 'error',
         'import/no-duplicates': 'error',
-        'arrow-body-style': ['error', 'always'],
+        'arrow-body-style': ['error', 'as-needed'],
       },
     },
   ],

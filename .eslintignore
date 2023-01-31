@@ -2,3 +2,5 @@
 coverage/**/*.js
 storybook/storyLoader.js
 storybook-static
+.eslintrc.js
+babel.config.js
