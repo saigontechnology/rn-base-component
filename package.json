@@ -3,7 +3,6 @@
   "version": "0.0.2",
   "description": "test",
   "main": "lib/commonjs/index",
-  "module": "lib/module/index",
   "types": "lib/typescript/index.d.ts",
   "react-native": "src/index",
   "source": "src/index",
@@ -29,8 +28,10 @@
   "scripts": {
     "test": "jest",
     "typecheck": "tsc --noEmit",
+    "tsc": "tsc -b",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
     "example": "yarn --cwd example",
+    "prerelease": "yarn tsc",
     "release": "yarn publish"
   },
   "keywords": [
