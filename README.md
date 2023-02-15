@@ -8,11 +8,9 @@ React Native Base Component
 npm install rn-base-component
 ```
 
-## Usage
+## Documents
 
-```js
-
-```
+- [Jest Configuration](/docs/jest-config.md)
 
 ## Contributing
 
