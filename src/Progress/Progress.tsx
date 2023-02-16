@@ -31,52 +31,55 @@ interface IProgressProps {
 
 const {width: screenWidth} = Dimensions.get('screen')
 
-const Progress = (
-  {
-    value = 0,
-    size = 16,
-    borderRadius = 0,
-    filledTrackColor = '#49BE25',
-    backgroundColor = '#E5E5E5',
-  }: IProgressProps,
-  ref?: any,
-) => {
-  const [width, setWidth] = useState(0)
-  const translateX = useRef(new Animated.Value(-screenWidth)).current
-  const toTranslateX = useRef(new Animated.Value(-screenWidth)).current
+const Progress = forwardRef<View, IProgressProps>(
+  (
+    {
+      value = 0,
+      size = 16,
+      borderRadius = 0,
+      filledTrackColor = '#49BE25',
+      backgroundColor = '#E5E5E5',
+    }: IProgressProps,
+    ref,
+  ) => {
+    const [width, setWidth] = useState(0)
+    const translateX = useRef(new Animated.Value(-screenWidth)).current
+    const toTranslateX = useRef(new Animated.Value(-screenWidth)).current
+    const maxValue = 100
 
-  useEffect(() => {
-    Animated.timing(translateX, {
-      toValue: toTranslateX,
-      duration: 500,
-      useNativeDriver: true,
-    }).start()
-  }, [])
+    useEffect(() => {
+      Animated.timing(translateX, {
+        toValue: toTranslateX,
+        duration: 500,
+        useNativeDriver: true,
+      }).start()
+    }, [])
 
-  useEffect(() => {
-    const _value = value >= 100 ? 100 : value
-    toTranslateX.setValue(-width + (width * _value) / 100)
-  }, [width, value])
+    useEffect(() => {
+      const _value = value >= maxValue ? maxValue : value
+      toTranslateX.setValue(-width + (width * _value) / maxValue)
+    }, [width, value])
 
-  return (
-    <View
-      ref={ref}
-      style={StyleSheet.flatten([styles.progress, {backgroundColor, height: size, borderRadius}])}
-      onLayout={({nativeEvent: {layout}}) => setWidth(layout.width)}>
-      <Animated.View
-        style={{
-          transform: [{translateX}],
-          backgroundColor: filledTrackColor,
-          borderRadius,
-          height: size,
-          width,
-        }}
-      />
-    </View>
-  )
-}
+    return (
+      <View
+        ref={ref}
+        style={StyleSheet.flatten([styles.progress, {backgroundColor, height: size, borderRadius}])}
+        onLayout={({nativeEvent: {layout}}) => setWidth(layout.width)}>
+        <Animated.View
+          style={{
+            transform: [{translateX}],
+            backgroundColor: filledTrackColor,
+            borderRadius,
+            height: size,
+            width,
+          }}
+        />
+      </View>
+    )
+  },
+)
 
-export default memo(forwardRef(Progress))
+export default memo(Progress)
 
 const styles = StyleSheet.create({
   progress: {
