@@ -41,11 +41,11 @@ const Progress = (props: IProgressProps, ref?: any) => {
   } = props
   const [width, setWidth] = useState(0)
   const translateX = useRef(new Animated.Value(-screenWidth)).current
-  const toTranslateXTo = useRef(new Animated.Value(-screenWidth)).current
+  const toTranslateX = useRef(new Animated.Value(-screenWidth)).current
 
   useEffect(() => {
     Animated.timing(translateX, {
-      toValue: toTranslateXTo,
+      toValue: toTranslateX,
       duration: 500,
       useNativeDriver: true,
     }).start()
@@ -53,7 +53,7 @@ const Progress = (props: IProgressProps, ref?: any) => {
 
   useEffect(() => {
     const _value = value >= 100 ? 100 : value
-    toTranslateXTo.setValue(-width + (width * _value) / 100)
+    toTranslateX.setValue(-width + (width * _value) / 100)
   }, [width, value])
 
   return (
