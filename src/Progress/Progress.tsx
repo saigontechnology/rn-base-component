@@ -6,7 +6,7 @@ interface IProgressProps {
    * Current percent of the Progress
    * default 0, max 100
    */
-  value: number
+  value?: number
   /**
    * Defines height of Progress
    * default 16
@@ -31,14 +31,16 @@ interface IProgressProps {
 
 const {width: screenWidth} = Dimensions.get('screen')
 
-const Progress = (props: IProgressProps, ref?: any) => {
-  const {
+const Progress = (
+  {
     value = 0,
     size = 16,
     borderRadius = 0,
     filledTrackColor = '#49BE25',
     backgroundColor = '#E5E5E5',
-  } = props
+  }: IProgressProps,
+  ref?: any,
+) => {
   const [width, setWidth] = useState(0)
   const translateX = useRef(new Animated.Value(-screenWidth)).current
   const toTranslateX = useRef(new Animated.Value(-screenWidth)).current
