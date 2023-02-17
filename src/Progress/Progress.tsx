@@ -44,7 +44,7 @@ const Progress = forwardRef<View, IProgressProps>(
       borderRadius = 0,
       filledTrackColor = '#49BE25',
       backgroundColor = '#E5E5E5',
-    }: IProgressProps,
+    },
     ref,
   ) => {
     const [progressWidth, setProgressWidth] = useState(0)
