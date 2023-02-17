@@ -1,25 +1,30 @@
 module.exports = {
   root: true,
-  extends: ['@react-native-community', 'plugin:@typescript-eslint/recommended-requiring-type-checking'],
+  extends: [
+    '@react-native-community',
+    'eslint:recommended',
+    'plugin:react/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+  ],
   parser: '@typescript-eslint/parser',
-  parserOptions: {
-    sourceType: 'module',
-    project: './tsconfig.json',
-  },
   plugins: ['@typescript-eslint', 'import', 'unused-imports'],
   overrides: [
     {
-      files: ['*.js', '*.ts', '*.tsx'],
+      files: ['*.ts', '*.tsx', '*.js'],
       rules: {
         semi: 'off',
-        '@typescript-eslint/no-shadow': ['error'],
+        'comma-dangle': 'off',
         'no-shadow': 'off',
         'no-undef': 'off',
         'import/no-cycle': 'warn',
-        'unused-imports/no-unused-imports': 'error',
         'import/first': 'error',
         'import/no-duplicates': 'error',
+        'unused-imports/no-unused-imports': 'error',
         'arrow-body-style': ['error', 'as-needed'],
+        '@typescript-eslint/no-shadow': ['error'],
+        '@typescript-eslint/no-empty-interface': 'warn',
       },
     },
   ],
