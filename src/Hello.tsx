@@ -4,6 +4,7 @@
 // src/Hello.tsx
 import React, {useEffect, useState} from 'react'
 import {Button, StyleSheet, Text, View} from 'react-native'
+import {useComponentTheme} from './theme'
 
 export interface IHello {
   name: string
@@ -11,6 +12,7 @@ export interface IHello {
 }
 
 const Hello = (props: IHello) => {
+  const theme = useComponentTheme('Hello')
   const [enthusiasmLevel, setEnthusiasmLevel] = useState<number>(props.enthusiasmLevel || 1)
 
   useEffect(() => {
@@ -25,7 +27,9 @@ const Hello = (props: IHello) => {
 
   return (
     <View style={styles.root}>
-      <Text style={styles.greeting}>Hello {props.name + getExclamationMarks(enthusiasmLevel)}</Text>
+      <Text style={[styles.greeting, {color: theme ? theme.text : styles.greeting.color}]}>
+        Hello {props.name + getExclamationMarks(enthusiasmLevel)}
+      </Text>
       <View style={styles.buttons}>
         <View style={styles.button}>
           <Button title="-" onPress={onDecrement} accessibilityLabel="decrement" color="red" />

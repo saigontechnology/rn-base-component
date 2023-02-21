@@ -55,6 +55,8 @@
     "@types/react": "^18.0.26",
     "@types/react-native": "^0.70.0",
     "@types/react-test-renderer": "^18.0.0",
+    "@types/styled-components": "^5.1.26",
+    "@types/styled-components-react-native": "^5.2.1",
     "commitlint": "^17.0.2",
     "del-cli": "^5.0.0",
     "eslint": "^8.4.1",
@@ -63,9 +65,7 @@
     "jest": "^29.3.1",
     "pod-install": "^0.1.0",
     "prettier": "^2.0.5",
-    "react": "18.1.0",
     "react-addons-test-utils": "^15.6.2",
-    "react-native": "0.70.5",
     "react-test-renderer": "^18.2.0",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
@@ -76,7 +76,8 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "styled-components": "^5.3.6"
   },
   "engines": {
     "node": ">= 16.0.0"
