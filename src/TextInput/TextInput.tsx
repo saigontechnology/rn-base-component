@@ -1,4 +1,4 @@
-import React, {forwardRef} from 'react'
+import React, {forwardRef, ForwardRefExoticComponent} from 'react'
 import {
   Text,
   TextInput as Input,
@@ -8,15 +8,14 @@ import {
   TextProps,
   ColorValue,
   ReturnKeyTypeOptions,
-  ImageSourcePropType,
-  ImageResizeMode,
-  ImageStyle,
   KeyboardTypeOptions,
+  LayoutChangeEvent,
 } from 'react-native'
-import {metrics} from '../helpers/metrics'
-import {Icon} from '../Icon/Icon'
-import styled from 'styled-components/native'
+import {metrics, responsiveFont} from '../helpers/metrics'
 import {colors} from '../helpers/colors'
+import TextInputFlat from './TextInputFlat'
+import {Error, CustomIcon, CustomIconProps} from './components'
+import styled from 'styled-components/native'
 
 export interface TextInputProps {
   /** Style for container */
@@ -46,32 +45,15 @@ export interface TextInputProps {
   /** Props to be passed to the React Native Text component used to display the label or React Component used instead of simple string in label prop */
   labelProps?: TextProps
 
-  /** Displays a left or right icon. (can be used along with iconPosition as well) */
-  icon?: ImageSourcePropType
-
-  /** Displays Icon size need to be used along with `icon` prop */
-  iconSize?: number
-
-  /** Displays Icon color need to be used along with `icon` prop */
-  iconColor?: string
-
-  /** Determines how to resize the image when the frame doesn't match the raw */
-  resizeMode?: ImageResizeMode
-
   /**
    * Sets the number of lines for a TextInput.
    * Use it with multiline set to true to be able to fill the lines.
    */
   numberOfLines?: number
 
-  /** Styling for Icon Component container */
-  iconContainerStyle?: StyleProp<ViewStyle>
+  leftComponent?: React.ReactNode
 
-  /** Styling for Icon Component */
-  iconStyle?: StyleProp<ImageStyle>
-
-  /** Displays Icon to the position mentioned. Needs to be used along with `icon` prop */
-  iconPosition?: 'left' | 'right'
+  rightComponent?: React.ReactNode
 
   /**
    * Can tell TextInput to automatically capitalize certain characters.
@@ -151,37 +133,31 @@ export interface TextInputProps {
   onSubmitEditing?: () => void
 
   /** Callback that is called when the text input is blurred */
-  onBlur?: (args: any) => void
+  onBlur?: () => void
 }
 
-interface CustomIconProps {
-  source: ImageSourcePropType
-  size?: number
-  color?: string
-  resizeMode?: ImageResizeMode
-  iconContainerStyle?: StyleProp<ViewStyle>
-  iconStyle?: StyleProp<ImageStyle>
-  style?: StyleProp<ViewStyle>
+export interface ITextInputFlat extends TextInputProps {
+  /** Value of the text input */
+  value: string
 }
 
-interface TextInputContainerProps {
+interface CompoundedComponent extends ForwardRefExoticComponent<TextInputProps> {
+  Flat: React.FunctionComponent<ITextInputFlat>
+  Icon: React.FunctionComponent<CustomIconProps>
+}
+
+export interface TextInputContainerProps {
   multiline?: boolean
+  isFocused?: boolean
+  onLayout?: (event: LayoutChangeEvent) => void
 }
 
-const CustomIcon: React.FC<CustomIconProps> = ({
-  source,
-  size,
-  color,
-  resizeMode,
-  iconContainerStyle,
-  iconStyle,
-}) => (
-  <IconWrapper style={iconContainerStyle}>
-    <Icon source={source} size={size} color={color} resizeMode={resizeMode} style={iconStyle} />
-  </IconWrapper>
-)
+export interface ITextInput {
+  style?: StyleProp<TextStyle>
+  underlineColorAndroid?: ColorValue
+}
 
-export const TextInput = forwardRef<Input, TextInputProps>(
+const TextInput = forwardRef<Input, TextInputProps>(
   (
     {
       containerStyle,
@@ -190,14 +166,9 @@ export const TextInput = forwardRef<Input, TextInputProps>(
       inputStyle,
       value,
       label,
-      icon,
-      iconSize,
-      iconColor,
-      iconContainerStyle,
-      iconStyle,
-      resizeMode,
       scrollEnabled,
-      iconPosition = 'left',
+      leftComponent,
+      rightComponent,
       textAlignVertical = 'top',
       maxLength,
       numberOfLines,
@@ -219,20 +190,9 @@ export const TextInput = forwardRef<Input, TextInputProps>(
       onFocus,
       onSubmitEditing,
       onBlur,
-    }: TextInputProps,
+    },
     ref,
   ) => {
-    const renderedIcon = icon && (
-      <CustomIcon
-        source={icon}
-        size={iconSize}
-        color={iconColor}
-        iconContainerStyle={iconContainerStyle}
-        iconStyle={iconStyle}
-        resizeMode={resizeMode}
-      />
-    )
-
     return (
       <Container style={containerStyle}>
         {!!label && (
@@ -242,7 +202,7 @@ export const TextInput = forwardRef<Input, TextInputProps>(
           </Title>
         )}
         <InputContainer multiline={multiline} style={inputContainerStyle}>
-          {iconPosition === 'left' && renderedIcon}
+          {!!leftComponent && leftComponent}
           <TextInputComponent
             ref={ref}
             as={Input}
@@ -268,56 +228,45 @@ export const TextInput = forwardRef<Input, TextInputProps>(
             onSubmitEditing={onSubmitEditing}
             onBlur={onBlur}
           />
-          {iconPosition === 'right' && renderedIcon}
+          {!!rightComponent && rightComponent}
         </InputContainer>
-        {!!errorText && (
-          <ErrorText as={Text} {...errorProps}>
-            {errorText}
-          </ErrorText>
-        )}
+        {!!errorText && <Error errorProps={errorProps} errorText={errorText} />}
       </Container>
     )
   },
-)
+) as CompoundedComponent
 
-const Container = styled.View`
-  align-items: flex-start;
-`
+const Container = styled.View({
+  flex: 1,
+})
 
-const InputContainer = styled.View<TextInputContainerProps>`
-  flex-direction: row;
-  align-items: center;
-  height: ${props => (props.multiline ? metrics.massive : metrics.xxxl)};
-  min-height: 40;
-  margin-top: ${metrics.tiny};
-  margin-bottom: ${metrics.tiny};
-  border-bottom-width: 1;
-  border-bottom-color: ${colors.black};
-`
+const InputContainer = styled.View<TextInputContainerProps>(props => ({
+  flexDirection: 'row',
+  alignItems: 'center',
+  height: props.multiline ? metrics.massive : metrics.huge,
+  borderWidth: 1,
+  borderRadius: 6,
+  marginVertical: metrics.tiny,
+  borderColor: colors.black,
+  minHeight: metrics.huge,
+  paddingLeft: metrics.xxs,
+}))
 
-const Title = styled.Text`
-  font-size: 16;
-  color: '#8B8B8B';
-`
+const Title = styled.Text({
+  fontSize: responsiveFont(16),
+  color: '#8B8B8B',
+})
 
-const StarText = styled.Text`
-  color: ${colors.red};
-`
+const StarText = styled.Text({
+  color: colors.red,
+})
 
-const ErrorText = styled.Text`
-  font-size: 14;
-  color: ${colors.red};
-`
+const TextInputComponent = styled.TextInput({
+  flex: 1,
+})
 
-interface ITextInput {
-  style?: StyleProp<TextStyle>
-  underlineColorAndroid?: ColorValue
-}
+TextInput.Flat = TextInputFlat
 
-const TextInputComponent = styled.TextInput<ITextInput>`
-  flex: 1;
-`
+TextInput.Icon = CustomIcon
 
-const IconWrapper = styled.View`
-  margin-horizontal: ${metrics.xxs};
-`
+export default TextInput
