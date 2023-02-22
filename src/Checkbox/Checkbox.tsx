@@ -1,4 +1,4 @@
-import React, {useEffect, useImperativeHandle, useRef, useState} from 'react'
+import React, {useEffect, useImperativeHandle, useRef, useState, memo} from 'react'
 import {
   Text,
   View,
@@ -33,8 +33,6 @@ export interface ICheckboxProps extends BaseTouchableProps {
   bounceFriction?: number
   useNativeDriver?: boolean
   disableBuiltInState?: boolean
-  ImageComponent?: any
-  TouchableComponent?: any
   bounceEffectIn?: number
   bounceEffectOut?: number
   bounceVelocityIn?: number
@@ -57,7 +55,7 @@ interface ICheckboxMethods {
   onHandlePress: () => void
 }
 
-const defaultCheckImage = require('./check.png')
+const defaultCheckImage = require('../assets/images/check.png')
 
 const Checkbox = React.forwardRef<ICheckboxMethods, ICheckboxProps>(
   (
@@ -68,7 +66,6 @@ const Checkbox = React.forwardRef<ICheckboxMethods, ICheckboxProps>(
       iconComponent,
       iconImageStyle,
       fillColor = '#ffc484',
-      ImageComponent = Image,
       unfillColor = 'transparent',
       disableBuiltInState = false,
       isChecked,
@@ -79,7 +76,6 @@ const Checkbox = React.forwardRef<ICheckboxMethods, ICheckboxProps>(
       textStyle,
       textContainerStyle,
       disableText = false,
-      TouchableComponent = Pressable,
       disable = false,
       disableOpacity = 0.5,
       bounceEffectIn = 0.9,
@@ -99,7 +95,7 @@ const Checkbox = React.forwardRef<ICheckboxMethods, ICheckboxProps>(
 
     useEffect(() => {
       setChecked(isChecked ?? false)
-    }, [])
+    }, [isChecked])
 
     const bounceInEffect = () => {
       Animated.spring(bounceValue, {
@@ -137,20 +133,32 @@ const Checkbox = React.forwardRef<ICheckboxMethods, ICheckboxProps>(
 
     const renderCheckIcon = () => {
       const checkStatus = disableBuiltInState ? isChecked! : checked
+
       return (
         <Animated.View
-          style={[
+          style={StyleSheet.flatten([
+            styles.iconContainer,
             {transform: [{scale: bounceValue}]},
-            styles.iconContainer(size, checkStatus, fillColor, unfillColor),
+            {
+              width: size,
+              height: size,
+              borderRadius: size / 4,
+              backgroundColor: checked ? fillColor : unfillColor,
+            },
             iconStyle,
             {opacity: disable ? disableOpacity : 1},
-          ]}>
-          <View style={[styles.innerIconContainer(size, fillColor), innerIconStyle]}>
+          ])}>
+          <View
+            style={StyleSheet.flatten([
+              styles.innerIconContainer,
+              {width: size, height: size, borderRadius: size / 4, borderColor: fillColor},
+              innerIconStyle,
+            ])}>
             {iconComponent ||
               (checkStatus && (
-                <ImageComponent
+                <Image
                   source={checkIconImageSource}
-                  style={[styles.iconImageStyle, iconImageStyle]}
+                  style={StyleSheet.flatten([styles.iconImageStyle, iconImageStyle])}
                 />
               ))}
           </View>
@@ -163,13 +171,19 @@ const Checkbox = React.forwardRef<ICheckboxMethods, ICheckboxProps>(
       return (
         (!disableText || checkDisableTextType) &&
         (textComponent || (
-          <View style={[styles.textContainer, textContainerStyle, {opacity: disable ? disableOpacity : 1}]}>
+          <View
+            style={StyleSheet.flatten([
+              styles.textContainer,
+              textContainerStyle,
+              {opacity: disable ? disableOpacity : 1},
+            ])}>
             <Text style={textStyle}>{text}</Text>
           </View>
         ))
       )
     }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const onHandlePress = () => {
       if (!disableBuiltInState) {
         setChecked(prev => !prev)
@@ -181,22 +195,22 @@ const Checkbox = React.forwardRef<ICheckboxMethods, ICheckboxProps>(
     useImperativeHandle(forwardedRef, () => ({onHandlePress}), [onHandlePress])
 
     return (
-      <TouchableComponent
+      <Pressable
         {...rest}
-        style={[styles.container, style]}
+        style={StyleSheet.flatten([styles.container, style])}
         onPressIn={!disable ? bounceInEffect : null}
         onPressOut={!disable ? bounceOutEffect : null}
         onPress={!disable ? onHandlePress : null}>
         {renderCheckIcon()}
         {renderCheckboxText()}
-      </TouchableComponent>
+      </Pressable>
     )
   },
 )
 
-export default Checkbox
+export default memo(Checkbox)
 
-const styles = StyleSheet.create<any>({
+const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -208,21 +222,13 @@ const styles = StyleSheet.create<any>({
   textContainer: {
     marginLeft: 16,
   },
-  iconContainer: (size: number, checked: boolean, fillColor: string, unfillColor: string) => ({
-    width: size,
-    height: size,
-    borderRadius: size / 4,
-    backgroundColor: checked ? fillColor : unfillColor,
+  iconContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-  }),
-  innerIconContainer: (size: number, fillColor: string) => ({
-    width: size,
-    height: size,
+  },
+  innerIconContainer: {
     borderWidth: 1,
-    borderColor: fillColor,
-    borderRadius: size / 4,
     alignItems: 'center',
     justifyContent: 'center',
-  }),
+  },
 })
