@@ -1,0 +1,190 @@
+import * as React from 'react'
+import {View, StyleProp, ViewStyle, StyleSheet, TextStyle, LayoutChangeEvent} from 'react-native'
+import {Bounceable} from '../Bounceable/Bounceable'
+import styled from 'styled-components/native'
+
+type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
+type CustomTextStyleProp = StyleProp<TextStyle> | Array<StyleProp<TextStyle>>
+
+export interface IRadioButtonProps {
+  /**
+   * set custom style for wrapper
+   */
+  wrapperStyle?: CustomStyleProp
+  /**
+   * ring custom style
+   */
+  style?: CustomStyleProp
+  /**
+   * set radio button color
+   */
+  ringColor?: string
+  /**
+   * Radio button inner custom style
+   */
+  innerContainerStyle?: CustomStyleProp
+  /**
+   * set color for circle
+   * default: 'blue'
+   */
+  circleColor?: string
+  /**
+   * this will disable the built-in state of activation
+   * default: undefined
+   */
+  isRemainActive?: boolean
+  /**
+   * set the initial activation of the radio button
+   */
+  initial?: boolean
+  /**
+   * change the inner circle's background color
+   * default: 'blue'
+   */
+  innerBackgroundColor?: string
+  /**
+   * onPress event
+   */
+  onPress: (isActive: boolean) => void
+  /**
+   * text label component
+   */
+  textComponent?: React.ReactNode
+  /**
+   * style for container of text label
+   */
+  textContainerStyle?: CustomStyleProp
+  /**
+   * disable radio button
+   */
+  disable?: boolean
+  /**
+   * set opacity for text
+   */
+  disableOpacity?: number
+  /**
+   * text label style
+   * default: 0.5
+   */
+  textStyle?: CustomTextStyleProp
+  /**
+   * set value for text label
+   */
+  text?: string
+}
+
+export const RadioButton = React.forwardRef<View, IRadioButtonProps>(
+  (
+    {
+      style,
+      isRemainActive = undefined,
+      innerContainerStyle,
+      ringColor = 'blue',
+      innerBackgroundColor = 'blue',
+      onPress,
+      initial,
+      textComponent,
+      textContainerStyle,
+      disable,
+      disableOpacity = 0.5,
+      textStyle,
+      text,
+      wrapperStyle,
+    },
+    ref,
+  ) => {
+    const [isActive, setIsActive] = React.useState(initial || false)
+    const widthBounceableRef = React.useRef({value: 0}).current
+    const heightBounceableRef = React.useRef({value: 0}).current
+
+    const handlePress = () => {
+      if (isRemainActive !== undefined && isRemainActive !== null) {
+        onPress && onPress(isRemainActive)
+      } else {
+        setIsActive(!isActive)
+        onPress && onPress(isActive)
+      }
+    }
+
+    const renderLabelText = () => {
+      return (
+        textComponent || (
+          <LabelTextView style={[textContainerStyle, styles.disableStyle(disable, disableOpacity)]}>
+            <LabelText style={textStyle}>{text}</LabelText>
+          </LabelTextView>
+        )
+      )
+    }
+
+    const handleLayout = (event: LayoutChangeEvent) => {
+      const {width, height} = event.nativeEvent.layout
+      widthBounceableRef.value = width
+      heightBounceableRef.value = height
+    }
+
+    return (
+      <RadioButtonWrapper ref={ref} style={wrapperStyle}>
+        <Bounceable
+          disabled={disable}
+          onLayout={handleLayout}
+          style={[
+            styles.container(ringColor),
+            style,
+            styles.disableStyle(disable, disableOpacity),
+            styles.constantBackgroundColor,
+          ]}
+          onPress={handlePress}>
+          <RadioButtonInnerContainer
+            style={[
+              styles.innerStyle(isRemainActive || isActive, innerBackgroundColor),
+              innerContainerStyle,
+              styles.maxDimensionStyle(widthBounceableRef.value, heightBounceableRef.value),
+            ]}
+          />
+        </Bounceable>
+        {renderLabelText()}
+      </RadioButtonWrapper>
+    )
+  },
+)
+
+const styles = StyleSheet.create<any>({
+  container: (ringColor: string) => ({
+    width: 45,
+    height: 45,
+    borderWidth: 5,
+    borderRadius: 25,
+    borderColor: ringColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+  innerStyle: (isActive: boolean, innerBackgroundColor: string) => ({
+    width: 25,
+    height: 25,
+    borderRadius: 25,
+    backgroundColor: isActive ? innerBackgroundColor : 'transparent',
+  }),
+  disableStyle: (disable: boolean, disableOpacity: number) => ({
+    opacity: disable ? disableOpacity : 1,
+  }),
+  maxDimensionStyle: (maxWidth: number, maxHeight: number) => ({
+    maxWidth: maxWidth,
+    maxHeight: maxHeight,
+  }),
+  constantBackgroundColor: {
+    backgroundColor: 'transparent',
+  },
+})
+
+const RadioButtonWrapper = styled.View({
+  flexDirection: 'row',
+  alignItems: 'center',
+})
+
+const RadioButtonInnerContainer = styled.View({})
+
+const LabelTextView = styled.View({
+  marginLeft: 16,
+})
+
+const LabelText = styled.Text({})
