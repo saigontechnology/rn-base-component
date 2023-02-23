@@ -3,7 +3,6 @@ import {
   ImageResizeMode,
   StyleSheet,
   TouchableOpacity,
-  View,
   Text,
   ActivityIndicatorProps,
   ViewStyle,
@@ -12,14 +11,17 @@ import {
   TextProps,
   ImageSourcePropType,
   ImageStyle,
-  ActivityIndicator,
+  TouchableOpacityProps,
 } from 'react-native'
 import {colors} from '../helpers/colors'
-import {metrics} from '../helpers/metrics'
+import {metrics, responsiveFont} from '../helpers/metrics'
 import {Icon} from '../Icon/Icon'
 import styled from 'styled-components/native'
 
-export interface IButtonProps {
+type IconPosition = 'left' | 'right' | 'top' | 'bottom'
+type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
+
+export interface IButtonProps extends TouchableOpacityProps {
   /** Add button title */
   title?: string | React.ReactElement
 
@@ -44,17 +46,11 @@ export interface IButtonProps {
   /** Styling for Icon Component container */
   iconContainerStyle?: StyleProp<ImageStyle>
 
-  /** Disables user interaction. */
-  disabled?: boolean
-
-  /** Determines what the opacity of the wrapped view should be when touch is active. Default is 0.2 */
-  activeOpacity?: number
-
   /** Radius of button */
   radius?: number
 
   /** Displays Icon to the position mentioned. Needs to be used along with `iconSource` prop */
-  iconPosition?: 'left' | 'right' | 'top' | 'bottom'
+  iconPosition?: IconPosition
 
   /** Displays Icon size need to be used along with `iconSource` prop */
   iconSize?: number
@@ -79,46 +75,30 @@ export interface IButtonProps {
 
   /** Styling for Component container. */
   containerStyle?: StyleProp<ViewStyle>
-
-  /** Called when the touch is released */
-  onPress?: () => void
-  onLongPress?: () => void
 }
 
-interface StyledView {
+interface ButtonContentProps {
   disabled: boolean
-  iconPosition: string
+  iconPosition: FlexDirection
   style: StyleProp<ViewStyle>
 }
 
 interface StyledText extends TextProps {
   uppercase: boolean
   disabled: boolean
-  style: any
+  style: StyleProp<TextStyle>
 }
 
-/**
- * Button style
- */
-const StyledButton = styled.View<StyledView>`
-  align-items: center;
-  justify-content: center;
-  padding-vertical: ${metrics.xs};
-  padding-horizontal: ${metrics.xs};
-  background-color: colors.primary;
-  flex-direction: ${props => props.iconPosition};
-  opacity: ${props => (props.disabled ? 0.5 : 1)};
-`
+type ContainerProps = {
+  radius: number
+}
 
-/**
- * Title style
- */
-const StyledTitle = styled.Text<StyledText>`
-  font-size: 16;
-  text-align: center;
-  text-transform: ${props => (props.uppercase ? 'uppercase' : 'none')};
-  opacity: ${props => (props.disabled ? 0.5 : 1)};
-`
+const iconPositionStyle = {
+  top: 'column',
+  bottom: 'column-reverse',
+  left: 'row',
+  right: 'row-reverse',
+}
 
 export const Button: React.FunctionComponent<IButtonProps> = ({
   title = '',
@@ -143,29 +123,26 @@ export const Button: React.FunctionComponent<IButtonProps> = ({
   containerStyle,
   onPress = () => {},
   onLongPress = () => {},
+  ...rest
 }) => {
-  const iconPositionStyle = {
-    top: 'column',
-    bottom: 'column-reverse',
-    left: 'row',
-    right: 'row-reverse',
-  }
-
   return (
-    <View style={[styles.buttonContainer, {borderRadius: radius}, containerStyle]}>
+    <Container radius={radius} style={containerStyle}>
       <TouchableOpacity
+        testID="test-button"
         disabled={disabled || loading}
         activeOpacity={activeOpacity}
         onPress={onPress}
-        onLongPress={onLongPress}>
-        <StyledButton
+        onLongPress={onLongPress}
+        {...rest}>
+        <ButtonContent
           style={[buttonStyle, !!disabled && disabledStyle]}
-          iconPosition={iconPositionStyle[iconPosition]}
+          iconPosition={iconPositionStyle[iconPosition] as FlexDirection}
           disabled={disabled}>
           {/* Activity Indicator on loading */}
           {!!loading && (
-            <ActivityIndicator
-              style={[styles.loading, loadingStyle]}
+            <Loading
+              testID={'test-loading'}
+              style={loadingStyle}
               color={buttonLoadingProps?.color || 'black'}
               size={buttonLoadingProps?.size || 'small'}
               {...buttonLoadingProps}
@@ -173,57 +150,63 @@ export const Button: React.FunctionComponent<IButtonProps> = ({
           )}
           {/* Button Icon, hide Icon while loading */}
           {!loading && iconSource && (
-            <Icon
+            <IconContainer
+              testID="test-icon"
               source={iconSource}
               size={iconSize}
               color={iconColor}
-              style={[styles.icon, iconContainerStyle]}
+              style={iconContainerStyle}
               resizeMode={resizeMode}
             />
           )}
           {/* Title for Button, hide while loading */}
           {!loading ? (
             typeof title === 'string' ? (
-              <StyledTitle
+              <Title
+                testID="test-title"
                 style={StyleSheet.flatten([buttonTitleStyle, !!disabled && disabledTitleStyle])}
                 disabled={disabled}
                 uppercase={uppercase}
                 as={Text}
                 {...titleProps}>
                 {title}
-              </StyledTitle>
+              </Title>
             ) : (
               title
             )
           ) : null}
-        </StyledButton>
+        </ButtonContent>
       </TouchableOpacity>
-    </View>
+    </Container>
   )
 }
 
-const styles = StyleSheet.create({
-  buttonContainer: {
-    overflow: 'hidden',
-  },
-  loading: {
-    marginVertical: 2,
-  },
-  icon: {
-    margin: metrics.xxs,
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: metrics.xs,
-    paddingHorizontal: metrics.xs,
-    backgroundColor: colors.primary,
-  },
-  disableStyle: {
-    opacity: 0.5,
-  },
-  title: {
-    fontSize: 16,
-    textAlign: 'center',
-  },
+const Container = styled.View<ContainerProps>(props => ({
+  overflow: 'hidden',
+  borderRadius: props.radius || 0,
+}))
+
+const ButtonContent = styled.View<ButtonContentProps>(props => ({
+  alignItems: 'center',
+  justifyContent: 'center',
+  paddingVertical: metrics.xs,
+  paddingHorizontal: metrics.xs,
+  backgroundColor: colors.primary,
+  flexDirection: props.iconPosition,
+  opacity: props.disabled ? 0.5 : 1,
+}))
+
+const Title = styled.Text<StyledText>(props => ({
+  fontSize: responsiveFont(16),
+  textAlign: 'center',
+  textTransform: props.uppercase ? 'uppercase' : 'none',
+  opacity: props.disabled ? 0.5 : 1,
+}))
+
+const Loading = styled.ActivityIndicator({
+  marginVertical: 2,
+})
+
+const IconContainer = styled(Icon)({
+  margin: metrics.xxs,
 })

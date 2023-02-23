@@ -20,6 +20,7 @@ export type IconProps = {
   hitSlop?: Insets
   style?: StyleProp<ImageStyle>
   resizeMode?: ImageResizeMode
+  testID?: string
   onPress?: () => void
   onLongPress?: () => void
   buttonStyle?: StyleProp<ViewStyle>
@@ -33,18 +34,21 @@ export const Icon: React.FunctionComponent<IconProps> = ({
   hitSlop = defaultHitSlop,
   style,
   resizeMode = 'contain',
+  testID,
   onPress,
   onLongPress,
   buttonStyle,
 }) => {
   return (
     <TouchableOpacity
+      testID={testID}
       disabled={(!onPress && !onLongPress) || disabled}
       onPress={onPress}
       onLongPress={onLongPress}
       style={buttonStyle}
       hitSlop={hitSlop}>
       <Image
+        testID="icon-image"
         source={source}
         style={[
           {
