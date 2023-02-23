@@ -13,6 +13,4 @@ export const Basic: ComponentStory<typeof RadioButton> = args => <RadioButton {.
 
 Basic.args = {
   text: '123',
-  disable: true,
-  initial: true,
 }
