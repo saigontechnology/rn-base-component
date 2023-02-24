@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Animated, ViewStyle, StyleProp, Pressable, PressableProps} from 'react-native'
+import {Animated, ViewStyle, StyleProp, Pressable, PressableProps, StyleSheet} from 'react-native'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -87,7 +87,7 @@ export const Bounceable = React.forwardRef<PressableProps, IBounceableProps>(
       <AnimatedPressable
         {...props}
         ref={ref}
-        style={[{transform: [{scale: bounceValue}]}, style]}
+        style={StyleSheet.flatten([{transform: [{scale: bounceValue}]}, style])}
         onPressIn={() => {
           bounceAnimation(bounceEffectIn, bounceVelocityIn, bouncinessIn)
         }}

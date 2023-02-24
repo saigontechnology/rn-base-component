@@ -109,7 +109,8 @@ export const RadioButton = React.forwardRef<View, IRadioButtonProps>(
     const renderLabelText = () => {
       return (
         textComponent || (
-          <LabelTextView style={[textContainerStyle, styles.disableStyle(disable, disableOpacity)]}>
+          <LabelTextView
+            style={StyleSheet.flatten([textContainerStyle, styles.disableStyle(disable, disableOpacity)])}>
             <LabelText style={textStyle}>{text}</LabelText>
           </LabelTextView>
         )
@@ -127,19 +128,19 @@ export const RadioButton = React.forwardRef<View, IRadioButtonProps>(
         <Bounceable
           disabled={disable}
           onLayout={handleLayout}
-          style={[
+          style={StyleSheet.flatten([
             styles.container(ringColor),
             style,
             styles.disableStyle(disable, disableOpacity),
             styles.constantBackgroundColor,
-          ]}
+          ])}
           onPress={handlePress}>
           <RadioButtonInnerContainer
-            style={[
+            style={StyleSheet.flatten([
               styles.innerStyle(isRemainActive || isActive, innerBackgroundColor),
               innerContainerStyle,
               styles.maxDimensionStyle(widthBounceableRef.value, heightBounceableRef.value),
-            ]}
+            ])}
           />
         </Bounceable>
         {renderLabelText()}
