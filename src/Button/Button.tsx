@@ -13,7 +13,7 @@ import {
   TouchableOpacityProps,
 } from 'react-native'
 import {colors} from '../helpers/colors'
-import {metrics, responsiveFont} from '../helpers/metrics'
+import {metrics, responsiveFont, responsiveHeight} from '../helpers/metrics'
 import {Icon} from '../Icon/Icon'
 import styled from 'styled-components/native'
 
@@ -122,8 +122,8 @@ export const Button: React.FunctionComponent<IButtonProps> = ({
   uppercase = false,
   activeOpacity = 0.2,
   containerStyle,
-  onPress = () => {},
-  onLongPress = () => {},
+  onPress = () => null,
+  onLongPress = () => null,
   ...rest
 }) => {
   return (
@@ -136,7 +136,7 @@ export const Button: React.FunctionComponent<IButtonProps> = ({
         onLongPress={onLongPress}
         {...rest}>
         <ButtonContent
-          style={[buttonStyle, !!disabled && disabledStyle]}
+          style={StyleSheet.flatten([buttonStyle, !!disabled && disabledStyle])}
           iconPosition={iconPositionStyle[iconPosition] as FlexDirection}
           disabled={disabled}>
           {/* Activity Indicator on loading */}
@@ -204,7 +204,7 @@ const Title = styled.Text((props: TitleProps) => ({
 }))
 
 const Loading = styled.ActivityIndicator({
-  marginVertical: 2,
+  marginVertical: responsiveHeight(2),
 })
 
 const IconContainer = styled(Icon)({

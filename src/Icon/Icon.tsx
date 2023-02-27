@@ -58,7 +58,7 @@ export const Icon: React.FunctionComponent<IconProps> = ({
           },
           StyleSheet.flatten(style),
         ]}
-        resizeMode={resizeMode || 'contain'}
+        resizeMode={resizeMode}
       />
     </TouchableOpacity>
   )
