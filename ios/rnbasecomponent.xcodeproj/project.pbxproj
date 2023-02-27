@@ -12,6 +12,8 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		1813F38029A8719A008D3404 /* ShimmerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1813F37E29A87104008D3404 /* ShimmerView.m */; };
+		1813F38329A871D8008D3404 /* ShimmerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1813F38229A871D8008D3404 /* ShimmerViewManager.m */; };
 		7699B88040F8A987B510C191 /* libPods-rnbasecomponent-rnbasecomponentTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-rnbasecomponent-rnbasecomponentTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
@@ -36,6 +38,10 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = rnbasecomponent/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = rnbasecomponent/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = rnbasecomponent/main.m; sourceTree = "<group>"; };
+		1813F37D29A870DC008D3404 /* ShimmerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShimmerView.h; sourceTree = "<group>"; };
+		1813F37E29A87104008D3404 /* ShimmerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShimmerView.m; sourceTree = "<group>"; };
+		1813F38129A871C6008D3404 /* ShimmerViewManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShimmerViewManager.h; sourceTree = "<group>"; };
+		1813F38229A871D8008D3404 /* ShimmerViewManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShimmerViewManager.m; sourceTree = "<group>"; };
 		19F6CBCC0A4E27FBF8BF4A61 /* libPods-rnbasecomponent-rnbasecomponentTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-rnbasecomponent-rnbasecomponentTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B4392A12AC88292D35C810B /* Pods-rnbasecomponent.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rnbasecomponent.debug.xcconfig"; path = "Target Support Files/Pods-rnbasecomponent/Pods-rnbasecomponent.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-rnbasecomponent.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-rnbasecomponent.release.xcconfig"; path = "Target Support Files/Pods-rnbasecomponent/Pods-rnbasecomponent.release.xcconfig"; sourceTree = "<group>"; };
@@ -86,6 +92,7 @@
 		13B07FAE1A68108700A75B9A /* rnbasecomponent */ = {
 			isa = PBXGroup;
 			children = (
+				1813F37A29A87072008D3404 /* Shimmer */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -94,6 +101,17 @@
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
 			name = rnbasecomponent;
+			sourceTree = "<group>";
+		};
+		1813F37A29A87072008D3404 /* Shimmer */ = {
+			isa = PBXGroup;
+			children = (
+				1813F37D29A870DC008D3404 /* ShimmerView.h */,
+				1813F37E29A87104008D3404 /* ShimmerView.m */,
+				1813F38129A871C6008D3404 /* ShimmerViewManager.h */,
+				1813F38229A871D8008D3404 /* ShimmerViewManager.m */,
+			);
+			path = Shimmer;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -413,6 +431,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
+				1813F38029A8719A008D3404 /* ShimmerView.m in Sources */,
+				1813F38329A871D8008D3404 /* ShimmerViewManager.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

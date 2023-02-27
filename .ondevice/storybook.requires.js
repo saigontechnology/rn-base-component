@@ -38,7 +38,7 @@ try {
 } catch {}
 
 const getStories = () => {
-  return [require("../src/Button/Button.stories.tsx")];
+  return [require("../src/Button/Button.stories.tsx"), require("../src/Shimmer/Shimmer.stories.tsx")];
 };
 
 configure(getStories, module, false);

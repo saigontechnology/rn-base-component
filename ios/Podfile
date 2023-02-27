@@ -26,6 +26,8 @@ target 'rnbasecomponent' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+  pod 'Shimmer', '~> 1'
+
   target 'rnbasecomponentTests' do
     inherit! :complete
     # Pods for testing
