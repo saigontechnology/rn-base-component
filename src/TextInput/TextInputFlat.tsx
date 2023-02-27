@@ -3,7 +3,7 @@ import {TextInput, View, Animated, StyleSheet, LayoutChangeEvent} from 'react-na
 import {metrics, responsiveFont, responsiveHeight} from '../helpers/metrics'
 import styled from 'styled-components/native'
 import {colors} from '../helpers/colors'
-import type {InputContainerProps, ITextInputFlat} from './TextInput'
+import type {FlexDirection, InputContainerProps, ITextInputFlat} from './TextInput'
 import {Error} from './components'
 
 interface TextInputContainerProps extends InputContainerProps {
@@ -191,8 +191,8 @@ const ContentContainer = styled.View({
   flex: 1,
 })
 
-const TextInputContainer = styled.View<TextInputContainerProps>(props => ({
-  flexDirection: 'row',
+const TextInputContainer = styled.View((props: TextInputContainerProps) => ({
+  flexDirection: 'row' as FlexDirection,
   alignItems: 'center',
   borderWidth: metrics.borderWidth,
   borderColor: props.isFocused ? colors.primary : colors.gray,

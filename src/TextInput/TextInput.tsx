@@ -15,7 +15,7 @@ import TextInputFlat from './TextInputFlat'
 import {Error, CustomIcon, CustomIconProps} from './components'
 import styled from 'styled-components/native'
 
-type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
+export type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
 
 export interface ITextInputProps extends TextInputProps {
   /** Style for container */
