@@ -24,8 +24,9 @@ export const CustomIcon: React.FC<CustomIconProps> = ({
   iconStyle,
   onPress = () => null,
 }) => (
-  <IconWrapper style={iconContainerStyle}>
+  <IconWrapper testID="icon-container" style={iconContainerStyle}>
     <Icon
+      testID="icon"
       source={source}
       size={size}
       color={color}
@@ -36,6 +37,6 @@ export const CustomIcon: React.FC<CustomIconProps> = ({
   </IconWrapper>
 )
 
-const IconWrapper = styled.View({
-  marginHorizontal: metrics.xxs,
-})
+const IconWrapper = styled.View`
+  margin-horizontal: ${metrics.xxs};
+`

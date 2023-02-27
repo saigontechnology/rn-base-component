@@ -36,6 +36,7 @@ export const TextInputFlat = forwardRef<TextInput, ITextInputFlat>(
       onFocus,
       onSubmitEditing,
       onBlur,
+      ...rest
     },
     ref,
   ) => {
@@ -110,7 +111,6 @@ export const TextInputFlat = forwardRef<TextInput, ITextInputFlat>(
     return (
       <View style={containerStyle}>
         <TextInputContainer
-          as={View}
           onLayout={getHeight}
           style={inputContainerStyle}
           multiline={multiline}
@@ -134,6 +134,7 @@ export const TextInputFlat = forwardRef<TextInput, ITextInputFlat>(
               </Animated.Text>
             )}
             <TextInputComponent
+              testID={'test-textInputFlat'}
               ref={ref}
               as={TextInput}
               value={value}
@@ -162,6 +163,7 @@ export const TextInputFlat = forwardRef<TextInput, ITextInputFlat>(
                 onBlur?.()
                 handleBlur()
               }}
+              {...rest}
             />
           </ContentContainer>
           {!!rightComponent && rightComponent}
