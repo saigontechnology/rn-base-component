@@ -23,7 +23,7 @@ export const TextInputComponent: ComponentStory<typeof TextInput> = () => {
         autoCorrect
         leftComponent={<TextInput.Icon source={require('../assets/folder-search.png')} />}
         containerStyle={{marginHorizontal: 20}}
-        errorText={'sadasdsadsa'}
+        errorText={'Error message'}
       />
       <View style={{marginBottom: 10}} />
       <TextInput

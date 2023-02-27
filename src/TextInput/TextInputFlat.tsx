@@ -3,8 +3,12 @@ import {TextInput, View, Animated, StyleSheet, LayoutChangeEvent} from 'react-na
 import {metrics, responsiveFont, responsiveHeight} from '../helpers/metrics'
 import styled from 'styled-components/native'
 import {colors} from '../helpers/colors'
-import type {TextInputContainerProps, ITextInputFlat} from './TextInput'
+import type {InputContainerProps, ITextInputFlat} from './TextInput'
 import {Error} from './components'
+
+interface TextInputContainerProps extends InputContainerProps {
+  onLayout?: (event: LayoutChangeEvent) => void
+}
 
 export const TextInputFlat = forwardRef<TextInput, ITextInputFlat>(
   (
@@ -119,7 +123,7 @@ export const TextInputFlat = forwardRef<TextInput, ITextInputFlat>(
           <ContentContainer>
             {!!label && (
               <Animated.Text
-                style={[
+                style={StyleSheet.flatten([
                   styles.labelContainer,
                   {
                     left: leftComponent ? moveToLeft : metrics.xxs,
@@ -128,7 +132,7 @@ export const TextInputFlat = forwardRef<TextInput, ITextInputFlat>(
                     color: isFocused ? colors.primary : colors.placeHolderText,
                   },
                   labelStyle,
-                ]}
+                ])}
                 onPress={handleFocus}>
                 {label}
               </Animated.Text>
@@ -190,11 +194,11 @@ const ContentContainer = styled.View({
 const TextInputContainer = styled.View<TextInputContainerProps>(props => ({
   flexDirection: 'row',
   alignItems: 'center',
-  borderWidth: 1,
+  borderWidth: metrics.borderWidth,
   borderColor: props.isFocused ? colors.primary : colors.gray,
   height: props.multiline ? metrics.giant : metrics.huge,
   minHeight: metrics.huge,
-  borderRadius: 6,
+  borderRadius: metrics.borderRadius,
 }))
 
 const TextInputComponent = styled.TextInput({

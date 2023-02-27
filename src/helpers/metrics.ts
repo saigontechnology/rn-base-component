@@ -20,6 +20,8 @@ export type IMetrics = {
   readonly massive: number
   readonly giant: number
 
+  // border
+  readonly borderWidth: number
   readonly borderRadius: number
   readonly borderRadiusLarge: number
   readonly borderRadiusHuge: number
@@ -96,6 +98,8 @@ const metrics: IMetrics = {
   massive: responsiveHeight(64),
   giant: responsiveHeight(80),
 
+  // border
+  borderWidth: responsiveHeight(1),
   borderRadius: responsiveHeight(5),
   borderRadiusLarge: responsiveHeight(10),
   borderRadiusHuge: responsiveHeight(20),

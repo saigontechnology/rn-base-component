@@ -5,6 +5,7 @@ export interface IColors {
   readonly black: string
   readonly white: string
   readonly gray: string
+  readonly grey: string
   readonly red: string
   readonly textDisabled: string
   readonly placeHolderText: string
@@ -16,6 +17,7 @@ const baseColor: IColors = {
   black: '#1F1F1F',
   white: '#ffffff',
   gray: '#454545',
+  grey: '#8B8B8B',
   red: '#ff0009',
   textDisabled: '#666666',
   placeHolderText: '#929298',

@@ -7,7 +7,6 @@ import {
   TextStyle,
   TextProps,
   ColorValue,
-  LayoutChangeEvent,
   TextInputProps,
 } from 'react-native'
 import {metrics, responsiveFont} from '../helpers/metrics'
@@ -15,6 +14,8 @@ import {colors} from '../helpers/colors'
 import TextInputFlat from './TextInputFlat'
 import {Error, CustomIcon, CustomIconProps} from './components'
 import styled from 'styled-components/native'
+
+type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
 
 export interface ITextInputProps extends TextInputProps {
   /** Style for container */
@@ -68,10 +69,9 @@ interface CompoundedComponent extends ForwardRefExoticComponent<ITextInputProps>
   Icon: React.FunctionComponent<CustomIconProps>
 }
 
-export interface TextInputContainerProps {
+export interface InputContainerProps {
   multiline?: boolean
   isFocused?: boolean
-  onLayout?: (event: LayoutChangeEvent) => void
 }
 
 export interface ITextInput {
@@ -128,11 +128,9 @@ const TextInput = forwardRef<Input, ITextInputProps>(
           {!!leftComponent && leftComponent}
           <TextInputComponent
             ref={ref}
-            as={Input}
             value={value}
             style={inputStyle}
             editable={editable}
-            underlineColorAndroid="transparent"
             multiline={multiline}
             numberOfLines={numberOfLines}
             placeholder={placeholder}
@@ -164,12 +162,12 @@ const Container = styled.View({
   flex: 1,
 })
 
-const InputContainer = styled.View<TextInputContainerProps>(props => ({
-  flexDirection: 'row',
+const InputContainer = styled.View((props: InputContainerProps) => ({
+  flexDirection: 'row' as FlexDirection,
   alignItems: 'center',
   height: props.multiline ? metrics.massive : metrics.huge,
-  borderWidth: 1,
-  borderRadius: 6,
+  borderWidth: metrics.borderWidth,
+  borderRadius: metrics.borderRadius,
   marginVertical: metrics.tiny,
   borderColor: colors.black,
   minHeight: metrics.huge,
@@ -178,7 +176,7 @@ const InputContainer = styled.View<TextInputContainerProps>(props => ({
 
 const Title = styled.Text({
   fontSize: responsiveFont(16),
-  color: '#8B8B8B',
+  color: colors.grey,
 })
 
 const StarText = styled.Text({
