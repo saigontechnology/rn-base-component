@@ -83,20 +83,23 @@ export const ButtonComponent: ComponentStory<typeof Button> = () => {
       />
       <Text style={styles.subHeader}>Rounded Buttons</Text>
       <Button
-        title="LOG IN"
+        title="log in"
         buttonStyle={styles.loginRoundedButton}
+        uppercase
         containerStyle={styles.loginRoundedContainer}
         titleStyle={styles.whiteText}
       />
       <Button
-        title="LEFT"
+        title="left"
+        uppercase
         iconSource={{uri: imgUrl}}
         titleStyle={styles.leftText}
         buttonStyle={styles.leftButton}
         containerStyle={styles.leftContainer}
       />
       <Button
-        title="RIGHT"
+        title="right"
+        uppercase
         iconSource={{uri: imgUrl}}
         iconPosition={'right'}
         titleStyle={styles.leftText}
@@ -104,7 +107,8 @@ export const ButtonComponent: ComponentStory<typeof Button> = () => {
         containerStyle={styles.leftContainer}
       />
       <Button
-        title="TOP"
+        title="top"
+        uppercase
         iconSource={{uri: imgUrl}}
         iconPosition={'top'}
         titleStyle={styles.leftText}
@@ -112,7 +116,8 @@ export const ButtonComponent: ComponentStory<typeof Button> = () => {
         containerStyle={styles.leftContainer}
       />
       <Button
-        title="BOTTOM"
+        title="bottom"
+        uppercase
         iconSource={{uri: imgUrl}}
         iconPosition={'bottom'}
         titleStyle={styles.leftText}

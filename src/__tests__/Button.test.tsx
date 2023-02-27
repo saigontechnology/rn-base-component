@@ -5,6 +5,7 @@ import {Text} from 'react-native'
 
 describe('Button component', () => {
   const onPressMock = jest.fn()
+  const onLongPressMock = jest.fn()
   const imgUrl = 'https://kenh14cdn.com/203336854389633024/2023/1/17/photo-12-1673980290121902612775.jpeg'
 
   afterEach(() => {
@@ -27,8 +28,13 @@ describe('Button component', () => {
     expect(icon).toBeDefined()
   })
 
-  test('calls onLongPress prop when button is long pressed', () => {
-    const onLongPressMock = jest.fn()
+  it('renders correctly with icon and loading prop', () => {
+    const {queryByTestId} = render(<Button title="Press me" loading iconSource={{uri: imgUrl}} />)
+    const icon = queryByTestId('test-icon')
+    expect(icon).toBeNull()
+  })
+
+  it('calls onLongPress prop when button is long pressed', () => {
     const {getByTestId} = render(<Button title="Test Button" onLongPress={onLongPressMock} />)
     fireEvent(getByTestId('test-button'), 'longPress')
     expect(onLongPressMock).toHaveBeenCalled()
@@ -73,12 +79,22 @@ describe('Button component', () => {
   })
 
   it('disables button if disabled prop is true', () => {
-    const {getByTestId} = render(<Button title="Press me" testID="button" onPress={onPressMock} disabled />)
+    const {getByTestId} = render(
+      <Button
+        title="Press me"
+        testID="button"
+        onPress={onPressMock}
+        onLongPress={onLongPressMock}
+        disabled
+      />,
+    )
     const button = getByTestId('button')
 
     fireEvent.press(button)
-
     expect(onPressMock).not.toHaveBeenCalled()
+
+    fireEvent(button, 'longPress')
+    expect(onLongPressMock).not.toHaveBeenCalled()
   })
 
   it('shows loading indicator when loading prop is true', () => {

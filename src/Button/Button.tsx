@@ -3,7 +3,6 @@ import {
   ImageResizeMode,
   StyleSheet,
   TouchableOpacity,
-  Text,
   ActivityIndicatorProps,
   ViewStyle,
   StyleProp,
@@ -20,6 +19,8 @@ import styled from 'styled-components/native'
 
 type IconPosition = 'left' | 'right' | 'top' | 'bottom'
 type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
+type TextTransform = 'capitalize' | 'full-size-kana' | 'full-width' | 'lowercase' | 'none' | 'uppercase'
+type TextAlign = 'center' | 'end' | 'justify' | 'left' | 'match-parent' | 'right' | 'start'
 
 export interface IButtonProps extends TouchableOpacityProps {
   /** Add button title */
@@ -83,7 +84,7 @@ interface ButtonContentProps {
   style: StyleProp<ViewStyle>
 }
 
-interface StyledText extends TextProps {
+interface TitleProps extends TextProps {
   uppercase: boolean
   disabled: boolean
   style: StyleProp<TextStyle>
@@ -167,7 +168,6 @@ export const Button: React.FunctionComponent<IButtonProps> = ({
                 style={StyleSheet.flatten([buttonTitleStyle, !!disabled && disabledTitleStyle])}
                 disabled={disabled}
                 uppercase={uppercase}
-                as={Text}
                 {...titleProps}>
                 {title}
               </Title>
@@ -181,12 +181,12 @@ export const Button: React.FunctionComponent<IButtonProps> = ({
   )
 }
 
-const Container = styled.View<ContainerProps>(props => ({
+const Container = styled.View((props: ContainerProps) => ({
   overflow: 'hidden',
   borderRadius: props.radius || 0,
 }))
 
-const ButtonContent = styled.View<ButtonContentProps>(props => ({
+const ButtonContent = styled.View((props: ButtonContentProps) => ({
   alignItems: 'center',
   justifyContent: 'center',
   paddingVertical: metrics.xs,
@@ -196,10 +196,10 @@ const ButtonContent = styled.View<ButtonContentProps>(props => ({
   opacity: props.disabled ? 0.5 : 1,
 }))
 
-const Title = styled.Text<StyledText>(props => ({
+const Title = styled.Text((props: TitleProps) => ({
   fontSize: responsiveFont(16),
-  textAlign: 'center',
-  textTransform: props.uppercase ? 'uppercase' : 'none',
+  textAlign: 'center' as TextAlign,
+  textTransform: (props.uppercase ? 'uppercase' : 'none') as TextTransform,
   opacity: props.disabled ? 0.5 : 1,
 }))
 
