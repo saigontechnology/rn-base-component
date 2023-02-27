@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState, forwardRef, memo} from 'react'
-import {View, StyleSheet, Animated, Dimensions} from 'react-native'
-import {metrics} from '../helpers/metrics'
+import {View, StyleSheet, Animated} from 'react-native'
+import {metrics, deviceWidth} from '../helpers/metrics'
 
 interface IProgressProps {
   /**
@@ -34,7 +34,7 @@ interface IProgressProps {
   width?: number
 }
 
-const {width: screenWidth} = Dimensions.get('screen')
+const screenWidth = deviceWidth()
 const MAX_VALUE = 100
 
 const Progress = forwardRef<View, IProgressProps>(
