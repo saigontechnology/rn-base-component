@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useState, forwardRef, memo} from 'react'
 import {View, StyleSheet, Animated, Dimensions} from 'react-native'
+import {metrics} from '../helpers/metrics'
 
 interface IProgressProps {
   /**
@@ -34,13 +35,14 @@ interface IProgressProps {
 }
 
 const {width: screenWidth} = Dimensions.get('screen')
+const MAX_VALUE = 100
 
 const Progress = forwardRef<View, IProgressProps>(
   (
     {
       width,
       value = 0,
-      size = 16,
+      size = metrics.small,
       borderRadius = 0,
       filledTrackColor = '#49BE25',
       backgroundColor = '#E5E5E5',
@@ -50,7 +52,6 @@ const Progress = forwardRef<View, IProgressProps>(
     const [progressWidth, setProgressWidth] = useState(0)
     const translateX = useRef(new Animated.Value(-screenWidth)).current
     const toTranslateX = useRef(new Animated.Value(-screenWidth)).current
-    const maxValue = 100
 
     useEffect(() => {
       Animated.timing(translateX, {
@@ -61,8 +62,8 @@ const Progress = forwardRef<View, IProgressProps>(
     }, [])
 
     useEffect(() => {
-      const progressValue = value >= maxValue ? maxValue : value
-      toTranslateX.setValue(-progressWidth + (progressWidth * progressValue) / maxValue)
+      const progressValue = value >= MAX_VALUE ? MAX_VALUE : value
+      toTranslateX.setValue(-progressWidth + (progressWidth * progressValue) / MAX_VALUE)
     }, [progressWidth, value])
 
     return (
