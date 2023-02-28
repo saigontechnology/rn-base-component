@@ -136,6 +136,7 @@ const Checkbox = React.forwardRef<ICheckboxMethods, ICheckboxProps>(
 
       return (
         <Animated.View
+          testID={'icon-container'}
           style={StyleSheet.flatten([
             styles.iconContainer,
             {transform: [{scale: bounceValue}]},
@@ -177,7 +178,9 @@ const Checkbox = React.forwardRef<ICheckboxMethods, ICheckboxProps>(
               textContainerStyle,
               {opacity: disable ? disableOpacity : 1},
             ])}>
-            <Text style={textStyle}>{text}</Text>
+            <Text testID="text" style={textStyle}>
+              {text}
+            </Text>
           </View>
         ))
       )
@@ -196,6 +199,7 @@ const Checkbox = React.forwardRef<ICheckboxMethods, ICheckboxProps>(
 
     return (
       <Pressable
+        testID="container"
         {...rest}
         style={StyleSheet.flatten([styles.container, style])}
         onPressIn={!disable ? bounceInEffect : null}
