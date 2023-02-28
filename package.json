@@ -78,7 +78,8 @@
   },
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "styled-components": "*"
   },
   "engines": {
     "node": ">= 16.0.0"

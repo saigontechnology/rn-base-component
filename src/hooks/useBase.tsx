@@ -1,5 +1,5 @@
 import {useContext} from 'react'
-import {BaseContext, IBaseContext} from 'src/core/BaseProvider'
+import {BaseContext, IBaseContext} from '../core/BaseProvider'
 
 export const useBase = () => {
   const base = useContext(BaseContext)

@@ -39,5 +39,5 @@ export default Hello
 const Demo = styled(View)`
   width: 100px;
   height: 100px;
-  background-color: ${props => props?.theme?.demo};
+  background-color: ${props => props?.theme?.colors?.demo};
 `
