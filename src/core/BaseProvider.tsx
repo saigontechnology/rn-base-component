@@ -1,5 +1,5 @@
 import React, {createContext, useCallback, useMemo, useState} from 'react'
-import {IColors, ITheme, theme as defaultTheme} from 'src/theme'
+import {IColors, ITheme, theme as defaultTheme} from '../theme'
 import {
   ThemeProvider as ThemeProviderStyled,
   ThemeContext as ThemeContextStyled,
@@ -7,17 +7,17 @@ import {
 } from 'styled-components'
 import type {ColorMode, IColorModeContextProps} from './color-mode/type'
 
-export const BaseContext = createContext<IColorModeContextProps | {}>({})
+export const BaseContext = createContext<{theme: ITheme} | IColorModeContextProps | {}>({})
 type AnyIfEmpty<T extends object> = keyof T extends never ? any : T
 const ThemeProvider: ThemeProviderComponent<AnyIfEmpty<IColors>> = ThemeProviderStyled
 export const ThemeContext: React.Context<any> = ThemeContextStyled
 
-export interface ThemeProviderProps {
+export interface BaseProviderProps {
   children?: React.ReactNode
   theme?: ITheme
 }
 
-const BaseProvider = ({children, theme = defaultTheme}: ThemeProviderProps) => {
+const BaseProvider = ({children, theme = defaultTheme}: BaseProviderProps) => {
   const [colorModeValue, setColorModeValue] = useState<ColorMode>(theme?.config.initialColorMode)
 
   const darkColor = useMemo(() => {
@@ -43,6 +43,7 @@ const BaseProvider = ({children, theme = defaultTheme}: ThemeProviderProps) => {
   return (
     <BaseContext.Provider
       value={{
+        theme: newTheme,
         colorMode: colorModeValue,
         toggleColorMode,
         setColorMode,

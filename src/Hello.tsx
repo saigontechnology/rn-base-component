@@ -6,7 +6,7 @@ import React from 'react'
 import {View} from 'react-native'
 import styled from 'styled-components'
 import {extendTheme} from './core/extendTheme'
-import BaseProvider from './core/ThemeProvider'
+import BaseProvider from './core/BaseProvider'
 
 const theme = extendTheme({
   colors: {
