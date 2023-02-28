@@ -3,8 +3,7 @@
  */
 // src/Hello.tsx
 import React from 'react'
-import {View} from 'react-native'
-import styled from 'styled-components'
+import styled from 'styled-components/native'
 import {extendTheme} from './core/extendTheme'
 import BaseProvider from './core/BaseProvider'
 import {useTheme} from './hooks/useTheme'
@@ -36,7 +35,7 @@ const Welcome = () => {
 
 export default Hello
 
-const Demo = styled(View)`
+const Demo = styled.View`
   width: 100px;
   height: 100px;
   background-color: ${props => props?.theme?.colors?.demo};
