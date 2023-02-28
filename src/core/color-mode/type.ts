@@ -13,5 +13,5 @@ export interface ColorModeOptions {
 export interface IColorModeContextProps {
   colorMode: ColorMode
   toggleColorMode: () => void
-  setColorMode: (value: any) => void
+  setColorMode: (value: ColorMode) => void
 }
