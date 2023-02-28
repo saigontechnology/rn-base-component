@@ -1,5 +1,5 @@
 import {useContext} from 'react'
-import {BaseContext} from 'src/core/ThemeProvider'
+import {BaseContext, IBaseContext} from 'src/core/BaseProvider'
 
 export const useBase = () => {
   const base = useContext(BaseContext)
@@ -8,5 +8,5 @@ export const useBase = () => {
     throw Error('`base` is undefined. Seems you forgot to wrap your app in `<BaseProvider />`')
   }
 
-  return base
+  return base as IBaseContext
 }

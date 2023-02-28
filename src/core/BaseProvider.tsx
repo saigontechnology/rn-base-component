@@ -1,16 +1,12 @@
 import React, {createContext, useCallback, useMemo, useState} from 'react'
-import {IColors, ITheme, theme as defaultTheme} from '../theme'
-import {
-  ThemeProvider as ThemeProviderStyled,
-  ThemeContext as ThemeContextStyled,
-  ThemeProviderComponent,
-} from 'styled-components'
+import {ThemeProvider as ThemeProviderStyled, ThemeProviderComponent} from 'styled-components'
+import {ITheme, theme as defaultTheme} from '../theme'
 import type {ColorMode, IColorModeContextProps} from './color-mode/type'
 
-export const BaseContext = createContext<{theme: ITheme} | IColorModeContextProps | {}>({})
+export type IBaseContext = {theme: ITheme} | IColorModeContextProps
+export const BaseContext = createContext<IBaseContext | null>(null)
 type AnyIfEmpty<T extends object> = keyof T extends never ? any : T
-const ThemeProvider: ThemeProviderComponent<AnyIfEmpty<IColors>> = ThemeProviderStyled
-export const ThemeContext: React.Context<any> = ThemeContextStyled
+const ThemeProvider: ThemeProviderComponent<AnyIfEmpty<ITheme>> = ThemeProviderStyled
 
 export interface BaseProviderProps {
   children?: React.ReactNode
@@ -20,17 +16,17 @@ export interface BaseProviderProps {
 const BaseProvider = ({children, theme = defaultTheme}: BaseProviderProps) => {
   const [colorModeValue, setColorModeValue] = useState<ColorMode>(theme?.config.initialColorMode)
 
-  const darkColor = useMemo(() => {
-    return theme.darkColors
-  }, [theme.darkColors])
-
   const isLight = useMemo(() => {
     return colorModeValue === 'light'
   }, [colorModeValue])
 
+  const darkTheme = useMemo(() => {
+    return {...theme, colors: {...theme.colors, ...theme.darkColors}}
+  }, [theme])
+
   const newTheme = useMemo(() => {
-    return isLight ? theme.colors : darkColor
-  }, [darkColor, isLight, theme])
+    return isLight ? theme : darkTheme
+  }, [darkTheme, isLight, theme])
 
   const toggleColorMode = useCallback(() => {
     isLight ? setColorModeValue('dark') : setColorModeValue('light')

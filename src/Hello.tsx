@@ -7,6 +7,8 @@ import {View} from 'react-native'
 import styled from 'styled-components'
 import {extendTheme} from './core/extendTheme'
 import BaseProvider from './core/BaseProvider'
+import {useTheme} from './hooks/useTheme'
+import {useBase} from './hooks/useBase'
 
 const theme = extendTheme({
   colors: {
@@ -26,6 +28,9 @@ const Hello = () => {
 }
 
 const Welcome = () => {
+  const {} = useBase()
+  const {} = useTheme()
+
   return <Demo />
 }
 

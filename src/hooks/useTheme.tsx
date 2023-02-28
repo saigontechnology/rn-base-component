@@ -1,4 +1,4 @@
-import type {IColors} from 'src/theme'
+import type {ITheme} from 'src/theme'
 import {useTheme as useThemeStyled} from 'styled-components'
 
 export const useTheme = () => {
@@ -8,5 +8,5 @@ export const useTheme = () => {
     throw Error('`theme` is undefined. Seems you forgot to wrap your app in `<BaseProvider />`')
   }
 
-  return theme as IColors
+  return theme as ITheme
 }
