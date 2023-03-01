@@ -50,29 +50,19 @@ const hitSlop: IHitSlop = {
   left: 10,
 }
 
-const DESIGN_WIDTH: number = 375
-const DESIGN_HEIGHT: number = 812
+const DESIGN_WIDTH = 375
+const DESIGN_HEIGHT = 812
 const {width, height} = Dimensions.get('window')
 
-const responsiveFont = (value = 0): number => {
-  return (width * value) / DESIGN_WIDTH
-}
+const responsiveFont = (value = 0): number => (width * value) / DESIGN_WIDTH
 
-const deviceWidth = (): number => {
-  return width
-}
+const deviceWidth = (): number => width
 
-const deviceHeight = (): number => {
-  return height
-}
+const deviceHeight = (): number => height
 
-const responsiveWidth = (value = 0): number => {
-  return (width * value) / DESIGN_WIDTH
-}
+const responsiveWidth = (value = 0): number => (width * value) / DESIGN_WIDTH
 
-const responsiveHeight = (value = 0): number => {
-  return (height * value) / DESIGN_HEIGHT
-}
+const responsiveHeight = (value = 0): number => (height * value) / DESIGN_HEIGHT
 
 const isIOS: boolean = Platform.OS === 'ios'
 
