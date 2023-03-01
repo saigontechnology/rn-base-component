@@ -21,33 +21,69 @@ type BaseTouchableProps = Pick<
   Exclude<keyof TouchableWithoutFeedbackProps, 'onPress'>
 >
 export interface ICheckboxProps extends BaseTouchableProps {
+  /** size of the checkbox */
   size?: number
+  /** the text of the checkbox */
   text?: string
+  /** color when checkbox is checked
+   * default #ffc484
+   */
   fillColor?: string
+  /** define the status of checkbox */
   isChecked?: boolean
+  /** color when checkbox is unchecked
+   * default transparent
+   */
   unfillColor?: string
+  /** disable checkbox */
   disable?: boolean
+  /** opacity of checkbox when disable
+   * default 0.5
+   */
   disableOpacity?: number
+  /** disable the checkbox text */
   disableText?: boolean
+  /** bounceEffect animation when press */
   bounceEffect?: number
+  /** bounceFriction animation when press */
   bounceFriction?: number
+  /** useNativeDriver or not
+   * default true
+   */
   useNativeDriver?: boolean
+  /** disableBuiltInState of checkbox */
   disableBuiltInState?: boolean
+  /** bounceEffectIn animation when press */
   bounceEffectIn?: number
+  /** bounceEffectOut animation when press */
   bounceEffectOut?: number
+  /** bounceVelocityIn animation when press */
   bounceVelocityIn?: number
+  /** bounceVelocityOut animation when press */
   bounceVelocityOut?: number
+  /** bouncinessIn animation when press */
   bouncinessIn?: number
+  /** bouncinessOut animation when press */
   bouncinessOut?: number
+  /** define custom icon component */
   iconComponent?: React.ReactNode
+  /** define custom text component */
   textComponent?: React.ReactNode
+  /** custom style for the icon */
   iconStyle?: CustomStyleProp
+  /** custom style for the inner icon */
   innerIconStyle?: CustomStyleProp
+  /** style of container view  */
   style?: CustomStyleProp
+  /** style of checkbox text */
   textStyle?: CustomTextStyleProp
+  /** style icon image */
   iconImageStyle?: CustomImageStyleProp
+  /** checkbox text container style */
   textContainerStyle?: CustomStyleProp
+  /** define image source show when checkbox is checked */
   checkIconImageSource?: ImageSourcePropType
+  /** callback when checkbox is change state */
   onPress?: (checked: boolean) => void
 }
 
