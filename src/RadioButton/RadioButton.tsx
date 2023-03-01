@@ -2,6 +2,7 @@ import * as React from 'react'
 import {View, StyleProp, ViewStyle, StyleSheet, TextStyle, LayoutChangeEvent} from 'react-native'
 import {Bounceable} from '../Bounceable/Bounceable'
 import styled from 'styled-components/native'
+import {metrics, responsiveWidth, responsiveHeight} from '../helpers/metrics'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 type CustomTextStyleProp = StyleProp<TextStyle> | Array<StyleProp<TextStyle>>
@@ -151,18 +152,18 @@ export const RadioButton = React.forwardRef<View, IRadioButtonProps>(
 
 const styles = StyleSheet.create<any>({
   container: (ringColor: string) => ({
-    width: 45,
-    height: 45,
-    borderWidth: 5,
-    borderRadius: 25,
+    width: responsiveWidth(45),
+    height: responsiveHeight(45),
+    borderWidth: metrics.borderRadius,
+    borderRadius: responsiveHeight(25),
     borderColor: ringColor,
     alignItems: 'center',
     justifyContent: 'center',
   }),
   innerStyle: (isActive: boolean, innerBackgroundColor: string) => ({
-    width: 25,
-    height: 25,
-    borderRadius: 25,
+    width: responsiveWidth(25),
+    height: responsiveWidth(25),
+    borderRadius: responsiveHeight(25),
     backgroundColor: isActive ? innerBackgroundColor : 'transparent',
   }),
   disableStyle: (disable: boolean, disableOpacity: number) => ({
@@ -185,7 +186,7 @@ const RadioButtonWrapper = styled.View({
 const RadioButtonInnerContainer = styled.View({})
 
 const LabelTextView = styled.View({
-  marginLeft: 16,
+  marginLeft: responsiveWidth(16),
 })
 
 const LabelText = styled.Text({})
