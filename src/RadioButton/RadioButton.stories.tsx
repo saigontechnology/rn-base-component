@@ -2,7 +2,7 @@
 import React from 'react'
 import type {ComponentMeta, ComponentStory} from '@storybook/react'
 
-import {RadioButton} from './RadioButton'
+import RadioButton from './RadioButton'
 
 export default {
   title: 'components/MyButton',
@@ -13,4 +13,5 @@ export const Basic: ComponentStory<typeof RadioButton> = args => <RadioButton {.
 
 Basic.args = {
   text: '123',
+  initial: true,
 }

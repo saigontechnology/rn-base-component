@@ -1,6 +1,6 @@
 import * as React from 'react'
-import {View, StyleProp, ViewStyle, StyleSheet, TextStyle, LayoutChangeEvent} from 'react-native'
-import {Bounceable} from '../Bounceable/Bounceable'
+import {StyleProp, ViewStyle, StyleSheet, TextStyle, LayoutChangeEvent, PressableProps} from 'react-native'
+import Bounceable from '../Bounceable/Bounceable'
 import styled from 'styled-components/native'
 import {metrics, responsiveWidth, responsiveHeight} from '../helpers/metrics'
 
@@ -46,7 +46,7 @@ export interface IRadioButtonProps {
   /**
    * onPress event
    */
-  onPress: (isActive: boolean) => void
+  onPress?: (isActive: boolean) => void
   /**
    * text label component
    */
@@ -74,7 +74,7 @@ export interface IRadioButtonProps {
   text?: string
 }
 
-export const RadioButton = React.forwardRef<View, IRadioButtonProps>(
+const RadioButton = React.forwardRef<PressableProps, IRadioButtonProps>(
   (
     {
       style,
@@ -91,6 +91,7 @@ export const RadioButton = React.forwardRef<View, IRadioButtonProps>(
       textStyle,
       text,
       wrapperStyle,
+      ...props
     },
     ref,
   ) => {
@@ -125,8 +126,10 @@ export const RadioButton = React.forwardRef<View, IRadioButtonProps>(
     }
 
     return (
-      <RadioButtonWrapper ref={ref} style={wrapperStyle}>
+      <RadioButtonWrapper testID="container" style={wrapperStyle}>
         <Bounceable
+          testID="bounceable"
+          ref={ref}
           disabled={disable}
           onLayout={handleLayout}
           style={StyleSheet.flatten([
@@ -135,8 +138,10 @@ export const RadioButton = React.forwardRef<View, IRadioButtonProps>(
             styles.disableStyle(disable, disableOpacity),
             styles.constantBackgroundColor,
           ])}
-          onPress={handlePress}>
+          onPress={handlePress}
+          {...props}>
           <RadioButtonInnerContainer
+            testID="circle"
             style={StyleSheet.flatten([
               styles.innerStyle(isRemainActive || isActive, innerBackgroundColor),
               innerContainerStyle,
@@ -149,6 +154,8 @@ export const RadioButton = React.forwardRef<View, IRadioButtonProps>(
     )
   },
 )
+
+export default React.memo(RadioButton)
 
 const styles = StyleSheet.create<any>({
   container: (ringColor: string) => ({

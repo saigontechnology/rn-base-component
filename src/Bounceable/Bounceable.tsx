@@ -55,7 +55,7 @@ export interface IBounceableProps extends PressableProps {
   style?: CustomStyleProp
 }
 
-export const Bounceable = React.forwardRef<PressableProps, IBounceableProps>(
+const Bounceable = React.forwardRef<PressableProps, IBounceableProps>(
   (
     {
       bounceEffectIn = 0.93,
@@ -100,3 +100,5 @@ export const Bounceable = React.forwardRef<PressableProps, IBounceableProps>(
     )
   },
 )
+
+export default React.memo(Bounceable)
