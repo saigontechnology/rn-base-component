@@ -1,8 +1,9 @@
 import React from 'react'
 import {render, fireEvent} from '@testing-library/react-native'
 import RadioButton from '../RadioButton/RadioButton'
+import {StyleSheet} from 'react-native'
 
-describe('Checkbox test', () => {
+describe('RadioButton test', () => {
   const onPressMock = jest.fn()
 
   beforeEach(() => {
@@ -28,32 +29,39 @@ describe('Checkbox test', () => {
     const circle = getByTestId('circle')
 
     fireEvent.press(radionButton)
-    expect(circle.props.style[1].backgroundColor).toBe('blue')
+
+    const styles = StyleSheet.flatten(circle.props.style)
+
+    expect(styles.backgroundColor).toBe('blue')
 
     fireEvent.press(radionButton)
-    expect(circle.props.style[1].backgroundColor).toBe('transparent')
+    const stylesAfterPress = StyleSheet.flatten(circle.props.style)
+    expect(stylesAfterPress.backgroundColor).toBe('transparent')
   })
 
-  //   it('should not change state when disabled', () => {
-  //     const {getByTestId} = render(<Checkbox disable={true} />)
-  //     const checkbox = getByTestId('container')
-  //     const icon = getByTestId('icon-container')
+  it('should not change state when disabled', () => {
+    const {getByTestId} = render(<RadioButton onPress={onPressMock} disable={true} />)
+    const radionButton = getByTestId('bounceable')
 
-  //     fireEvent.press(checkbox)
-  //     expect(icon.props.style.backgroundColor).toEqual('transparent')
-  //   })
+    fireEvent.press(radionButton)
+    expect(onPressMock).not.toHaveBeenCalled()
+  })
 
-  //   it('text should be null', () => {
-  //     const {queryByTestId} = render(<Checkbox disableText={true} />)
-  //     const text = queryByTestId('text')
+  it('should be active state when initial is set to true', () => {
+    const {getByTestId} = render(<RadioButton initial={true} />)
+    const circle = getByTestId('circle')
 
-  //     expect(text).toBeNull()
-  //   })
+    expect(circle.props.style[1].backgroundColor).toBe('blue')
+  })
 
-  //   it('text should be set', () => {
-  //     const {getByTestId} = render(<Checkbox text="checkbox text" />)
-  //     const text = getByTestId('text')
+  it('should be remain state', () => {
+    const {getByTestId} = render(<RadioButton isRemainActive={true} />)
+    const radionButton = getByTestId('bounceable')
+    const circle = getByTestId('circle')
 
-  //     expect(text.props.children).toEqual('checkbox text')
-  //   })
+    fireEvent.press(radionButton)
+    expect(onPressMock).not.toHaveBeenCalled()
+
+    expect(circle.props.style[1].backgroundColor).toBe('blue')
+  })
 })

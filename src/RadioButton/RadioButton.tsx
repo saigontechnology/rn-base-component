@@ -3,11 +3,12 @@ import {StyleProp, ViewStyle, StyleSheet, TextStyle, LayoutChangeEvent, Pressabl
 import Bounceable from '../Bounceable/Bounceable'
 import styled from 'styled-components/native'
 import {metrics, responsiveWidth, responsiveHeight} from '../helpers/metrics'
+import type {IBounceableProps} from '../Bounceable/Bounceable'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 type CustomTextStyleProp = StyleProp<TextStyle> | Array<StyleProp<TextStyle>>
 
-export interface IRadioButtonProps {
+export interface IRadioButtonProps extends IBounceableProps {
   /**
    * set custom style for wrapper
    */
@@ -25,11 +26,6 @@ export interface IRadioButtonProps {
    */
   innerContainerStyle?: CustomStyleProp
   /**
-   * set color for circle
-   * default: 'blue'
-   */
-  circleColor?: string
-  /**
    * this will disable the built-in state of activation
    * default: undefined
    */
@@ -46,7 +42,7 @@ export interface IRadioButtonProps {
   /**
    * onPress event
    */
-  onPress?: (isActive: boolean) => void
+  onPressButton?: (isActive: boolean) => void
   /**
    * text label component
    */
@@ -82,7 +78,7 @@ const RadioButton = React.forwardRef<PressableProps, IRadioButtonProps>(
       innerContainerStyle,
       ringColor = 'blue',
       innerBackgroundColor = 'blue',
-      onPress,
+      onPressButton,
       initial,
       textComponent,
       textContainerStyle,
@@ -101,10 +97,10 @@ const RadioButton = React.forwardRef<PressableProps, IRadioButtonProps>(
 
     const handlePress = () => {
       if (isRemainActive !== undefined && isRemainActive !== null) {
-        onPress && onPress(isRemainActive)
+        onPressButton && onPressButton(isRemainActive)
       } else {
         setIsActive(!isActive)
-        onPress && onPress(isActive)
+        onPressButton && onPressButton(isActive)
       }
     }
 
