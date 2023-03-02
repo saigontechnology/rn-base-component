@@ -27,6 +27,7 @@ export interface IRadioButtonProps extends IBounceableProps {
   innerContainerStyle?: CustomStyleProp
   /**
    * this will disable the built-in state of activation
+   * Note that the initial state will be overwrite by "initial" prop
    * default: undefined
    */
   isRemainActive?: boolean
@@ -76,7 +77,7 @@ const RadioButton = React.forwardRef<PressableProps, IRadioButtonProps>(
       style,
       isRemainActive = undefined,
       innerContainerStyle,
-      ringColor = 'blue',
+      ringColor,
       innerBackgroundColor = 'blue',
       onPressButton,
       initial,
@@ -92,8 +93,12 @@ const RadioButton = React.forwardRef<PressableProps, IRadioButtonProps>(
     ref,
   ) => {
     const [isActive, setIsActive] = React.useState(initial || false)
-    const widthBounceableRef = React.useRef({value: 0}).current
-    const heightBounceableRef = React.useRef({value: 0}).current
+    const widthBounceableRef = React.useRef({
+      value: styles.container().width,
+    }).current
+    const heightBounceableRef = React.useRef({
+      value: styles.container().width,
+    }).current
 
     const handlePress = () => {
       if (isRemainActive !== undefined && isRemainActive !== null) {
@@ -154,7 +159,7 @@ const RadioButton = React.forwardRef<PressableProps, IRadioButtonProps>(
 export default React.memo(RadioButton)
 
 const styles = StyleSheet.create<any>({
-  container: (ringColor: string) => ({
+  container: (ringColor = 'blue') => ({
     width: responsiveWidth(45),
     height: responsiveHeight(45),
     borderWidth: metrics.borderRadius,
@@ -165,7 +170,7 @@ const styles = StyleSheet.create<any>({
   }),
   innerStyle: (isActive: boolean, innerBackgroundColor: string) => ({
     width: responsiveWidth(25),
-    height: responsiveWidth(25),
+    height: responsiveHeight(25),
     borderRadius: responsiveHeight(25),
     backgroundColor: isActive ? innerBackgroundColor : 'transparent',
   }),
