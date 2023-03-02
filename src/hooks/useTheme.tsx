@@ -1,4 +1,4 @@
-import type {ITheme} from 'src/theme'
+import type {ITheme} from '../theme'
 import {useTheme as useThemeStyled} from 'styled-components'
 
 export const useTheme = () => {

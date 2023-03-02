@@ -8,13 +8,14 @@ import {extendTheme} from './core/extendTheme'
 import BaseProvider from './core/BaseProvider'
 import {useTheme} from './hooks/useTheme'
 import {useBase} from './hooks/useBase'
+import type {ITheme} from './theme'
 
 const theme = extendTheme({
   colors: {
-    demo: 'green',
+    cardPrimaryBackground: 'green',
   },
   darkColors: {
-    demo: 'gray',
+    cardPrimaryBackground: 'gray',
   },
 })
 
@@ -38,5 +39,5 @@ export default Hello
 const Demo = styled.View`
   width: 100px;
   height: 100px;
-  background-color: ${props => props?.theme?.colors?.demo};
+  background-color: ${(props: {theme: ITheme}) => props?.theme?.colors?.cardPrimaryBackground};
 `

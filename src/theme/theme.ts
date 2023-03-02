@@ -1,4 +1,4 @@
-import type {ColorModeOptions} from 'src/core/color-mode/type'
+import type {ColorModeOptions} from '../core/color-mode/type'
 import base from './base'
 
 const config: ColorModeOptions = {
