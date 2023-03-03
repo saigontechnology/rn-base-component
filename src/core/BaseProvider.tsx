@@ -14,7 +14,7 @@ export interface BaseProviderProps {
 }
 
 const BaseProvider = ({children, theme = defaultTheme}: BaseProviderProps) => {
-  const [colorModeValue, setColorModeValue] = useState<ColorMode>(theme?.config.initialColorMode)
+  const [colorModeValue, setColorModeValue] = useState(theme?.config.initialColorMode)
 
   const isLight = useMemo(() => {
     return colorModeValue === 'light'
