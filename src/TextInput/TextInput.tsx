@@ -1,6 +1,5 @@
-import React, {forwardRef, ForwardRefExoticComponent} from 'react'
-import {
-  Text,
+import React, {forwardRef, ForwardRefExoticComponent, useCallback, useImperativeHandle, useRef} from 'react'
+import type {
   TextInput as Input,
   StyleProp,
   ViewStyle,
@@ -9,13 +8,14 @@ import {
   ColorValue,
   TextInputProps,
 } from 'react-native'
-import {metrics, responsiveFont} from '../helpers/metrics'
+import {isIOS, metrics, responsiveFont, responsiveHeight} from '../helpers/metrics'
 import {colors} from '../helpers/colors'
-import TextInputFlat from './TextInputFlat'
+import TextInputOutlined from './TextInputFloat'
 import {Error, CustomIcon, CustomIconProps} from './components'
 import styled from 'styled-components/native'
 
 export type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
+export type AnimationMode = 'Flat' | 'Outlined' | 'None'
 
 export interface ITextInputProps extends TextInputProps {
   /** Style for container */
@@ -59,15 +59,19 @@ export interface ITextInputProps extends TextInputProps {
   onBlur?: () => void
 }
 
-export interface ITextInputFlat extends ITextInputProps {
+export interface ITextInputAnimation extends ITextInputProps {
   /** Value of the text input */
   value: string
+  mode?: AnimationMode
 }
 
-interface CompoundedComponent extends ForwardRefExoticComponent<ITextInputProps> {
-  Flat: React.FunctionComponent<ITextInputFlat>
+interface CompoundedComponent
+  extends ForwardRefExoticComponent<ITextInputProps & React.RefAttributes<TextInputRef>> {
+  Float: React.FunctionComponent<ITextInputAnimation>
   Icon: React.FunctionComponent<CustomIconProps>
 }
+
+export type TextInputRef = Pick<Input, 'focus' | 'blur' | 'clear'>
 
 export interface InputContainerProps {
   multiline?: boolean
@@ -79,7 +83,7 @@ export interface ITextInput {
   underlineColorAndroid?: ColorValue
 }
 
-const TextInput = forwardRef<Input, ITextInputProps>(
+const TextInput = forwardRef<TextInputRef, ITextInputProps>(
   (
     {
       containerStyle,
@@ -88,25 +92,25 @@ const TextInput = forwardRef<Input, ITextInputProps>(
       inputStyle,
       value,
       label,
-      scrollEnabled,
       leftComponent,
       rightComponent,
-      textAlignVertical = 'top',
       maxLength,
-      numberOfLines,
-      keyboardType,
       errorText,
       errorProps,
       isRequire,
+      numberOfLines,
+      textAlignVertical,
+      scrollEnabled,
+      keyboardType,
+      placeholderTextColor,
+      returnKeyType,
+      autoCapitalize,
+      autoCorrect,
       labelStyle,
       labelProps,
-      autoCapitalize = 'none',
-      autoCorrect,
       autoFocus,
       multiline,
       placeholder,
-      placeholderTextColor,
-      returnKeyType,
       secureTextEntry,
       onChangeText,
       onFocus,
@@ -116,18 +120,31 @@ const TextInput = forwardRef<Input, ITextInputProps>(
     },
     ref,
   ) => {
+    const inputRef = useRef<Input>(null)
+
+    useImperativeHandle(ref, () => ({
+      focus: () => inputRef.current?.focus(),
+      clear: () => inputRef.current?.clear(),
+      blur: () => inputRef.current?.blur(),
+    }))
+
+    const handleFocus = useCallback(() => {
+      inputRef.current?.focus()
+    }, [])
+
     return (
       <Container style={containerStyle}>
         {!!label && (
-          <Title testID="test-title" style={labelStyle} as={Text} {...labelProps}>
+          <Title testID="test-title" style={labelStyle} {...labelProps}>
             {label}
             {!!isRequire && <StarText testID="test-startText"> *</StarText>}
           </Title>
         )}
-        <InputContainer multiline={multiline} style={inputContainerStyle}>
+        <TouchableContainer style={inputContainerStyle} activeOpacity={1} onPress={handleFocus}>
           {!!leftComponent && leftComponent}
           <TextInputComponent
-            ref={ref}
+            testID="test-TextInputComponent"
+            ref={inputRef}
             value={value}
             style={inputStyle}
             editable={editable}
@@ -151,7 +168,7 @@ const TextInput = forwardRef<Input, ITextInputProps>(
             {...rest}
           />
           {!!rightComponent && rightComponent}
-        </InputContainer>
+        </TouchableContainer>
         {!!errorText && <Error errorProps={errorProps} errorText={errorText} />}
       </Container>
     )
@@ -162,20 +179,20 @@ const Container = styled.View({
   flex: 1,
 })
 
-const InputContainer = styled.View((props: InputContainerProps) => ({
+const TouchableContainer = styled.TouchableOpacity({
+  flex: 1,
   flexDirection: 'row' as FlexDirection,
   alignItems: 'center',
-  height: props.multiline ? metrics.massive : metrics.huge,
   borderWidth: metrics.borderWidth,
   borderRadius: metrics.borderRadius,
   marginVertical: metrics.tiny,
   borderColor: colors.black,
   minHeight: metrics.huge,
-  paddingLeft: metrics.xxs,
-}))
+  paddingHorizontal: metrics.tiny,
+})
 
 const Title = styled.Text({
-  fontSize: responsiveFont(16),
+  fontSize: responsiveFont(14),
   color: colors.grey,
 })
 
@@ -183,11 +200,18 @@ const StarText = styled.Text({
   color: colors.red,
 })
 
-const TextInputComponent = styled.TextInput({
+const TextInputComponent = styled.TextInput((props: InputContainerProps) => ({
   flex: 1,
-})
+  height: props.multiline ? metrics.giant : metrics.xxl,
+  ...(!isIOS &&
+    !props.multiline && {
+      textAlignVertical: 'bottom',
+      paddingBottom: metrics.tiny,
+      lineHeight: responsiveHeight(5),
+    }),
+}))
 
-TextInput.Flat = TextInputFlat
+TextInput.Float = TextInputOutlined
 
 TextInput.Icon = CustomIcon
 

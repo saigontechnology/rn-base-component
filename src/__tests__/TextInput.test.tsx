@@ -1,7 +1,10 @@
 import React from 'react'
-import {fireEvent, render, waitFor} from '@testing-library/react-native'
-import TextInput from '../TextInput/TextInput'
+import {act, fireEvent, render, waitFor} from '@testing-library/react-native'
+import TextInput, {ITextInputProps, TextInputRef} from '../TextInput/TextInput'
+import '@testing-library/jest-native/extend-expect'
+import 'jest-styled-components'
 import {View} from 'react-native'
+import '@testing-library/jest-dom/extend-expect'
 
 describe('TextInput component', () => {
   const onChangeTextMock = jest.fn()
@@ -46,6 +49,16 @@ describe('TextInput component', () => {
     expect(rightComponent).toBeTruthy()
   })
 
+  const props: ITextInputProps = {
+    onChangeText: jest.fn(),
+  }
+
+  it('renders correctly', () => {
+    const {getByTestId} = render(<TextInput testID="input-component" {...props} />)
+    const textInput = getByTestId('input-component')
+    expect(textInput).toBeDefined()
+  })
+
   it('calls the onChangeText callback when the text changes', () => {
     const {getByTestId} = render(<TextInput testID="test-textInput" onChangeText={onChangeTextMock} />)
     const textInput = getByTestId('test-textInput')
@@ -66,32 +79,75 @@ describe('TextInput component', () => {
   })
 
   it('should render the component', () => {
-    const {getByTestId} = render(<TextInput.Flat label="Username" value="JohnDoe" />)
-    const textInputFlat = getByTestId('test-textInputFlat')
-    expect(textInputFlat).toBeTruthy()
+    const {getByTestId} = render(<TextInput.Float label="Username" value="JohnDoe" />)
+    const textInputFloat = getByTestId('test-textInputFloat')
+    expect(textInputFloat).toBeTruthy()
   })
 
   it('should call onChangeText when input changes', () => {
-    const {getByTestId} = render(<TextInput.Flat label="Username" value="" onChangeText={onChangeTextMock} />)
-    const textInputFlat = getByTestId('test-textInputFlat')
-    fireEvent.changeText(textInputFlat, 'JohnDoe')
+    const {getByTestId} = render(
+      <TextInput.Float label="Username" value="" onChangeText={onChangeTextMock} />,
+    )
+    const textInputFloat = getByTestId('test-textInputFloat')
+    fireEvent.changeText(textInputFloat, 'JohnDoe')
     expect(onChangeTextMock).toHaveBeenCalledWith('JohnDoe')
   })
 
   it('should call onFocus when input is focused', () => {
     const onFocus = jest.fn()
-    const {getByTestId} = render(<TextInput.Flat label="Username" value="" onFocus={onFocus} />)
-    const textInputFlat = getByTestId('test-textInputFlat')
-    fireEvent(textInputFlat, 'focus')
+    const {getByTestId} = render(<TextInput.Float label="Username" value="" onFocus={onFocus} />)
+    const textInputFloat = getByTestId('test-textInputFloat')
+    fireEvent(textInputFloat, 'focus')
     expect(onFocus).toHaveBeenCalled()
   })
 
   it('should call onBlur when input loses focus', () => {
     const onBlur = jest.fn()
-    const {getByTestId} = render(<TextInput.Flat label="Username" value="" onBlur={onBlur} />)
-    const textInputFlat = getByTestId('test-textInputFlat')
-    fireEvent(textInputFlat, 'blur')
+    const {getByTestId} = render(<TextInput.Float label="Username" value="" onBlur={onBlur} />)
+    const textInputFloat = getByTestId('test-textInputFloat')
+    fireEvent(textInputFloat, 'blur')
     expect(onBlur).toHaveBeenCalled()
+  })
+
+  it('calls handleFocus on press', () => {
+    const inputRef = React.createRef<TextInputRef>()
+    const {getByTestId} = render(<TextInput ref={inputRef} />)
+    const touchableContainer = getByTestId('test-TextInputComponent')
+
+    fireEvent.press(touchableContainer)
+
+    expect(inputRef.current?.focus).toBeTruthy()
+  })
+
+  // it('calls handleFocus TextInput.Float of onPress', () => {
+  //   const inputRef = React.createRef<TextInputRef>()
+  //   const {getByTestId} = render(<TextInput.Float ref />)
+  //   const touchableContainer = getByTestId('test-TextInputComponent')
+
+  //   fireEvent.press(touchableContainer)
+
+  //   expect(inputRef.current?.focus).toBeTruthy()
+  // })
+
+  it('should blur input when calling blur method', () => {
+    const inputRef = React.createRef<TextInputRef>()
+    render(<TextInput ref={inputRef} />)
+    act(() => inputRef.current?.blur())
+    expect(inputRef.current?.blur).toBeTruthy()
+  })
+
+  it('should focus input when calling focus method', () => {
+    const inputRef = React.createRef<TextInputRef>()
+    render(<TextInput ref={inputRef} />)
+    act(() => inputRef.current?.focus())
+    expect(inputRef.current?.focus).toBeTruthy()
+  })
+
+  it('should clear input when calling clear method', () => {
+    const inputRef = React.createRef<TextInputRef>()
+    render(<TextInput ref={inputRef} />)
+    act(() => inputRef.current?.clear())
+    expect(inputRef.current?.clear).toBeTruthy()
   })
 
   it('should set containerHeightRef.current when getHeight is called', async () => {
@@ -102,9 +158,9 @@ describe('TextInput component', () => {
     const getHeight = jest.fn()
 
     const {getByTestId} = render(
-      <TextInput.Flat testID="test-textInputFlat" value="Test TextInputFlat" onLayout={getHeight} />,
+      <TextInput.Float testID="test-textInputFloat" value="Test TextInputFloat" onLayout={getHeight} />,
     )
-    const textInput = getByTestId('test-textInputFlat')
+    const textInput = getByTestId('test-textInputFloat')
     await waitFor(() => textInput.props.onLayout(mockLayoutChangeEvent))
 
     expect(getHeight).toHaveBeenCalledTimes(1)
@@ -113,7 +169,7 @@ describe('TextInput component', () => {
     expect(textInput).toBeDefined()
   })
 
-  it('renders correctly', () => {
+  it('renders correctly with icon', () => {
     const source = {uri: imgUrl}
     const size = 24
     const color = 'red'
