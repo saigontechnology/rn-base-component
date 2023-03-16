@@ -1,11 +1,10 @@
-// stories/MyButton.stories.tsx
 import React from 'react'
 import type {ComponentMeta, ComponentStory} from '@storybook/react'
 
 import {RnBaseButton} from 'rn-base-component'
 
 export default {
-  title: 'components/MyButton',
+  title: 'components/Button',
   component: RnBaseButton,
 } as ComponentMeta<typeof RnBaseButton>
 

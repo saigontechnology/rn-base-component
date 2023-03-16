@@ -1,5 +1,6 @@
 import React from 'react'
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import {metrics} from './helpers/metrics'
 
 export type ButtonProps = {
   onPress: () => void
@@ -10,16 +11,16 @@ export type ButtonProps = {
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 4,
+    paddingVertical: metrics.xxs,
+    paddingHorizontal: metrics.small,
+    borderRadius: metrics.borderRadius,
     alignSelf: 'flex-start',
     flexGrow: 0,
     backgroundColor: 'purple',
   },
   buttonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: metrics.span,
     fontWeight: 'bold',
   },
   buttonContainer: {
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
   },
 })
 
-const MyButton: React.FC<ButtonProps> = ({text, onPress, color, textColor}) => (
+const Button: React.FC<ButtonProps> = ({text, onPress, color, textColor}) => (
   <View style={styles.buttonContainer}>
     <TouchableOpacity
       style={[styles.button, !!color && {backgroundColor: color}]}
@@ -39,4 +40,4 @@ const MyButton: React.FC<ButtonProps> = ({text, onPress, color, textColor}) => (
   </View>
 )
 
-export default MyButton
+export default Button
