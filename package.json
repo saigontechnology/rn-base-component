@@ -24,7 +24,8 @@
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__",
-    "!**/.*"
+    "!**/.*",
+    "!**/.stories.*"
   ],
   "scripts": {
     "test": "jest",
