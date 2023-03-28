@@ -1,5 +1,6 @@
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
 import Button from './Button'
+import Slider from './Slider/Slider'
 
 const LINKING_ERROR =
   `The package 'rn-base-component' doesn't seem to be linked. Make sure: \n\n` +
@@ -22,3 +23,4 @@ export const RnBaseComponentView =
       }
 
 export const RnBaseButton = Button
+export const RnBaseSlider = Slider
