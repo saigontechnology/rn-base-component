@@ -8,6 +8,20 @@ React Native Base Component
 npm install rn-base-component
 ```
 
+## Preview/Debug Components
+
+```sh
+yarn boostrap
+yarn ios/android
+```
+
+## Update Storybook (Debug purpose only)
+
+To update Storybook after running it on the Simulator and adding new components or updating existing ones, run the following command.
+```sh
+yarn update-stories
+```
+
 ## Documents
 
 - [Jest Configuration](/docs/jest-config.md)
