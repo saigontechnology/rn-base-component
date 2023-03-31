@@ -12,5 +12,4 @@ export const Basic: ComponentStory<typeof RnBaseButton> = args => <RnBaseButton 
 
 Basic.args = {
   text: 'Hello STS Team!',
-  color: 'green',
 }
