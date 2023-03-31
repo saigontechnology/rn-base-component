@@ -1,6 +1,7 @@
 import React from 'react'
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import styled from 'styled-components/native'
 import {metrics} from './helpers/metrics'
+import type {ITheme} from './theme'
 
 export type ButtonProps = {
   onPress: () => void
@@ -9,35 +10,27 @@ export type ButtonProps = {
   textColor?: string
 }
 
-const styles = StyleSheet.create({
-  button: {
+const Button: React.FC<ButtonProps> = ({text, onPress, color, textColor}) => (
+  <ButtonRoot onPress={onPress} activeOpacity={0.8} color={color}>
+    <Label color={textColor}>{text}</Label>
+  </ButtonRoot>
+)
+
+const ButtonRoot = styled.TouchableOpacity`
+  ${(props: {theme: ITheme; color: string | undefined}) => ({
     paddingVertical: metrics.xxs,
     paddingHorizontal: metrics.small,
     borderRadius: metrics.borderRadius,
+    backgroundColor: props?.color || props?.theme?.colors?.cardPrimaryBackground,
     alignSelf: 'flex-start',
-    flexGrow: 0,
-    backgroundColor: 'purple',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: metrics.span,
-    fontWeight: 'bold',
-  },
-  buttonContainer: {
-    alignItems: 'flex-start',
-    flex: 1,
-  },
-})
+  })}
+`
 
-const Button: React.FC<ButtonProps> = ({text, onPress, color, textColor}) => (
-  <View style={styles.buttonContainer}>
-    <TouchableOpacity
-      style={[styles.button, !!color && {backgroundColor: color}]}
-      onPress={onPress}
-      activeOpacity={0.8}>
-      <Text style={[styles.buttonText, !!textColor && {color: textColor}]}>{text}</Text>
-    </TouchableOpacity>
-  </View>
-)
+const Label = styled.Text`
+  ${(props: {theme: ITheme; color: string | undefined}) => ({
+    color: props?.color || 'white',
+    fontWeight: props?.theme?.fontWeights?.bold,
+  })}
+`
 
 export default Button

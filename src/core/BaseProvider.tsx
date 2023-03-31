@@ -13,20 +13,14 @@ export interface BaseProviderProps {
   theme?: ITheme
 }
 
-const BaseProvider = ({children, theme = defaultTheme}: BaseProviderProps) => {
+export const BaseProvider = ({children, theme = defaultTheme}: BaseProviderProps) => {
   const [colorModeValue, setColorModeValue] = useState(theme?.config.initialColorMode)
 
-  const isLight = useMemo(() => {
-    return colorModeValue === 'light'
-  }, [colorModeValue])
+  const isLight = useMemo(() => colorModeValue === 'light', [colorModeValue])
 
-  const darkTheme = useMemo(() => {
-    return {...theme, colors: {...theme.colors, ...theme.darkColors}}
-  }, [theme])
+  const darkTheme = useMemo(() => ({...theme, colors: {...theme.colors, ...theme.darkColors}}), [theme])
 
-  const newTheme = useMemo(() => {
-    return isLight ? theme : darkTheme
-  }, [darkTheme, isLight, theme])
+  const newTheme = useMemo(() => (isLight ? theme : darkTheme), [darkTheme, isLight, theme])
 
   const toggleColorMode = useCallback(() => {
     isLight ? setColorModeValue('dark') : setColorModeValue('light')
@@ -48,5 +42,3 @@ const BaseProvider = ({children, theme = defaultTheme}: BaseProviderProps) => {
     </BaseContext.Provider>
   )
 }
-
-export default BaseProvider

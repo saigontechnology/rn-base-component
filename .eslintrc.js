@@ -25,6 +25,7 @@ module.exports = {
         'arrow-body-style': ['error', 'as-needed'],
         '@typescript-eslint/no-shadow': ['error'],
         '@typescript-eslint/no-empty-interface': 'warn',
+        '@typescript-eslint/ban-types': 'warn',
       },
     },
   ],
