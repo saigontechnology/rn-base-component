@@ -109,16 +109,13 @@ const RadioButton = React.forwardRef<PressableProps, IRadioButtonProps>(
       }
     }
 
-    const renderLabelText = () => {
-      return (
-        textComponent || (
-          <LabelTextView
-            style={StyleSheet.flatten([textContainerStyle, styles.disableStyle(disable, disableOpacity)])}>
-            <LabelText style={textStyle}>{text}</LabelText>
-          </LabelTextView>
-        )
+    const renderLabelText = () =>
+      textComponent || (
+        <LabelTextView
+          style={StyleSheet.flatten([textContainerStyle, styles.disableStyle(disable, disableOpacity)])}>
+          <LabelText style={textStyle as any}>{text}</LabelText>
+        </LabelTextView>
       )
-    }
 
     const handleLayout = (event: LayoutChangeEvent) => {
       const {width, height} = event.nativeEvent.layout
@@ -127,7 +124,7 @@ const RadioButton = React.forwardRef<PressableProps, IRadioButtonProps>(
     }
 
     return (
-      <RadioButtonWrapper testID="container" style={wrapperStyle}>
+      <RadioButtonWrapper testID="container" style={wrapperStyle as any}>
         <Bounceable
           testID="bounceable"
           ref={ref}
@@ -155,6 +152,8 @@ const RadioButton = React.forwardRef<PressableProps, IRadioButtonProps>(
     )
   },
 )
+
+RadioButton.displayName = 'RadioButton'
 
 export default React.memo(RadioButton)
 

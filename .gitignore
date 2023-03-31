@@ -41,6 +41,13 @@ build/
 local.properties
 android.iml
 
+# Cocoapods
+#
+example/ios/Pods
+
+# Ruby
+example/vendor/
+
 # node.js
 #
 node_modules/
