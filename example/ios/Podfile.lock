@@ -645,7 +645,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: ad17efcfb2fa8f6bfd8ac0cf48d96668b8b28e0b
   React-runtimeexecutor: 8fa50b38df6b992c76537993a2b0553d3b088004
   ReactCommon: b49a4b00ca6d181ff74b17c12b2d59ac4add0bde
-  rn-base-component: 858f2f5ece62ac0e5b9f8f346ce48e2330f94442
+  rn-base-component: 0e4d0e35df39f193ccd2a51d1e49856cf7d2818d
   RNCAsyncStorage: 8616bd5a58af409453ea4e1b246521bb76578d60
   RNDateTimePicker: 65e1d202799460b286ff5e741d8baf54695e8abd
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
