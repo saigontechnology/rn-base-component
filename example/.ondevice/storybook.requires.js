@@ -52,7 +52,8 @@ const getStories = () => {
     "./src/stories/Button.stories.tsx": require("../src/stories/Button.stories.tsx"),
     './src/stories/RadioButton.stories.tsx': require('../src/stories/RadioButton.stories.tsx'),
     './src/stories/Text.stories.tsx': require('../src/stories/Text.stories.tsx'),
-  }
-}
+    './src/stories/RadioButton.stories.tsx': require('../src/stories/RadioButton.stories.tsx'),
+  };
+};
 
 configure(getStories, module, false)
