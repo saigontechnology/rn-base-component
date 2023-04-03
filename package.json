@@ -38,10 +38,7 @@
     "lint:fix": "eslint . --fix",
     "pretty": "prettier --write \"./**/*.{js,jsx,json}\"",
     "bootstrap": "yarn example && yarn install && yarn example pods",
-    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build",
-    "ios": "yarn example ios",
-    "android": "yarn example android",
-    "update-stories": "yarn example update-stories"
+    "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build"
   },
   "keywords": [
     "react-native",

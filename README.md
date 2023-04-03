@@ -12,14 +12,14 @@ npm install rn-base-component
 
 ```sh
 yarn boostrap
-yarn ios/android
+yarn example ios/android
 ```
 
 ## Update Storybook (Debug purpose only)
 
 To update Storybook after running it on the Simulator and adding new components or updating existing ones, run the following command.
 ```sh
-yarn update-stories
+yarn example update-stories
 ```
 
 ## Documents
