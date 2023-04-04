@@ -12,5 +12,4 @@ export const Basic: ComponentStory<typeof RnRadioButton> = args => <RnRadioButto
 
 Basic.args = {
   text: 'Radio Button',
-  innerContainerStyle: {width: 150},
 }

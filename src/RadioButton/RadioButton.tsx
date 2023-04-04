@@ -7,12 +7,13 @@ import {
   LayoutChangeEvent,
   PressableProps,
   View,
+  Text,
 } from 'react-native'
 import Bounceable from './Bounceable'
 import styled from 'styled-components/native'
 import {metrics, responsiveWidth, responsiveHeight} from '../helpers/metrics'
 import type {IBounceableProps} from './Bounceable'
-import {theme} from '../theme'
+import type {ITheme} from '../theme'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 type CustomTextStyleProp = StyleProp<TextStyle> | Array<StyleProp<TextStyle>>
@@ -91,7 +92,7 @@ const RadioButton = React.forwardRef<PressableProps, IRadioButtonProps>(
       style,
       isRemainActive = undefined,
       innerContainerStyle,
-      ringColor,
+      ringColor = 'blue',
       innerBackgroundColor = 'blue',
       onPressButton,
       initial,
@@ -127,7 +128,7 @@ const RadioButton = React.forwardRef<PressableProps, IRadioButtonProps>(
       textComponent || (
         <LabelTextView
           style={StyleSheet.flatten([textContainerStyle, styles.disableStyle(disable, disableOpacity)])}>
-          <LabelText style={textStyle as any}>{text}</LabelText>
+          <LabelText style={textStyle}>{text}</LabelText>
         </LabelTextView>
       )
 
@@ -138,7 +139,7 @@ const RadioButton = React.forwardRef<PressableProps, IRadioButtonProps>(
     }
 
     return (
-      <RadioButtonWrapper testID="container" style={wrapperStyle as any}>
+      <RadioButtonWrapper testID="container" style={wrapperStyle}>
         <Bounceable
           testID="bounceable"
           ref={ref}
@@ -173,7 +174,7 @@ RadioButton.displayName = 'RadioButton'
 export default React.memo(RadioButton)
 
 const styles = StyleSheet.create<any>({
-  container: (ringColor = 'blue') => ({
+  container: (ringColor: string) => ({
     width: responsiveWidth(45),
     height: responsiveHeight(45),
     borderWidth: metrics.borderRadius,
@@ -196,7 +197,7 @@ const styles = StyleSheet.create<any>({
   },
 })
 
-const RadioButtonWrapper = styled.View({
+const RadioButtonWrapper = styled(View)({
   flexDirection: 'row',
   alignItems: 'center',
 })
@@ -206,10 +207,11 @@ const RadioButtonInnerContainer = styled(View)((props: TrackStyle) => ({
   maxHeight: props.maxHeight,
 }))
 
-const LabelTextView = styled.View({
+const LabelTextView = styled(View)({
   marginLeft: responsiveWidth(16),
 })
 
-const LabelText = styled.Text({
-  color: theme.colors.textColor,
-})
+const LabelText = styled(Text)((props: {theme: ITheme}) => ({
+  color: props.theme.colors.textColor,
+  fontSize: props.theme.fontSizes.md,
+}))
