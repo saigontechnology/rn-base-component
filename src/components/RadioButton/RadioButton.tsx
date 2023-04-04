@@ -1,5 +1,5 @@
-import * as React from 'react'
-import {StyleProp, ViewStyle, StyleSheet, TextStyle, LayoutChangeEvent, View, Text} from 'react-native'
+import React, {useMemo, forwardRef, useState, useRef} from 'react'
+import {StyleProp, ViewStyle, TextStyle, LayoutChangeEvent, View, Text} from 'react-native'
 import Bounceable from './Bounceable'
 import styled from 'styled-components/native'
 import {metrics, responsiveWidth, responsiveHeight} from '../../helpers/metrics'
@@ -9,11 +9,6 @@ import {theme} from '../../theme'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 type CustomTextStyleProp = StyleProp<TextStyle>
-
-type TrackStyle = {
-  maxWidth: number
-  maxHeight: number
-}
 
 export interface IRadioButtonProps extends IBounceableProps {
   /**
@@ -86,7 +81,7 @@ export interface IRadioButtonProps extends IBounceableProps {
   text?: string
 }
 
-const RadioButton = React.forwardRef<View, IRadioButtonProps>(
+const RadioButton = forwardRef<View, IRadioButtonProps>(
   (
     {
       style,
@@ -109,12 +104,30 @@ const RadioButton = React.forwardRef<View, IRadioButtonProps>(
     },
     ref,
   ) => {
-    const [isActive, setIsActive] = React.useState(initial || false)
-    const widthBounceableRef = React.useRef({
-      value: styles.container().width,
+    const [isActive, setIsActive] = useState(initial || false)
+
+    const outer = useMemo(
+      () => ({
+        width: responsiveWidth(outerSize),
+        height: responsiveHeight(outerSize),
+        border: responsiveHeight(outerSize / 2),
+      }),
+      [outerSize],
+    )
+    const inner = useMemo(
+      () => ({
+        width: responsiveWidth(innerSize),
+        height: responsiveHeight(innerSize),
+        border: responsiveHeight(innerSize / 2),
+      }),
+      [innerSize],
+    )
+
+    const widthBounceableRef = useRef({
+      value: outer.width,
     }).current
-    const heightBounceableRef = React.useRef({
-      value: styles.container().width,
+    const heightBounceableRef = useRef({
+      value: outer.height,
     }).current
 
     const handlePress = () => {
@@ -129,8 +142,7 @@ const RadioButton = React.forwardRef<View, IRadioButtonProps>(
     const renderLabelText = () =>
       textComponent ||
       (text ? (
-        <LabelTextView
-          style={StyleSheet.flatten([textContainerStyle, styles.disableStyle(disable, disableOpacity)])}>
+        <LabelTextView disable={!!disable} disableOpacity={disableOpacity} style={textContainerStyle}>
           <LabelText style={textStyle}>{text}</LabelText>
         </LabelTextView>
       ) : null)
@@ -143,29 +155,28 @@ const RadioButton = React.forwardRef<View, IRadioButtonProps>(
 
     return (
       <RadioButtonWrapper testID="container" style={wrapperStyle}>
-        <Bounceable
+        <BounceableStyle
+          outer={outer}
+          disable={!!disable}
+          disableOpacity={disableOpacity}
+          ringColor={ringColor}
           testID="bounceable"
           ref={ref}
           disabled={disable}
           onLayout={handleLayout}
-          style={StyleSheet.flatten([
-            styles.container(ringColor, outerSize),
-            style,
-            styles.disableStyle(disable, disableOpacity),
-            styles.constantBackgroundColor,
-          ])}
+          style={style}
           onPress={handlePress}
           {...props}>
           <RadioButtonInnerContainer
             maxWidth={widthBounceableRef.value}
             maxHeight={heightBounceableRef.value}
+            inner={inner}
+            isActive={isActive}
+            innerBackgroundColor={innerBackgroundColor}
+            style={innerContainerStyle}
             testID="circle"
-            style={StyleSheet.flatten([
-              styles.innerStyle(isRemainActive || isActive, innerBackgroundColor, innerSize),
-              innerContainerStyle,
-            ])}
           />
-        </Bounceable>
+        </BounceableStyle>
         {renderLabelText()}
       </RadioButtonWrapper>
     )
@@ -176,43 +187,49 @@ RadioButton.displayName = 'RadioButton'
 
 export default RadioButton
 
-const styles = StyleSheet.create<any>({
-  container: (ringColor: string, outerSize: number) => ({
-    width: responsiveWidth(outerSize),
-    height: responsiveHeight(outerSize),
-    borderWidth: metrics.borderRadius,
-    borderRadius: responsiveHeight(outerSize / 2),
-    borderColor: ringColor,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }),
-  innerStyle: (isActive: boolean, innerBackgroundColor: string, innerSize: number) => ({
-    width: responsiveWidth(innerSize),
-    height: responsiveHeight(innerSize),
-    borderRadius: responsiveHeight(innerSize / 2),
-    backgroundColor: isActive ? innerBackgroundColor : 'transparent',
-  }),
-  disableStyle: (disable: boolean, disableOpacity: number) => ({
-    opacity: disable ? disableOpacity : 1,
-  }),
-  constantBackgroundColor: {
-    backgroundColor: 'transparent',
-  },
-})
+const BounceableStyle = styled(Bounceable)<{
+  outer: {width: number; height: number; border: number}
+  ringColor: string
+  disable: boolean
+  disableOpacity: number
+}>(({outer, ringColor, disable, disableOpacity}) => ({
+  width: outer.width,
+  height: outer.height,
+  borderWidth: metrics.borderRadius,
+  borderRadius: outer.border,
+  borderColor: ringColor,
+  alignItems: 'center',
+  justifyContent: 'center',
+  opacity: disable ? disableOpacity : 1,
+  backgroundColor: 'transparent',
+}))
 
 const RadioButtonWrapper = styled(View)({
   flexDirection: 'row',
   alignItems: 'center',
 })
 
-const RadioButtonInnerContainer = styled(View)((props: TrackStyle) => ({
-  maxWidth: props.maxWidth,
-  maxHeight: props.maxHeight,
+const RadioButtonInnerContainer = styled(View)<{
+  inner: {width: number; height: number; border: number}
+  maxWidth: number
+  maxHeight: number
+  isActive: boolean
+  innerBackgroundColor: string
+}>(({inner, maxWidth, maxHeight, isActive, innerBackgroundColor}) => ({
+  maxWidth: maxWidth,
+  maxHeight: maxHeight,
+  width: inner.width,
+  height: inner.height,
+  borderRadius: inner.border,
+  backgroundColor: isActive ? innerBackgroundColor : 'transparent',
 }))
 
-const LabelTextView = styled.View({
-  marginLeft: responsiveWidth(16),
-})
+const LabelTextView = styled(View)<{disable: boolean; disableOpacity: number}>(
+  ({disable, disableOpacity}) => ({
+    marginLeft: responsiveWidth(16),
+    opacity: disable ? disableOpacity : 1,
+  }),
+)
 
 const LabelText = styled(Text)((props: {theme: ITheme}) => ({
   color: props?.theme?.colors?.black,
