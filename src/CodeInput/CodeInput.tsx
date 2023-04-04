@@ -3,6 +3,7 @@ import {TextInput, Text, StyleProp, ViewStyle, KeyboardTypeOptions, TextStyle} f
 import {metrics} from '../helpers/metrics'
 import styled from 'styled-components/native'
 import Cursor from './Cursor'
+import type {ITheme} from 'src/theme'
 
 interface CodeInputProps {
   /** define style for cell */
@@ -26,6 +27,9 @@ interface CodeInputProps {
   /** render custom view for cursor/indicator */
   customCursor?: () => ReactNode
 
+  /** render custom view for cursor/indicator */
+  secureTextEntry?: boolean
+
   /** keyboard type */
   keyboardType?: KeyboardTypeOptions
 }
@@ -40,6 +44,7 @@ const CodeInput = ({
   cellCount = DEFAULT_CELL_COUNT,
   onFulfill,
   customCursor,
+  secureTextEntry,
   keyboardType = 'number-pad',
 }: CodeInputProps) => {
   const textInputRef = useRef<TextInput>()
@@ -90,9 +95,13 @@ const CodeInput = ({
               key={index}
               onPress={() => handleCellPress(index)}>
               {code[index] ? (
-                <Text testID="text" style={[textStyle, isFocused && focusTextStyle]}>
-                  {code[index]}
-                </Text>
+                secureTextEntry ? (
+                  <SecureView testID="text" style={textStyle} />
+                ) : (
+                  <Text testID="text" style={textStyle}>
+                    {code[index]}
+                  </Text>
+                )
               ) : (
                 isFocused && (customCursor ? customCursor() : <Cursor style={focusTextStyle} />)
               )}
@@ -108,16 +117,27 @@ export default memo(CodeInput)
 
 const CodeInputContainer = styled.View({})
 
-const Cell = styled.Pressable({
-  width: metrics.huge,
-  height: metrics.huge,
-  borderRadius: metrics.tiny,
-  borderWidth: 1,
-  borderColor: 'gray',
-  justifyContent: 'center',
-  alignItems: 'center',
-  margin: metrics.tiny,
-})
+const Cell = styled.Pressable`
+  ${(props: {theme: ITheme}) => ({
+    width: metrics.huge,
+    height: metrics.huge,
+    borderRadius: metrics.tiny,
+    borderWidth: 1,
+    borderColor: props?.theme?.colors?.cardPrimaryBackground,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: metrics.tiny,
+  })}
+`
+
+const SecureView = styled.View`
+  ${(props: {theme: ITheme}) => ({
+    width: metrics.small,
+    height: metrics.small,
+    borderRadius: metrics.small,
+    backgroundColor: props.theme.colors.textColor,
+  })}
+`
 
 const CellContainer = styled.View({
   display: 'flex',
