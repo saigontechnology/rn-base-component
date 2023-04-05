@@ -1,6 +1,6 @@
 import React, {ReactNode, useCallback, useRef, useState, memo} from 'react'
 import {TextInput, Text, StyleProp, ViewStyle, KeyboardTypeOptions, TextStyle} from 'react-native'
-import {metrics} from '../helpers/metrics'
+import {metrics} from '../../helpers/metrics'
 import styled from 'styled-components/native'
 import Cursor from './Cursor'
 import type {ITheme} from 'src/theme'
