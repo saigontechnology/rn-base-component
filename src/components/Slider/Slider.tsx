@@ -17,8 +17,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import {PanGestureHandler, PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
-import {isIOS, metrics} from '../helpers/metrics'
-import {colors} from '../helpers/colors'
+import {isIOS, metrics} from '../../helpers/metrics'
+import {colors} from '../../helpers/colors'
 import styled from 'styled-components/native'
 
 const DEFAULT_STEP = 1
