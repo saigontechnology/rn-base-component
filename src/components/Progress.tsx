@@ -1,6 +1,7 @@
-import React, {useEffect, useRef, useState, forwardRef, memo} from 'react'
-import {View, StyleSheet, Animated} from 'react-native'
+import React, {useEffect, useRef, useState, forwardRef, memo, useCallback} from 'react'
+import {View, Animated, LayoutChangeEvent} from 'react-native'
 import {metrics, deviceWidth} from '../helpers/metrics'
+import styled from 'styled-components/native'
 
 interface IProgressProps {
   /**
@@ -36,6 +37,13 @@ interface IProgressProps {
    * Defines progress mode
    */
   isIndeterminateProgress?: boolean
+}
+
+type ProgressStyle = {
+  width: number | undefined
+  size: number | undefined
+  backgroundColor: string
+  borderRadius: number
 }
 
 const screenWidth = deviceWidth()
@@ -84,14 +92,21 @@ const Progress = forwardRef<View, IProgressProps>(
       toTranslateX.setValue(-progressWidth + (progressWidth * progressValue) / MAX_VALUE)
     }, [progressWidth, value])
 
+    const onLayout = useCallback((event: LayoutChangeEvent) => {
+      const {layout} = event.nativeEvent
+      setProgressWidth(layout.width)
+    }, [])
+
     return (
-      <View
+      <ProgressWrapper
         ref={ref}
-        style={StyleSheet.flatten([
-          styles.progress,
-          {width: width ? width : '100%', height: size, backgroundColor, borderRadius},
-        ])}
-        onLayout={({nativeEvent: {layout}}) => setProgressWidth(layout.width)}>
+        size={size}
+        onLayout={onLayout}
+        {...{
+          backgroundColor,
+          borderRadius,
+          width,
+        }}>
         <Animated.View
           style={{
             transform: [
@@ -118,7 +133,7 @@ const Progress = forwardRef<View, IProgressProps>(
             width: progressWidth,
           }}
         />
-      </View>
+      </ProgressWrapper>
     )
   },
 )
@@ -127,8 +142,10 @@ Progress.displayName = 'Progress'
 
 export default memo(Progress)
 
-const styles = StyleSheet.create({
-  progress: {
-    overflow: 'hidden',
-  },
-})
+const ProgressWrapper = styled(View)((props: ProgressStyle) => ({
+  overflow: 'hidden',
+  width: props.width,
+  height: props.size,
+  backgroundColor: props.backgroundColor,
+  borderRadius: props.borderRadius,
+}))

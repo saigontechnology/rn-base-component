@@ -15,5 +15,4 @@ Basic.args = {
   filledTrackColor: '#49BE25',
   backgroundColor: '#E5E5E5',
   borderRadius: 8,
-  isIndeterminateProgress: true,
 }
