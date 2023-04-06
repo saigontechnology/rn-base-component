@@ -13,6 +13,8 @@ import {
   TouchableWithoutFeedbackProps,
   StyleSheet,
 } from 'react-native'
+import styled from 'styled-components/native'
+import {metrics} from '../../helpers/metrics'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 type CustomTextStyleProp = StyleProp<TextStyle> | Array<StyleProp<TextStyle>>
@@ -21,26 +23,35 @@ type BaseTouchableProps = Pick<
   TouchableWithoutFeedbackProps,
   Exclude<keyof TouchableWithoutFeedbackProps, 'onPress'>
 >
+type TextContainerStyle = {
+  disable: boolean
+  disableOpacity: number
+}
+type IconContainerStyle = {
+  size: number
+  backgroundColor: string
+  disable: boolean
+  disableOpacity: number
+}
+type InnerIconContainerStyle = {
+  size: number
+  borderColor: string
+}
+
 export interface ICheckboxProps extends BaseTouchableProps {
   /** size of the checkbox */
   size?: number
   /** the text of the checkbox */
   text?: string
-  /** color when checkbox is checked
-   * default #ffc484
-   */
+  /** color when checkbox is checked, default #ffc484 */
   fillColor?: string
   /** define the status of checkbox */
   isChecked?: boolean
-  /** color when checkbox is unchecked
-   * default transparent
-   */
+  /** color when checkbox is unchecked, default transparent */
   unfillColor?: string
   /** disable checkbox */
   disable?: boolean
-  /** opacity of checkbox when disable
-   * default 0.5
-   */
+  /** opacity of checkbox when disable, default 0.5 */
   disableOpacity?: number
   /** disable the checkbox text */
   disableText?: boolean
@@ -48,9 +59,7 @@ export interface ICheckboxProps extends BaseTouchableProps {
   bounceEffect?: number
   /** bounceFriction animation when press */
   bounceFriction?: number
-  /** useNativeDriver or not
-   * default true
-   */
+  /** useNativeDriver or not, default true */
   useNativeDriver?: boolean
   /** disableBuiltInState of checkbox */
   disableBuiltInState?: boolean
@@ -85,7 +94,7 @@ export interface ICheckboxProps extends BaseTouchableProps {
   /** define image source show when checkbox is checked */
   checkIconImageSource?: ImageSourcePropType
   /** callback when checkbox is change state */
-  onPress?: (checked: boolean) => void
+  onChange?: (checked: boolean) => void
 }
 
 interface ICheckboxMethods {
@@ -123,7 +132,7 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       bouncinessIn = 20,
       bouncinessOut = 20,
       useNativeDriver = true,
-      onPress,
+      onChange,
       ...rest
     },
     forwardedRef,
@@ -173,35 +182,18 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       const checkStatus = disableBuiltInState ? isChecked : checked
 
       return (
-        <Animated.View
+        <IconContainer
           testID={'icon-container'}
-          style={StyleSheet.flatten([
-            styles.iconContainer,
-            {transform: [{scale: bounceValue}]},
-            {
-              width: size,
-              height: size,
-              borderRadius: size / 4,
-              backgroundColor: checked ? fillColor : unfillColor,
-            },
-            iconStyle,
-            {opacity: disable ? disableOpacity : 1},
-          ])}>
-          <View
-            style={StyleSheet.flatten([
-              styles.innerIconContainer,
-              {width: size, height: size, borderRadius: size / 4, borderColor: fillColor},
-              innerIconStyle,
-            ])}>
+          size={size}
+          backgroundColor={checked ? fillColor : unfillColor}
+          disable={disable}
+          disableOpacity={disableOpacity}
+          style={StyleSheet.flatten([{transform: [{scale: bounceValue}]}, iconStyle])}>
+          <InnerIconContainer style={innerIconStyle} size={size} borderColor={fillColor}>
             {iconComponent ||
-              (checkStatus && (
-                <Image
-                  source={checkIconImageSource}
-                  style={StyleSheet.flatten([styles.iconImageStyle, iconImageStyle])}
-                />
-              ))}
-          </View>
-        </Animated.View>
+              (checkStatus && <StyledImage source={checkIconImageSource} style={iconImageStyle} />)}
+          </InnerIconContainer>
+        </IconContainer>
       )
     }
 
@@ -210,16 +202,11 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       return (
         (!disableText || checkDisableTextType) &&
         (textComponent || (
-          <View
-            style={StyleSheet.flatten([
-              styles.textContainer,
-              textContainerStyle,
-              {opacity: disable ? disableOpacity : 1},
-            ])}>
+          <TextContainer style={textContainerStyle} disable={disable} disableOpacity={disableOpacity}>
             <Text testID="text" style={textStyle}>
               {text}
             </Text>
-          </View>
+          </TextContainer>
         ))
       )
     }
@@ -229,22 +216,22 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
         setChecked(prev => !prev)
       }
       syntheticBounceEffect()
-      onPress && onPress(!checked)
-    }, [disableBuiltInState, checked, onPress, syntheticBounceEffect])
+      onChange && onChange(!checked)
+    }, [disableBuiltInState, checked, onChange, syntheticBounceEffect])
 
     useImperativeHandle(forwardedRef, () => ({onHandlePress}), [onHandlePress])
 
     return (
-      <Pressable
+      <Container
         testID="container"
         {...rest}
-        style={StyleSheet.flatten([styles.container, style])}
+        style={style}
         onPressIn={!disable ? bounceInEffect : null}
         onPressOut={!disable ? bounceOutEffect : null}
         onPress={!disable ? onHandlePress : null}>
         {renderCheckIcon()}
         {renderCheckboxText()}
-      </Pressable>
+      </Container>
     )
   },
 )
@@ -253,25 +240,37 @@ Checkbox.displayName = 'Checkbox'
 
 export default memo(Checkbox)
 
-const styles = StyleSheet.create({
-  container: {
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  iconImageStyle: {
-    width: 10,
-    height: 10,
-  },
-  textContainer: {
-    marginLeft: 16,
-  },
-  iconContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  innerIconContainer: {
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+const Container = styled(Pressable)({
+  alignItems: 'center',
+  flexDirection: 'row',
 })
+
+const StyledImage = styled(Image)({
+  width: metrics.xs,
+  height: metrics.xs,
+})
+
+const TextContainer = styled(View)((props: TextContainerStyle) => ({
+  marginLeft: metrics.small,
+  opacity: props.disable ? props.disableOpacity : 1,
+}))
+
+const IconContainer = styled(Animated.View)((props: IconContainerStyle) => ({
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: props.size,
+  height: props.size,
+  borderRadius: props.size / 4,
+  backgroundColor: props.backgroundColor,
+  opacity: props.disable ? props.disableOpacity : 1,
+}))
+
+const InnerIconContainer = styled(View)((props: InnerIconContainerStyle) => ({
+  borderWidth: 1,
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: props.size,
+  height: props.size,
+  borderRadius: props.size / 4,
+  borderColor: props.borderColor,
+}))
