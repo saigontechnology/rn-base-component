@@ -21,7 +21,7 @@ import {metrics} from '../../helpers/metrics'
 import {colors} from '../../helpers/colors'
 import styled from 'styled-components/native'
 import SliderRange from './SliderRange'
-import {DEFAULT_STEP, FIRST_POINT, MINIMUM_TRACK_WIDTH} from './Constants'
+import {DEFAULT_STEP, FIRST_POINT, MINIMUM_TRACK_WIDTH, defaultHitSlop} from './Constants'
 import {Thumb, TrackPoint} from './components'
 
 type Size = {
@@ -136,6 +136,8 @@ const Slider: SliderComponentProps = ({
   labelStyle,
   thumbComponent,
   hasTrackPoint,
+  hasPointTouch,
+  hitSlopPoint = defaultHitSlop,
   sliderWidth = 0,
   thumbSize = {width: metrics.medium, height: metrics.medium},
   trackPointStyle,
@@ -246,6 +248,18 @@ const Slider: SliderComponentProps = ({
     sliderInfo.value = {range: range, trackWidth: width}
   }
 
+  const onPressPoint = useCallback(
+    (point: number) => {
+      const positionPoint = sliderInfo.value.range * (point + 1)
+      const curPoint = point + 1
+      const value = minimumValue + curPoint * step
+
+      updateSlider(positionPoint, curPoint)
+      onValueChange(value)
+    },
+    [minimumValue, onValueChange, sliderInfo.value.range, step, updateSlider],
+  )
+
   return (
     <Container style={!!sliderWidth && {width: sliderWidth}}>
       <Track
@@ -254,7 +268,14 @@ const Slider: SliderComponentProps = ({
         onLayout={getTrackWidth}
       />
       {!!hasTrackPoint && (
-        <TrackPoint sliderWidth={sliderWidth} totalPoint={totalPoint} trackPointStyle={trackPointStyle} />
+        <TrackPoint
+          sliderWidth={sliderWidth}
+          totalPoint={totalPoint}
+          hitSlopPoint={hitSlopPoint}
+          activeOpacity={hasPointTouch ? 0 : 1}
+          trackPointStyle={trackPointStyle}
+          onPressPoint={(point: number) => hasPointTouch && onPressPoint(point)}
+        />
       )}
       <Tracked
         backgroundColor={bgColorTracked}
@@ -296,7 +317,7 @@ const Tracked = styled(Animated.View)((props: TrackStyle) => ({
 
 Slider.Range = SliderRange
 
-export {
+export type {
   Size,
   SliderInfo,
   AnimatedGHContext,

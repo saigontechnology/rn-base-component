@@ -42,6 +42,7 @@ export const Basic: ComponentStory<typeof RnBaseSlider> = () => {
           thumbStyle={[styles.thumb, styles.radius]}
           thumbSize={styles.thumb}
           hasTrackPoint
+          hasPointTouch
           sliderWidth={331}
           onValueChange={setValue2}
         />
@@ -80,15 +81,15 @@ export const Basic: ComponentStory<typeof RnBaseSlider> = () => {
         <View style={styles.spacingTop} />
         <RnBaseSlider
           minimumValue={20}
-          step={2}
+          step={1}
           maximumValue={40}
           trackStyle={styles.height10}
           bgColorTracked={'blue'}
-          hasPointTouch
           isSliderRange
           onValueChange={setValue}
           thumbSize={{height: 40, width: 40}}
           hasTrackPoint
+          hasPointTouch
           sliderWidth={331}
         />
         <Text style={styles.spacingTop20}>Total: 40, step: 2 - Value: {value}</Text>
