@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/native'
-import {metrics} from './helpers/metrics'
-import type {ITheme} from './theme'
+import {metrics} from '../helpers/metrics'
+import type {ITheme} from '../theme'
 
 export type ButtonProps = {
   onPress: () => void
