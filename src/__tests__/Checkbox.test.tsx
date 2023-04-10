@@ -1,6 +1,6 @@
 import React from 'react'
 import {render, fireEvent} from '@testing-library/react-native'
-import Checkbox from './Checkbox'
+import Checkbox from '../components/Checkbox/Checkbox'
 
 describe('Checkbox test', () => {
   const onPressMock = jest.fn()
@@ -15,7 +15,7 @@ describe('Checkbox test', () => {
   })
 
   it('should call on press', () => {
-    const {getByTestId} = render(<Checkbox onPress={onPressMock} />)
+    const {getByTestId} = render(<Checkbox onChange={onPressMock} />)
     const checkbox = getByTestId('container')
 
     fireEvent.press(checkbox)
@@ -28,14 +28,14 @@ describe('Checkbox test', () => {
     const icon = getByTestId('icon-container')
 
     fireEvent.press(checkbox)
-    expect(icon.props.style.backgroundColor).toEqual('#ffc484')
+    expect(icon.props.style.backgroundColor).toEqual('#0B0B0B')
 
     fireEvent.press(checkbox)
     expect(icon.props.style.backgroundColor).toEqual('transparent')
   })
 
   it('should not change state when disabled', () => {
-    const {getByTestId} = render(<Checkbox disable={true} />)
+    const {getByTestId} = render(<Checkbox disabled={true} />)
     const checkbox = getByTestId('container')
     const icon = getByTestId('icon-container')
 

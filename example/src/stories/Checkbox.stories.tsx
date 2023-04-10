@@ -10,11 +10,11 @@ export default {
 
 export const Basic: ComponentStory<typeof RnBaseCheckbox> = () => (
   <View style={styles.container}>
-    <RnBaseCheckbox size={25} fillColor="#562B69" />
+    <RnBaseCheckbox fillColor="#562B69" />
     <View style={styles.spacer} />
-    <RnBaseCheckbox size={25} fillColor="green" text="checkbox label" />
+    <RnBaseCheckbox fillColor="green" text="checkbox label" />
     <View style={styles.spacer} />
-    <RnBaseCheckbox size={25} fillColor="green" disable={true} text="disable checkbox" />
+    <RnBaseCheckbox fillColor="green" disabled={true} text="disable checkbox" />
   </View>
 )
 
