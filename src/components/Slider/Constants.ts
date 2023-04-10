@@ -1,8 +1,28 @@
 const DEFAULT_STEP = 1
-const FIRST_POINT = 0
+const INIT_POINT = 0
 const MINIMUM_TRACK_WIDTH = 0
-const defaultHitSlop = {top: 5, right: 5, bottom: 5, left: 5}
+const DEFAULT_MINIMUM_VALUE = 1
+const DEFAULT_MAXIMUM_VALUE = 10
+const INIT_VALUE = 0
+const VISIBLE = 1
+const INVISIBLE = 0
+const NEXT_STEP = 1
+const PREVIOUS_STEP = 1
+const FIRST_POINT = 1
 
 const ThumbPosition = {left: 'left', right: 'right'}
 
-export {DEFAULT_STEP, FIRST_POINT, MINIMUM_TRACK_WIDTH, defaultHitSlop, ThumbPosition}
+export {
+  DEFAULT_MINIMUM_VALUE,
+  DEFAULT_MAXIMUM_VALUE,
+  DEFAULT_STEP,
+  INIT_POINT,
+  FIRST_POINT,
+  MINIMUM_TRACK_WIDTH,
+  ThumbPosition,
+  INIT_VALUE,
+  VISIBLE,
+  INVISIBLE,
+  NEXT_STEP,
+  PREVIOUS_STEP,
+}

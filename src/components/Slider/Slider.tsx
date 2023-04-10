@@ -1,14 +1,20 @@
 import React, {useCallback, useMemo} from 'react'
+import type {PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
+import {hitSlop, metrics} from '../../helpers/metrics'
+import SliderRange, {ISliderRange} from './SliderRange'
+import {Thumb, Track, TrackPoint} from './components'
+import styled from 'styled-components/native'
+import type {ITheme} from '../../theme'
 import {
   StyleProp,
   ViewStyle,
   StyleSheet,
   LayoutChangeEvent,
   TextInputProps,
-  TextProps,
   Insets,
+  TextStyle,
 } from 'react-native'
-import Animated, {
+import {
   useAnimatedStyle,
   useSharedValue,
   useAnimatedGestureHandler,
@@ -16,13 +22,19 @@ import Animated, {
   useAnimatedProps,
   withTiming,
 } from 'react-native-reanimated'
-import type {PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
-import {metrics} from '../../helpers/metrics'
-import {colors} from '../../helpers/colors'
-import styled from 'styled-components/native'
-import SliderRange from './SliderRange'
-import {DEFAULT_STEP, FIRST_POINT, MINIMUM_TRACK_WIDTH, defaultHitSlop} from './Constants'
-import {Thumb, TrackPoint} from './components'
+import {
+  DEFAULT_MAXIMUM_VALUE,
+  DEFAULT_MINIMUM_VALUE,
+  DEFAULT_STEP,
+  FIRST_POINT,
+  INIT_POINT,
+  INIT_VALUE,
+  INVISIBLE,
+  MINIMUM_TRACK_WIDTH,
+  NEXT_STEP,
+  PREVIOUS_STEP,
+  VISIBLE,
+} from './constants'
 
 type Size = {
   width: number
@@ -40,12 +52,10 @@ type AnimatedGHContext = {
 }
 
 type ThumbContainerStyle = {
+  theme?: ITheme
   thumbSize: Size
   hasThumbComponent?: boolean
-}
-
-type TrackStyle = {
-  backgroundColor: string
+  background?: string
 }
 
 type TrackPointStyle = {
@@ -56,10 +66,19 @@ interface AnimatedLabelProps extends TextInputProps {
   text: string
 }
 
+type ISlider = {
+  /** custom element that can be used to replace the default thumb of the slider */
+  thumbComponent?: React.ReactElement
+
+  /** Callback function to handle the change in slider value */
+  onValueChange?: (value: number) => void
+}
+
 type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
 type Position = 'absolute' | 'fixed' | 'relative' | 'static' | 'sticky'
+type TextAlign = 'center' | 'end' | 'justify' | 'left' | 'match-parent' | 'right' | 'start'
 
-export interface SliderCommonProps {
+export interface ISliderCommon {
   /** The maximum value of the slider */
   maximumValue?: number
 
@@ -81,14 +100,14 @@ export interface SliderCommonProps {
   /** The touchable area is used to increase the size of the thumb and make it easier to interact with */
   hitSlopPoint?: Insets | number
 
+  /** Style for the slider component. */
+  style?: StyleProp<ViewStyle>
+
   /** Style of the slider's track */
   trackStyle?: StyleProp<ViewStyle>
 
-  /** The bgColorTrack sets the background color of the slider's track */
-  bgColorTrack?: string
-
-  /** The bgColorTracked sets the background color of the part of the track that has been selected */
-  bgColorTracked?: string
+  /** Style for the track's filled portion (in case of a range slider) */
+  trackedStyle?: StyleProp<ViewStyle>
 
   /** Style of the point on the slider's track */
   trackPointStyle?: StyleProp<ViewStyle>
@@ -97,19 +116,13 @@ export interface SliderCommonProps {
   bgColorLabelView?: string
 
   /** The labelStyle sets the style of the text that displays the value of the slider */
-  labelStyle?: StyleProp<TextProps>
+  labelStyle?: StyleProp<TextStyle>
 
   /** Style of the slider's thumb */
   thumbStyle?: StyleProp<ViewStyle>
 
-  /** custom element that can be used to replace the default thumb of the slider */
-  thumbComponent?: React.ReactElement
-
   /** Size of the slider's thumb */
   thumbSize?: Size
-
-  /** Callback function to handle the change in slider value */
-  onValueChange?: (value: number | {minimum: number; maximum: number}) => void
 }
 
 type SliderPropsWithOptionalWidth = {sliderWidth?: number} & (
@@ -117,36 +130,36 @@ type SliderPropsWithOptionalWidth = {sliderWidth?: number} & (
   | {hasTrackPoint?: false; sliderWidth?: number}
 )
 
-type SliderProps = SliderCommonProps & SliderPropsWithOptionalWidth
+type SliderProps = ISliderCommon & ISlider & SliderPropsWithOptionalWidth
 
-type SliderComponentProps = React.FunctionComponent<SliderProps> & {
-  Range: React.FunctionComponent<SliderProps>
+type SliderComponentProps = React.FC<SliderProps> & {
+  Range: React.FC<ISliderRange>
 }
 
 const Slider: SliderComponentProps = ({
-  minimumValue = 1,
-  maximumValue = 10,
+  minimumValue = DEFAULT_MINIMUM_VALUE,
+  maximumValue = DEFAULT_MAXIMUM_VALUE,
   step = DEFAULT_STEP,
+  style,
   trackStyle,
-  bgColorTrack = '#F1F1F1',
-  bgColorTracked = colors.primary,
+  trackedStyle,
   thumbStyle,
-  bgColorLabelView = colors.primary,
+  bgColorLabelView,
   alwaysShowValue,
   labelStyle,
   thumbComponent,
   hasTrackPoint,
   hasPointTouch,
-  hitSlopPoint = defaultHitSlop,
-  sliderWidth = 0,
+  hitSlopPoint = hitSlop,
+  sliderWidth,
   thumbSize = {width: metrics.medium, height: metrics.medium},
   trackPointStyle,
   onValueChange = () => null,
 }: SliderProps) => {
-  const sliderInfo = useSharedValue<SliderInfo>({range: 0, trackWidth: 0})
-  const currentPoint = useSharedValue<number>(FIRST_POINT)
-  const progress = useSharedValue<number>(0)
-  const opacity = useSharedValue(0)
+  const sliderInfo = useSharedValue<SliderInfo>({range: INIT_VALUE, trackWidth: INIT_VALUE})
+  const currentPoint = useSharedValue<number>(INIT_POINT)
+  const progress = useSharedValue<number>(INIT_VALUE)
+  const opacity = useSharedValue(INIT_VALUE)
 
   const totalPoint = useMemo(() => (maximumValue - minimumValue) / step, [maximumValue, minimumValue, step])
 
@@ -172,36 +185,33 @@ const Slider: SliderComponentProps = ({
       const progressing = ctx.startX + event.translationX
       // Calculate the new slider value based on the progressing (new position) and the range
       const sliderValue = progressing / range
-      let currentProgress = 0
-      let point = 0
-
-      opacity.value = 1
+      opacity.value = VISIBLE
 
       // When sliding the thumb across a distance shorter than the track's width
       if (progressing < MINIMUM_TRACK_WIDTH) {
-        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, FIRST_POINT)
+        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, INIT_POINT)
       }
       // When sliding the thumb over the track's width
       else if (progressing > trackWidth) {
         runOnJS(updateSlider)(trackWidth, totalPoint)
       }
       // When sliding steadily increases
-      else if (progressing > range * (currentPoint.value + 1)) {
-        currentProgress = range * Math.floor(sliderValue)
-        point = Math.floor(sliderValue)
+      else if (progressing > range * (currentPoint.value + NEXT_STEP)) {
+        const currentProgress = range * Math.floor(sliderValue)
+        const point = Math.floor(sliderValue)
 
         runOnJS(updateSlider)(currentProgress, point)
       }
       // When sliding steadily decreases
-      else if (progressing < range * (currentPoint.value - 1)) {
-        currentProgress = range * Math.floor(sliderValue + 1)
-        point = Math.floor(sliderValue + 1)
+      else if (progressing < range * (currentPoint.value - PREVIOUS_STEP)) {
+        const currentProgress = range * Math.ceil(sliderValue)
+        const point = Math.ceil(sliderValue)
 
         runOnJS(updateSlider)(currentProgress, point)
       }
     },
     onEnd: () => {
-      opacity.value = 0
+      opacity.value = INVISIBLE
       runOnJS(onValueChange)(minimumValue + currentPoint.value * step)
     },
   })
@@ -248,10 +258,15 @@ const Slider: SliderComponentProps = ({
     sliderInfo.value = {range: range, trackWidth: width}
   }
 
+  /**
+   * Function called when the user presses on a point on the slider's track
+   * Calculates the position of the pressed point on the slider's track and updates the slider's state accordingly
+   * @param {number} point - The index of the point on the slider's track that was pressed by the user
+   */
   const onPressPoint = useCallback(
     (point: number) => {
-      const positionPoint = sliderInfo.value.range * (point + 1)
-      const curPoint = point + 1
+      const positionPoint = sliderInfo.value.range * (point + FIRST_POINT)
+      const curPoint = point + FIRST_POINT
       const value = minimumValue + curPoint * step
 
       updateSlider(positionPoint, curPoint)
@@ -261,12 +276,8 @@ const Slider: SliderComponentProps = ({
   )
 
   return (
-    <Container style={!!sliderWidth && {width: sliderWidth}}>
-      <Track
-        backgroundColor={bgColorTrack}
-        style={[trackStyle, (hasTrackPoint || !!sliderWidth) && {width: sliderWidth}]}
-        onLayout={getTrackWidth}
-      />
+    <Container style={[!!sliderWidth && {width: sliderWidth}, style]}>
+      <Track style={trackStyle} onLayout={getTrackWidth} />
       {!!hasTrackPoint && (
         <TrackPoint
           sliderWidth={sliderWidth}
@@ -277,10 +288,7 @@ const Slider: SliderComponentProps = ({
           onPressPoint={(point: number) => hasPointTouch && onPressPoint(point)}
         />
       )}
-      <Tracked
-        backgroundColor={bgColorTracked}
-        style={[trackStyle, hasTrackPoint && {width: sliderWidth}, animatedTrackStyle]}
-      />
+      <Tracked style={[trackedStyle, animatedTrackStyle]} />
       <Thumb
         text={minimumValue?.toString()}
         bgColorLabelView={bgColorLabelView}
@@ -302,17 +310,9 @@ const Container = styled.View({
   justifyContent: 'center',
 })
 
-const Track = styled(Animated.View)((props: TrackStyle) => ({
-  height: 10,
-  borderRadius: 10,
-  backgroundColor: props.backgroundColor,
-}))
-
-const Tracked = styled(Animated.View)((props: TrackStyle) => ({
+const Tracked = styled(Track)(({theme}: {theme: ITheme}) => ({
   ...StyleSheet.absoluteFillObject,
-  height: 10,
-  borderRadius: 10,
-  backgroundColor: props.backgroundColor,
+  backgroundColor: theme?.colors.primary,
 }))
 
 Slider.Range = SliderRange
@@ -325,9 +325,9 @@ export type {
   SliderProps,
   SliderPropsWithOptionalWidth,
   AnimatedLabelProps,
-  TrackStyle,
   TrackPointStyle,
   FlexDirection,
   Position,
+  TextAlign,
 }
 export default Slider

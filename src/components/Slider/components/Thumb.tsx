@@ -7,16 +7,16 @@ import {
 } from 'react-native-gesture-handler'
 import styled from 'styled-components/native'
 import Animated, {useAnimatedProps, useAnimatedStyle} from 'react-native-reanimated'
-import type {Position, Size, ThumbContainerStyle} from '../Slider'
-import {colors} from '../../../helpers/colors'
+import type {Position, Size, TextAlign, ThumbContainerStyle} from '../Slider'
 import {isIOS, metrics} from '../../../helpers/metrics'
 import type {StyleProp, TextProps, ViewStyle} from 'react-native'
+import type {ITheme} from '../../../theme'
 
 const AnimatedText = Animated.createAnimatedComponent(TextInput)
 
 interface ThumbProps {
   text: string
-  bgColorLabelView: string
+  bgColorLabelView?: string
   labelStyle: StyleProp<TextProps>
   thumbSize: Size
   thumbStyle: StyleProp<ViewStyle>
@@ -30,7 +30,7 @@ interface ThumbProps {
 
 const Thumb: React.FunctionComponent<ThumbProps> = ({
   text,
-  bgColorLabelView = colors.primary,
+  bgColorLabelView,
   labelStyle,
   alwaysShowValue,
   thumbSize,
@@ -47,9 +47,10 @@ const Thumb: React.FunctionComponent<ThumbProps> = ({
       hasThumbComponent={!!thumbComponent}
       style={[thumbStyle, animatedThumbStyle]}>
       <LabelContainer
-        style={[{backgroundColor: bgColorLabelView}, !alwaysShowValue && opacityStyle]}
+        background={bgColorLabelView}
+        style={!alwaysShowValue && opacityStyle}
         thumbSize={thumbSize}>
-        <TriangleDown style={[{borderBottomColor: bgColorLabelView, transform: [{rotate: '180deg'}]}]} />
+        <TriangleDown background={bgColorLabelView} style={{transform: [{rotate: '180deg'}]}} />
         <Label {...{animatedProps}} style={labelStyle} editable={false} defaultValue={text} />
       </LabelContainer>
       {thumbComponent}
@@ -61,13 +62,14 @@ const ThumbContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   position: 'absolute' as Position,
   height: props.thumbSize.height,
   width: props.thumbSize.width,
-  borderRadius: 10,
+  borderRadius: props.theme?.borderWidths.huge,
   borderWidth: props.hasThumbComponent ? 0 : 1,
-  backgroundColor: props.hasThumbComponent ? 'transparent' : colors.white,
+  // backgroundColor: props.hasThumbComponent ? 'transparent' : props.theme?.colors.backgroundColor,
+  backgroundColor: 'transparent',
 }))
 
-const TriangleDown = styled.View({
-  position: 'absolute',
+const TriangleDown = styled.View(({background, theme}: {background?: string; theme: ITheme}) => ({
+  position: 'absolute' as Position,
   bottom: -5,
   width: 0,
   height: 0,
@@ -78,25 +80,27 @@ const TriangleDown = styled.View({
   borderBottomWidth: 10,
   borderLeftColor: 'transparent',
   borderRightColor: 'transparent',
-})
+  borderBottomColor: background || theme?.colors.primary,
+}))
 
 const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   position: 'absolute' as Position,
-  top: -40,
+  top: -(props.theme?.spacing.xxxl ?? 40),
   bottom: props.thumbSize.height + metrics.xxs,
-  borderRadius: 5,
+  borderRadius: props.theme?.borderWidths.medium,
+  backgroundColor: props.background || props.theme?.colors.primary,
   alignSelf: 'center',
   justifyContent: 'center',
   alignItems: 'center',
 }))
 
-const Label = styled(AnimatedText)({
-  color: colors.white,
-  padding: isIOS ? 5 : 2,
-  textAlign: 'center',
-  fontWeight: 'bold',
-  fontSize: 16,
+const Label = styled(AnimatedText)(({theme}: {theme: ITheme}) => ({
+  color: theme.colors.textLightColor,
+  padding: isIOS ? theme.spacing.micro : theme.spacing.mini,
+  textAlign: 'center' as TextAlign,
+  fontWeight: theme.fontWeights.bold,
+  fontSize: theme.fontSizes.md,
   width: '100%',
-})
+}))
 
 export {Thumb}

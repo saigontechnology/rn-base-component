@@ -1,6 +1,11 @@
 import React, {useCallback, useMemo} from 'react'
-import {StyleSheet, LayoutChangeEvent} from 'react-native'
-import Animated, {
+import {StyleSheet} from 'react-native'
+import styled from 'styled-components/native'
+import {Thumb, Track, TrackPoint} from './components'
+import type {PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
+import type {AnimatedGHContext, AnimatedLabelProps, ISliderCommon} from './Slider'
+import type {ITheme} from '../../theme'
+import {
   useAnimatedStyle,
   useSharedValue,
   useAnimatedGestureHandler,
@@ -8,13 +13,22 @@ import Animated, {
   useAnimatedProps,
   withTiming,
 } from 'react-native-reanimated'
-import {metrics} from '../../helpers/metrics'
-import {colors} from '../../helpers/colors'
-import styled from 'styled-components/native'
-import {Thumb, TrackPoint} from './components'
-import {DEFAULT_STEP, FIRST_POINT, MINIMUM_TRACK_WIDTH, ThumbPosition} from './Constants'
-import type {PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
-import type {AnimatedGHContext, AnimatedLabelProps, SliderInfo, SliderProps, TrackStyle} from './Slider'
+import {
+  DEFAULT_MAXIMUM_VALUE,
+  DEFAULT_MINIMUM_VALUE,
+  DEFAULT_STEP,
+  FIRST_POINT,
+  INIT_POINT,
+  INIT_VALUE,
+  INVISIBLE,
+  MINIMUM_TRACK_WIDTH,
+  NEXT_STEP,
+  PREVIOUS_STEP,
+  ThumbPosition,
+  VISIBLE,
+} from './constants'
+import {useTheme} from '../../hooks'
+import {hitSlop} from '../../helpers/metrics'
 
 type Point = {
   left: number
@@ -26,37 +40,62 @@ type SliderAnimated = {
   zIndex: number
 }
 
-const SliderRange: React.FunctionComponent<SliderProps> = ({
-  minimumValue = 1,
-  maximumValue = 10,
+type ContainerProps = {
+  width: number
+}
+
+type NumberRange = {
+  maximum: number
+  minimum: number
+}
+
+export interface ISliderRange extends ISliderCommon {
+  sliderWidth: number
+
+  leftThumbComponent?: React.ReactElement
+
+  rightThumbComponent?: React.ReactElement
+
+  onValueChange?: (value: NumberRange) => void
+}
+
+const SliderRange: React.FC<ISliderRange> = ({
+  minimumValue = DEFAULT_MINIMUM_VALUE,
+  maximumValue = DEFAULT_MAXIMUM_VALUE,
   step = DEFAULT_STEP,
+  style,
   trackStyle,
-  bgColorTrack = '#F1F1F1',
-  bgColorTracked = colors.primary,
+  trackedStyle,
   thumbStyle,
-  bgColorLabelView = colors.primary,
+  bgColorLabelView,
   alwaysShowValue,
   labelStyle,
-  thumbComponent,
+  hitSlopPoint = hitSlop,
+  leftThumbComponent,
+  rightThumbComponent,
+  hasPointTouch,
   hasTrackPoint,
-  sliderWidth = 0,
-  thumbSize = {width: metrics.medium, height: metrics.medium},
+  sliderWidth,
+  thumbSize,
   trackPointStyle,
   onValueChange = () => null,
 }) => {
-  const sliderInfo = useSharedValue<SliderInfo>({range: 0, trackWidth: 0})
-  const currentPoint = useSharedValue<Point>({left: FIRST_POINT, right: FIRST_POINT})
-  const leftProgress = useSharedValue<number>(0)
-  const rightProgress = useSharedValue<number>(0)
-  const leftAnimated = useSharedValue<SliderAnimated>({opacity: 0, zIndex: 0})
-  const rightAnimated = useSharedValue<SliderAnimated>({opacity: 0, zIndex: 0})
-
   const totalPoint = useMemo(() => (maximumValue - minimumValue) / step, [maximumValue, minimumValue, step])
+  const range = useMemo(() => sliderWidth / totalPoint, [sliderWidth, totalPoint])
+  const theme = useTheme()
+  const actualThumbSize = thumbSize || {width: theme.sizes.large, height: theme.sizes.large}
+
+  const currentPoint = useSharedValue<Point>({left: INIT_POINT, right: maximumValue})
+  const leftProgress = useSharedValue<number>(INIT_VALUE)
+  const rightProgress = useSharedValue<number>(sliderWidth)
+  const leftAnimated = useSharedValue<SliderAnimated>({opacity: INIT_VALUE, zIndex: INIT_VALUE})
+  const rightAnimated = useSharedValue<SliderAnimated>({opacity: INIT_VALUE, zIndex: INIT_VALUE})
 
   /**
    * This function updates the slider with the new position (progressing) and new point
    * @param {number} progressing - The current position of the thumb on the track
    * @param {number} currentPoint - The current point of the slider
+   * @param {string} position - The position indicates the left thumb or the right thumb
    */
   const updateSlider = useCallback(
     (progressing: number, point: number, position: string) => {
@@ -72,42 +111,41 @@ const SliderRange: React.FunctionComponent<SliderProps> = ({
       ctx.startX = leftProgress.value
     },
     onActive: (event, ctx) => {
-      const {trackWidth, range} = sliderInfo.value
       const {left, right} = currentPoint.value
       const leftProgressing = ctx.startX + event.translationX
       // Calculate the new slider value based on the leftProgressing (new position) and the range
       const sliderValue = leftProgressing / range
 
-      leftAnimated.value = {zIndex: 1, opacity: 1}
-      rightAnimated.value = {zIndex: 0, opacity: 0}
+      leftAnimated.value = {zIndex: VISIBLE, opacity: VISIBLE}
+      rightAnimated.value = {zIndex: INVISIBLE, opacity: INVISIBLE}
 
       // When sliding the thumb across a distance shorter than the track's width
       if (leftProgressing < MINIMUM_TRACK_WIDTH) {
-        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, FIRST_POINT, ThumbPosition.left)
+        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, INIT_POINT, ThumbPosition.left)
       }
       // When sliding the thumb over the track's width
-      else if (leftProgressing >= trackWidth + rightProgress.value) {
-        runOnJS(updateSlider)(trackWidth + rightProgress.value, totalPoint + right, ThumbPosition.left)
+      else if (leftProgressing > rightProgress.value) {
+        runOnJS(updateSlider)(rightProgress.value, right, ThumbPosition.left)
       }
       // When sliding steadily increases
-      else if (leftProgressing > range * (left + 1) && leftProgressing <= trackWidth + rightProgress.value) {
+      else if (leftProgressing > range * (left + NEXT_STEP)) {
         const currentProgress = range * Math.floor(sliderValue)
         const point = Math.floor(sliderValue)
         runOnJS(updateSlider)(currentProgress, point, ThumbPosition.left)
       }
       // When sliding steadily decreases
-      else if (leftProgressing < range * (left - 1)) {
-        const currentProgress = range * Math.floor(sliderValue + 1)
-        const point = Math.floor(sliderValue + 1)
+      else if (leftProgressing < range * (left - PREVIOUS_STEP)) {
+        const currentProgress = range * Math.ceil(sliderValue)
+        const point = Math.ceil(sliderValue)
 
         runOnJS(updateSlider)(currentProgress, point, ThumbPosition.left)
       }
     },
     onEnd: () => {
-      leftAnimated.value = {...leftAnimated.value, opacity: 0}
+      leftAnimated.value = {...leftAnimated.value, opacity: INVISIBLE}
       runOnJS(onValueChange)({
         minimum: minimumValue + currentPoint.value.left * step,
-        maximum: minimumValue + (totalPoint + currentPoint.value.right) * step,
+        maximum: minimumValue + currentPoint.value.right * step,
       })
     },
   })
@@ -117,40 +155,39 @@ const SliderRange: React.FunctionComponent<SliderProps> = ({
       ctx.startX = rightProgress.value
     },
     onActive: (event, ctx) => {
-      const {trackWidth, range} = sliderInfo.value
       const {left, right} = currentPoint.value
       const rightProgressing = ctx.startX + event.translationX
       // Calculate the new slider value based on the rightProgressing (new position) and the range
       const sliderValue = rightProgressing / range
-      leftAnimated.value = {zIndex: 0, opacity: 0}
-      rightAnimated.value = {zIndex: 1, opacity: 1}
+      leftAnimated.value = {zIndex: INVISIBLE, opacity: INVISIBLE}
+      rightAnimated.value = {zIndex: VISIBLE, opacity: VISIBLE}
 
       // When sliding the thumb across a distance shorter than the track's width
-      if (trackWidth + rightProgressing < leftProgress.value) {
-        runOnJS(updateSlider)(-trackWidth + leftProgress.value, -totalPoint + left, ThumbPosition.right)
+      if (rightProgressing < leftProgress.value) {
+        runOnJS(updateSlider)(leftProgress.value, left, ThumbPosition.right)
       }
       // When sliding the thumb over the track's width
-      else if (rightProgressing > 0) {
-        runOnJS(updateSlider)(0, 0, ThumbPosition.right)
+      else if (rightProgressing > sliderWidth) {
+        runOnJS(updateSlider)(sliderWidth, totalPoint, ThumbPosition.right)
       }
       // When sliding steadily increases
-      else if (rightProgressing < -range * (-right + 1)) {
-        const currentProgress = range * Math.floor(-sliderValue)
-        const point = Math.floor(-sliderValue)
-        runOnJS(updateSlider)(-currentProgress, -point, ThumbPosition.right)
+      else if (rightProgressing > range * (right + NEXT_STEP)) {
+        const currentProgress = range * Math.floor(sliderValue)
+        const point = Math.floor(sliderValue)
+        runOnJS(updateSlider)(currentProgress, point, ThumbPosition.right)
       }
       // When sliding steadily decreases
-      else if (rightProgressing > -range * (-right - 1)) {
-        const currentProgress = range * Math.floor(-sliderValue + 1)
-        const point = Math.floor(-sliderValue + 1)
-        runOnJS(updateSlider)(-currentProgress, -point, ThumbPosition.right)
+      else if (rightProgressing < range * (right - PREVIOUS_STEP)) {
+        const currentProgress = range * Math.ceil(sliderValue)
+        const point = Math.ceil(sliderValue)
+        runOnJS(updateSlider)(currentProgress, point, ThumbPosition.right)
       }
     },
     onEnd: () => {
-      rightAnimated.value = {...rightAnimated.value, opacity: 0}
+      rightAnimated.value = {...rightAnimated.value, opacity: INVISIBLE}
       runOnJS(onValueChange)({
         minimum: minimumValue + currentPoint.value.left * step,
-        maximum: minimumValue + (totalPoint + currentPoint.value.right) * step,
+        maximum: minimumValue + currentPoint.value.right * step,
       })
     },
   })
@@ -161,7 +198,7 @@ const SliderRange: React.FunctionComponent<SliderProps> = ({
   }))
 
   const rightThumbRangeStyle = useAnimatedStyle(() => ({
-    transform: [{translateX: withTiming(rightProgress.value, {duration: 1})}],
+    transform: [{translateX: withTiming(rightProgress.value - actualThumbSize.width / 2, {duration: 1})}],
     zIndex: rightAnimated.value.zIndex,
   }))
 
@@ -194,58 +231,64 @@ const SliderRange: React.FunctionComponent<SliderProps> = ({
   const rightAnimatedProps = useAnimatedProps(
     () =>
       ({
-        text: `${maximumValue + currentPoint.value.right * step}`,
+        text: `${minimumValue + currentPoint.value.right * step}`,
       } as AnimatedLabelProps),
   )
-
-  const getTrackWidth = (event: LayoutChangeEvent) => {
-    const {width} = event.nativeEvent.layout
-    // Range refers to the width of a point
-    // It is used to calculate the correct position of the slider while sliding
-    const range = width / totalPoint
-    sliderInfo.value = {...sliderInfo.value, range: range, trackWidth: width}
-  }
 
   /**
    * Update the tracked width based on the thumb sliding
    */
   const animatedTrackStyle = useAnimatedStyle(() => {
-    const {range} = sliderInfo.value
-    const {left, right} = currentPoint.value
-
-    const width =
-      leftProgress.value === 0 && rightProgress.value === 0
-        ? '100%'
-        : range * (totalPoint + right) - range * left
-
-    const transform = [{translateX: withTiming(range * left, {duration: 1})}]
+    const width = rightProgress.value - leftProgress.value
+    const transform = [{translateX: withTiming(leftProgress.value, {duration: 1})}]
 
     return {transform, width}
   })
 
+  /**
+   * Function called when the user presses on a point on the slider's track
+   * Calculates the position of the pressed point on the slider's track and updates the slider's state accordingly
+   * @param {number} point - The index of the point on the slider's track that was pressed by the user
+   */
+  const onPressPoint = useCallback(
+    (point: number) => {
+      const position = point <= currentPoint.value.left ? ThumbPosition.left : ThumbPosition.right
+      const positionPoint = range * (point + FIRST_POINT)
+      const curPoint = point + FIRST_POINT
+      const value = {
+        minimum: minimumValue + currentPoint.value.left * step,
+        maximum: minimumValue + currentPoint.value.right * step,
+      }
+
+      updateSlider(positionPoint, curPoint, position)
+      onValueChange(value)
+    },
+    [currentPoint, minimumValue, onValueChange, range, step, updateSlider],
+  )
+
   return (
-    <Container style={!!sliderWidth && {width: sliderWidth}}>
-      <Track
-        backgroundColor={bgColorTrack}
-        style={[trackStyle, !!sliderWidth && {width: sliderWidth}]}
-        onLayout={getTrackWidth}
-      />
+    <Container width={sliderWidth} style={style}>
+      <Track style={trackStyle} />
       {!!hasTrackPoint && (
-        <TrackPoint sliderWidth={sliderWidth} totalPoint={totalPoint} trackPointStyle={trackPointStyle} />
+        <TrackPoint
+          sliderWidth={sliderWidth}
+          totalPoint={totalPoint}
+          hitSlopPoint={hitSlopPoint}
+          trackPointStyle={trackPointStyle}
+          activeOpacity={hasPointTouch ? 0 : 1}
+          onPressPoint={(point: number) => hasPointTouch && onPressPoint(point)}
+        />
       )}
-      <Tracked
-        backgroundColor={bgColorTracked}
-        style={[trackStyle, !!sliderWidth && {width: sliderWidth}, animatedTrackStyle]}
-      />
+      <Tracked style={[trackedStyle, animatedTrackStyle]} />
       <Thumb
         text={minimumValue?.toString()}
         bgColorLabelView={bgColorLabelView}
         labelStyle={labelStyle}
         alwaysShowValue={alwaysShowValue}
-        thumbSize={thumbSize}
-        thumbComponent={thumbComponent}
+        thumbSize={actualThumbSize}
+        thumbComponent={leftThumbComponent}
         animatedProps={leftAnimatedProps}
-        thumbStyle={[thumbStyle, {left: -thumbSize.width / 2}]}
+        thumbStyle={[thumbStyle, {left: -actualThumbSize.width / 2}]}
         animatedThumbStyle={leftThumbRangeStyle}
         opacityStyle={leftOpacityStyle}
         onGestureEvent={leftHandler}
@@ -255,10 +298,10 @@ const SliderRange: React.FunctionComponent<SliderProps> = ({
         bgColorLabelView={bgColorLabelView}
         labelStyle={labelStyle}
         alwaysShowValue={alwaysShowValue}
-        thumbSize={thumbSize}
-        thumbComponent={thumbComponent}
+        thumbSize={actualThumbSize}
+        thumbComponent={rightThumbComponent}
         animatedProps={rightAnimatedProps}
-        thumbStyle={[thumbStyle, {right: -thumbSize.width / 2}]}
+        thumbStyle={thumbStyle}
         animatedThumbStyle={rightThumbRangeStyle}
         opacityStyle={rightOpacityStyle}
         onGestureEvent={rightHandler}
@@ -267,21 +310,14 @@ const SliderRange: React.FunctionComponent<SliderProps> = ({
   )
 }
 
-const Container = styled.View({
+const Container = styled.View((props: ContainerProps) => ({
   justifyContent: 'center',
-})
-
-const Track = styled(Animated.View)((props: TrackStyle) => ({
-  height: 10,
-  borderRadius: 10,
-  backgroundColor: props.backgroundColor,
+  width: props.width,
 }))
 
-const Tracked = styled(Animated.View)((props: TrackStyle) => ({
+const Tracked = styled(Track)(({theme}: {theme: ITheme}) => ({
   ...StyleSheet.absoluteFillObject,
-  height: 10,
-  borderRadius: 10,
-  backgroundColor: props.backgroundColor,
+  backgroundColor: theme?.colors.primary,
 }))
 
 export default SliderRange

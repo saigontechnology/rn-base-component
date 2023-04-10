@@ -2,15 +2,14 @@ import React, {useState} from 'react'
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native'
 import type {ComponentMeta, ComponentStory} from '@storybook/react'
 
-import {RnBaseSlider} from 'rn-base-component'
-import {metrics} from '../../../src/helpers/metrics'
+import {Slider} from 'rn-base-component'
 
 export default {
   title: 'components/Slider',
-  component: RnBaseSlider,
-} as ComponentMeta<typeof RnBaseSlider>
+  component: Slider,
+} as ComponentMeta<typeof Slider>
 
-export const Basic: ComponentStory<typeof RnBaseSlider> = () => {
+export const Basic: ComponentStory<typeof Slider> = () => {
   const [value, setValue] = useState<number>(20)
   const [value1, setValue1] = useState<number>(5)
   const [value2, setValue2] = useState<number>(0)
@@ -26,10 +25,10 @@ export const Basic: ComponentStory<typeof RnBaseSlider> = () => {
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View style={styles.container}>
         <View style={styles.spacingTop} />
-        <RnBaseSlider
+        <Slider
           minimumValue={50}
           maximumValue={100}
-          trackStyle={styles.height30}
+          style={styles.height30}
           thumbComponent={
             <Image
               source={{
@@ -49,13 +48,31 @@ export const Basic: ComponentStory<typeof RnBaseSlider> = () => {
         <Text style={styles.spacingTop10}>Total: 100, step: 1 - Value: {value2}</Text>
         {/* two thumbs */}
         <View style={styles.spacingTop20} />
-        <RnBaseSlider.Range
+        <Slider.Range
           minimumValue={20}
           step={2}
           maximumValue={40}
-          trackStyle={styles.height10}
-          bgColorTracked={'blue'}
+          style={styles.height10}
+          trackedStyle={{backgroundColor: 'blue'}}
           onValueChange={setRangeValue}
+          leftThumbComponent={
+            <Image
+              source={{
+                uri: 'https://img.icons8.com/color/256/hand-right-skin-type-1.png',
+              }}
+              style={styles.thumb}
+              resizeMode={'contain'}
+            />
+          }
+          rightThumbComponent={
+            <Image
+              source={{
+                uri: 'https://img.icons8.com/color/256/hand-left-skin-type-1.png',
+              }}
+              style={styles.thumb}
+              resizeMode={'contain'}
+            />
+          }
           thumbSize={{height: 40, width: 40}}
           hasTrackPoint
           sliderWidth={351}
@@ -64,12 +81,13 @@ export const Basic: ComponentStory<typeof RnBaseSlider> = () => {
           Total: 40, step: 2, minimum: {rangeValue.minimum}, maximum: {rangeValue.maximum}
         </Text>
         <View style={styles.spacingTop} />
-        <RnBaseSlider.Range
+        <Slider.Range
           minimumValue={10}
           step={1}
           maximumValue={40}
-          trackStyle={styles.height10}
+          style={styles.height10}
           onValueChange={setRangeValue1}
+          hasPointTouch
           alwaysShowValue
           thumbSize={{height: 40, width: 40}}
           hasTrackPoint
@@ -79,12 +97,11 @@ export const Basic: ComponentStory<typeof RnBaseSlider> = () => {
           Total: 40, step: 1, minimum: {rangeValue1.minimum}, maximum: {rangeValue1.maximum}
         </Text>
         <View style={styles.spacingTop} />
-        <RnBaseSlider
+        <Slider
           minimumValue={20}
           step={1}
           maximumValue={40}
-          trackStyle={styles.height10}
-          bgColorTracked={'blue'}
+          style={styles.height10}
           isSliderRange
           onValueChange={setValue}
           thumbSize={{height: 40, width: 40}}
@@ -94,13 +111,13 @@ export const Basic: ComponentStory<typeof RnBaseSlider> = () => {
         />
         <Text style={styles.spacingTop20}>Total: 40, step: 2 - Value: {value}</Text>
         <View style={styles.spacingTop} />
-        <RnBaseSlider
+        <Slider
           minimumValue={5}
           maximumValue={10}
           onValueChange={setValue1}
-          trackStyle={styles.height10}
-          bgColorTrack="red"
-          bgColorTracked="green"
+          style={styles.height10}
+          trackStyle={{backgroundColor: 'red'}}
+          trackedStyle={{backgroundColor: 'green'}}
           bgColorLabelView={'#00FFFF'}
           thumbStyle={styles.bgColorThumb}
           labelStyle={styles.black}
@@ -109,20 +126,20 @@ export const Basic: ComponentStory<typeof RnBaseSlider> = () => {
         />
         <Text style={styles.spacingTop20}>Total: 10, step: 1 - Value: {value1}</Text>
         <View style={styles.spacingTop} />
-        <RnBaseSlider
+        <Slider
           minimumValue={0}
           maximumValue={2}
           onValueChange={setValue3}
-          trackStyle={styles.height10}
+          style={styles.height10}
           alwaysShowValue
         />
         <Text style={styles.spacingTop20}>Total: 2, step: 1 - Value: {value3}</Text>
         <View style={styles.spacingTop} />
-        <RnBaseSlider
+        <Slider
           minimumValue={0}
           step={0.5}
           maximumValue={1}
-          trackStyle={styles.height10}
+          style={styles.height10}
           onValueChange={setValue4}
           hasTrackPoint
           sliderWidth={331}
@@ -141,7 +158,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    marginHorizontal: metrics.medium,
+    marginHorizontal: responsiveHeight(20),
   },
   thumb: {
     height: 50,

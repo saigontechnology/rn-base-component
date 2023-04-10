@@ -26,5 +26,5 @@
     "target": "esnext"
   },
   "include": [".eslintrc.js", "babel.config.js", "**/*.js", "**/*.ts", "**/*.tsx"],
-  "exclude": []
+  "exclude": ["**/constants.ts"]
 }

@@ -2,7 +2,8 @@ import React from 'react'
 import type {Insets, StyleProp, ViewStyle} from 'react-native'
 import styled from 'styled-components/native'
 import type {FlexDirection, Position, TrackPointStyle} from '../Slider'
-import {colors} from '../../../helpers/colors'
+import type {ITheme} from '../../../theme'
+import {FIRST_POINT} from '../constants'
 
 interface TrackPointProps {
   sliderWidth: number
@@ -23,7 +24,7 @@ const TrackPoint: React.FunctionComponent<TrackPointProps> = React.memo(
     onPressPoint,
   }: TrackPointProps) => {
     // We don't need to display the first point on the track, so we removed it using totalPoint - 1
-    const range = sliderWidth / totalPoint - 1
+    const range = sliderWidth / totalPoint - FIRST_POINT
 
     // Render the track points based on the range
     return (
@@ -31,7 +32,7 @@ const TrackPoint: React.FunctionComponent<TrackPointProps> = React.memo(
         {/**
          * Loop through the range of the slider track and render a point for each value
          */}
-        {Array(totalPoint - 1)
+        {Array(totalPoint - FIRST_POINT)
           .fill(0)
           .map((_, i) => (
             <Point
@@ -40,7 +41,7 @@ const TrackPoint: React.FunctionComponent<TrackPointProps> = React.memo(
               hitSlop={hitSlopPoint}
               onPress={() => onPressPoint?.(i)}
               activeOpacity={activeOpacity}
-              style={[trackPointStyle, {left: range * (i + 1)}]}
+              style={[trackPointStyle, {left: range * (i + FIRST_POINT)}]}
             />
           ))}
       </TrackPointComponent>
@@ -56,11 +57,11 @@ const TrackPointComponent = styled.View((props: TrackPointStyle) => ({
   overflow: 'hidden',
 }))
 
-const Point = styled.TouchableOpacity({
+const Point = styled.TouchableOpacity(({theme}: {theme: ITheme}) => ({
   height: '100%',
   width: 1,
-  backgroundColor: colors.primary,
-})
+  backgroundColor: theme.colors.primary,
+}))
 
 TrackPoint.displayName = 'TrackPoint'
 

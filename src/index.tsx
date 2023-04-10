@@ -1,6 +1,6 @@
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
-import Button from './components/Button'
-import Slider from './components/Slider/Slider'
+import {default as ButtonComponent} from './components/Button'
+import {default as SliderComponent} from './components/Slider/Slider'
 
 const LINKING_ERROR = `The package 'rn-base-component' doesn't seem to be linked. Make sure: \n\n ${Platform.select(
   {ios: "- You have run 'pod install'\n", default: ''},
@@ -20,8 +20,8 @@ export const RnBaseComponentView =
         throw new Error(LINKING_ERROR)
       }
 
-export const RnBaseButton = Button
-export const RnBaseSlider = Slider
+export const Button = ButtonComponent
+export const Slider = SliderComponent
 
 export * from './core'
 export * from './hooks'
