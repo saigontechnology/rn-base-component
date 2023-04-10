@@ -1,28 +1,16 @@
-import React, {useEffect, useRef} from 'react'
-import {Animated, StyleProp, TextStyle} from 'react-native'
+import React, {useEffect} from 'react'
+import type {StyleProp, TextStyle} from 'react-native'
+import Animated, {useSharedValue, withRepeat, withSequence, withTiming} from 'react-native-reanimated'
 
 interface ICursorProps {
   style?: StyleProp<TextStyle>
 }
 
 const Cursor = ({style}: ICursorProps) => {
-  const animatedValue = useRef(new Animated.Value(0)).current
+  const animatedValue = useSharedValue(0)
 
   useEffect(() => {
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(animatedValue, {
-          toValue: 1,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-        Animated.timing(animatedValue, {
-          toValue: 0,
-          duration: 500,
-          useNativeDriver: true,
-        }),
-      ]),
-    ).start()
+    animatedValue.value = withRepeat(withSequence(withTiming(1), withTiming(0)), -1)
   }, [animatedValue])
 
   return <Animated.Text style={[{opacity: animatedValue}, style]}>|</Animated.Text>
