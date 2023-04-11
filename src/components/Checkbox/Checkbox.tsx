@@ -14,8 +14,8 @@ import {
 } from 'react-native'
 import Animated, {useSharedValue, withSequence, withSpring, withTiming} from 'react-native-reanimated'
 import styled from 'styled-components/native'
-import {metrics} from '../../helpers/metrics'
-import colors from '../../theme/base/colors'
+import type {ITheme} from 'src/theme'
+import {useTheme} from '../../hooks/useTheme'
 import {BOUNCE_EFFECT_IN, BOUNCE_EFFECT_OUT, DISABLE_OPACITY} from './constants'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
@@ -25,18 +25,24 @@ type BaseTouchableProps = Pick<
   TouchableWithoutFeedbackProps,
   Exclude<keyof TouchableWithoutFeedbackProps, 'onPress'>
 >
+type StyledImageStyle = {
+  theme?: ITheme
+}
 type TextContainerStyle = {
+  theme?: ITheme
   disabled: boolean
   disableOpacity: number
 }
 type IconContainerStyle = {
-  size: number
+  theme?: ITheme
+  size?: number
   backgroundColor: string
   disabled: boolean
   disableOpacity: number
 }
 type InnerIconContainerStyle = {
-  size: number
+  theme?: ITheme
+  size?: number
   borderColor: string
 }
 
@@ -91,12 +97,12 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
   (
     {
       style,
-      size = metrics.large,
+      size,
       iconStyle,
       iconComponent,
       iconImageStyle,
-      fillColor = colors.textColor,
-      unfillColor = colors.transparent,
+      fillColor,
+      unfillColor,
       disableBuiltInState = false,
       isChecked,
       innerIconStyle,
@@ -115,6 +121,7 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
     },
     forwardedRef,
   ) => {
+    const theme = useTheme()
     const [checked, setChecked] = useState(false)
     const bounceValue = useSharedValue(1)
 
@@ -141,11 +148,16 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
         <IconContainer
           testID={'icon-container'}
           size={size}
-          backgroundColor={checked ? fillColor : unfillColor}
+          backgroundColor={
+            checked ? fillColor || theme.colors.primary : unfillColor || theme.colors.transparent
+          }
           disabled={disabled}
           disableOpacity={disableOpacity}
           style={StyleSheet.flatten([{transform: [{scale: bounceValue}]}, iconStyle])}>
-          <InnerIconContainer style={innerIconStyle} size={size} borderColor={fillColor}>
+          <InnerIconContainer
+            style={innerIconStyle}
+            size={size}
+            borderColor={fillColor || theme.colors.primary}>
             {iconComponent ||
               (checkStatus && <StyledImage source={checkIconImageSource} style={iconImageStyle} />)}
           </InnerIconContainer>
@@ -198,32 +210,32 @@ const Container = styled(Pressable)({
   flexDirection: 'row',
 })
 
-const StyledImage = styled(Image)({
-  width: metrics.xs,
-  height: metrics.xs,
-})
+const StyledImage = styled(Image)((props: StyledImageStyle) => ({
+  width: props.theme?.sizes.small,
+  height: props.theme?.sizes.small,
+}))
 
 const TextContainer = styled(View)((props: TextContainerStyle) => ({
-  marginLeft: metrics.small,
+  marginLeft: props.theme?.sizes.small,
   opacity: props.disabled ? props.disableOpacity : 1,
 }))
 
 const IconContainer = styled(Animated.View)((props: IconContainerStyle) => ({
   alignItems: 'center',
   justifyContent: 'center',
-  width: props.size,
-  height: props.size,
-  borderRadius: props.size / 4,
+  width: props.size || props.theme?.sizes.huge,
+  height: props.size || props.theme?.sizes.huge,
+  borderRadius: (props.size || props.theme?.sizes.huge) ?? 24 / 4,
   backgroundColor: props.backgroundColor,
   opacity: props.disabled ? props.disableOpacity : 1,
 }))
 
 const InnerIconContainer = styled(View)((props: InnerIconContainerStyle) => ({
-  borderWidth: 1,
+  borderWidth: props.theme?.borderWidths.tiny,
   alignItems: 'center',
   justifyContent: 'center',
-  width: props.size,
-  height: props.size,
-  borderRadius: props.size / 4,
-  borderColor: props.borderColor,
+  width: props.size || props.theme?.sizes.huge,
+  height: props.size || props.theme?.sizes.huge,
+  borderRadius: (props.size || props.theme?.sizes.huge) ?? 24 / 4,
+  borderColor: props?.borderColor,
 }))

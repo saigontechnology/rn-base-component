@@ -1,20 +1,20 @@
 import React from 'react'
 import {StyleSheet, View} from 'react-native'
 import type {ComponentMeta, ComponentStory} from '@storybook/react'
-import {RnBaseCheckbox} from 'rn-base-component'
+import {Checkbox} from 'rn-base-component'
 
 export default {
   title: 'components/Checkbox',
-  component: RnBaseCheckbox,
-} as ComponentMeta<typeof RnBaseCheckbox>
+  component: Checkbox,
+} as ComponentMeta<typeof Checkbox>
 
-export const Basic: ComponentStory<typeof RnBaseCheckbox> = () => (
+export const Basic: ComponentStory<typeof Checkbox> = () => (
   <View style={styles.container}>
-    <RnBaseCheckbox fillColor="#562B69" />
+    <Checkbox />
     <View style={styles.spacer} />
-    <RnBaseCheckbox fillColor="green" text="checkbox label" />
+    <Checkbox text="checkbox label" />
     <View style={styles.spacer} />
-    <RnBaseCheckbox fillColor="green" disabled={true} text="disable checkbox" />
+    <Checkbox disabled={true} text="disable checkbox" />
   </View>
 )
 
