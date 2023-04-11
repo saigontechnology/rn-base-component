@@ -64,8 +64,7 @@ const ThumbContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   width: props.thumbSize.width,
   borderRadius: props.theme?.borderWidths.huge,
   borderWidth: props.hasThumbComponent ? 0 : 1,
-  // backgroundColor: props.hasThumbComponent ? 'transparent' : props.theme?.colors.backgroundColor,
-  backgroundColor: 'transparent',
+  backgroundColor: props.hasThumbComponent ? 'transparent' : props.theme?.colors.backgroundColor,
 }))
 
 const TriangleDown = styled.View(({background, theme}: {background?: string; theme: ITheme}) => ({
