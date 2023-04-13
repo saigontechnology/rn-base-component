@@ -1,6 +1,6 @@
 import React from 'react'
 import {render, fireEvent} from '@testing-library/react-native'
-import RadioButton from './RadioButton'
+import RadioButton from '../components/RadioButton/RadioButton'
 import {StyleSheet} from 'react-native'
 
 describe('RadioButton test', () => {

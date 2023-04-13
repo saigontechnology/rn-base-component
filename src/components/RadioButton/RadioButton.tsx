@@ -11,9 +11,9 @@ import {
 } from 'react-native'
 import Bounceable from './Bounceable'
 import styled from 'styled-components/native'
-import {metrics, responsiveWidth, responsiveHeight} from '../helpers/metrics'
+import {metrics, responsiveWidth, responsiveHeight} from '../../helpers/metrics'
 import type {IBounceableProps} from './Bounceable'
-import type {ITheme} from '../theme'
+import type {ITheme} from '../../theme'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 type CustomTextStyleProp = StyleProp<TextStyle> | Array<StyleProp<TextStyle>>
