@@ -193,22 +193,29 @@ const Slider: SliderComponentProps = ({
       }
       // When sliding the thumb over the track's width
       else if (progressing > trackWidth) {
-        runOnJS(updateSlider)(trackWidth, totalPoint)
-      }
-      // When sliding steadily increases
-      else if (progressing > range * (currentPoint.value + NEXT_STEP)) {
-        const currentProgress = range * Math.floor(sliderValue)
+        runOnJS(updateSlider)(trackWidth, 100)
+      } else {
+        // const currentProgress = range * Math.floor(sliderValue)
+        // console.log('ccccc range : ', range)
+
         const point = Math.floor(sliderValue)
-
-        runOnJS(updateSlider)(currentProgress, point)
+        runOnJS(updateSlider)(progressing, Math.round((progressing / sliderWidth) * 100))
       }
-      // When sliding steadily decreases
-      else if (progressing < range * (currentPoint.value - PREVIOUS_STEP)) {
-        const currentProgress = range * Math.ceil(sliderValue)
-        const point = Math.ceil(sliderValue)
 
-        runOnJS(updateSlider)(currentProgress, point)
-      }
+      // When sliding steadily increases
+      // else if (progressing > range * (currentPoint.value + NEXT_STEP)) {
+      //   const currentProgress = range * Math.floor(sliderValue)
+      //   const point = Math.floor(sliderValue)
+
+      //   runOnJS(updateSlider)(currentProgress, point)
+      // }
+      // // When sliding steadily decreases
+      // else if (progressing < range * (currentPoint.value - PREVIOUS_STEP)) {
+      //   const currentProgress = range * Math.ceil(sliderValue)
+      //   const point = Math.ceil(sliderValue)
+
+      //   runOnJS(updateSlider)(currentProgress, point)
+      // }
     },
     onEnd: () => {
       opacity.value = INVISIBLE
@@ -246,7 +253,7 @@ const Slider: SliderComponentProps = ({
   const animatedProps = useAnimatedProps(
     () =>
       ({
-        text: `${minimumValue + currentPoint.value * step}`,
+        text: `${currentPoint.value}`,
       } as AnimatedLabelProps),
   )
 

@@ -24,7 +24,7 @@ export const Basic: ComponentStory<typeof Slider> = () => {
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
       <View style={styles.container}>
-        <View style={styles.spacingTop} />
+        {/* <View style={styles.spacingTop} />
         <Slider
           minimumValue={50}
           maximumValue={100}
@@ -46,7 +46,6 @@ export const Basic: ComponentStory<typeof Slider> = () => {
           onValueChange={setValue2}
         />
         <Text style={styles.spacingTop10}>Total: 100, step: 1 - Value: {value2}</Text>
-        {/* two thumbs */}
         <View style={styles.spacingTop20} />
         <Slider.Range
           minimumValue={20}
@@ -109,23 +108,24 @@ export const Basic: ComponentStory<typeof Slider> = () => {
           hasPointTouch
           sliderWidth={331}
         />
-        <Text style={styles.spacingTop20}>Total: 40, step: 2 - Value: {value}</Text>
+        <Text style={styles.spacingTop20}>Total: 40, step: 2 - Value: {value}</Text> */}
         <View style={styles.spacingTop} />
         <Slider
-          minimumValue={5}
-          maximumValue={10}
+          minimumValue={0}
+          maximumValue={100}
+          step={25}
           onValueChange={setValue1}
           style={styles.height10}
-          trackStyle={{backgroundColor: 'red'}}
           trackedStyle={{backgroundColor: 'green'}}
+          hasPointTouch
           bgColorLabelView={'#00FFFF'}
-          thumbStyle={styles.bgColorThumb}
+          // thumbStyle={styles.bgColorThumb}
           labelStyle={styles.black}
           hasTrackPoint
           sliderWidth={300}
         />
         <Text style={styles.spacingTop20}>Total: 10, step: 1 - Value: {value1}</Text>
-        <View style={styles.spacingTop} />
+        {/* <View style={styles.spacingTop} />
         <Slider
           minimumValue={0}
           maximumValue={2}
@@ -144,7 +144,7 @@ export const Basic: ComponentStory<typeof Slider> = () => {
           hasTrackPoint
           sliderWidth={331}
         />
-        <Text style={styles.spacingTop20}>Total: 1, step: 0.5 - Value: {value4}</Text>
+        <Text style={styles.spacingTop20}>Total: 1, step: 0.5 - Value: {value4}</Text> */}
       </View>
     </ScrollView>
   )
