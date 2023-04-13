@@ -1,5 +1,5 @@
-import React, {useRef, useState, useEffect} from 'react'
-import {StatusBar, View, Image, Text, useWindowDimensions, SafeAreaView, Dimensions} from 'react-native'
+import React, {useRef, useState, useCallback} from 'react'
+import {StatusBar, View, Image, Text, useWindowDimensions, Dimensions, TouchableOpacity} from 'react-native'
 import Animated, {
   useSharedValue,
   useAnimatedGestureHandler,
@@ -13,7 +13,7 @@ import Animated, {
   useAnimatedRef,
   scrollTo,
 } from 'react-native-reanimated'
-import {PanGestureHandler} from 'react-native-gesture-handler'
+import {PanGestureHandler, GestureHandlerRootView} from 'react-native-gesture-handler'
 // import {useSafeAreaInsets} from 'react-native-safe-area-context'
 
 const ALBUM_COVERS = {
@@ -162,9 +162,12 @@ const SONGS = shuffle([
   },
 ])
 
-function Song({artist, cover, title}: any) {
+function Song({artist, cover, title, setIsEnableDrag}: any) {
   return (
-    <View
+    <TouchableOpacity
+      onLongPress={() => {
+        setIsEnableDrag(true)
+      }}
       style={{
         flexDirection: 'row',
         alignItems: 'center',
@@ -188,11 +191,24 @@ function Song({artist, cover, title}: any) {
 
         <Text style={{fontSize: 12, color: 'gray'}}>{artist}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   )
 }
 
-function MovableSong({id, artist, cover, title, positions, scrollY, songsCount}: any) {
+function MovableSong({
+  id,
+  artist,
+  cover,
+  title,
+  positions,
+  scrollY,
+  songsCount,
+  isEnableDrag,
+  setIsEnableDrag,
+  setIndexDrag,
+  index,
+}: any) {
+  const ref = useRef<Animated.View>(null)
   const [moving, setMoving] = useState(false)
   const top = useSharedValue(positions.value[id] * SONG_HEIGHT)
   const dimensions = useWindowDimensions()
@@ -206,8 +222,10 @@ function MovableSong({id, artist, cover, title, positions, scrollY, songsCount}:
   useAnimatedReaction(
     () => positions.value[id],
     (currentPosition, previousPosition) => {
-      if (!moving) {
-        top.value = withSpring(currentPosition * SONG_HEIGHT)
+      if (currentPosition !== previousPosition) {
+        if (!moving) {
+          top.value = withSpring(currentPosition * SONG_HEIGHT)
+        }
       }
     },
     [moving],
@@ -216,23 +234,20 @@ function MovableSong({id, artist, cover, title, positions, scrollY, songsCount}:
   const gestureHandler = useAnimatedGestureHandler({
     onStart() {
       runOnJS(setMoving)(true)
+      runOnJS(setIndexDrag)(index)
     },
     onActive(event) {
       const positionY = event.absoluteY + scrollY.value
-      top.value = withTiming(positionY - SONG_HEIGHT, {
-        duration: 16,
-      })
 
-      if (positionY <= scrollY.value + SCROLL_HEIGHT_THRESHOLD) {
+      if (positionY <= scrollY.value + SCROLL_HEIGHT_THRESHOLD - 100) {
         // Scroll up
         scrollY.value = withTiming(0, {duration: 1500})
       } else if (positionY >= scrollY.value + dimensions.height - SCROLL_HEIGHT_THRESHOLD) {
         // Scroll down
         const contentHeight = songsCount * SONG_HEIGHT
-        const containerHeight = dimensions.height
+        const containerHeight = dimensions.height - topPadding - bottomPadding
         const maxScroll = contentHeight - containerHeight + 10
         scrollY.value = withTiming(maxScroll, {duration: 1500})
-        console.log('scrollY>>>>>>', scrollY.value)
       } else {
         cancelAnimation(scrollY)
       }
@@ -250,6 +265,7 @@ function MovableSong({id, artist, cover, title, positions, scrollY, songsCount}:
     onFinish() {
       top.value = positions.value[id] * SONG_HEIGHT
       runOnJS(setMoving)(false)
+      runOnJS(setIsEnableDrag)(false)
     },
   })
 
@@ -259,7 +275,7 @@ function MovableSong({id, artist, cover, title, positions, scrollY, songsCount}:
       left: 0,
       right: 0,
       top: top.value,
-      backgroundColor: 'white',
+      backgroundColor: moving ? 'red' : 'white',
       zIndex: moving ? 1 : 0,
       shadowColor: 'black',
       shadowOffset: {
@@ -272,13 +288,21 @@ function MovableSong({id, artist, cover, title, positions, scrollY, songsCount}:
     [moving],
   )
 
+  const ViewContainer = isEnableDrag ? PanGestureHandler : View
+
   return (
-    <Animated.View style={animatedStyle}>
-      <PanGestureHandler onGestureEvent={gestureHandler}>
-        <Animated.View style={{maxWidth: '80%'}}>
-          <Song artist={artist} cover={cover} title={title} />
+    <Animated.View ref={ref} style={[animatedStyle]}>
+      <ViewContainer onGestureEvent={gestureHandler}>
+        <Animated.View>
+          <Song
+            moving={moving}
+            artist={artist}
+            cover={cover}
+            title={title}
+            setIsEnableDrag={setIsEnableDrag}
+          />
         </Animated.View>
-      </PanGestureHandler>
+      </ViewContainer>
     </Animated.View>
   )
 }
@@ -286,11 +310,12 @@ function MovableSong({id, artist, cover, title, positions, scrollY, songsCount}:
 const DraggableList: React.FC = () => {
   const scrollY = useSharedValue(0)
   const positions = useSharedValue(listToObject(SONGS))
+  const [isEnableDrag, setIsEnableDrag] = useState(false)
   const handleScroll = useAnimatedScrollHandler(event => {
-    console.log('event.contentOffset.y', event.contentOffset.y)
     scrollY.value = event.contentOffset.y
   })
-  const scrollViewRef = useAnimatedRef()
+  const scrollViewRef = useAnimatedRef<Animated.FlatList<string>>()
+  const [indexDrag, setIndexDrag] = useState(0)
 
   useAnimatedReaction(
     () => scrollY.value,
@@ -299,36 +324,57 @@ const DraggableList: React.FC = () => {
     },
   )
 
+  const renderItem: any = useCallback(
+    ({item, index}: any) => (
+      <MovableSong
+        key={item.id}
+        id={item.id}
+        artist={item.artist}
+        cover={item.cover}
+        title={item.title}
+        positions={positions}
+        scrollY={scrollY}
+        songsCount={SONGS.length}
+        setIsEnableDrag={setIsEnableDrag}
+        isEnableDrag={isEnableDrag}
+        index={index}
+        setIndexDrag={setIndexDrag}
+      />
+    ),
+    [isEnableDrag, positions, scrollY],
+  )
+
+  const renderCellComponent = useCallback(
+    ({item, index, children, style, ...props}: any) => (
+      <View
+        style={[style, {zIndex: indexDrag === index ? 100 : 0, elevation: indexDrag === index ? 1 : 0}]}
+        {...props}
+      />
+    ),
+    [],
+  )
+
   return (
     <>
-      <View style={{flex: 1}}>
-        {/* <SafeAreaView style={{flex: 1}}> */}
-        <StatusBar barStyle="dark-content" />
-        {/* <SafeAreaProvider> */}
-
-        <Animated.ScrollView
-          ref={scrollViewRef}
-          scrollEventThrottle={15}
-          onScroll={handleScroll}
-          style={{flex: 1, position: 'relative', backgroundColor: 'white'}}
-          contentContainerStyle={{height: SONGS.length * SONG_HEIGHT}}>
-          {SONGS.map(song => (
-            <MovableSong
-              key={song.id}
-              id={song.id}
-              artist={song.artist}
-              cover={song.cover}
-              title={song.title}
-              positions={positions}
-              scrollY={scrollY}
-              songsCount={SONGS.length}
-            />
-          ))}
-        </Animated.ScrollView>
-
-        {/* </SafeAreaProvider> */}
-        {/* </SafeAreaView> */}
-      </View>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <View style={{flex: 1}}>
+          {/* <SafeAreaView style={{flex: 1}}> */}
+          <StatusBar barStyle="dark-content" />
+          {/* <SafeAreaProvider> */}
+          <Animated.FlatList
+            data={SONGS ?? []}
+            ref={scrollViewRef}
+            scrollEventThrottle={16}
+            onScroll={handleScroll}
+            style={{backgroundColor: 'white', position: 'relative', flex: 1, zIndex: 1}}
+            contentContainerStyle={{height: SONGS.length * SONG_HEIGHT}}
+            keyExtractor={(item: any) => `${item.id}`}
+            removeClippedSubviews={false}
+            renderItem={renderItem}
+            CellRendererComponent={renderCellComponent}
+          />
+        </View>
+      </GestureHandlerRootView>
     </>
   )
 }
