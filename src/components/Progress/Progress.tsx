@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState, forwardRef, memo, useCallback} from 'react'
 import {View, Animated, LayoutChangeEvent} from 'react-native'
-import {metrics, deviceWidth} from '../helpers/metrics'
+import {metrics, deviceWidth} from '../../helpers/metrics'
 import styled from 'styled-components/native'
 
 interface IProgressProps {
@@ -101,6 +101,7 @@ const Progress = forwardRef<View, IProgressProps>(
       <ProgressWrapper
         ref={ref}
         size={size}
+        testID="progress-wrapper"
         onLayout={onLayout}
         {...{
           backgroundColor,
@@ -108,6 +109,7 @@ const Progress = forwardRef<View, IProgressProps>(
           width,
         }}>
         <Animated.View
+          testID="filled-track"
           style={{
             transform: [
               {
