@@ -6,7 +6,7 @@
 
 ### Theme
 
-```
+```ts
 {
     colors: {...},
     borderWidths: {...},
@@ -24,25 +24,20 @@ The `BaseProvider` component is used to provide the theme to all the components 
 It should be wrapped around the root component of the app.
 Here is an example of how to use it:
 
-```
+```ts
 import React from 'react'
 import {BaseProvider} from 'rn-base-component'
 
-const App = () => (
-  <BaseProvider theme={theme}>
-    {/* Your app components go here */}
-  </BaseProvider>
-);
+const App = () => <BaseProvider theme={theme}>{/* Your app components go here */}</BaseProvider>
 
 export default App
-
 ```
 
 ### extendTheme
 
 The `extendTheme` function is used to extend the default theme provided by `rn-base-component`. It takes an object as an argument, which should contain the properties you want to override or add to the default theme. Here is an example of how to use it:
 
-```
+```ts
 import { BaseProvider, extendTheme } from 'rn-base-component';
 
 const theme = extendTheme({
@@ -70,7 +65,7 @@ The `theme` object is used to the colors, sizes, spacing, and other properties o
 
 Here is an example of how to use it:
 
-```
+```ts
 import React from 'react'
 import styled from 'styled-components/native'
 import type {ITheme} from '../theme'
@@ -119,9 +114,9 @@ const Label = styled.Text((props: {theme: ITheme; color: string | undefined}) =>
 
 The `useTheme` hook allows you to access the theme object in any component without having to pass it down as a prop. Here is an example of how to use the `useTheme` hook:
 
-```
+```ts
 import React from 'react'
-import { useTheme } from 'rn-base-component'
+import {useTheme} from 'rn-base-component'
 
 const MyComponent = () => {
   const theme = useTheme()
@@ -136,7 +131,7 @@ const MyComponent = () => {
 
 ### uesBase
 
-```
+```ts
 {
     theme: {...},
     colorMode: 'light' | 'dark',
@@ -149,20 +144,20 @@ const MyComponent = () => {
 - The `toggleColorMode` function is used to toggle between 'light' and 'dark' color modes.
 - The `setColorMode` function is used to set the color mode to a specific value.
 
-```
+```ts
 import React from 'react'
 import {Button} from 'react-native'
-import { uesBase } from 'rn-base-component'
+import {uesBase} from 'rn-base-component'
 
 const MyComponent = () => {
   const {colorMode, toggleColorMode, setColorMode} = uesBase()
 
   return (
     <View>
-        <Text>{colorMode}</Text>
-        <Button title='Toggle Color' onPress={toggleColorModee} />
-        <Button title='Set Color Light' onPress={() => setColorMode('light')} />
-        <Button title='Set Color Dark' onPress={() => setColorMode('dark')} />
+      <Text>{colorMode}</Text>
+      <Button title="Toggle Color" onPress={toggleColorModee} />
+      <Button title="Set Color Light" onPress={() => setColorMode('light')} />
+      <Button title="Set Color Dark" onPress={() => setColorMode('dark')} />
     </View>
   )
 }
@@ -172,7 +167,7 @@ const MyComponent = () => {
 
 ### Colors
 
-```
+```ts
 const colors = {
   mainBackground: '#F0F2F3',
   cardPrimaryBackground: '#0A906E',
@@ -182,7 +177,7 @@ const colors = {
 
 ### Typography
 
-```
+```ts
 const typography = {
   fontWeights: {
     hairline: 100,
@@ -222,7 +217,7 @@ const typography = {
 
 ### Border Width
 
-```
+```ts
 const borderWidths = {
   smallest: 1,
   tiny: 2,
@@ -240,7 +235,7 @@ const borderWidths = {
 
 ### Sizes
 
-```
+```ts
 const sizes = {
   tiny: responsiveHeight(4),
   small: responsiveHeight(8),
@@ -259,7 +254,7 @@ const sizes = {
 
 ### Spacing
 
-```
+```ts
 const spacing = {
   mini: responsiveHeight(2),
   tiny: responsiveHeight(4),
