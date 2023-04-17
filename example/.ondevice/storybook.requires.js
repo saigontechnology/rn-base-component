@@ -57,6 +57,7 @@ const getStories = () => {
     "./src/stories/Text.stories.tsx": require("../src/stories/Text.stories.tsx"),
     './src/stories/Card.stories.tsx': require('../src/stories/Card.stories.tsx'),
     './src/stories/RadioButton.stories.tsx': require('../src/stories/RadioButton.stories.tsx'),
+    "./src/stories/TextInput.stories.tsx": require("../src/stories/TextInput.stories.tsx"),
   };
 };
 

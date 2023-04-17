@@ -38,10 +38,21 @@ const colors = {
   blueGray: '#334155',
   dark: '#18181b',
   transparent: '#00000000',
+  lightBackground: '#FFFFFF',
+  backgroundSecondary: '#D1D1D1',
   mainBackground: '#F0F2F3',
   cardPrimaryBackground: '#0A906E',
+
+  // border
+  primaryBorder: '#454545',
+
+  // text
   textColor: '#0B0B0B',
   cardBackground: '#ffffff',
+  lightTextColor: '#FFFFFF',
+  darkTextColor: '#333333',
+  placeHolderText: '#929298',
+  errorText: '#ff0009',
 }
 
 export type IColors = keyof typeof colors

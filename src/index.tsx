@@ -3,6 +3,7 @@ import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-nati
 import type {ITheme} from './theme'
 import Button from './components/Button'
 import Card from './components/Card/Card'
+import {default as TextInputComponent} from './components/TextInput/TextInput'
 
 declare module 'styled-components/native' {
   export interface DefaultTheme extends ITheme {}
@@ -29,6 +30,7 @@ export const RnBaseComponentView =
 export * from './components'
 export const RnBaseButton = Button
 export {Card}
+export const TextInput = TextInputComponent
 
 export * from './core'
 export * from './hooks'
