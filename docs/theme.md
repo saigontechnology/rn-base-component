@@ -129,7 +129,7 @@ const MyComponent = () => {
 }
 ```
 
-### uesBase
+### useBase
 
 ```ts
 {
