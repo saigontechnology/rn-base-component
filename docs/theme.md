@@ -147,10 +147,10 @@ const MyComponent = () => {
 ```ts
 import React from 'react'
 import {Button} from 'react-native'
-import {uesBase} from 'rn-base-component'
+import {useBase} from 'rn-base-component'
 
 const MyComponent = () => {
-  const {colorMode, toggleColorMode, setColorMode} = uesBase()
+  const {colorMode, toggleColorMode, setColorMode} = useBase()
 
   return (
     <View>
