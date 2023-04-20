@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo} from 'react'
 import type {PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
 import {hitSlop, metrics} from '../../helpers/metrics'
-import SliderRange, {ISliderRange} from './SliderRange'
+import SliderFixedRange, {SliderFixedRangeProps} from './SliderFixedRange'
 import {Thumb, Track, TrackPoint} from './components'
 import styled from 'styled-components/native'
 import type {ITheme} from '../../theme'
@@ -26,15 +26,20 @@ import {
   DEFAULT_MAXIMUM_VALUE,
   DEFAULT_MINIMUM_VALUE,
   DEFAULT_STEP,
+  DURATION,
   FIRST_POINT,
   INIT_POINT,
   INIT_VALUE,
   INVISIBLE,
   MINIMUM_TRACK_WIDTH,
-  NEXT_STEP,
-  PREVIOUS_STEP,
   VISIBLE,
 } from './constants'
+import SliderFixed from './SliderFixed'
+import SliderRange, {SliderRangeProps} from './SliderRange'
+
+type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
+type Position = 'absolute' | 'fixed' | 'relative' | 'static' | 'sticky'
+type TextAlign = 'center' | 'end' | 'justify' | 'left' | 'match-parent' | 'right' | 'start'
 
 type Size = {
   width: number
@@ -67,6 +72,9 @@ interface AnimatedLabelProps extends TextInputProps {
 }
 
 type ISlider = {
+  /** The value to which the slider thumb should be rounded */
+  roundToValue?: number
+
   /** custom element that can be used to replace the default thumb of the slider */
   thumbComponent?: React.ReactElement
 
@@ -74,11 +82,7 @@ type ISlider = {
   onValueChange?: (value: number) => void
 }
 
-type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
-type Position = 'absolute' | 'fixed' | 'relative' | 'static' | 'sticky'
-type TextAlign = 'center' | 'end' | 'justify' | 'left' | 'match-parent' | 'right' | 'start'
-
-export interface ISliderCommon {
+export interface SliderCommonProps {
   /** The maximum value of the slider */
   maximumValue?: number
 
@@ -92,10 +96,10 @@ export interface ISliderCommon {
   alwaysShowValue?: boolean
 
   /** Whether to show the point on the slider's track */
-  hasTrackPoint?: boolean
+  showTrackPoint?: boolean
 
   /** Determines whether the thumb can be moved by directly touching the thumb or only by dragging the slider track */
-  hasPointTouch?: boolean
+  tapToSeek?: boolean
 
   /** The touchable area is used to increase the size of the thumb and make it easier to interact with */
   hitSlopPoint?: Insets | number
@@ -126,20 +130,23 @@ export interface ISliderCommon {
 }
 
 type SliderPropsWithOptionalWidth = {sliderWidth?: number} & (
-  | {hasTrackPoint: true; sliderWidth: number}
-  | {hasTrackPoint?: false; sliderWidth?: number}
+  | {showTrackPoint: true; sliderWidth: number}
+  | {showTrackPoint?: false; sliderWidth?: number}
 )
 
-type SliderProps = ISliderCommon & ISlider & SliderPropsWithOptionalWidth
+type SliderProps = SliderCommonProps & ISlider & SliderPropsWithOptionalWidth
 
 type SliderComponentProps = React.FC<SliderProps> & {
-  Range: React.FC<ISliderRange>
+  Range: React.FC<SliderRangeProps>
+  FixedRange: React.FC<SliderFixedRangeProps>
+  Fixed: React.FC<SliderProps>
 }
 
 const Slider: SliderComponentProps = ({
   minimumValue = DEFAULT_MINIMUM_VALUE,
   maximumValue = DEFAULT_MAXIMUM_VALUE,
-  step = DEFAULT_STEP,
+  step,
+  roundToValue,
   style,
   trackStyle,
   trackedStyle,
@@ -148,32 +155,39 @@ const Slider: SliderComponentProps = ({
   alwaysShowValue,
   labelStyle,
   thumbComponent,
-  hasTrackPoint,
-  hasPointTouch,
+  showTrackPoint,
+  tapToSeek,
   hitSlopPoint = hitSlop,
   sliderWidth,
   thumbSize = {width: metrics.medium, height: metrics.medium},
   trackPointStyle,
   onValueChange = () => null,
 }: SliderProps) => {
-  const sliderInfo = useSharedValue<SliderInfo>({range: INIT_VALUE, trackWidth: INIT_VALUE})
-  const currentPoint = useSharedValue<number>(INIT_POINT)
+  const sliderInfo = useSharedValue<SliderInfo>({
+    range: INIT_VALUE,
+    trackWidth: INIT_VALUE,
+  })
+  const sliderValue = useSharedValue<number>(INIT_POINT)
   const progress = useSharedValue<number>(INIT_VALUE)
   const opacity = useSharedValue(INIT_VALUE)
+  const stepValue = useMemo(() => step || DEFAULT_STEP, [step])
 
-  const totalPoint = useMemo(() => (maximumValue - minimumValue) / step, [maximumValue, minimumValue, step])
+  const totalPoint = useMemo(
+    () => (maximumValue - minimumValue) / stepValue,
+    [maximumValue, minimumValue, stepValue],
+  )
 
   /**
    * This function updates the slider with the new position (progressing) and new point
    * @param {number} progressing - The current position of the thumb on the track
-   * @param {number} currentPoint - The current point of the slider
+   * @param {number} value - The value of the slider
    */
   const updateSlider = useCallback(
-    (progressing: number, point: number) => {
+    (progressing: number, value: number) => {
       progress.value = progressing
-      currentPoint.value = point
+      sliderValue.value = value
     },
-    [currentPoint, progress],
+    [sliderValue, progress],
   )
 
   const handler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent, AnimatedGHContext>({
@@ -181,64 +195,70 @@ const Slider: SliderComponentProps = ({
       ctx.startX = progress.value
     },
     onActive: (event, ctx) => {
-      const {trackWidth, range} = sliderInfo.value
+      const {trackWidth} = sliderInfo.value
       const progressing = ctx.startX + event.translationX
-      // Calculate the new slider value based on the progressing (new position) and the range
-      const sliderValue = progressing / range
+
       opacity.value = VISIBLE
 
       // When sliding the thumb across a distance shorter than the track's width
       if (progressing < MINIMUM_TRACK_WIDTH) {
-        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, INIT_POINT)
+        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, minimumValue)
       }
       // When sliding the thumb over the track's width
       else if (progressing > trackWidth) {
-        runOnJS(updateSlider)(trackWidth, totalPoint)
-      }
-      // When sliding steadily increases
-      else if (progressing > range * (currentPoint.value + NEXT_STEP)) {
-        const currentProgress = range * Math.floor(sliderValue)
-        const point = Math.floor(sliderValue)
-
-        runOnJS(updateSlider)(currentProgress, point)
-      }
-      // When sliding steadily decreases
-      else if (progressing < range * (currentPoint.value - PREVIOUS_STEP)) {
-        const currentProgress = range * Math.ceil(sliderValue)
-        const point = Math.ceil(sliderValue)
-
-        runOnJS(updateSlider)(currentProgress, point)
+        runOnJS(updateSlider)(trackWidth, maximumValue)
+      } else {
+        const value = progressing / (trackWidth / (maximumValue - minimumValue))
+        runOnJS(updateSlider)(progressing, value + minimumValue)
       }
     },
     onEnd: () => {
+      const {range} = sliderInfo.value
+      let value = roundToValue ? sliderValue.value.toFixed(roundToValue) : sliderValue.value
       opacity.value = INVISIBLE
-      runOnJS(onValueChange)(minimumValue + currentPoint.value * step)
+      if (step) {
+        // Calculate the ratio of the current thumb position with respect to the entire range of the slider
+        const progressRatio = Math.round(progress.value / range)
+        value = minimumValue + progressRatio * stepValue
+        const roundedProgress = progressRatio * range
+        runOnJS(updateSlider)(roundedProgress, value)
+      }
+      runOnJS(onValueChange)(value as number)
     },
   })
 
   /**
    * Update the tracked width based on the thumb sliding
    */
-  const animatedTrackStyle = useAnimatedStyle(() => ({
-    width: progress.value,
-  }))
+  const animatedTrackStyle = useAnimatedStyle(
+    () => ({
+      width: withTiming(progress.value, {duration: 1}),
+    }),
+    [progress],
+  )
 
   /**
    * Add animation to the thumb while it's sliding
    */
-  const animatedThumbStyle = useAnimatedStyle(() => ({
-    transform: [{translateX: withTiming(progress.value, {duration: 1})}],
-  }))
+  const animatedThumbStyle = useAnimatedStyle(
+    () => ({
+      transform: [{translateX: progress.value}],
+    }),
+    [progress],
+  )
 
   /**
    * Update opacity when touching the thumb
    * This animation should run within 200ms when the thumb is touched or released
    */
-  const opacityStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(opacity.value, {
-      duration: 200,
+  const opacityStyle = useAnimatedStyle(
+    () => ({
+      opacity: withTiming(opacity.value, {
+        duration: DURATION,
+      }),
     }),
-  }))
+    [opacity],
+  )
 
   /**
    * Display the current slider value in real time as the user slides the thumb along the slider track
@@ -246,7 +266,7 @@ const Slider: SliderComponentProps = ({
   const animatedProps = useAnimatedProps(
     () =>
       ({
-        text: `${minimumValue + currentPoint.value * step}`,
+        text: `${roundToValue !== undefined ? sliderValue.value.toFixed(roundToValue) : sliderValue.value}`,
       } as AnimatedLabelProps),
   )
 
@@ -267,25 +287,25 @@ const Slider: SliderComponentProps = ({
     (point: number) => {
       const positionPoint = sliderInfo.value.range * (point + FIRST_POINT)
       const curPoint = point + FIRST_POINT
-      const value = minimumValue + curPoint * step
+      const value = minimumValue + curPoint * stepValue
 
-      updateSlider(positionPoint, curPoint)
+      updateSlider(positionPoint, value)
       onValueChange(value)
     },
-    [minimumValue, onValueChange, sliderInfo.value.range, step, updateSlider],
+    [minimumValue, onValueChange, sliderInfo.value.range, stepValue, updateSlider],
   )
 
   return (
     <Container style={[!!sliderWidth && {width: sliderWidth}, style]}>
       <Track style={trackStyle} onLayout={getTrackWidth} />
-      {!!hasTrackPoint && (
+      {!!showTrackPoint && (
         <TrackPoint
           sliderWidth={sliderWidth}
           totalPoint={totalPoint}
           hitSlopPoint={hitSlopPoint}
-          activeOpacity={hasPointTouch ? 0 : 1}
+          activeOpacity={tapToSeek ? 0 : 1}
           trackPointStyle={trackPointStyle}
-          onPressPoint={(point: number) => hasPointTouch && onPressPoint(point)}
+          onPressPoint={(point: number) => tapToSeek && onPressPoint(point)}
         />
       )}
       <Tracked style={[trackedStyle, animatedTrackStyle]} />
@@ -306,9 +326,10 @@ const Slider: SliderComponentProps = ({
   )
 }
 
-const Container = styled.View({
+const Container = styled.View(({theme}: {theme: ITheme}) => ({
   justifyContent: 'center',
-})
+  height: theme.sizes.xxs,
+}))
 
 const Tracked = styled(Track)(({theme}: {theme: ITheme}) => ({
   ...StyleSheet.absoluteFillObject,
@@ -316,6 +337,8 @@ const Tracked = styled(Track)(({theme}: {theme: ITheme}) => ({
 }))
 
 Slider.Range = SliderRange
+Slider.FixedRange = SliderFixedRange
+Slider.Fixed = SliderFixed
 
 export type {
   Size,

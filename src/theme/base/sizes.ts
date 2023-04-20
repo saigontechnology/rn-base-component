@@ -3,6 +3,7 @@ import {responsiveHeight} from '../../helpers/metrics'
 const sizes = {
   tiny: responsiveHeight(4),
   small: responsiveHeight(8),
+  xxs: responsiveHeight(10),
   medium: responsiveHeight(16),
   large: responsiveHeight(20),
   huge: responsiveHeight(24),

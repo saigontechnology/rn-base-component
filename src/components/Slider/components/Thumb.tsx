@@ -64,7 +64,8 @@ const ThumbContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   width: props.thumbSize.width,
   borderRadius: props.theme?.borderWidths.huge,
   borderWidth: props.hasThumbComponent ? 0 : 1,
-  backgroundColor: props.hasThumbComponent ? 'transparent' : props.theme?.colors.backgroundColor,
+  // backgroundColor: props.hasThumbComponent ? 'transparent' : props.theme?.colors.backgroundColor,
+  backgroundColor: 'transparent',
 }))
 
 const TriangleDown = styled.View(({background, theme}: {background?: string; theme: ITheme}) => ({
@@ -91,14 +92,15 @@ const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   alignSelf: 'center',
   justifyContent: 'center',
   alignItems: 'center',
+  margin: !isIOS ? -(props.theme?.spacing.mini || 0) : 0,
 }))
 
 const Label = styled(AnimatedText)(({theme}: {theme: ITheme}) => ({
   color: theme.colors.textLightColor,
-  padding: isIOS ? theme.spacing.micro : theme.spacing.mini,
+  padding: isIOS ? theme.spacing.micro : theme.spacing.tiny,
   textAlign: 'center' as TextAlign,
   fontWeight: theme.fontWeights.bold,
-  fontSize: theme.fontSizes.md,
+  fontSize: theme.fontSizes.sm,
   width: '100%',
 }))
 

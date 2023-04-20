@@ -23,13 +23,15 @@ import {
   INIT_VALUE,
   INVISIBLE,
   MINIMUM_TRACK_WIDTH,
+  NEXT_STEP,
+  PREVIOUS_STEP,
   ThumbPosition,
   VISIBLE,
 } from './constants'
 import {useTheme} from '../../hooks'
 import {hitSlop} from '../../helpers/metrics'
 
-type Value = {
+type Point = {
   left: number
   right: number
 }
@@ -48,28 +50,32 @@ type NumberRange = {
   minimum: number
 }
 
-export interface SliderRangeProps extends SliderCommonProps {
-  roundToValue?: number
-
+export interface SliderFixedRangeProps extends SliderCommonProps {
+  /** The width of the slider */
   sliderWidth: number
 
+  /** The custom React element to be used for the left thumb of the slider */
   leftThumbComponent?: React.ReactElement
 
+  /** The custom React element to be used for the right thumb of the slider */
   rightThumbComponent?: React.ReactElement
 
+  /**
+   * The callback function that is called when the value of the slider changes
+   * The value is an object with a minimum and a maximum property
+   */
   onValueChange?: (value: NumberRange) => void
 }
 
-const SliderRange: React.FC<SliderRangeProps> = ({
+const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
   minimumValue = DEFAULT_MINIMUM_VALUE,
   maximumValue = DEFAULT_MAXIMUM_VALUE,
-  step,
+  step = DEFAULT_STEP,
   style,
   trackStyle,
   trackedStyle,
   thumbStyle,
   bgColorLabelView,
-  roundToValue,
   alwaysShowValue,
   labelStyle,
   hitSlopPoint = hitSlop,
@@ -82,32 +88,16 @@ const SliderRange: React.FC<SliderRangeProps> = ({
   trackPointStyle,
   onValueChange = () => null,
 }) => {
-  const stepValue = useMemo(() => step || DEFAULT_STEP, [step])
-  const totalPoint = useMemo(
-    () => (maximumValue - minimumValue) / stepValue,
-    [maximumValue, minimumValue, stepValue],
-  )
+  const totalPoint = useMemo(() => (maximumValue - minimumValue) / step, [maximumValue, minimumValue, step])
   const range = useMemo(() => sliderWidth / totalPoint, [sliderWidth, totalPoint])
   const theme = useTheme()
-  const actualThumbSize = thumbSize || {
-    width: theme.sizes.large,
-    height: theme.sizes.large,
-  }
+  const actualThumbSize = thumbSize || {width: theme.sizes.large, height: theme.sizes.large}
 
-  const sliderValue = useSharedValue<Value>({
-    left: INIT_POINT,
-    right: maximumValue,
-  })
+  const sliderValue = useSharedValue<Point>({left: INIT_POINT, right: maximumValue})
   const leftProgress = useSharedValue<number>(INIT_VALUE)
   const rightProgress = useSharedValue<number>(sliderWidth)
-  const leftAnimated = useSharedValue<SliderAnimated>({
-    opacity: INIT_VALUE,
-    zIndex: INIT_VALUE,
-  })
-  const rightAnimated = useSharedValue<SliderAnimated>({
-    opacity: INIT_VALUE,
-    zIndex: INIT_VALUE,
-  })
+  const leftAnimated = useSharedValue<SliderAnimated>({opacity: INIT_VALUE, zIndex: INIT_VALUE})
+  const rightAnimated = useSharedValue<SliderAnimated>({opacity: INIT_VALUE, zIndex: INIT_VALUE})
 
   /**
    * This function updates the slider with the new position (progressing) and new point
@@ -129,48 +119,42 @@ const SliderRange: React.FC<SliderRangeProps> = ({
       ctx.startX = leftProgress.value
     },
     onActive: (event, ctx) => {
-      const {right} = sliderValue.value
+      const {left, right} = sliderValue.value
       const leftProgressing = ctx.startX + event.translationX
+      // Calculate the ratio of the current left thumb position with respect to the entire range of the slider
+      const leftProgressRatio = leftProgressing / range
 
       leftAnimated.value = {zIndex: VISIBLE, opacity: VISIBLE}
       rightAnimated.value = {zIndex: INVISIBLE, opacity: INVISIBLE}
 
       // When sliding the thumb across a distance shorter than the track's width
       if (leftProgressing < MINIMUM_TRACK_WIDTH) {
-        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, minimumValue, ThumbPosition.left)
+        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, INIT_POINT, ThumbPosition.left)
       }
       // When sliding the thumb over the track's width
       else if (leftProgressing > rightProgress.value) {
         runOnJS(updateSlider)(rightProgress.value, right, ThumbPosition.left)
       }
       // When sliding steadily increases
-      else if (leftProgressing >= rightProgress.value) {
-        runOnJS(updateSlider)(rightProgress.value, right, ThumbPosition.left)
+      else if (leftProgressing > range * (left + NEXT_STEP)) {
+        const currentProgress = range * Math.floor(leftProgressRatio)
+        const point = Math.floor(leftProgressRatio)
+        runOnJS(updateSlider)(currentProgress, point, ThumbPosition.left)
       }
       // When sliding steadily decreases
-      else {
-        const currentProgressValue = leftProgressing / (sliderWidth / (maximumValue - minimumValue))
-        const value = currentProgressValue + minimumValue
-        const roundedValue = roundToValue ? value.toFixed(roundToValue) : value
-        runOnJS(updateSlider)(leftProgressing, roundedValue as number, ThumbPosition.left)
+      else if (leftProgressing < range * (left - PREVIOUS_STEP)) {
+        const currentProgress = range * Math.ceil(leftProgressRatio)
+        const point = Math.ceil(leftProgressRatio)
+
+        runOnJS(updateSlider)(currentProgress, point, ThumbPosition.left)
       }
     },
     onEnd: () => {
       // This line sets the opacity of the left label animated
       leftAnimated.value = {...leftAnimated.value, opacity: INVISIBLE}
-      let value = sliderValue.value.left
-
-      if (step) {
-        // Calculate the ratio of the current left thumb position with respect to the entire range of the slider
-        const leftProgressRatio = Math.round(leftProgress.value / range)
-        value = minimumValue + leftProgressRatio * stepValue
-        const roundedProgress = leftProgressRatio * range
-        runOnJS(updateSlider)(roundedProgress, value, ThumbPosition.left)
-      }
-
       runOnJS(onValueChange)({
-        minimum: value as number,
-        maximum: sliderValue.value.right,
+        minimum: minimumValue + sliderValue.value.left * step,
+        maximum: minimumValue + sliderValue.value.right * step,
       })
     },
   })
@@ -180,8 +164,10 @@ const SliderRange: React.FC<SliderRangeProps> = ({
       ctx.startX = rightProgress.value
     },
     onActive: (event, ctx) => {
-      const {left} = sliderValue.value
+      const {left, right} = sliderValue.value
       const rightProgressing = ctx.startX + event.translationX
+      // Calculate the ratio of the current right thumb position with respect to the entire range of the slider
+      const rightProgressRatio = rightProgressing / range
       leftAnimated.value = {zIndex: INVISIBLE, opacity: INVISIBLE}
       rightAnimated.value = {zIndex: VISIBLE, opacity: VISIBLE}
 
@@ -191,50 +177,38 @@ const SliderRange: React.FC<SliderRangeProps> = ({
       }
       // When sliding the thumb over the track's width
       else if (rightProgressing > sliderWidth) {
-        runOnJS(updateSlider)(sliderWidth, maximumValue, ThumbPosition.right)
+        runOnJS(updateSlider)(sliderWidth, totalPoint, ThumbPosition.right)
       }
       // When sliding steadily increases
-      else if (rightProgressing <= leftProgress.value) {
-        runOnJS(updateSlider)(leftProgress.value, left, ThumbPosition.right)
+      else if (rightProgressing > range * (right + NEXT_STEP)) {
+        const currentProgress = range * Math.floor(rightProgressRatio)
+        const point = Math.floor(rightProgressRatio)
+        runOnJS(updateSlider)(currentProgress, point, ThumbPosition.right)
       }
       // When sliding steadily decreases
-      else {
-        const currentProgressValue = rightProgressing / (sliderWidth / (maximumValue - minimumValue))
-        const value = currentProgressValue + minimumValue
-        const roundedValue = roundToValue ? value.toFixed(roundToValue) : value
-        runOnJS(updateSlider)(rightProgressing, roundedValue as number, ThumbPosition.right)
+      else if (rightProgressing < range * (right - PREVIOUS_STEP)) {
+        const currentProgress = range * Math.ceil(rightProgressRatio)
+        const point = Math.ceil(rightProgressRatio)
+        runOnJS(updateSlider)(currentProgress, point, ThumbPosition.right)
       }
     },
     onEnd: () => {
       // This line sets the opacity of the right label animated
       rightAnimated.value = {...rightAnimated.value, opacity: INVISIBLE}
-      let value = sliderValue.value.right
-
-      if (step) {
-        // Calculate the ratio of the current right thumb position with respect to the entire range of the slider
-        const rightProgressRatio = Math.round(rightProgress.value / range)
-        value = minimumValue + rightProgressRatio * stepValue
-        const roundedProgress = rightProgressRatio * range
-        runOnJS(updateSlider)(roundedProgress, value, ThumbPosition.right)
-      }
       runOnJS(onValueChange)({
-        minimum: sliderValue.value.left,
-        maximum: value as number,
+        minimum: minimumValue + sliderValue.value.left * step,
+        maximum: minimumValue + sliderValue.value.right * step,
       })
     },
   })
 
   const leftThumbRangeStyle = useAnimatedStyle(() => ({
-    transform: [{translateX: leftProgress.value}],
+    transform: [{translateX: withTiming(leftProgress.value, {duration: 1})}],
     zIndex: leftAnimated.value.zIndex,
   }))
 
   const rightThumbRangeStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        translateX: rightProgress.value - actualThumbSize.width / 2,
-      },
-    ],
+    transform: [{translateX: withTiming(rightProgress.value - actualThumbSize.width / 2, {duration: 1})}],
     zIndex: rightAnimated.value.zIndex,
   }))
 
@@ -260,14 +234,14 @@ const SliderRange: React.FC<SliderRangeProps> = ({
   const leftAnimatedProps = useAnimatedProps(
     () =>
       ({
-        text: `${sliderValue.value.left}`,
+        text: `${minimumValue + sliderValue.value.left * step}`,
       } as AnimatedLabelProps),
   )
 
   const rightAnimatedProps = useAnimatedProps(
     () =>
       ({
-        text: `${sliderValue.value.right}`,
+        text: `${minimumValue + sliderValue.value.right * step}`,
       } as AnimatedLabelProps),
   )
 
@@ -276,7 +250,7 @@ const SliderRange: React.FC<SliderRangeProps> = ({
    */
   const animatedTrackStyle = useAnimatedStyle(() => {
     const width = rightProgress.value - leftProgress.value
-    const transform = [{translateX: leftProgress.value}]
+    const transform = [{translateX: withTiming(leftProgress.value, {duration: 1})}]
 
     return {transform, width}
   })
@@ -290,16 +264,17 @@ const SliderRange: React.FC<SliderRangeProps> = ({
     (point: number) => {
       const {left, right} = sliderValue.value
       const curPoint = point + FIRST_POINT
-      const isPointToLeft = point <= left
-      const pointValue = minimumValue + curPoint * stepValue
+      const isPointToLeft = point <= sliderValue.value.left
+      const getSliderValue = (value: number) => minimumValue + value * step
       const value = {
-        minimum: isPointToLeft ? pointValue : left,
-        maximum: isPointToLeft ? right : pointValue,
+        minimum: isPointToLeft ? getSliderValue(curPoint) : getSliderValue(left),
+        maximum: isPointToLeft ? getSliderValue(right) : getSliderValue(curPoint),
       }
-      updateSlider(range * curPoint, pointValue, isPointToLeft ? ThumbPosition.left : ThumbPosition.right)
+
+      updateSlider(range * curPoint, curPoint, isPointToLeft ? ThumbPosition.left : ThumbPosition.right)
       onValueChange(value)
     },
-    [sliderValue, minimumValue, onValueChange, range, stepValue, updateSlider],
+    [sliderValue, minimumValue, step, updateSlider, range, onValueChange],
   )
 
   return (
@@ -356,4 +331,4 @@ const Tracked = styled(Track)(({theme}: {theme: ITheme}) => ({
   backgroundColor: theme?.colors.primary,
 }))
 
-export default SliderRange
+export default SliderFixedRange

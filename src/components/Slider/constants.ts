@@ -1,14 +1,15 @@
 const DEFAULT_STEP = 1
 const INIT_POINT = 0
 const MINIMUM_TRACK_WIDTH = 0
-const DEFAULT_MINIMUM_VALUE = 1
-const DEFAULT_MAXIMUM_VALUE = 10
+const DEFAULT_MINIMUM_VALUE = 0
+const DEFAULT_MAXIMUM_VALUE = 1
 const INIT_VALUE = 0
 const VISIBLE = 1
 const INVISIBLE = 0
 const NEXT_STEP = 1
 const PREVIOUS_STEP = 1
 const FIRST_POINT = 1
+const DURATION = 200
 
 const ThumbPosition = {left: 'left', right: 'right'}
 
@@ -25,4 +26,5 @@ export {
   INVISIBLE,
   NEXT_STEP,
   PREVIOUS_STEP,
+  DURATION,
 }
