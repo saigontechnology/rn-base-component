@@ -237,18 +237,18 @@ const borderWidths = {
 
 ```ts
 const sizes = {
-  tiny: responsiveHeight(4),
-  small: responsiveHeight(8),
-  medium: responsiveHeight(16),
-  large: responsiveHeight(20),
-  huge: responsiveHeight(24),
-  enormous: responsiveHeight(32),
-  massive: responsiveHeight(48),
-  gargantuan: responsiveHeight(64),
-  colossal: responsiveHeight(96),
-  gigantic: responsiveHeight(128),
-  extraLarge: responsiveHeight(160),
-  jumbo: responsiveHeight(200),
+  tiny: 4,
+  small: 8,
+  medium: 16,
+  large: 20,
+  huge: 24,
+  enormous: 32,
+  massive: 48,
+  gargantuan: 64,
+  colossal: 96,
+  gigantic: 128,
+  extraLarge: 160,
+  jumbo: 200,
 }
 ```
 
@@ -256,20 +256,20 @@ const sizes = {
 
 ```ts
 const spacing = {
-  mini: responsiveHeight(2),
-  tiny: responsiveHeight(4),
-  micro: responsiveHeight(6),
-  xxs: responsiveHeight(8),
-  xs: responsiveHeight(12),
-  small: responsiveHeight(16),
-  sMedium: responsiveHeight(18),
-  medium: responsiveHeight(20),
-  large: responsiveHeight(24),
-  xl: responsiveHeight(28),
-  xxl: responsiveHeight(32),
-  xxxl: responsiveHeight(40),
-  huge: responsiveHeight(48),
-  massive: responsiveHeight(64),
-  giant: responsiveHeight(80),
+  mini: 2,
+  tiny: 4,
+  micro: 6,
+  xxs: 8,
+  xs: 12,
+  small: 16,
+  sMedium: 18,
+  medium: 20,
+  large: 24,
+  xl: 28,
+  xxl: 32,
+  xxxl: 40,
+  huge: 48,
+  massive: 64,
+  giant: 80,
 }
 ```
