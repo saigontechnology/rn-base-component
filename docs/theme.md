@@ -68,10 +68,6 @@ Here is an example of how to use it:
 ```ts
 import React from 'react'
 import styled from 'styled-components/native'
-import type {ITheme} from '../theme'
-
-import React from 'react'
-import styled from 'styled-components/native'
 import {metrics} from '../helpers/metrics'
 import type {ITheme} from '../theme'
 
