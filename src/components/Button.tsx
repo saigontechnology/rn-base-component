@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components/native'
 import {metrics} from '../helpers/metrics'
-import type {ITheme} from '../theme'
 
 export type ButtonProps = {
   onPress: () => void
@@ -16,21 +15,23 @@ const Button: React.FC<ButtonProps> = ({text, onPress, color, textColor}) => (
   </ButtonRoot>
 )
 
-const ButtonRoot = styled.TouchableOpacity`
-  ${(props: {theme: ITheme; color: string | undefined}) => ({
-    paddingVertical: metrics.xxs,
-    paddingHorizontal: metrics.small,
-    borderRadius: metrics.borderRadius,
-    backgroundColor: props?.color || props?.theme?.colors?.cardPrimaryBackground,
-    alignSelf: 'flex-start',
-  })}
-`
+interface IButtonRoot {
+  color?: string
+}
+const ButtonRoot = styled.TouchableOpacity<IButtonRoot>(({theme, color}) => ({
+  paddingVertical: metrics.xxs,
+  paddingHorizontal: metrics.small,
+  borderRadius: metrics.borderRadius,
+  backgroundColor: color || theme.colors?.cardPrimaryBackground,
+  alignSelf: 'flex-start',
+}))
 
-const Label = styled.Text`
-  ${(props: {theme: ITheme; color: string | undefined}) => ({
-    color: props?.color || 'white',
-    fontWeight: props?.theme?.fontWeights?.bold,
-  })}
-`
+interface ILabel {
+  color?: string
+}
+const Label = styled.Text<ILabel>(({theme, color}) => ({
+  color: color || 'white',
+  fontWeight: theme?.fontWeights?.bold,
+}))
 
 export default Button
