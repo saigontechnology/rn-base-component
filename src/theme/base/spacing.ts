@@ -1,21 +1,19 @@
-import {responsiveHeight} from '../../helpers/metrics'
-
 const spacing = {
-  mini: responsiveHeight(2),
-  tiny: responsiveHeight(4),
-  micro: responsiveHeight(6),
-  xxs: responsiveHeight(8),
-  xs: responsiveHeight(12),
-  small: responsiveHeight(16),
-  sMedium: responsiveHeight(18),
-  medium: responsiveHeight(20),
-  large: responsiveHeight(24),
-  xl: responsiveHeight(28),
-  xxl: responsiveHeight(32),
-  xxxl: responsiveHeight(40),
-  huge: responsiveHeight(48),
-  massive: responsiveHeight(64),
-  giant: responsiveHeight(80),
+  mini: 2,
+  tiny: 4,
+  micro: 6,
+  xxs: 8,
+  xs: 12,
+  small: 16,
+  sMedium: 18,
+  medium: 20,
+  large: 24,
+  xl: 28,
+  xxl: 32,
+  xxxl: 40,
+  huge: 48,
+  massive: 64,
+  giant: 80,
 }
 
 export type ISpacing = keyof typeof spacing

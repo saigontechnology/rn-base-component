@@ -1,7 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import React, {createContext, useCallback, useMemo, useState} from 'react'
 import {ThemeProvider as ThemeProviderStyled, ThemeProviderComponent} from 'styled-components'
 import {ITheme, theme as defaultTheme} from '../theme'
 import type {ColorMode, IColorModeContextProps} from './color-mode/type'
+
+declare module 'styled-components/native' {
+  export interface DefaultTheme extends ITheme {}
+}
 
 export type IBaseContext = {theme: ITheme} | IColorModeContextProps
 export const BaseContext = createContext<IBaseContext | null>(null)
