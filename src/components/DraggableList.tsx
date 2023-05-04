@@ -13,8 +13,10 @@ import Animated, {
   useAnimatedRef,
   scrollTo,
 } from 'react-native-reanimated'
-import {PanGestureHandler, GestureHandlerRootView} from 'react-native-gesture-handler'
+import {PanGestureHandler, GestureHandlerRootView, FlatList} from 'react-native-gesture-handler'
 // import {useSafeAreaInsets} from 'react-native-safe-area-context'
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList) as any
 
 const ALBUM_COVERS = {
   DISCOVERY: 'https://media.pitchfork.com/photos/5929a87b5e6ef95969321208/16:9/w_1280,c_limit/d23a880a.jpg',
@@ -162,11 +164,11 @@ const SONGS = shuffle([
   },
 ])
 
-function Song({artist, cover, title, setIsEnableDrag}: any) {
+function Song({artist, cover, title, onLongPress}: any) {
   return (
     <TouchableOpacity
       onLongPress={() => {
-        setIsEnableDrag(true)
+        onLongPress()
       }}
       style={{
         flexDirection: 'row',
@@ -195,19 +197,7 @@ function Song({artist, cover, title, setIsEnableDrag}: any) {
   )
 }
 
-function MovableSong({
-  id,
-  artist,
-  cover,
-  title,
-  positions,
-  scrollY,
-  songsCount,
-  isEnableDrag,
-  setIsEnableDrag,
-  setIndexDrag,
-  index,
-}: any) {
+function MovableSong({id, artist, cover, title, positions, scrollY, songsCount}: any) {
   const ref = useRef<Animated.View>(null)
   const [moving, setMoving] = useState(false)
   const top = useSharedValue(positions.value[id] * SONG_HEIGHT)
@@ -217,6 +207,8 @@ function MovableSong({
   const screen = Dimensions.get('screen')
   const topPadding = statusBarHeight
   const bottomPadding = screen.height - window.height - topPadding
+  const isEnableDrag = useRef(false)
+  const [state, setState] = useState(false)
   //   const insets = useSafeAreaInsets()
 
   useAnimatedReaction(
@@ -231,43 +223,50 @@ function MovableSong({
     [moving],
   )
 
-  const gestureHandler = useAnimatedGestureHandler({
-    onStart() {
-      runOnJS(setMoving)(true)
-      runOnJS(setIndexDrag)(index)
+  const onLongPress = useCallback(() => {
+    isEnableDrag.current = true
+    setState(true)
+  }, [])
+
+  const gestureHandler = useAnimatedGestureHandler(
+    {
+      onStart() {
+        runOnJS(setMoving)(true)
+      },
+      onActive(event) {
+        const positionY = event.absoluteY + scrollY.value
+
+        if (positionY <= scrollY.value + SCROLL_HEIGHT_THRESHOLD - 100) {
+          // Scroll up
+          scrollY.value = withTiming(0, {duration: 1500})
+        } else if (positionY >= scrollY.value + dimensions.height - SCROLL_HEIGHT_THRESHOLD) {
+          // Scroll down
+          const contentHeight = songsCount * SONG_HEIGHT
+          const containerHeight = dimensions.height - topPadding - bottomPadding
+          const maxScroll = contentHeight - containerHeight + 10
+          scrollY.value = withTiming(maxScroll, {duration: 1500})
+        } else {
+          cancelAnimation(scrollY)
+        }
+
+        top.value = withTiming(positionY - SONG_HEIGHT, {
+          duration: 16,
+        })
+
+        const newPosition = clamp(Math.floor(positionY / SONG_HEIGHT), 0, songsCount - 1)
+
+        if (newPosition !== positions.value[id]) {
+          positions.value = objectMove(positions.value, positions.value[id], newPosition)
+        }
+      },
+      onFinish() {
+        top.value = positions.value[id] * SONG_HEIGHT
+        runOnJS(setMoving)(false)
+        isEnableDrag.current = false
+      },
     },
-    onActive(event) {
-      const positionY = event.absoluteY + scrollY.value
-
-      if (positionY <= scrollY.value + SCROLL_HEIGHT_THRESHOLD - 100) {
-        // Scroll up
-        scrollY.value = withTiming(0, {duration: 1500})
-      } else if (positionY >= scrollY.value + dimensions.height - SCROLL_HEIGHT_THRESHOLD) {
-        // Scroll down
-        const contentHeight = songsCount * SONG_HEIGHT
-        const containerHeight = dimensions.height - topPadding - bottomPadding
-        const maxScroll = contentHeight - containerHeight + 10
-        scrollY.value = withTiming(maxScroll, {duration: 1500})
-      } else {
-        cancelAnimation(scrollY)
-      }
-
-      top.value = withTiming(positionY - SONG_HEIGHT, {
-        duration: 16,
-      })
-
-      const newPosition = clamp(Math.floor(positionY / SONG_HEIGHT), 0, songsCount - 1)
-
-      if (newPosition !== positions.value[id]) {
-        positions.value = objectMove(positions.value, positions.value[id], newPosition)
-      }
-    },
-    onFinish() {
-      top.value = positions.value[id] * SONG_HEIGHT
-      runOnJS(setMoving)(false)
-      runOnJS(setIsEnableDrag)(false)
-    },
-  })
+    [state],
+  )
 
   const animatedStyle = useAnimatedStyle(
     () => ({
@@ -275,7 +274,7 @@ function MovableSong({
       left: 0,
       right: 0,
       top: top.value,
-      backgroundColor: moving ? 'red' : 'white',
+      backgroundColor: isEnableDrag.current ? 'red' : 'white',
       zIndex: moving ? 1 : 0,
       shadowColor: 'black',
       shadowOffset: {
@@ -285,24 +284,18 @@ function MovableSong({
       shadowOpacity: withSpring(moving ? 0.2 : 0),
       shadowRadius: 10,
     }),
-    [moving],
+    [moving, isEnableDrag.current],
   )
 
-  const ViewContainer = isEnableDrag ? PanGestureHandler : View
+  const ViewContainer = state ? PanGestureHandler : View
 
   return (
     <Animated.View ref={ref} style={[animatedStyle]}>
-      <ViewContainer onGestureEvent={gestureHandler}>
+      <PanGestureHandler onGestureEvent={gestureHandler}>
         <Animated.View>
-          <Song
-            moving={moving}
-            artist={artist}
-            cover={cover}
-            title={title}
-            setIsEnableDrag={setIsEnableDrag}
-          />
+          <Song moving={moving} artist={artist} cover={cover} title={title} onLongPress={onLongPress} />
         </Animated.View>
-      </ViewContainer>
+      </PanGestureHandler>
     </Animated.View>
   )
 }
@@ -310,12 +303,10 @@ function MovableSong({
 const DraggableList: React.FC = () => {
   const scrollY = useSharedValue(0)
   const positions = useSharedValue(listToObject(SONGS))
-  const [isEnableDrag, setIsEnableDrag] = useState(false)
   const handleScroll = useAnimatedScrollHandler(event => {
     scrollY.value = event.contentOffset.y
   })
   const scrollViewRef = useAnimatedRef<Animated.FlatList<string>>()
-  const [indexDrag, setIndexDrag] = useState(0)
 
   useAnimatedReaction(
     () => scrollY.value,
@@ -335,23 +326,25 @@ const DraggableList: React.FC = () => {
         positions={positions}
         scrollY={scrollY}
         songsCount={SONGS.length}
-        setIsEnableDrag={setIsEnableDrag}
-        isEnableDrag={isEnableDrag}
-        index={index}
-        setIndexDrag={setIndexDrag}
       />
     ),
-    [isEnableDrag, positions, scrollY],
+    [positions, scrollY],
   )
 
   const renderCellComponent = useCallback(
     ({item, index, children, style, ...props}: any) => (
-      <View
-        style={[style, {zIndex: indexDrag === index ? 100 : 0, elevation: indexDrag === index ? 1 : 0}]}
-        {...props}
+      <MovableSong
+        key={item.id}
+        id={item.id}
+        artist={item.artist}
+        cover={item.cover}
+        title={item.title}
+        positions={positions}
+        scrollY={scrollY}
+        songsCount={SONGS.length}
       />
     ),
-    [],
+    [positions, scrollY],
   )
 
   return (
@@ -361,12 +354,12 @@ const DraggableList: React.FC = () => {
           {/* <SafeAreaView style={{flex: 1}}> */}
           <StatusBar barStyle="dark-content" />
           {/* <SafeAreaProvider> */}
-          <Animated.FlatList
+          <AnimatedFlatList
             data={SONGS ?? []}
             ref={scrollViewRef}
             scrollEventThrottle={16}
             onScroll={handleScroll}
-            style={{backgroundColor: 'white', position: 'relative', flex: 1, zIndex: 1}}
+            style={{backgroundColor: 'white'}}
             contentContainerStyle={{height: SONGS.length * SONG_HEIGHT}}
             keyExtractor={(item: any) => `${item.id}`}
             removeClippedSubviews={false}
