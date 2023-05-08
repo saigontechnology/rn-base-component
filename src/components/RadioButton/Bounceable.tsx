@@ -1,5 +1,6 @@
 import * as React from 'react'
-import {Animated, ViewStyle, StyleProp, Pressable, PressableProps, StyleSheet} from 'react-native'
+import {ViewStyle, StyleProp, Pressable, PressableProps, View} from 'react-native'
+import Animated from 'react-native-reanimated'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -71,34 +72,7 @@ const Bounceable = React.forwardRef<PressableProps, IBounceableProps>(
       ...props
     },
     ref,
-  ) => {
-    const [bounceValue] = React.useState(new Animated.Value(1))
-
-    const bounceAnimation = (value: number, velocity: number, bounciness: number) => {
-      Animated.spring(bounceValue, {
-        toValue: value,
-        velocity,
-        bounciness,
-        useNativeDriver,
-      }).start()
-    }
-
-    return (
-      <AnimatedPressable
-        {...props}
-        ref={ref}
-        style={StyleSheet.flatten([{transform: [{scale: bounceValue}]}, style])}
-        onPressIn={() => {
-          bounceAnimation(bounceEffectIn, bounceVelocityIn, bouncinessIn)
-        }}
-        onPressOut={() => {
-          bounceAnimation(bounceEffectOut, bounceVelocityOut, bouncinessOut)
-        }}
-        onPress={onPress}>
-        {children}
-      </AnimatedPressable>
-    )
-  },
+  ) => <View />,
 )
 
 Bounceable.displayName = 'Bounceable'
