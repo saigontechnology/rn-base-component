@@ -22,7 +22,7 @@ const ButtonRoot = styled.TouchableOpacity<IButtonRoot>(({theme, color}) => ({
   paddingVertical: metrics.xxs,
   paddingHorizontal: metrics.small,
   borderRadius: metrics.borderRadius,
-  backgroundColor: color || theme.colors?.cardPrimaryBackground,
+  backgroundColor: color || theme.colors.green,
   alignSelf: 'flex-start',
 }))
 

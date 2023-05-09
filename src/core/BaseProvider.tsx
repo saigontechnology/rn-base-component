@@ -5,10 +5,6 @@ import {ThemeProvider as ThemeProviderStyled, ThemeProviderComponent} from 'styl
 import {ITheme, theme as defaultTheme} from '../theme'
 import type {ColorMode, IColorModeContextProps} from './color-mode/type'
 
-declare module 'styled-components/native' {
-  export interface DefaultTheme extends ITheme {}
-}
-
 export type IBaseContext = {theme: ITheme} | IColorModeContextProps
 export const BaseContext = createContext<IBaseContext | null>(null)
 type AnyIfEmpty<T extends object> = keyof T extends never ? any : T

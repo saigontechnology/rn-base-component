@@ -1,5 +1,10 @@
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
 import Button from './components/Button'
+import type {ITheme} from './theme'
+
+declare module 'styled-components/native' {
+  export interface DefaultTheme extends ITheme {}
+}
 
 const LINKING_ERROR = `The package 'rn-base-component' doesn't seem to be linked. Make sure: \n\n ${Platform.select(
   {ios: "- You have run 'pod install'\n", default: ''},
