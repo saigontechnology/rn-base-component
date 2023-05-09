@@ -5,6 +5,7 @@ import styled from 'styled-components/native'
 import {metrics, responsiveWidth, responsiveHeight} from '../../helpers/metrics'
 import type {IBounceableProps} from './Bounceable'
 import type {ITheme} from '../../theme'
+import {theme} from '../../theme'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 type CustomTextStyleProp = StyleProp<TextStyle> | Array<StyleProp<TextStyle>>
@@ -83,8 +84,8 @@ const RadioButton = React.forwardRef<View, IRadioButtonProps>(
       style,
       isRemainActive = undefined,
       innerContainerStyle,
-      ringColor = 'blue',
-      innerBackgroundColor = 'blue',
+      ringColor = theme.colors.cardPrimaryBackground,
+      innerBackgroundColor = theme.colors.cardPrimaryBackground,
       onPressButton,
       initial,
       textComponent,

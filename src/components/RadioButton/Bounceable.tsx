@@ -65,16 +65,19 @@ const Bounceable = React.forwardRef<View, IBounceableProps>(
     const velocity = useSharedValue(bounceVelocityIn)
     const bounciness = useSharedValue(bouncinessValue)
 
-    const animatedStyle = useAnimatedStyle(() => ({
-      transform: [
-        {
-          scale: withSpring(scale.value, {
-            stiffness: bounciness.value,
-            velocity: velocity.value,
-          }),
-        },
-      ],
-    }))
+    const animatedStyle = useAnimatedStyle(
+      () => ({
+        transform: [
+          {
+            scale: withSpring(scale.value, {
+              stiffness: bounciness.value,
+              velocity: velocity.value,
+            }),
+          },
+        ],
+      }),
+      [scale.value, bounciness.value, velocity.value],
+    )
 
     const handlePressIn = () => {
       scale.value = bounceEffectIn
