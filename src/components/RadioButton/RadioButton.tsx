@@ -1,14 +1,5 @@
 import * as React from 'react'
-import {
-  StyleProp,
-  ViewStyle,
-  StyleSheet,
-  TextStyle,
-  LayoutChangeEvent,
-  PressableProps,
-  View,
-  Text,
-} from 'react-native'
+import {StyleProp, ViewStyle, StyleSheet, TextStyle, LayoutChangeEvent, View, Text} from 'react-native'
 import Bounceable from './Bounceable'
 import styled from 'styled-components/native'
 import {metrics, responsiveWidth, responsiveHeight} from '../../helpers/metrics'
@@ -86,7 +77,7 @@ export interface IRadioButtonProps extends IBounceableProps {
   text?: string
 }
 
-const RadioButton = React.forwardRef<PressableProps, IRadioButtonProps>(
+const RadioButton = React.forwardRef<View, IRadioButtonProps>(
   (
     {
       style,
