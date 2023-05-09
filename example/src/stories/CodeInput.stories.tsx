@@ -2,19 +2,19 @@ import React from 'react'
 import {SafeAreaView, StyleSheet, Text} from 'react-native'
 import type {ComponentMeta, ComponentStory} from '@storybook/react'
 
-import {RnCodeInput} from 'rn-base-component'
+import {CodeInput} from 'rn-base-component'
 
 export default {
   title: 'components/CodeInput',
-  component: RnCodeInput,
-} as ComponentMeta<typeof RnCodeInput>
+  component: CodeInput,
+} as ComponentMeta<typeof CodeInput>
 
-export const Basic: ComponentStory<typeof RnCodeInput> = () => (
+export const Basic: ComponentStory<typeof CodeInput> = () => (
   <SafeAreaView style={styles.root}>
     <Text>SecureTextEntry</Text>
-    <RnCodeInput focusCellStyle={styles.focusCellStyle} secureTextEntry />
+    <CodeInput focusCellStyle={styles.focusCellStyle} secureTextEntry />
     <Text>Normal</Text>
-    <RnCodeInput cellCount={4} focusCellStyle={styles.focusCellStyle} />
+    <CodeInput length={4} focusCellStyle={styles.focusCellStyle} />
   </SafeAreaView>
 )
 

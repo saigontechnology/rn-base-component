@@ -1,6 +1,12 @@
 import React, {useEffect} from 'react'
 import type {StyleProp, TextStyle} from 'react-native'
-import Animated, {useSharedValue, withRepeat, withSequence, withTiming} from 'react-native-reanimated'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated'
 
 interface ICursorProps {
   style?: StyleProp<TextStyle>
@@ -13,7 +19,9 @@ const Cursor = ({style}: ICursorProps) => {
     animatedValue.value = withRepeat(withSequence(withTiming(1), withTiming(0)), -1)
   }, [animatedValue])
 
-  return <Animated.Text style={[{opacity: animatedValue}, style]}>|</Animated.Text>
+  const animatedStyle = useAnimatedStyle(() => ({opacity: animatedValue.value}), [])
+
+  return <Animated.Text style={[animatedStyle, style]}>|</Animated.Text>
 }
 
 export default Cursor

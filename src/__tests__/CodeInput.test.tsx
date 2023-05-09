@@ -5,7 +5,7 @@ import {fireEvent, render} from '@testing-library/react-native'
 describe('CodeInput', () => {
   test('calls onFulfill with the correct value when input is complete', () => {
     const onFulfill = jest.fn()
-    const {getByTestId} = render(<CodeInput onFulfill={onFulfill} />)
+    const {getByTestId} = render(<CodeInput onSubmit={onFulfill} />)
     const textInput = getByTestId('input')
 
     fireEvent.changeText(textInput, '123456')
@@ -20,7 +20,7 @@ describe('CodeInput', () => {
   })
 
   test('display correct custom number of cells', () => {
-    const {getAllByTestId} = render(<CodeInput cellCount={4} />)
+    const {getAllByTestId} = render(<CodeInput length={4} />)
 
     const cells = getAllByTestId('cell')
     expect(cells.length).toBe(4)

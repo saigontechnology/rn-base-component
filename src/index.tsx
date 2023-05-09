@@ -1,6 +1,6 @@
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
 import Button from './components/Button'
-import CodeInput from './components/CodeInput/CodeInput'
+import {default as CodeInputComponent} from './components/CodeInput/CodeInput'
 
 const LINKING_ERROR = `The package 'rn-base-component' doesn't seem to be linked. Make sure: \n\n ${Platform.select(
   {ios: "- You have run 'pod install'\n", default: ''},
@@ -21,7 +21,7 @@ export const RnBaseComponentView =
       }
 
 export const RnBaseButton = Button
-export const RnCodeInput = CodeInput
+export const CodeInput = CodeInputComponent
 
 export * from './core'
 export * from './hooks'

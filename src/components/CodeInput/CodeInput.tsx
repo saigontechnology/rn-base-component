@@ -15,14 +15,17 @@ interface CodeInputProps {
   /** define style for text in the cell */
   textStyle?: StyleProp<TextStyle>
 
+  /** define secure view style when using secureTextEntry mode */
+  secureViewStyle?: StyleProp<ViewStyle>
+
   /** define style for text in the cell when cell is focused */
   focusTextStyle?: StyleProp<TextStyle>
 
   /** cell count */
-  cellCount?: number
+  length?: number
   /** callback when complete  */
 
-  onFulfill?: (val: string) => void
+  onSubmit?: (val: string) => void
 
   /** render custom view for cursor/indicator */
   customCursor?: () => ReactNode
@@ -34,40 +37,46 @@ interface CodeInputProps {
   keyboardType?: KeyboardTypeOptions
 }
 
-const DEFAULT_CELL_COUNT = 6
+type CellStyle = {
+  theme: ITheme
+}
+
+type SecureViewStyle = {
+  theme: ITheme
+}
+
+const DEFAULT_LENGTH = 6
 
 const CodeInput = ({
   cellStyle,
   focusCellStyle,
   textStyle,
   focusTextStyle,
-  cellCount = DEFAULT_CELL_COUNT,
-  onFulfill,
+  secureViewStyle,
+  length = DEFAULT_LENGTH,
+  onSubmit,
   customCursor,
   secureTextEntry,
   keyboardType = 'number-pad',
 }: CodeInputProps) => {
   const textInputRef = useRef<TextInput>()
   const [code, setCode] = useState<string>('')
-  const [focusIndex, setFocusIndex] = useState<number>(0)
 
   const handleOnChangeText = useCallback(
     (val: string) => {
       setCode(val)
-      setFocusIndex(val.length)
-      if (val.length === cellCount) {
-        onFulfill && onFulfill(val)
+      if (val.length === length) {
+        onSubmit?.(val)
         textInputRef.current?.blur()
       }
     },
-    [cellCount, onFulfill],
+    [length, onSubmit],
   )
 
   const handleCellPress = useCallback(
     (index: number) => {
       if (index < code.length) {
         setCode(code.slice(0, index))
-        setFocusIndex(index)
       }
       textInputRef.current?.focus()
     },
@@ -83,11 +92,11 @@ const CodeInput = ({
         textContentType="oneTimeCode"
         keyboardType={keyboardType}
         onChangeText={handleOnChangeText}
-        maxLength={cellCount}
+        maxLength={length}
       />
       <CellContainer>
-        {new Array(cellCount).fill(0).map((_, index: number) => {
-          const isFocused = focusIndex === index
+        {new Array(length).fill(0).map((_, index: number) => {
+          const isFocused = code.length === index
           return (
             <Cell
               testID="cell"
@@ -96,7 +105,7 @@ const CodeInput = ({
               onPress={() => handleCellPress(index)}>
               {code[index] ? (
                 secureTextEntry ? (
-                  <SecureView testID="text" style={textStyle} />
+                  <SecureView testID="text" style={secureViewStyle} />
                 ) : (
                   <Text testID="text" style={textStyle}>
                     {code[index]}
@@ -117,27 +126,23 @@ export default memo(CodeInput)
 
 const CodeInputContainer = styled.View({})
 
-const Cell = styled.Pressable`
-  ${(props: {theme: ITheme}) => ({
-    width: metrics.huge,
-    height: metrics.huge,
-    borderRadius: metrics.tiny,
-    borderWidth: 1,
-    borderColor: props?.theme?.colors?.cardPrimaryBackground,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: metrics.tiny,
-  })}
-`
+const Cell = styled.Pressable((props: CellStyle) => ({
+  width: metrics.huge,
+  height: metrics.huge,
+  borderRadius: metrics.tiny,
+  borderWidth: 1,
+  borderColor: props?.theme?.colors?.cardPrimaryBackground,
+  justifyContent: 'center',
+  alignItems: 'center',
+  margin: metrics.tiny,
+}))
 
-const SecureView = styled.View`
-  ${(props: {theme: ITheme}) => ({
-    width: metrics.small,
-    height: metrics.small,
-    borderRadius: metrics.small,
-    backgroundColor: props.theme.colors.textColor,
-  })}
-`
+const SecureView = styled.Pressable((props: SecureViewStyle) => ({
+  width: metrics.small,
+  height: metrics.small,
+  borderRadius: metrics.small,
+  backgroundColor: props?.theme?.colors?.textColor,
+}))
 
 const CellContainer = styled.View({
   display: 'flex',
