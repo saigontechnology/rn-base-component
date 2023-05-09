@@ -139,6 +139,6 @@
   },
   "dependencies": {
     "eslint-plugin-ft-flow": "^2.0.3",
-    "react-native-reanimated": "3.1.0"
+    "react-native-reanimated": "3.0.2"
   }
 }
