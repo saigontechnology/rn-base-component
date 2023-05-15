@@ -1,11 +1,9 @@
-import React, {useMemo, forwardRef, useState, useRef} from 'react'
+import React, {forwardRef, useMemo, useRef, useState} from 'react'
 import {StyleProp, ViewStyle, TextStyle, LayoutChangeEvent, View, Text} from 'react-native'
-import Bounceable from './Bounceable'
 import styled from 'styled-components/native'
-import {metrics, responsiveWidth, responsiveHeight} from '../../helpers/metrics'
-import type {IBounceableProps} from './Bounceable'
-import type {ITheme} from '../../theme'
-import {theme} from '../../theme'
+import {metrics, responsiveHeight, responsiveWidth} from 'src/helpers'
+import Bounceable, {IBounceableProps} from './Bounceable'
+import {theme, ITheme} from '../../theme'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 type CustomTextStyleProp = StyleProp<TextStyle>
@@ -204,7 +202,7 @@ const BounceableStyle = styled(Bounceable)<{
   backgroundColor: 'transparent',
 }))
 
-const RadioButtonWrapper = styled(View)({
+const RadioButtonWrapper = styled.View({
   flexDirection: 'row',
   alignItems: 'center',
 })
