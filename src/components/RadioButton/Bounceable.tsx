@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {ViewStyle, StyleProp, Pressable, PressableProps, SafeAreaView, View} from 'react-native'
+import {ViewStyle, StyleProp, Pressable, PressableProps, View} from 'react-native'
 import Animated, {withSpring, useSharedValue, useAnimatedStyle} from 'react-native-reanimated'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
@@ -90,17 +90,15 @@ const Bounceable = React.forwardRef<View, IBounceableProps>(
     }
 
     return (
-      <SafeAreaView>
-        <AnimatedPressable
-          {...props}
-          ref={ref}
-          style={[animatedStyle, style]}
-          onPressIn={handlePressIn}
-          onPressOut={handlePressOut}
-          onPress={onPress}>
-          {children}
-        </AnimatedPressable>
-      </SafeAreaView>
+      <AnimatedPressable
+        {...props}
+        ref={ref}
+        style={[animatedStyle, style]}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        onPress={onPress}>
+        {children}
+      </AnimatedPressable>
     )
   },
 )
