@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {StyleProp, ViewStyle, StyleSheet, TextStyle, LayoutChangeEvent, View, Text} from 'react-native'
+import {StyleProp, ViewStyle, StyleSheet, TextStyle, LayoutChangeEvent, View} from 'react-native'
 import Bounceable from './Bounceable'
 import styled from 'styled-components/native'
 import {metrics, responsiveWidth, responsiveHeight} from '../../helpers/metrics'
@@ -8,7 +8,7 @@ import type {ITheme} from '../../theme'
 import {theme} from '../../theme'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
-type CustomTextStyleProp = StyleProp<TextStyle> | Array<StyleProp<TextStyle>>
+type CustomTextStyleProp = StyleProp<TextStyle>
 
 type TrackStyle = {
   maxWidth: number
@@ -24,6 +24,14 @@ export interface IRadioButtonProps extends IBounceableProps {
    * ring custom style
    */
   style?: CustomStyleProp
+  /**
+   * size of ring container
+   */
+  outerSize?: number
+  /**
+   * size of circle container
+   */
+  innerSize?: number
   /**
    * set radio button color
    */
@@ -84,6 +92,8 @@ const RadioButton = React.forwardRef<View, IRadioButtonProps>(
       style,
       isRemainActive = undefined,
       innerContainerStyle,
+      outerSize = 45,
+      innerSize = 25,
       ringColor = theme.colors.cardPrimaryBackground,
       innerBackgroundColor = theme.colors.cardPrimaryBackground,
       onPressButton,
@@ -138,7 +148,7 @@ const RadioButton = React.forwardRef<View, IRadioButtonProps>(
           disabled={disable}
           onLayout={handleLayout}
           style={StyleSheet.flatten([
-            styles.container(ringColor),
+            styles.container(ringColor, outerSize),
             style,
             styles.disableStyle(disable, disableOpacity),
             styles.constantBackgroundColor,
@@ -150,7 +160,7 @@ const RadioButton = React.forwardRef<View, IRadioButtonProps>(
             maxHeight={heightBounceableRef.value}
             testID="circle"
             style={StyleSheet.flatten([
-              styles.innerStyle(isRemainActive || isActive, innerBackgroundColor),
+              styles.innerStyle(isRemainActive || isActive, innerBackgroundColor, innerSize),
               innerContainerStyle,
             ])}
           />
@@ -163,22 +173,22 @@ const RadioButton = React.forwardRef<View, IRadioButtonProps>(
 
 RadioButton.displayName = 'RadioButton'
 
-export default React.memo(RadioButton)
+export default RadioButton
 
 const styles = StyleSheet.create<any>({
-  container: (ringColor: string) => ({
-    width: responsiveWidth(45),
-    height: responsiveHeight(45),
+  container: (ringColor: string, outerSize: number) => ({
+    width: responsiveWidth(outerSize),
+    height: responsiveHeight(outerSize),
     borderWidth: metrics.borderRadius,
-    borderRadius: responsiveHeight(25),
+    borderRadius: responsiveHeight(outerSize / 2),
     borderColor: ringColor,
     alignItems: 'center',
     justifyContent: 'center',
   }),
-  innerStyle: (isActive: boolean, innerBackgroundColor: string) => ({
-    width: responsiveWidth(25),
-    height: responsiveHeight(25),
-    borderRadius: responsiveHeight(25),
+  innerStyle: (isActive: boolean, innerBackgroundColor: string, innerSize: number) => ({
+    width: responsiveWidth(innerSize),
+    height: responsiveHeight(innerSize),
+    borderRadius: responsiveHeight(innerSize / 2),
     backgroundColor: isActive ? innerBackgroundColor : 'transparent',
   }),
   disableStyle: (disable: boolean, disableOpacity: number) => ({
@@ -189,21 +199,21 @@ const styles = StyleSheet.create<any>({
   },
 })
 
-const RadioButtonWrapper = styled(View)({
+const RadioButtonWrapper = styled.View({
   flexDirection: 'row',
   alignItems: 'center',
 })
 
-const RadioButtonInnerContainer = styled(View)((props: TrackStyle) => ({
+const RadioButtonInnerContainer = styled.View((props: TrackStyle) => ({
   maxWidth: props.maxWidth,
   maxHeight: props.maxHeight,
 }))
 
-const LabelTextView = styled(View)({
+const LabelTextView = styled.View({
   marginLeft: responsiveWidth(16),
 })
 
-const LabelText = styled(Text)((props: {theme: ITheme}) => ({
-  color: props.theme.colors.textColor,
-  fontSize: props.theme.fontSizes.md,
+const LabelText = styled.Text((props: {theme: ITheme}) => ({
+  color: props?.theme?.colors?.textColor,
+  fontSize: props?.theme?.fontSizes?.md,
 }))

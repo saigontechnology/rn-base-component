@@ -1,5 +1,5 @@
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
-import RadioButton from './components/RadioButton/RadioButton'
+import {default as RadioButtonComponent} from './components/RadioButton/RadioButton'
 import Button from './components/Button'
 
 const LINKING_ERROR = `The package 'rn-base-component' doesn't seem to be linked. Make sure: \n\n ${Platform.select(
@@ -21,7 +21,7 @@ export const RnBaseComponentView =
       }
 
 export const RnBaseButton = Button
-export const RnRadioButton = RadioButton
+export const RadioButton = RadioButtonComponent
 
 export * from './core'
 export * from './hooks'

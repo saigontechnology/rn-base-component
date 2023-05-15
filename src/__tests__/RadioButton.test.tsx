@@ -17,7 +17,7 @@ describe('RadioButton test', () => {
 
   it('should call on press', () => {
     const {getByTestId} = render(<RadioButton onPress={onPressMock} />)
-    const radioButton = getByTestId('container')
+    const radioButton = getByTestId('bounceable')
 
     fireEvent.press(radioButton)
     expect(onPressMock).toHaveBeenCalled()
@@ -32,7 +32,7 @@ describe('RadioButton test', () => {
 
     const styles = StyleSheet.flatten(circle.props.style)
 
-    expect(styles.backgroundColor).toBe('blue')
+    expect(styles.backgroundColor).toBe('#0A906E')
 
     fireEvent.press(radionButton)
     const stylesAfterPress = StyleSheet.flatten(circle.props.style)
@@ -51,7 +51,7 @@ describe('RadioButton test', () => {
     const {getByTestId} = render(<RadioButton initial={true} />)
     const circle = getByTestId('circle')
 
-    expect(circle.props.style[1].backgroundColor).toBe('blue')
+    expect(circle.props.style[1].backgroundColor).toBe('#0A906E')
   })
 
   it('should be remain state', () => {
@@ -62,6 +62,6 @@ describe('RadioButton test', () => {
     fireEvent.press(radionButton)
     expect(onPressMock).not.toHaveBeenCalled()
 
-    expect(circle.props.style[1].backgroundColor).toBe('blue')
+    expect(circle.props.style[1].backgroundColor).toBe('#0A906E')
   })
 })
