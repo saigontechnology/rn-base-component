@@ -1,4 +1,4 @@
-name: Publish Tests Result
+name: Run unit test
 
 on:
   pull_request:
@@ -29,7 +29,7 @@ jobs:
           yarn test --json --outputFile=test-results.json
           cat test-results.json
 
-      - name: Post test results
+      - name: Publish test results
         uses: actions/github-script@v6
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request }}
         with:
