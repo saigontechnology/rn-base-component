@@ -1,5 +1,5 @@
 const shadows = {
-  0: {
+  tiny: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -9,7 +9,7 @@ const shadows = {
     shadowRadius: 1.0,
     elevation: 1,
   },
-  1: {
+  miniature: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -19,7 +19,7 @@ const shadows = {
     shadowRadius: 1.41,
     elevation: 2,
   },
-  2: {
+  petite: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -29,7 +29,7 @@ const shadows = {
     shadowRadius: 2.22,
     elevation: 3,
   },
-  3: {
+  small: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -39,7 +39,7 @@ const shadows = {
     shadowRadius: 2.62,
     elevation: 4,
   },
-  4: {
+  little: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -49,7 +49,7 @@ const shadows = {
     shadowRadius: 3.84,
     elevation: 5,
   },
-  5: {
+  compact: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -59,7 +59,7 @@ const shadows = {
     shadowRadius: 4.65,
     elevation: 6,
   },
-  6: {
+  narrow: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -69,7 +69,7 @@ const shadows = {
     shadowRadius: 4.65,
     elevation: 7,
   },
-  7: {
+  slim: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -79,7 +79,7 @@ const shadows = {
     shadowRadius: 4.65,
     elevation: 8,
   },
-  8: {
+  moderate: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -89,7 +89,7 @@ const shadows = {
     shadowRadius: 5.46,
     elevation: 9,
   },
-  9: {
+  average: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
