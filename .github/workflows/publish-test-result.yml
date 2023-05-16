@@ -27,7 +27,6 @@ jobs:
         id: unit-test-results
         run: |
           yarn test --json --outputFile=test-results.json
-          cat test-results.json
 
       - name: Publish test results
         uses: actions/github-script@v6
