@@ -171,9 +171,43 @@ const MyComponent = () => {
 
 ```ts
 const colors = {
-  mainBackground: '#F0F2F3',
-  cardPrimaryBackground: '#0A906E',
-  textColor: '#0B0B0B',
+  primary: '#0e7490',
+  secondary: '#be185d',
+  tertiary: '#047857',
+  danger: '#be123c',
+  error: '#b91c1c',
+  success: '#15803d',
+  warning: '#c2410c',
+  muted: '#404040',
+  info: '#0369a1',
+  light: '#44403c',
+  white: '#FFFFFF',
+  black: '#000000',
+  darkText: '#27272a',
+  rose: '#be123c',
+  pink: '#be185d',
+  fuchsia: '#a21caf',
+  purple: '#7e22ce',
+  violet: '#6d28d9',
+  indigo: '#4338ca',
+  blue: '#1d4ed8',
+  lightBlue: '#0369a1',
+  darkBlue: '#004282',
+  cyan: '#0e7490',
+  teal: '#0f766e',
+  emerald: '#047857',
+  green: '#15803d',
+  lime: '#4d7c0f',
+  yellow: '#a16207',
+  amber: '#b45309',
+  orange: '#c2410c',
+  red: '#b91c1c',
+  warmGray: '#44403c',
+  trueGray: '#404040',
+  gray: '#3f3f46',
+  coolGray: '#374151',
+  blueGray: '#334155',
+  dark: '#18181b',
 }
 ```
 
@@ -221,17 +255,26 @@ const typography = {
 
 ```ts
 const borderWidths = {
-  smallest: 1,
-  tiny: 2,
+  tiny: 1,
+  miniature: 2,
+  petite: 3,
   small: 4,
-  medium: 6,
-  large: 8,
-  huge: 10,
-  enormous: 12,
-  massive: 14,
-  gargantuan: 16,
-  colossal: 18,
-  largest: 20,
+  little: 5,
+  compact: 6,
+  narrow: 7,
+  slim: 8,
+  moderate: 9,
+  average: 10,
+  substantial: 11,
+  large: 12,
+  big: 13,
+  grand: 14,
+  huge: 15,
+  giant: 16,
+  colossal: 17,
+  enormous: 18,
+  mammoth: 19,
+  titanic: 20,
 }
 ```
 
@@ -240,17 +283,25 @@ const borderWidths = {
 ```ts
 const sizes = {
   tiny: 4,
-  small: 8,
-  medium: 16,
-  large: 20,
-  huge: 24,
-  enormous: 32,
-  massive: 48,
-  gargantuan: 64,
-  colossal: 96,
-  gigantic: 128,
-  extraLarge: 160,
-  jumbo: 200,
+  miniature: 8,
+  petite: 12,
+  small: 16,
+  little: 20,
+  compact: 24,
+  narrow: 28,
+  slim: 32,
+  moderate: 36,
+  average: 40,
+  substantial: 48,
+  large: 64,
+  big: 80,
+  grand: 96,
+  huge: 128,
+  giant: 160,
+  colossal: 192,
+  enormous: 224,
+  mammoth: 256,
+  titanic: 288,
 }
 ```
 
@@ -258,20 +309,154 @@ const sizes = {
 
 ```ts
 const spacing = {
-  mini: 2,
-  tiny: 4,
-  micro: 6,
-  xxs: 8,
-  xs: 12,
-  small: 16,
-  sMedium: 18,
-  medium: 20,
+  tiny: 2,
+  miniature: 4,
+  petite: 6,
+  small: 8,
+  little: 10,
+  compact: 12,
+  narrow: 14,
+  slim: 16,
+  moderate: 18,
+  average: 20,
+  substantial: 22,
   large: 24,
-  xl: 28,
-  xxl: 32,
-  xxxl: 40,
-  huge: 48,
-  massive: 64,
-  giant: 80,
+  big: 26,
+  grand: 28,
+  huge: 30,
+  giant: 32,
+  colossal: 34,
+  enormous: 36,
+  mammoth: 38,
+  titanic: 40,
+}
+```
+
+### Opacity
+
+```ts
+const opacity = {
+  tiny: 0,
+  miniature: 0.05,
+  petite: 0.1,
+  small: 0.2,
+  little: 0.25,
+  compact: 0.3,
+  narrow: 0.4,
+  slim: 0.5,
+  moderate: 0.6,
+  average: 0.7,
+  substantial: 0.75,
+  large: 0.8,
+  big: 0.9,
+  grand: 0.95,
+  huge: 1,
+}
+```
+
+### Shadows
+
+```ts
+const shadows = {
+  tiny: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+    elevation: 1,
+  },
+  miniature: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  petite: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    elevation: 3,
+  },
+  small: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    elevation: 4,
+  },
+  little: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  compact: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+    elevation: 6,
+  },
+  narrow: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.29,
+    shadowRadius: 4.65,
+    elevation: 7,
+  },
+  slim: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    elevation: 8,
+  },
+  moderate: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.32,
+    shadowRadius: 5.46,
+    elevation: 9,
+  },
+  average: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+    elevation: 10,
+  },
 }
 ```
