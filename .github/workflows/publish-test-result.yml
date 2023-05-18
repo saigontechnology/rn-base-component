@@ -23,36 +23,12 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run unit tests and capture results
-        id: unit-test-results
-        run: |
-          yarn test --json --outputFile=test-results.json
+      - name: Run tests with coverage
+        run: yarn test --coverage
 
-      - name: Publish test results
-        uses: actions/github-script@v6
-        if: ${{ github.event_name == 'pull_request' && github.event.pull_request }}
+      - name: Comment with Test Coverage
+        uses: dkershner6/jest-coverage-commenter-action@v1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const {repo, owner} = context.repo
-            const fs = require('fs');
-            const results = JSON.parse(fs.readFileSync('test-results.json', 'utf8'));
-            const { number } = context.payload.pull_request;
-
-            await github.rest.issues.createComment({
-              owner,
-              repo,
-              issue_number: number,
-              body: `
-              ## Test Results
-
-              | Tests                | Passed | Failed | Total     |
-              |----------------------|--------------------------------------|--------------------------------------|------------------------------------|
-              | Files                |                                      |                                      | ${results.numTotalTestSuites}      |
-              | TestSuites           | <img src="https://github.githubassets.com/images/icons/emoji/unicode/2714.png" height="10"/> ${results.numPassedTestSuites}| <img src="https://github.githubassets.com/images/icons/emoji/unicode/274c.png" height="10"/> ${results.numFailedTestSuites}| ${results.numTotalTestSuites}      |
-              | Tests                | <img src="https://github.githubassets.com/images/icons/emoji/unicode/2714.png" height="10"/> ${results.numPassedTests}| <img src="https://github.githubassets.com/images/icons/emoji/unicode/274c.png" height="10"/> ${results.numFailedTests} | ${results.numTotalTests}           |
-              | Snapshots            |                                      |                                      | ${results.snapshot.total}          |
-              | Time                 |                                      |                                      | ${results.startTime}               |
-                `,
-            });
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+          comment_prefix: "## Test Result"
 
