@@ -23,9 +23,6 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
-      - name: Run tests with coverage
-        run: yarn test --coverage
-
       - name: Comment with Test Coverage
         uses: dkershner6/jest-coverage-commenter-action@v1
         with:
