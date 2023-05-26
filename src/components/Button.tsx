@@ -10,15 +10,15 @@ export type ButtonProps = {
 }
 
 const Button: React.FC<ButtonProps> = ({text, onPress, color, textColor}) => (
-  <ButtonRoot onPress={onPress} activeOpacity={0.8} color={color}>
+  <ButtonWrapper onPress={onPress} activeOpacity={0.8} color={color}>
     <Label color={textColor}>{text}</Label>
-  </ButtonRoot>
+  </ButtonWrapper>
 )
 
-interface IButtonRoot {
+interface IButtonWrapper {
   color?: string
 }
-const ButtonRoot = styled.TouchableOpacity<IButtonRoot>(({theme, color}) => ({
+const ButtonWrapper = styled.TouchableOpacity<IButtonWrapper>(({theme, color}) => ({
   paddingVertical: metrics.xxs,
   paddingHorizontal: metrics.small,
   borderRadius: metrics.borderRadius,
