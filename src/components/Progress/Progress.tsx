@@ -1,7 +1,15 @@
-import React, {useEffect, useRef, useState, forwardRef, memo, useCallback} from 'react'
-import {View, Animated, LayoutChangeEvent} from 'react-native'
+import React, {useEffect, forwardRef, memo, useCallback, useState} from 'react'
+import {View, LayoutChangeEvent} from 'react-native'
 import {metrics, deviceWidth} from '../../helpers/metrics'
 import styled from 'styled-components/native'
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+  Easing,
+  interpolate,
+} from 'react-native-reanimated'
 
 interface IProgressProps {
   /**
@@ -63,39 +71,46 @@ const Progress = forwardRef<View, IProgressProps>(
     ref,
   ) => {
     const [progressWidth, setProgressWidth] = useState(0)
-    const translateX = useRef(new Animated.Value(-screenWidth)).current
-    const toTranslateX = useRef(new Animated.Value(-screenWidth)).current
-    const {current: animation} = React.useRef(new Animated.Value(0))
-    const intermediate = React.useRef<Animated.CompositeAnimation | null>(null)
-
-    useEffect(() => {
-      if (isIndeterminateProgress) {
-        intermediate.current = Animated.timing(animation, {
-          duration: 2000,
-          toValue: 1,
-          useNativeDriver: true,
-          isInteraction: false,
-        })
-        animation.setValue(0)
-        Animated.loop(intermediate.current).start()
-      } else {
-        Animated.timing(translateX, {
-          toValue: toTranslateX,
-          duration: 500,
-          useNativeDriver: true,
-        }).start()
-      }
-    }, [])
+    const translateX = useSharedValue(-screenWidth)
+    const animation = useSharedValue(0)
 
     useEffect(() => {
       const progressValue = value >= MAX_VALUE ? MAX_VALUE : value
-      toTranslateX.setValue(-progressWidth + (progressWidth * progressValue) / MAX_VALUE)
-    }, [progressWidth, value])
+      const newToTranslateX = -progressWidth + (progressWidth * progressValue) / MAX_VALUE
+      if (isIndeterminateProgress) {
+        animation.value = withRepeat(
+          withTiming(1, {
+            duration: 2000,
+            easing: Easing.linear,
+          }),
+          -1,
+        )
+      } else {
+        translateX.value = withTiming(newToTranslateX, {
+          duration: 500,
+          easing: Easing.linear,
+        })
+      }
+    }, [animation, isIndeterminateProgress, progressWidth, translateX, value])
 
     const onLayout = useCallback((event: LayoutChangeEvent) => {
       const {layout} = event.nativeEvent
       setProgressWidth(layout.width)
     }, [])
+
+    const progressStyle = useAnimatedStyle(() => {
+      const translateXValue = isIndeterminateProgress
+        ? interpolate(animation.value, [0, 1], [-progressWidth, 0.5 * progressWidth])
+        : translateX.value
+
+      const scaleXValue = isIndeterminateProgress
+        ? interpolate(animation.value, [0, 0.5, 1], [0.0001, 1, 0.001])
+        : 1
+
+      return {
+        transform: [{translateX: translateXValue}, {scaleX: scaleXValue}],
+      }
+    })
 
     return (
       <ProgressWrapper
@@ -110,30 +125,15 @@ const Progress = forwardRef<View, IProgressProps>(
         }}>
         <Animated.View
           testID="filled-track"
-          style={{
-            transform: [
-              {
-                translateX: isIndeterminateProgress
-                  ? animation.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [-progressWidth, 0.5 * progressWidth],
-                    })
-                  : translateX,
-              },
-              {
-                scaleX: isIndeterminateProgress
-                  ? animation.interpolate({
-                      inputRange: [0, 0.5, 1],
-                      outputRange: [0.0001, 1, 0.001],
-                    })
-                  : 1,
-              },
-            ],
-            backgroundColor: filledTrackColor,
-            borderRadius,
-            height: size,
-            width: progressWidth,
-          }}
+          style={[
+            progressStyle,
+            {
+              backgroundColor: filledTrackColor,
+              borderRadius,
+              height: size,
+              width: progressWidth,
+            },
+          ]}
         />
       </ProgressWrapper>
     )
