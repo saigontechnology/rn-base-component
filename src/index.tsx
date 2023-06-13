@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
 import type {ITheme} from './theme'
 
