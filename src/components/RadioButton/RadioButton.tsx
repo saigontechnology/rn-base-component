@@ -94,8 +94,8 @@ const RadioButton = React.forwardRef<View, IRadioButtonProps>(
       innerContainerStyle,
       outerSize = 45,
       innerSize = 25,
-      ringColor = theme.colors.cardPrimaryBackground,
-      innerBackgroundColor = theme.colors.cardPrimaryBackground,
+      ringColor = theme.colors.darkBlue,
+      innerBackgroundColor = theme.colors.darkBlue,
       onPressButton,
       initial,
       textComponent,
@@ -214,6 +214,6 @@ const LabelTextView = styled.View({
 })
 
 const LabelText = styled.Text((props: {theme: ITheme}) => ({
-  color: props?.theme?.colors?.textColor,
+  color: props?.theme?.colors?.black,
   fontSize: props?.theme?.fontSizes?.md,
 }))
