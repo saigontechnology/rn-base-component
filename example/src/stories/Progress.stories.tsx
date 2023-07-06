@@ -1,14 +1,14 @@
 import React from 'react'
 import type {ComponentMeta, ComponentStory} from '@storybook/react'
 
-import {RnProgress} from 'rn-base-component'
+import {Progress} from 'rn-base-component'
 
 export default {
   title: 'components/Progress',
-  component: RnProgress,
-} as ComponentMeta<typeof RnProgress>
+  component: Progress,
+} as ComponentMeta<typeof Progress>
 
-export const Basic: ComponentStory<typeof RnProgress> = args => <RnProgress {...args} />
+export const Basic: ComponentStory<typeof Progress> = args => <Progress {...args} />
 
 Basic.args = {
   value: 20,

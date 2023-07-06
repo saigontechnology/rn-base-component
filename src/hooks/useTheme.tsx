@@ -1,4 +1,3 @@
-import type {ITheme} from '../theme'
 import {useTheme as useThemeStyled} from 'styled-components'
 
 export const useTheme = () => {
@@ -8,5 +7,5 @@ export const useTheme = () => {
     throw Error('`theme` is undefined. Seems you forgot to wrap your app in `<BaseProvider />`')
   }
 
-  return theme as ITheme
+  return theme
 }

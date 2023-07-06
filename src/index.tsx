@@ -1,6 +1,11 @@
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
 import Button from './components/Button'
-import Progress from './components/Progress/Progress'
+import {default as ProgressComponent} from './components/Progress/Progress'
+import type {ITheme} from './theme'
+
+declare module 'styled-components/native' {
+  export interface DefaultTheme extends ITheme {}
+}
 
 const LINKING_ERROR = `The package 'rn-base-component' doesn't seem to be linked. Make sure: \n\n ${Platform.select(
   {ios: "- You have run 'pod install'\n", default: ''},
@@ -21,8 +26,9 @@ export const RnBaseComponentView =
       }
 
 export const RnBaseButton = Button
-export const RnProgress = Progress
+export const Progress = ProgressComponent
 
+export * from './components'
 export * from './core'
 export * from './hooks'
 export * from './theme'
