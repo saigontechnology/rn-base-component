@@ -1,5 +1,6 @@
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
 import Button from './components/Button'
+import {default as StepComponent} from './components/Step/Step'
 import type {ITheme} from './theme'
 
 declare module 'styled-components/native' {
@@ -25,6 +26,7 @@ export const RnBaseComponentView =
       }
 
 export const RnBaseButton = Button
+export const Step = StepComponent
 
 export * from './core'
 export * from './hooks'
