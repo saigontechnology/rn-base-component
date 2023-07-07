@@ -4,7 +4,7 @@ import {hitSlop, metrics} from '../../helpers/metrics'
 import {Thumb, Track, TrackPoint} from './components'
 import styled from 'styled-components/native'
 import type {ITheme} from '../../theme'
-import {StyleSheet, LayoutChangeEvent} from 'react-native'
+import {StyleSheet, LayoutChangeEvent, View} from 'react-native'
 import {
   useAnimatedStyle,
   useSharedValue,
@@ -199,7 +199,7 @@ const SliderFixed: React.FC<SliderProps> = ({
   )
 }
 
-const Container = styled.View({
+const Container = styled(View)({
   justifyContent: 'center',
 })
 

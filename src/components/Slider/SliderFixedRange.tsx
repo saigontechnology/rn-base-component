@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo} from 'react'
-import {StyleSheet} from 'react-native'
+import {StyleSheet, View} from 'react-native'
 import styled from 'styled-components/native'
 import {Thumb, Track, TrackPoint} from './components'
 import type {PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
@@ -321,7 +321,7 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
   )
 }
 
-const Container = styled.View((props: ContainerProps) => ({
+const Container = styled(View)((props: ContainerProps) => ({
   justifyContent: 'center',
   width: props.width,
 }))

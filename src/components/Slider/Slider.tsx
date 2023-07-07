@@ -13,6 +13,7 @@ import {
   TextInputProps,
   Insets,
   TextStyle,
+  View,
 } from 'react-native'
 import {
   useAnimatedStyle,
@@ -326,7 +327,7 @@ const Slider: SliderComponentProps = ({
   )
 }
 
-const Container = styled.View(({theme}: {theme: ITheme}) => ({
+const Container = styled(View)(({theme}: {theme: ITheme}) => ({
   justifyContent: 'center',
   height: theme.sizes.xxs,
 }))

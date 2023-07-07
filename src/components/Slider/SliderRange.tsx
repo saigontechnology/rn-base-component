@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo} from 'react'
-import {StyleSheet} from 'react-native'
+import {StyleSheet, View} from 'react-native'
 import styled from 'styled-components/native'
 import {Thumb, Track, TrackPoint} from './components'
 import type {PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
@@ -277,7 +277,6 @@ const SliderRange: React.FC<SliderRangeProps> = ({
   const animatedTrackStyle = useAnimatedStyle(() => {
     const width = rightProgress.value - leftProgress.value
     const transform = [{translateX: leftProgress.value}]
-
     return {transform, width}
   })
 
@@ -346,7 +345,7 @@ const SliderRange: React.FC<SliderRangeProps> = ({
   )
 }
 
-const Container = styled.View((props: ContainerProps) => ({
+const Container = styled(View)((props: ContainerProps) => ({
   justifyContent: 'center',
   width: props.width,
 }))
