@@ -1,4 +1,4 @@
-import React, {useEffect, forwardRef, memo, useCallback, useState} from 'react'
+import React, {useEffect, forwardRef, useCallback, useState, memo} from 'react'
 import {View, LayoutChangeEvent} from 'react-native'
 import {metrics, deviceWidth} from '../../helpers/metrics'
 import styled from 'styled-components/native'
@@ -110,7 +110,7 @@ const Progress = forwardRef<View, IProgressProps>(
       return {
         transform: [{translateX: translateXValue}, {scaleX: scaleXValue}],
       }
-    })
+    }, [progressWidth])
 
     return (
       <ProgressWrapper
