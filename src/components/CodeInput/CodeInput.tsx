@@ -59,7 +59,7 @@ const CodeInput = ({
   secureTextEntry,
   keyboardType = 'number-pad',
 }: CodeInputProps) => {
-  const textInputRef = useRef<TextInput>()
+  const textInputRef = useRef<TextInput>(null)
   const [code, setCode] = useState<string>('')
 
   const handleOnChangeText = useCallback(
@@ -131,7 +131,7 @@ const Cell = styled.Pressable((props: CellStyle) => ({
   height: metrics.huge,
   borderRadius: metrics.tiny,
   borderWidth: 1,
-  borderColor: props?.theme?.colors?.cardPrimaryBackground,
+  borderColor: props?.theme?.colors?.coolGray,
   justifyContent: 'center',
   alignItems: 'center',
   margin: metrics.tiny,
@@ -141,7 +141,7 @@ const SecureView = styled.Pressable((props: SecureViewStyle) => ({
   width: metrics.small,
   height: metrics.small,
   borderRadius: metrics.small,
-  backgroundColor: props?.theme?.colors?.textColor,
+  backgroundColor: props?.theme?.colors?.darkText,
 }))
 
 const CellContainer = styled.View({

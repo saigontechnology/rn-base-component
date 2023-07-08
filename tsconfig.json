@@ -23,8 +23,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "esnext",
-    "types": ["jest"]
+    "target": "esnext"
   },
   "include": [".eslintrc.js", "babel.config.js", "**/*.js", "**/*.ts", "**/*.tsx"],
   "exclude": []
