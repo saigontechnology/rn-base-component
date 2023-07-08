@@ -23,7 +23,7 @@ describe('Checkbox test', () => {
   })
 
   it('should change state when pressed', () => {
-    const {getByTestId} = render(<Checkbox />)
+    const {getByTestId} = render(<Checkbox fillColor="#0B0B0B" unfillColor="#00000000" />)
     const checkbox = getByTestId('container')
     const icon = getByTestId('icon-container')
 
@@ -31,16 +31,16 @@ describe('Checkbox test', () => {
     expect(icon.props.style.backgroundColor).toEqual('#0B0B0B')
 
     fireEvent.press(checkbox)
-    expect(icon.props.style.backgroundColor).toEqual('transparent')
+    expect(icon.props.style.backgroundColor).toEqual('#00000000')
   })
 
   it('should not change state when disabled', () => {
-    const {getByTestId} = render(<Checkbox disabled={true} />)
+    const {getByTestId} = render(<Checkbox disabled={true} unfillColor="#00000000" />)
     const checkbox = getByTestId('container')
     const icon = getByTestId('icon-container')
 
     fireEvent.press(checkbox)
-    expect(icon.props.style.backgroundColor).toEqual('transparent')
+    expect(icon.props.style.backgroundColor).toEqual('#00000000')
   })
 
   it('text should be null', () => {

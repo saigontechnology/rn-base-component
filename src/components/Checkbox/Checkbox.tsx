@@ -15,7 +15,7 @@ import {
 import Animated, {useSharedValue, withSequence, withSpring, withTiming} from 'react-native-reanimated'
 import styled from 'styled-components/native'
 import type {ITheme} from 'src/theme'
-import {useTheme} from '../../hooks/useTheme'
+import {theme} from '../../theme'
 import {BOUNCE_EFFECT_IN, BOUNCE_EFFECT_OUT, DISABLE_OPACITY} from './constants'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
@@ -101,8 +101,8 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       iconStyle,
       iconComponent,
       iconImageStyle,
-      fillColor,
-      unfillColor,
+      fillColor = theme.colors.primary,
+      unfillColor = theme.colors.transparent,
       disableBuiltInState = false,
       isChecked,
       innerIconStyle,
@@ -121,7 +121,6 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
     },
     forwardedRef,
   ) => {
-    const theme = useTheme()
     const [checked, setChecked] = useState(false)
     const bounceValue = useSharedValue(1)
 
@@ -148,16 +147,11 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
         <IconContainer
           testID={'icon-container'}
           size={size}
-          backgroundColor={
-            checked ? fillColor || theme.colors.primary : unfillColor || theme.colors.transparent
-          }
+          backgroundColor={checked ? fillColor : unfillColor}
           disabled={disabled}
           disableOpacity={disableOpacity}
           style={StyleSheet.flatten([{transform: [{scale: bounceValue}]}, iconStyle])}>
-          <InnerIconContainer
-            style={innerIconStyle}
-            size={size}
-            borderColor={fillColor || theme.colors.primary}>
+          <InnerIconContainer style={innerIconStyle} size={size} borderColor={fillColor}>
             {iconComponent ||
               (checkStatus && <StyledImage source={checkIconImageSource} style={iconImageStyle} />)}
           </InnerIconContainer>
@@ -211,31 +205,31 @@ const Container = styled(Pressable)({
 })
 
 const StyledImage = styled(Image)((props: StyledImageStyle) => ({
-  width: props.theme?.sizes.small,
-  height: props.theme?.sizes.small,
+  width: props.theme?.sizes?.small,
+  height: props.theme?.sizes?.small,
 }))
 
 const TextContainer = styled(View)((props: TextContainerStyle) => ({
-  marginLeft: props.theme?.sizes.small,
+  marginLeft: props.theme?.sizes?.small,
   opacity: props.disabled ? props.disableOpacity : 1,
 }))
 
 const IconContainer = styled(Animated.View)((props: IconContainerStyle) => ({
   alignItems: 'center',
   justifyContent: 'center',
-  width: props.size || props.theme?.sizes.huge,
-  height: props.size || props.theme?.sizes.huge,
-  borderRadius: (props.size || props.theme?.sizes.huge) ?? 24 / 4,
+  width: props.size || props.theme?.sizes?.huge,
+  height: props.size || props.theme?.sizes?.huge,
+  borderRadius: (props.size || props.theme?.sizes?.huge) ?? 24 / 4,
   backgroundColor: props.backgroundColor,
   opacity: props.disabled ? props.disableOpacity : 1,
 }))
 
 const InnerIconContainer = styled(View)((props: InnerIconContainerStyle) => ({
-  borderWidth: props.theme?.borderWidths.tiny,
+  borderWidth: props.theme?.borderWidths?.tiny,
   alignItems: 'center',
   justifyContent: 'center',
-  width: props.size || props.theme?.sizes.huge,
-  height: props.size || props.theme?.sizes.huge,
-  borderRadius: (props.size || props.theme?.sizes.huge) ?? 24 / 4,
+  width: props.size || props.theme?.sizes?.huge,
+  height: props.size || props.theme?.sizes?.huge,
+  borderRadius: (props.size || props.theme?.sizes?.huge) ?? 24 / 4,
   borderColor: props?.borderColor,
 }))
