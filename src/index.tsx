@@ -1,5 +1,4 @@
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
-import {default as RadioButtonComponent} from './components/RadioButton/RadioButton'
 import Button from './components/Button'
 import type {ITheme} from './theme'
 
@@ -26,8 +25,8 @@ export const RnBaseComponentView =
       }
 
 export const RnBaseButton = Button
-export const RadioButton = RadioButtonComponent
 
+export * from './components'
 export * from './core'
 export * from './hooks'
 export * from './theme'
