@@ -1,6 +1,5 @@
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
 import Button from './components/Button'
-import {default as ProgressComponent} from './components/Progress/Progress'
 import type {ITheme} from './theme'
 
 declare module 'styled-components/native' {
@@ -26,7 +25,6 @@ export const RnBaseComponentView =
       }
 
 export const RnBaseButton = Button
-export const Progress = ProgressComponent
 
 export * from './components'
 export * from './core'
