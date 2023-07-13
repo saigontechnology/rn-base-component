@@ -135,6 +135,13 @@ const SliderRange: React.FC<SliderRangeProps> = ({
       leftAnimated.value = {zIndex: VISIBLE, opacity: VISIBLE}
       rightAnimated.value = {zIndex: INVISIBLE, opacity: INVISIBLE}
 
+      leftProgress.value =
+        leftProgressing < MINIMUM_TRACK_WIDTH
+          ? 0
+          : leftProgressing > rightProgress.value
+          ? rightProgress.value
+          : leftProgressing
+
       // When sliding the thumb across a distance shorter than the track's width
       if (leftProgressing < MINIMUM_TRACK_WIDTH) {
         runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, minimumValue, ThumbPosition.left)
@@ -184,6 +191,13 @@ const SliderRange: React.FC<SliderRangeProps> = ({
       const rightProgressing = ctx.startX + event.translationX
       leftAnimated.value = {zIndex: INVISIBLE, opacity: INVISIBLE}
       rightAnimated.value = {zIndex: VISIBLE, opacity: VISIBLE}
+
+      rightProgress.value =
+        rightProgressing < leftProgress.value
+          ? leftProgress.value
+          : rightProgressing > sliderWidth
+          ? sliderWidth
+          : rightProgressing
 
       // When sliding the thumb across a distance shorter than the track's width
       if (rightProgressing < leftProgress.value) {
@@ -278,7 +292,7 @@ const SliderRange: React.FC<SliderRangeProps> = ({
     const width = rightProgress.value - leftProgress.value
     const transform = [{translateX: leftProgress.value}]
     return {transform, width}
-  })
+  }, [rightProgress, leftProgress])
 
   /**
    * Function called when the user presses on a point on the slider's track
