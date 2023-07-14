@@ -276,7 +276,7 @@ const Slider: SliderComponentProps = ({
     // Range refers to the width of a point
     // It is used to calculate the correct position of the slider while sliding
     const range = width / totalPoint
-    sliderInfo.value = {range: range, trackWidth: width}
+    sliderInfo.value = {range, trackWidth: width}
   }
 
   /**
@@ -285,9 +285,9 @@ const Slider: SliderComponentProps = ({
    * @param {number} point - The index of the point on the slider's track that was pressed by the user
    */
   const onPressPoint = useCallback(
-    (point: number) => {
-      const positionPoint = sliderInfo.value.range * (point + FIRST_POINT)
-      const curPoint = point + FIRST_POINT
+    (pointIndex: number) => {
+      const curPoint = pointIndex + FIRST_POINT
+      const positionPoint = sliderInfo.value.range * curPoint
       const value = minimumValue + curPoint * stepValue
 
       updateSlider(positionPoint, value)

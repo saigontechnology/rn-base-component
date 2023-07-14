@@ -30,25 +30,7 @@ import {
 } from './constants'
 import {useTheme} from '../../hooks'
 import {hitSlop} from '../../helpers/metrics'
-
-type Point = {
-  left: number
-  right: number
-}
-
-type SliderAnimated = {
-  opacity: number
-  zIndex: number
-}
-
-type ContainerProps = {
-  width: number
-}
-
-type NumberRange = {
-  maximum: number
-  minimum: number
-}
+import type {Value, SliderAnimated, ContainerProps, NumberRange} from './SliderRange'
 
 export interface SliderFixedRangeProps extends SliderCommonProps {
   /** The width of the slider */
@@ -93,7 +75,7 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
   const theme = useTheme()
   const actualThumbSize = thumbSize || {width: theme.sizes.large, height: theme.sizes.large}
 
-  const sliderValue = useSharedValue<Point>({left: INIT_POINT, right: maximumValue})
+  const sliderValue = useSharedValue<Value>({left: INIT_POINT, right: maximumValue})
   const leftProgress = useSharedValue<number>(INIT_VALUE)
   const rightProgress = useSharedValue<number>(sliderWidth)
   const leftAnimated = useSharedValue<SliderAnimated>({opacity: INIT_VALUE, zIndex: INIT_VALUE})

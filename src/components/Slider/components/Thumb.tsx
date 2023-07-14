@@ -85,7 +85,7 @@ const TriangleDown = styled.View<{background?: string; theme: ITheme}>(({backgro
 
 const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   position: 'absolute' as Position,
-  top: -(responsiveHeight(props.theme?.spacing.titanic) ?? 40),
+  top: -responsiveHeight(props.theme?.spacing?.titanic),
   bottom: props.thumbSize.height + metrics.xxs,
   borderRadius: props.theme?.borderWidths.compact,
   backgroundColor: props.background || props.theme?.colors.primary,

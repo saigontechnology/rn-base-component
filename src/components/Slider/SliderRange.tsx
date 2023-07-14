@@ -29,21 +29,21 @@ import {
 import {useTheme} from '../../hooks'
 import {hitSlop} from '../../helpers/metrics'
 
-type Value = {
+export type Value = {
   left: number
   right: number
 }
 
-type SliderAnimated = {
+export type SliderAnimated = {
   opacity: number
   zIndex: number
 }
 
-type ContainerProps = {
+export type ContainerProps = {
   width: number
 }
 
-type NumberRange = {
+export type NumberRange = {
   maximum: number
   minimum: number
 }
