@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo} from 'react'
 import type {PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
-import {hitSlop, metrics} from '../../helpers/metrics'
+import {hitSlop, metrics, responsiveHeight} from '../../helpers/metrics'
 import SliderFixedRange, {SliderFixedRangeProps} from './SliderFixedRange'
 import {Thumb, Track, TrackPoint} from './components'
 import styled from 'styled-components/native'
@@ -327,9 +327,9 @@ const Slider: SliderComponentProps = ({
   )
 }
 
-const Container = styled(View)(({theme}: {theme: ITheme}) => ({
+const Container = styled(View)(() => ({
   justifyContent: 'center',
-  height: theme.sizes.xxs,
+  height: responsiveHeight(10),
 }))
 
 const Tracked = styled(Track)(({theme}: {theme: ITheme}) => ({

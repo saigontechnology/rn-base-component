@@ -40,8 +40,8 @@ export const Basic: ComponentStory<typeof Slider> = () => {
           }
           thumbStyle={[styles.thumb, styles.radius]}
           thumbSize={styles.thumb}
-          hasTrackPoint
-          hasPointTouch
+          showTrackPoint
+          tapToSeek
           sliderWidth={331}
           onValueChange={setValue2}
         />
@@ -74,7 +74,6 @@ export const Basic: ComponentStory<typeof Slider> = () => {
             />
           }
           thumbSize={{height: 40, width: 40}}
-          hasTrackPoint
           sliderWidth={351}
         />
         <Text style={styles.spacingTop20}>
@@ -87,10 +86,9 @@ export const Basic: ComponentStory<typeof Slider> = () => {
           maximumValue={40}
           style={styles.height10}
           onValueChange={setRangeValue1}
-          hasPointTouch
           alwaysShowValue
           thumbSize={{height: 40, width: 40}}
-          hasTrackPoint
+          showTrackPoint
           sliderWidth={351}
         />
         <Text style={styles.spacingTop20}>
@@ -102,12 +100,11 @@ export const Basic: ComponentStory<typeof Slider> = () => {
           step={1}
           maximumValue={40}
           style={styles.height10}
-          isSliderRange
           onValueChange={setValue}
           thumbSize={{height: 40, width: 40}}
-          hasTrackPoint
-          hasPointTouch
           sliderWidth={331}
+          showTrackPoint
+          tapToSeek
         />
         <Text style={styles.spacingTop20}>Total: 40, step: 2 - Value: {value}</Text>
         <View style={styles.spacingTop} />
@@ -121,7 +118,6 @@ export const Basic: ComponentStory<typeof Slider> = () => {
           bgColorLabelView={'#00FFFF'}
           thumbStyle={styles.bgColorThumb}
           labelStyle={styles.black}
-          hasTrackPoint
           sliderWidth={300}
         />
         <Text style={styles.spacingTop20}>Total: 10, step: 1 - Value: {value1}</Text>
@@ -141,7 +137,7 @@ export const Basic: ComponentStory<typeof Slider> = () => {
           maximumValue={1}
           style={styles.height10}
           onValueChange={setValue4}
-          hasTrackPoint
+          showTrackPoint
           sliderWidth={331}
         />
         <Text style={styles.spacingTop20}>Total: 1, step: 0.5 - Value: {value4}</Text>

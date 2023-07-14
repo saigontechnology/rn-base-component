@@ -8,7 +8,7 @@ import {
 import styled from 'styled-components/native'
 import Animated, {useAnimatedProps, useAnimatedStyle} from 'react-native-reanimated'
 import type {Position, Size, TextAlign, ThumbContainerStyle} from '../Slider'
-import {isIOS, metrics} from '../../../helpers/metrics'
+import {isIOS, metrics, responsiveHeight} from '../../../helpers/metrics'
 import type {StyleProp, TextProps, ViewStyle} from 'react-native'
 import type {ITheme} from '../../../theme'
 
@@ -68,7 +68,7 @@ const ThumbContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   backgroundColor: 'transparent',
 }))
 
-const TriangleDown = styled.View(({background, theme}: {background?: string; theme: ITheme}) => ({
+const TriangleDown = styled.View<{background?: string; theme: ITheme}>(({background, theme}) => ({
   position: 'absolute' as Position,
   bottom: -5,
   width: 0,
@@ -85,19 +85,19 @@ const TriangleDown = styled.View(({background, theme}: {background?: string; the
 
 const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   position: 'absolute' as Position,
-  top: -(props.theme?.spacing.xxxl ?? 40),
+  top: -(responsiveHeight(props.theme?.spacing.titanic) ?? 40),
   bottom: props.thumbSize.height + metrics.xxs,
-  borderRadius: props.theme?.borderWidths.medium,
+  borderRadius: props.theme?.borderWidths.compact,
   backgroundColor: props.background || props.theme?.colors.primary,
   alignSelf: 'center',
   justifyContent: 'center',
   alignItems: 'center',
-  margin: !isIOS ? -(props.theme?.spacing.mini || 0) : 0,
+  margin: !isIOS ? -(responsiveHeight(props.theme?.spacing.tiny) || 0) : 0,
 }))
 
 const Label = styled(AnimatedText)(({theme}: {theme: ITheme}) => ({
-  color: theme.colors.textLightColor,
-  padding: isIOS ? theme.spacing.micro : theme.spacing.tiny,
+  color: theme.colors.white,
+  padding: responsiveHeight(isIOS ? theme.spacing.petite : theme.spacing.miniature),
   textAlign: 'center' as TextAlign,
   fontWeight: theme.fontWeights.bold,
   fontSize: theme.fontSizes.sm,
