@@ -28,6 +28,7 @@ import {
   VISIBLE,
 } from './constants'
 import type {AnimatedGHContext, AnimatedLabelProps, SliderInfo, SliderProps} from './Slider'
+import {GestureHandlerRootView} from 'react-native-gesture-handler'
 
 const SliderFixed: React.FC<SliderProps> = ({
   minimumValue = DEFAULT_MINIMUM_VALUE,
@@ -169,33 +170,35 @@ const SliderFixed: React.FC<SliderProps> = ({
   )
 
   return (
-    <Container style={[!!sliderWidth && {width: sliderWidth}, style]}>
-      <Track style={trackStyle} onLayout={getTrackWidth} />
-      {!!showTrackPoint && (
-        <TrackPoint
-          sliderWidth={sliderWidth}
-          totalPoint={totalPoint}
-          hitSlopPoint={hitSlopPoint}
-          activeOpacity={tapToSeek ? 0 : 1}
-          trackPointStyle={trackPointStyle}
-          onPressPoint={(point: number) => tapToSeek && onPressPoint(point)}
+    <GestureHandlerRootView>
+      <Container style={[!!sliderWidth && {width: sliderWidth}, style]}>
+        <Track style={trackStyle} onLayout={getTrackWidth} />
+        {!!showTrackPoint && (
+          <TrackPoint
+            sliderWidth={sliderWidth}
+            totalPoint={totalPoint}
+            hitSlopPoint={hitSlopPoint}
+            activeOpacity={tapToSeek ? 0 : 1}
+            trackPointStyle={trackPointStyle}
+            onPressPoint={(point: number) => tapToSeek && onPressPoint(point)}
+          />
+        )}
+        <Tracked style={[trackedStyle, animatedTrackStyle]} />
+        <Thumb
+          text={minimumValue?.toString()}
+          bgColorLabelView={bgColorLabelView}
+          labelStyle={labelStyle}
+          alwaysShowValue={alwaysShowValue}
+          thumbSize={thumbSize}
+          thumbComponent={thumbComponent}
+          animatedProps={animatedProps}
+          thumbStyle={[thumbStyle, {left: -thumbSize.width / 2}]}
+          animatedThumbStyle={animatedThumbStyle}
+          opacityStyle={opacityStyle}
+          onGestureEvent={handler}
         />
-      )}
-      <Tracked style={[trackedStyle, animatedTrackStyle]} />
-      <Thumb
-        text={minimumValue?.toString()}
-        bgColorLabelView={bgColorLabelView}
-        labelStyle={labelStyle}
-        alwaysShowValue={alwaysShowValue}
-        thumbSize={thumbSize}
-        thumbComponent={thumbComponent}
-        animatedProps={animatedProps}
-        thumbStyle={[thumbStyle, {left: -thumbSize.width / 2}]}
-        animatedThumbStyle={animatedThumbStyle}
-        opacityStyle={opacityStyle}
-        onGestureEvent={handler}
-      />
-    </Container>
+      </Container>
+    </GestureHandlerRootView>
   )
 }
 

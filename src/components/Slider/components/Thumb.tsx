@@ -10,6 +10,7 @@ import Animated, {useAnimatedProps, useAnimatedStyle} from 'react-native-reanima
 import type {Position, Size, TextAlign, ThumbContainerStyle} from '../Slider'
 import {isIOS, metrics, responsiveHeight} from '../../../helpers/metrics'
 import type {StyleProp, TextProps, ViewStyle} from 'react-native'
+import {View} from 'react-native'
 import type {ITheme} from '../../../theme'
 
 const AnimatedText = Animated.createAnimatedComponent(TextInput)
@@ -50,7 +51,7 @@ const Thumb: React.FunctionComponent<ThumbProps> = ({
         background={bgColorLabelView}
         style={!alwaysShowValue && opacityStyle}
         thumbSize={thumbSize}>
-        <TriangleDown background={bgColorLabelView} style={{transform: [{rotate: '180deg'}]}} />
+        <TriangleDown background={bgColorLabelView} />
         <Label {...{animatedProps}} style={labelStyle} editable={false} defaultValue={text} />
       </LabelContainer>
       {thumbComponent}
@@ -68,20 +69,23 @@ const ThumbContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   backgroundColor: 'transparent',
 }))
 
-const TriangleDown = styled.View<{background?: string; theme: ITheme}>(({background, theme}) => ({
-  position: 'absolute' as Position,
-  bottom: -5,
-  width: 0,
-  height: 0,
-  backgroundColor: 'transparent',
-  borderStyle: 'solid',
-  borderLeftWidth: 5,
-  borderRightWidth: 5,
-  borderBottomWidth: 10,
-  borderLeftColor: 'transparent',
-  borderRightColor: 'transparent',
-  borderBottomColor: background || theme?.colors.primary,
-}))
+const TriangleDown = styled(View)<ViewStyle & {background?: string; theme: ITheme}>(
+  ({background, theme}) => ({
+    position: 'absolute' as Position,
+    bottom: -5,
+    width: 0,
+    height: 0,
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+    borderLeftWidth: 5,
+    borderRightWidth: 5,
+    borderBottomWidth: 10,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: background || theme?.colors.primary,
+    transform: [{rotate: '180deg'}] as any,
+  }),
+)
 
 const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   position: 'absolute' as Position,

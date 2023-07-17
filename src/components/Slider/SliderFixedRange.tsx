@@ -2,7 +2,7 @@ import React, {useCallback, useMemo} from 'react'
 import {StyleSheet, View} from 'react-native'
 import styled from 'styled-components/native'
 import {Thumb, Track, TrackPoint} from './components'
-import type {PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
+import {GestureHandlerRootView, PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
 import type {AnimatedGHContext, AnimatedLabelProps, SliderCommonProps} from './Slider'
 import type {ITheme} from '../../theme'
 import {
@@ -260,46 +260,48 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
   )
 
   return (
-    <Container width={sliderWidth} style={style}>
-      <Track style={trackStyle} />
-      {!!showTrackPoint && (
-        <TrackPoint
-          sliderWidth={sliderWidth}
-          totalPoint={totalPoint}
-          hitSlopPoint={hitSlopPoint}
-          trackPointStyle={trackPointStyle}
-          activeOpacity={tapToSeek ? 0 : 1}
-          onPressPoint={(point: number) => tapToSeek && onPressPoint(point)}
+    <GestureHandlerRootView>
+      <Container width={sliderWidth} style={style}>
+        <Track style={trackStyle} />
+        {!!showTrackPoint && (
+          <TrackPoint
+            sliderWidth={sliderWidth}
+            totalPoint={totalPoint}
+            hitSlopPoint={hitSlopPoint}
+            trackPointStyle={trackPointStyle}
+            activeOpacity={tapToSeek ? 0 : 1}
+            onPressPoint={(point: number) => tapToSeek && onPressPoint(point)}
+          />
+        )}
+        <Tracked style={[trackedStyle, animatedTrackStyle]} />
+        <Thumb
+          text={minimumValue?.toString()}
+          bgColorLabelView={bgColorLabelView}
+          labelStyle={labelStyle}
+          alwaysShowValue={alwaysShowValue}
+          thumbSize={actualThumbSize}
+          thumbComponent={leftThumbComponent}
+          animatedProps={leftAnimatedProps}
+          thumbStyle={[thumbStyle, {left: -actualThumbSize.width / 2}]}
+          animatedThumbStyle={leftThumbRangeStyle}
+          opacityStyle={leftOpacityStyle}
+          onGestureEvent={leftHandler}
         />
-      )}
-      <Tracked style={[trackedStyle, animatedTrackStyle]} />
-      <Thumb
-        text={minimumValue?.toString()}
-        bgColorLabelView={bgColorLabelView}
-        labelStyle={labelStyle}
-        alwaysShowValue={alwaysShowValue}
-        thumbSize={actualThumbSize}
-        thumbComponent={leftThumbComponent}
-        animatedProps={leftAnimatedProps}
-        thumbStyle={[thumbStyle, {left: -actualThumbSize.width / 2}]}
-        animatedThumbStyle={leftThumbRangeStyle}
-        opacityStyle={leftOpacityStyle}
-        onGestureEvent={leftHandler}
-      />
-      <Thumb
-        text={maximumValue?.toString()}
-        bgColorLabelView={bgColorLabelView}
-        labelStyle={labelStyle}
-        alwaysShowValue={alwaysShowValue}
-        thumbSize={actualThumbSize}
-        thumbComponent={rightThumbComponent}
-        animatedProps={rightAnimatedProps}
-        thumbStyle={thumbStyle}
-        animatedThumbStyle={rightThumbRangeStyle}
-        opacityStyle={rightOpacityStyle}
-        onGestureEvent={rightHandler}
-      />
-    </Container>
+        <Thumb
+          text={maximumValue?.toString()}
+          bgColorLabelView={bgColorLabelView}
+          labelStyle={labelStyle}
+          alwaysShowValue={alwaysShowValue}
+          thumbSize={actualThumbSize}
+          thumbComponent={rightThumbComponent}
+          animatedProps={rightAnimatedProps}
+          thumbStyle={thumbStyle}
+          animatedThumbStyle={rightThumbRangeStyle}
+          opacityStyle={rightOpacityStyle}
+          onGestureEvent={rightHandler}
+        />
+      </Container>
+    </GestureHandlerRootView>
   )
 }
 
