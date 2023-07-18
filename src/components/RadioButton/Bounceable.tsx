@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, {PropsWithChildren} from 'react'
 import {ViewStyle, StyleProp, Pressable, PressableProps, View} from 'react-native'
 import Animated, {withSpring, useSharedValue, useAnimatedStyle} from 'react-native-reanimated'
 
@@ -6,11 +6,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 
-export interface IBounceableProps extends PressableProps {
-  /**
-   * onPress event
-   */
-  onPress?: () => void
+export interface IBounceableProps extends Omit<PressableProps, 'children'>, PropsWithChildren {
   /**
    * The target value when onPressIn
    * default: 0.93
@@ -36,10 +32,6 @@ export interface IBounceableProps extends PressableProps {
    * default: 0
    */
   bouncinessValue?: number
-  /**
-   * The children component of Bounceable
-   */
-  children?: React.ReactNode
   /**
    * Custom style for Bounceable
    */

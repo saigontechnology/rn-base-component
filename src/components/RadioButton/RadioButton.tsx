@@ -127,12 +127,13 @@ const RadioButton = React.forwardRef<View, IRadioButtonProps>(
     }
 
     const renderLabelText = () =>
-      textComponent || (
+      textComponent ||
+      (text ? (
         <LabelTextView
           style={StyleSheet.flatten([textContainerStyle, styles.disableStyle(disable, disableOpacity)])}>
           <LabelText style={textStyle}>{text}</LabelText>
         </LabelTextView>
-      )
+      ) : null)
 
     const handleLayout = (event: LayoutChangeEvent) => {
       const {width, height} = event.nativeEvent.layout
