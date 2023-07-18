@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {StyleProp, ViewStyle, StyleSheet, TextStyle, LayoutChangeEvent, View} from 'react-native'
+import {StyleProp, ViewStyle, StyleSheet, TextStyle, LayoutChangeEvent, View, Text} from 'react-native'
 import Bounceable from './Bounceable'
 import styled from 'styled-components/native'
 import {metrics, responsiveWidth, responsiveHeight} from '../../helpers/metrics'
@@ -200,12 +200,12 @@ const styles = StyleSheet.create<any>({
   },
 })
 
-const RadioButtonWrapper = styled.View({
+const RadioButtonWrapper = styled(View)({
   flexDirection: 'row',
   alignItems: 'center',
 })
 
-const RadioButtonInnerContainer = styled.View((props: TrackStyle) => ({
+const RadioButtonInnerContainer = styled(View)((props: TrackStyle) => ({
   maxWidth: props.maxWidth,
   maxHeight: props.maxHeight,
 }))
@@ -214,7 +214,7 @@ const LabelTextView = styled.View({
   marginLeft: responsiveWidth(16),
 })
 
-const LabelText = styled.Text((props: {theme: ITheme}) => ({
+const LabelText = styled(Text)((props: {theme: ITheme}) => ({
   color: props?.theme?.colors?.black,
   fontSize: props?.theme?.fontSizes?.md,
 }))
