@@ -202,7 +202,7 @@ const BounceableStyle = styled(Bounceable)<{
   backgroundColor: 'transparent',
 }))
 
-const RadioButtonWrapper = styled.View({
+const RadioButtonWrapper = styled(View)({
   flexDirection: 'row',
   alignItems: 'center',
 })
