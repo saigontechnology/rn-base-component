@@ -1,6 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
-import Button from './components/Button'
-import {default as CheckboxComponent} from './components/Checkbox/Checkbox'
 import type {ITheme} from './theme'
 
 declare module 'styled-components/native' {
@@ -25,9 +24,7 @@ export const RnBaseComponentView =
         throw new Error(LINKING_ERROR)
       }
 
-export const RnBaseButton = Button
-export const Checkbox = CheckboxComponent
-
+export * from './components'
 export * from './core'
 export * from './hooks'
 export * from './theme'
