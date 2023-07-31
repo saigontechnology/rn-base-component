@@ -23,8 +23,8 @@ interface CodeInputProps {
 
   /** cell count */
   length?: number
-  /** callback when complete  */
 
+  /** callback when complete  */
   onSubmit?: (val: string) => void
 
   /** render custom view for cursor/indicator */
@@ -83,6 +83,45 @@ const CodeInput = ({
     [code],
   )
 
+  const renderCells = useCallback(() => {
+    const cells = []
+    for (let index = 0; index < length; index++) {
+      const isFocused = code.length === index
+
+      cells.push(
+        <Cell
+          testID="cell"
+          style={[cellStyle, isFocused && focusCellStyle]}
+          key={index}
+          onPress={() => handleCellPress(index)}>
+          {code[index] ? (
+            secureTextEntry ? (
+              <SecureView testID="text" style={secureViewStyle} />
+            ) : (
+              <Text testID="text" style={textStyle}>
+                {code[index]}
+              </Text>
+            )
+          ) : (
+            isFocused && (customCursor ? customCursor() : <Cursor style={focusTextStyle} />)
+          )}
+        </Cell>,
+      )
+    }
+    return cells
+  }, [
+    length,
+    cellStyle,
+    focusCellStyle,
+    code,
+    customCursor,
+    textStyle,
+    focusTextStyle,
+    handleCellPress,
+    secureTextEntry,
+    secureViewStyle,
+  ])
+
   return (
     <CodeInputContainer>
       <StyledTextInput
@@ -94,30 +133,7 @@ const CodeInput = ({
         onChangeText={handleOnChangeText}
         maxLength={length}
       />
-      <CellContainer>
-        {new Array(length).fill(0).map((_, index: number) => {
-          const isFocused = code.length === index
-          return (
-            <Cell
-              testID="cell"
-              style={[cellStyle, isFocused && focusCellStyle]}
-              key={index}
-              onPress={() => handleCellPress(index)}>
-              {code[index] ? (
-                secureTextEntry ? (
-                  <SecureView testID="text" style={secureViewStyle} />
-                ) : (
-                  <Text testID="text" style={textStyle}>
-                    {code[index]}
-                  </Text>
-                )
-              ) : (
-                isFocused && (customCursor ? customCursor() : <Cursor style={focusTextStyle} />)
-              )}
-            </Cell>
-          )
-        })}
-      </CellContainer>
+      <CellContainer>{renderCells()}</CellContainer>
     </CodeInputContainer>
   )
 }
