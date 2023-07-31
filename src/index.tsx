@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
-import Button from './components/Button'
 import {default as CodeInputComponent} from './components/CodeInput/CodeInput'
 import type {ITheme} from './theme'
 
@@ -25,9 +25,8 @@ export const RnBaseComponentView =
         throw new Error(LINKING_ERROR)
       }
 
-export const RnBaseButton = Button
-export const CodeInput = CodeInputComponent
 
+export * from './components'
 export * from './core'
 export * from './hooks'
 export * from './theme'

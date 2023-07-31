@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import type {ColorModeOptions} from '../core/color-mode/type'
 import base from './base'
 
