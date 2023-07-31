@@ -329,7 +329,7 @@ PODS:
   - React-jsinspector (0.71.4)
   - React-logger (0.71.4):
     - glog
-  - react-native-safe-area-context (4.5.0):
+  - react-native-safe-area-context (4.5.3):
     - RCT-Folly
     - RCTRequired
     - RCTTypeSafety
@@ -423,10 +423,39 @@ PODS:
     - React-perflogger (= 0.71.4)
   - rn-base-component (0.0.2):
     - React-Core
-  - RNCAsyncStorage (1.17.11):
+  - RNCAsyncStorage (1.18.1):
     - React-Core
   - RNDateTimePicker (6.7.5):
     - React-Core
+  - RNGestureHandler (2.10.1):
+    - React-Core
+  - RNReanimated (3.1.0):
+    - DoubleConversion
+    - FBLazyVector
+    - FBReactNativeSpec
+    - glog
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React-callinvoker
+    - React-Core
+    - React-Core/DevSupport
+    - React-Core/RCTWebSocket
+    - React-CoreModules
+    - React-cxxreact
+    - React-jsi
+    - React-jsiexecutor
+    - React-jsinspector
+    - React-RCTActionSheet
+    - React-RCTAnimation
+    - React-RCTBlob
+    - React-RCTImage
+    - React-RCTLinking
+    - React-RCTNetwork
+    - React-RCTSettings
+    - React-RCTText
+    - ReactCommon/turbomodule/core
+    - Yoga
   - SocketRocket (0.6.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -496,6 +525,8 @@ DEPENDENCIES:
   - rn-base-component (from `../..`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+  - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -593,6 +624,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
+  RNGestureHandler:
+    :path: "../node_modules/react-native-gesture-handler"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -630,7 +665,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: d6b7fa9260aa3cb40afee0507e3bc1d17ecaa6f2
   React-jsinspector: 1f51e775819199d3fe9410e69ee8d4c4161c7b06
   React-logger: 0d58569ec51d30d1792c5e86a8e3b78d24b582c6
-  react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
+  react-native-safe-area-context: b8979f5eda6ed5903d4dbc885be3846ea3daa753
   react-native-slider: 33b8d190b59d4f67a541061bb91775d53d617d9d
   React-perflogger: 0bb0522a12e058f6eb69d888bc16f40c16c4b907
   React-RCTActionSheet: bfd675a10f06a18728ea15d82082d48f228a213a
@@ -646,8 +681,10 @@ SPEC CHECKSUMS:
   React-runtimeexecutor: 8fa50b38df6b992c76537993a2b0553d3b088004
   ReactCommon: b49a4b00ca6d181ff74b17c12b2d59ac4add0bde
   rn-base-component: 0e4d0e35df39f193ccd2a51d1e49856cf7d2818d
-  RNCAsyncStorage: 8616bd5a58af409453ea4e1b246521bb76578d60
+  RNCAsyncStorage: b90b71f45b8b97be43bc4284e71a6af48ac9f547
   RNDateTimePicker: 65e1d202799460b286ff5e741d8baf54695e8abd
+  RNGestureHandler: 42ec7c28dd02d540ed6c9159c57a98ff016492dc
+  RNReanimated: b1220a0e5168745283ff5d53bfc7d2144b2cee1b
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 79dd7410de6f8ad73a77c868d3d368843f0c93e0
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

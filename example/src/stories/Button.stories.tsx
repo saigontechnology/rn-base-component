@@ -1,14 +1,14 @@
 import React from 'react'
 import type {ComponentMeta, ComponentStory} from '@storybook/react'
 
-import {RnBaseButton} from 'rn-base-component'
+import {Button} from 'rn-base-component'
 
 export default {
   title: 'components/Button',
-  component: RnBaseButton,
-} as ComponentMeta<typeof RnBaseButton>
+  component: Button,
+} as ComponentMeta<typeof Button>
 
-export const Basic: ComponentStory<typeof RnBaseButton> = args => <RnBaseButton {...args} />
+export const Basic: ComponentStory<typeof Button> = args => <Button {...args} />
 
 Basic.args = {
   text: 'Hello STS Team!',
