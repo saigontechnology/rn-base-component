@@ -1,24 +1,24 @@
 import React from 'react'
 import type {ComponentMeta, ComponentStory} from '@storybook/react'
 
-import {RnBaseText} from 'rn-base-component'
+import {BaseText} from 'rn-base-component'
 
 export default {
   title: 'Text',
-  component: RnBaseText,
-} as ComponentMeta<typeof RnBaseText>
+  component: BaseText,
+} as ComponentMeta<typeof BaseText>
 
-export const BasicText: ComponentStory<typeof RnBaseText> = args => (
-  <RnBaseText>
+export const BasicText: ComponentStory<typeof BaseText> = args => (
+  <BaseText>
     {'\n'}
-    <RnBaseText.Bold {...args} />
+    <BaseText.Bold {...args} />
     {'\n'}
-    <RnBaseText.Underline {...args} />
+    <BaseText.Underline {...args} />
     {'\n'}
-    <RnBaseText.Title {...args} />
+    <BaseText.Title {...args} />
     {'\n'}
-    <RnBaseText.Span {...args} />
-  </RnBaseText>
+    <BaseText.Span {...args} />
+  </BaseText>
 )
 BasicText.args = {
   children: 'Component Basic Text!',

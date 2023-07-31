@@ -9,7 +9,7 @@ with some default Type Text
 ## Usage
 
 ```js
-import BaseText from 'rn-base-component';
+import {BaseText} from 'rn-base-component';
 
 <BaseText> BaseText </BaseText>
 <BaseText.Bold> BaseText Bold </BaseText.Bold>
