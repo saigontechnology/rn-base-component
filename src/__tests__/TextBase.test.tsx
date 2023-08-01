@@ -1,30 +1,30 @@
 import React from 'react'
 import {render} from '@testing-library/react-native'
-import BaseText from '../components/Text/Text'
+import Text from '../components/Text/Text'
 
-describe('BaseText', () => {
-  it('renders BaseText correctly', () => {
-    const {getByText} = render(<BaseText>Hello, World!</BaseText>)
+describe('Text', () => {
+  it('renders Text correctly', () => {
+    const {getByText} = render(<Text>Hello, World!</Text>)
     expect(getByText('Hello, World!')).toBeDefined()
   })
 
-  it('renders BaseText.Bold correctly', () => {
-    const {getByText} = render(<BaseText.Bold>Hello, Bold Text!</BaseText.Bold>)
+  it('renders Text.Bold correctly', () => {
+    const {getByText} = render(<Text.Bold>Hello, Bold Text!</Text.Bold>)
     expect(getByText('Hello, Bold Text!')).toBeDefined()
   })
 
-  it('renders BaseText.Underline correctly', () => {
-    const {getByText} = render(<BaseText.Underline>Hello, Underlined Text!</BaseText.Underline>)
+  it('renders Text.Underline correctly', () => {
+    const {getByText} = render(<Text.Underline>Hello, Underlined Text!</Text.Underline>)
     expect(getByText('Hello, Underlined Text!')).toBeDefined()
   })
 
-  it('renders BaseText.Title correctly', () => {
-    const {getByText} = render(<BaseText.Title>Hello, Title Text!</BaseText.Title>)
+  it('renders Text.Title correctly', () => {
+    const {getByText} = render(<Text.Title>Hello, Title Text!</Text.Title>)
     expect(getByText('Hello, Title Text!')).toBeDefined()
   })
 
-  it('renders BaseText.Span correctly', () => {
-    const {getByText} = render(<BaseText.Span>Hello, Span Text!</BaseText.Span>)
+  it('renders Text.Span correctly', () => {
+    const {getByText} = render(<Text.Span>Hello, Span Text!</Text.Span>)
     expect(getByText('Hello, Span Text!')).toBeDefined()
   })
 })
