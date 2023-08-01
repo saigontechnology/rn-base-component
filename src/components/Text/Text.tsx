@@ -3,47 +3,46 @@ import {StyleSheet, Text as RNText, TextProps} from 'react-native'
 import {metrics} from '../../helpers/metrics'
 import styled from 'styled-components/native'
 
-type IBaseText = TextProps
-interface IBaseTextDefaultComponent extends React.FC<IBaseText> {
-  Bold: React.FC<IBaseText>
-  Underline: React.FC<IBaseText>
-  Span: React.FC<IBaseText>
-  Title: React.FC<IBaseText>
+interface TextComponent extends React.FC<TextProps> {
+  Bold: React.FC<TextProps>
+  Underline: React.FC<TextProps>
+  Span: React.FC<TextProps>
+  Title: React.FC<TextProps>
 }
 
-const BaseText: IBaseTextDefaultComponent = ({...rest}) => <RNText {...rest} />
-const TextBold: React.FC<IBaseText> = ({style, ...rest}) => (
+const Text: TextComponent = ({...rest}) => <RNText {...rest} />
+const TextBold: React.FC<TextProps> = ({style, ...rest}) => (
   <TxtBold {...rest} style={StyleSheet.flatten(style)} />
 )
-const TextUnderLine: React.FC<IBaseText> = ({style, ...rest}) => (
+const TextUnderLine: React.FC<TextProps> = ({style, ...rest}) => (
   <TxtUnderLine {...rest} style={StyleSheet.flatten(style)} />
 )
-const TextTitle: React.FC<IBaseText> = ({style, ...rest}) => (
+const TextTitle: React.FC<TextProps> = ({style, ...rest}) => (
   <TxtTitle {...rest} style={StyleSheet.flatten(style)} />
 )
-const TextSpan: React.FC<IBaseText> = ({style, ...rest}) => (
+const TextSpan: React.FC<TextProps> = ({style, ...rest}) => (
   <TxtSpan {...rest} style={StyleSheet.flatten(style)} />
 )
 
-BaseText.Bold = TextBold
-BaseText.Underline = TextUnderLine
-BaseText.Title = TextTitle
-BaseText.Span = TextSpan
+Text.Bold = TextBold
+Text.Underline = TextUnderLine
+Text.Title = TextTitle
+Text.Span = TextSpan
 
-const TxtBold = styled(BaseText)({
+const TxtBold = styled(Text)({
   fontWeight: 'bold',
 })
 
-const TxtUnderLine = styled(BaseText)({
+const TxtUnderLine = styled(Text)({
   textDecorationLine: 'underline',
 })
 
-const TxtTitle = styled(BaseText)({
+const TxtTitle = styled(Text)({
   fontSize: metrics.title,
 })
 
-const TxtSpan = styled(BaseText)({
+const TxtSpan = styled(Text)({
   fontSize: metrics.span,
 })
 
-export default BaseText
+export default Text

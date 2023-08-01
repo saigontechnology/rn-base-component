@@ -1,4 +1,4 @@
 import Button from './Button'
-import BaseText from './Text/Text'
+import Text from './Text/Text'
 
-export {Button, BaseText}
+export {Button, Text}
