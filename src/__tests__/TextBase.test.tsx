@@ -1,6 +1,6 @@
 import React from 'react'
 import {render} from '@testing-library/react-native'
-import Text from '../components/Text/Text'
+import {Text, TextBold, TextItalic} from '../components'
 
 describe('Text', () => {
   it('renders Text correctly', () => {
@@ -8,23 +8,13 @@ describe('Text', () => {
     expect(getByText('Hello, World!')).toBeDefined()
   })
 
-  it('renders Text.Bold correctly', () => {
-    const {getByText} = render(<Text.Bold>Hello, Bold Text!</Text.Bold>)
+  it('renders TextBold correctly', () => {
+    const {getByText} = render(<TextBold>Hello, Bold Text!</TextBold>)
     expect(getByText('Hello, Bold Text!')).toBeDefined()
   })
 
-  it('renders Text.Underline correctly', () => {
-    const {getByText} = render(<Text.Underline>Hello, Underlined Text!</Text.Underline>)
-    expect(getByText('Hello, Underlined Text!')).toBeDefined()
-  })
-
-  it('renders Text.Title correctly', () => {
-    const {getByText} = render(<Text.Title>Hello, Title Text!</Text.Title>)
-    expect(getByText('Hello, Title Text!')).toBeDefined()
-  })
-
-  it('renders Text.Span correctly', () => {
-    const {getByText} = render(<Text.Span>Hello, Span Text!</Text.Span>)
-    expect(getByText('Hello, Span Text!')).toBeDefined()
+  it('renders TextItalic correctly', () => {
+    const {getByText} = render(<TextItalic>Hello, Italic Text!</TextItalic>)
+    expect(getByText('Hello, Italic Text!')).toBeDefined()
   })
 })
