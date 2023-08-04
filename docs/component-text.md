@@ -1,32 +1,28 @@
-# Component Text
+# Text Component
 
-React Native Base Component Text
+React Native Base Text Component
 
-## Text Props
- this component extends from React Native Props.
-with some default Type Text
+This component extends from React Native Text
+with some variants
 
 ## Usage
 
 ```js
-import {BaseText} from 'rn-base-component';
+import {Text, TextBold, TextItalic} from 'rn-base-component';
 
-<BaseText> BaseText </BaseText>
-<BaseText.Bold> BaseText Bold </BaseText.Bold>
-<BaseText.Underline> BaseText Underline </BaseText.Underline>
-<BaseText.Title> BaseText Title </BaseText.Title>
-<BaseText.Span> BaseText Span </BaseText.Span>
+<Text> Text font normal </Text>
+<TextBold> Text font bold </TextBold>
+<TextItalic> Text font italic </TextItalic>
 ```
 
 
-### `Props Default`
+## Default Props
 
-|      Type      |      Default      |
-| :------------: | :---------------: |
-| Bold | fontWeight: 'bold' |
-| Underline | textDecorationLine: 'underline' |
-| Title | fontSize: metrics.title |
-| Span | fontSize: metrics.span |
+| Variant |                                         Default Props                                          |
+|:-------:|:----------------------------------------------------------------------------------------------:|
+|  Text   | fontSize: metrics.span <br/>color: colors.black<br/>fontFamily:  typography.fonts.regular<br/> |
+|  Bold   |                             fontFamily:      typography.fonts.bold                             |
+| Italic  |                                      fontStyle:    italic                                      |
 
 ---
 
