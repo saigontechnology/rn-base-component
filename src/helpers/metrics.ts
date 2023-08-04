@@ -54,19 +54,19 @@ const DESIGN_WIDTH = 375
 const DESIGN_HEIGHT = 812
 const {width, height} = Dimensions.get('window')
 
-const responsiveFont = (value = 0): number => (width * value) / DESIGN_WIDTH
+const responsiveFont = <T extends number>(value: T) => ((width * value) / DESIGN_WIDTH) as T
 
 const deviceWidth = (): number => width
 
 const deviceHeight = (): number => height
 
-const responsiveWidth = (value = 0): number => (width * value) / DESIGN_WIDTH
+const responsiveWidth = <T extends number>(value: T) => ((width * value) / DESIGN_WIDTH) as T
 
-const responsiveHeight = (value = 0): number => (height * value) / DESIGN_HEIGHT
+const responsiveHeight = <T extends number>(value: T) => ((height * value) / DESIGN_HEIGHT) as T
 
 const isIOS: boolean = Platform.OS === 'ios'
 
-const metrics: IMetrics = {
+const metrics = {
   // Text Size
   title: responsiveFont(20),
   span: responsiveFont(14),
@@ -99,6 +99,6 @@ const metrics: IMetrics = {
   logoWidth: responsiveWidth(300),
   logoHeight: responsiveHeight(70),
   icon: responsiveHeight(30),
-}
+} as const
 
 export {metrics, isIOS, hitSlop, responsiveFont, responsiveHeight, responsiveWidth, deviceWidth, deviceHeight}
