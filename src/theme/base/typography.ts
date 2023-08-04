@@ -1,3 +1,5 @@
+import {Platform} from 'react-native'
+
 const typography = {
   fontWeights: {
     hairline: 100,
@@ -15,6 +17,18 @@ const typography = {
     heading: undefined,
     body: undefined,
     mono: undefined,
+    regular: Platform.select({
+      ios: 'ArialMT',
+      android: 'sans-serif',
+    }),
+    bold: Platform.select({
+      ios: 'Arial-BoldMT',
+      android: 'sans-serif-medium',
+    }),
+    italic: Platform.select({
+      ios: 'Arial-ItalicMT',
+      android: 'sans-serif-medium',
+    }),
   },
   fontSizes: {
     '2xs': 10,

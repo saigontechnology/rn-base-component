@@ -6,52 +6,53 @@ import {
   addParameters,
   addArgsEnhancer,
   clearDecorators,
-} from "@storybook/react-native";
+} from '@storybook/react-native'
 
 global.STORIES = [
   {
-    titlePrefix: "",
-    directory: "./src",
-    files: "**/*.stories.?(ts|tsx|js|jsx)",
+    titlePrefix: '',
+    directory: './src',
+    files: '**/*.stories.?(ts|tsx|js|jsx)',
     importPathMatcher:
-      "^\\.[\\\\/](?:src(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)\\/|\\/|$)(?!\\.)(?=.)[^/]*?\\.stories\\.(?:ts|tsx|js|jsx)?)$",
+      '^\\.[\\\\/](?:src(?:\\/(?!\\.)(?:(?:(?!(?:^|\\/)\\.).)*?)\\/|\\/|$)(?!\\.)(?=.)[^/]*?\\.stories\\.(?:ts|tsx|js|jsx)?)$',
   },
-];
+]
 
-import "@storybook/addon-ondevice-notes/register";
-import "@storybook/addon-ondevice-controls/register";
-import "@storybook/addon-ondevice-backgrounds/register";
-import "@storybook/addon-ondevice-actions/register";
+import '@storybook/addon-ondevice-notes/register'
+import '@storybook/addon-ondevice-controls/register'
+import '@storybook/addon-ondevice-backgrounds/register'
+import '@storybook/addon-ondevice-actions/register'
 
-import { argsEnhancers } from "@storybook/addon-actions/dist/modern/preset/addArgs";
+import {argsEnhancers} from '@storybook/addon-actions/dist/modern/preset/addArgs'
 
-import { decorators, parameters } from "./preview";
+import {decorators, parameters} from './preview'
 
 if (decorators) {
   if (__DEV__) {
     // stops the warning from showing on every HMR
-    require("react-native").LogBox.ignoreLogs([
-      "`clearDecorators` is deprecated and will be removed in Storybook 7.0",
-    ]);
+    require('react-native').LogBox.ignoreLogs([
+      '`clearDecorators` is deprecated and will be removed in Storybook 7.0',
+    ])
   }
   // workaround for global decorators getting infinitely applied on HMR, see https://github.com/storybookjs/react-native/issues/185
-  clearDecorators();
-  decorators.forEach((decorator) => addDecorator(decorator));
+  clearDecorators()
+  decorators.forEach(decorator => addDecorator(decorator))
 }
 
 if (parameters) {
-  addParameters(parameters);
+  addParameters(parameters)
 }
 
 try {
-  argsEnhancers.forEach((enhancer) => addArgsEnhancer(enhancer));
+  argsEnhancers.forEach(enhancer => addArgsEnhancer(enhancer))
 } catch {}
 
 const getStories = () => {
   return {
     "./src/stories/Button.stories.tsx": require("../src/stories/Button.stories.tsx"),
     './src/stories/RadioButton.stories.tsx': require('../src/stories/RadioButton.stories.tsx'),
-  };
-};
+    './src/stories/Text.stories.tsx': require('../src/stories/Text.stories.tsx'),
+  }
+}
 
-configure(getStories, module, false);
+configure(getStories, module, false)
