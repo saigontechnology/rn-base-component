@@ -12,7 +12,7 @@ export default {
 
 export const BaseText: ComponentStory<typeof Text> = () => (
   <View style={styles.container}>
-    <Text style={styles.textContainer} fontSize={metrics.title} fontWeight={'normal'}>
+    <Text style={styles.textContainer} fontSize={metrics.title}>
       Text font normal
     </Text>
     <TextBold style={styles.textContainer} fontSize={metrics.title}>
