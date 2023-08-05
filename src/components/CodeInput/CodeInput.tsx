@@ -47,7 +47,7 @@ type SecureViewStyle = {
 
 const DEFAULT_LENGTH = 6
 
-const CodeInput = ({
+const CodeInput: React.FC<CodeInputProps> = ({
   cellStyle,
   focusCellStyle,
   textStyle,
@@ -58,7 +58,7 @@ const CodeInput = ({
   customCursor,
   secureTextEntry,
   keyboardType = 'number-pad',
-}: CodeInputProps) => {
+}) => {
   const textInputRef = useRef<TextInput>(null)
   const [code, setCode] = useState<string>('')
 
