@@ -1,6 +1,5 @@
 import Button from './Button'
 import Checkbox from './Checkbox/Checkbox'
 
-export {Button}
+export {Button, Checkbox}
 export * from './Text/Text'
-export * from './Checkbox/Checkbox'

@@ -15,7 +15,7 @@ import {
 import Animated, {useSharedValue, withSequence, withSpring, withTiming} from 'react-native-reanimated'
 import styled from 'styled-components/native'
 import type {ITheme} from 'src/theme'
-import {theme} from '../../theme'
+import {theme, Images} from '../../theme'
 import {BOUNCE_EFFECT_IN, BOUNCE_EFFECT_OUT, DISABLE_OPACITY} from './constants'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
@@ -106,7 +106,7 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       disableBuiltInState = false,
       isChecked,
       innerIconStyle,
-      checkIconImageSource = require('../../assets/images/check.png'),
+      checkIconImageSource = Images.check,
       text,
       textComponent,
       textStyle,
@@ -230,6 +230,6 @@ const InnerIconContainer = styled(View)((props: InnerIconContainerStyle) => ({
   justifyContent: 'center',
   width: props.size || props.theme?.sizes?.huge,
   height: props.size || props.theme?.sizes?.huge,
-  borderRadius: (props.size || props.theme?.sizes?.huge) ?? 24 / 4,
+  borderRadius: props.size || props.theme?.sizes?.huge,
   borderColor: props?.borderColor,
 }))
