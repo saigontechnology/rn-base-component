@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
-import {default as CodeInputComponent} from './components/CodeInput/CodeInput'
 import type {ITheme} from './theme'
 
 declare module 'styled-components/native' {
@@ -24,7 +23,6 @@ export const RnBaseComponentView =
     : () => {
         throw new Error(LINKING_ERROR)
       }
-
 
 export * from './components'
 export * from './core'

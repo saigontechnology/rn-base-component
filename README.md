@@ -11,7 +11,7 @@ npm install rn-base-component
 ## Preview/Debug Components
 
 ```sh
-yarn boostrap
+yarn bootstrap
 yarn example ios/android
 ```
 
