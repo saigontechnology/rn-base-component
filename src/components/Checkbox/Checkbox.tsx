@@ -16,7 +16,7 @@ import Animated, {useSharedValue, withSequence, withSpring, withTiming} from 're
 import styled from 'styled-components/native'
 import type {ITheme} from 'src/theme'
 import {theme, Images} from '../../theme'
-import {BOUNCE_EFFECT_IN, BOUNCE_EFFECT_OUT, DISABLE_OPACITY} from './constants'
+import {BOUNCE_EFFECT_IN, BOUNCE_EFFECT_OUT, DISABLE_OPACITY, DEFAULT_OPACITY} from './constants'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 type CustomTextStyleProp = StyleProp<TextStyle> | Array<StyleProp<TextStyle>>
@@ -211,7 +211,7 @@ const StyledImage = styled(Image)((props: StyledImageStyle) => ({
 
 const TextContainer = styled(View)((props: TextContainerStyle) => ({
   marginLeft: props.theme?.sizes?.small,
-  opacity: props.disabled ? props.disableOpacity : 1,
+  opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
 
 const IconContainer = styled(Animated.View)((props: IconContainerStyle) => ({
@@ -219,9 +219,9 @@ const IconContainer = styled(Animated.View)((props: IconContainerStyle) => ({
   justifyContent: 'center',
   width: props.size || props.theme?.sizes?.huge,
   height: props.size || props.theme?.sizes?.huge,
-  borderRadius: (props.size || props.theme?.sizes?.huge) ?? 24 / 4,
+  borderRadius: props.size || props.theme?.sizes?.huge,
   backgroundColor: props.backgroundColor,
-  opacity: props.disabled ? props.disableOpacity : 1,
+  opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
 
 const InnerIconContainer = styled(View)((props: InnerIconContainerStyle) => ({
