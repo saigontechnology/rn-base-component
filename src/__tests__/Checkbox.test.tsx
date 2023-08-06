@@ -1,12 +1,33 @@
 import React from 'react'
 import {render, fireEvent} from '@testing-library/react-native'
 import Checkbox from '../components/Checkbox/Checkbox'
+import {BOUNCE_EFFECT_OUT} from '../components/Checkbox/constants'
 
 describe('Checkbox test', () => {
   const onPressMock = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
+  })
+
+  it('should trigger bounceInEffect on press', () => {
+    const {getByTestId} = render(<Checkbox />)
+    const container = getByTestId('container')
+    const icon = getByTestId('icon-container')
+
+    fireEvent(container, 'pressIn')
+
+    expect(icon.props.style.transform[0].scale).toEqual(BOUNCE_EFFECT_OUT)
+  })
+
+  it('should trigger bounceOutEffect on press', () => {
+    const {getByTestId} = render(<Checkbox />)
+    const container = getByTestId('container')
+    const icon = getByTestId('icon-container')
+
+    fireEvent(container, 'pressOut')
+
+    expect(icon.props.style.transform[0].scale).toEqual(BOUNCE_EFFECT_OUT)
   })
 
   it('should render correctly', () => {

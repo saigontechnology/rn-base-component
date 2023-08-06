@@ -16,7 +16,13 @@ import Animated, {useSharedValue, withSequence, withSpring, withTiming} from 're
 import styled from 'styled-components/native'
 import type {ITheme} from 'src/theme'
 import {theme, Images} from '../../theme'
-import {BOUNCE_EFFECT_IN, BOUNCE_EFFECT_OUT, DISABLE_OPACITY, DEFAULT_OPACITY} from './constants'
+import {
+  BOUNCE_EFFECT_IN,
+  BOUNCE_EFFECT_OUT,
+  DISABLE_OPACITY,
+  DEFAULT_OPACITY,
+  DEFAULT_BOUNCE_EFFECT,
+} from './constants'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 type CustomTextStyleProp = StyleProp<TextStyle> | Array<StyleProp<TextStyle>>
@@ -122,7 +128,7 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
     forwardedRef,
   ) => {
     const [checked, setChecked] = useState(false)
-    const bounceValue = useSharedValue(1)
+    const bounceValue = useSharedValue(DEFAULT_BOUNCE_EFFECT)
 
     useEffect(() => {
       setChecked(isChecked ?? false)
