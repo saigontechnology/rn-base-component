@@ -1,6 +1,5 @@
 import React, {useEffect, forwardRef, useCallback, useState, memo} from 'react'
 import {View, LayoutChangeEvent} from 'react-native'
-import {metrics, deviceWidth} from '../../helpers/metrics'
 import styled from 'styled-components/native'
 import Animated, {
   useSharedValue,
@@ -10,6 +9,8 @@ import Animated, {
   Easing,
   interpolate,
 } from 'react-native-reanimated'
+import {metrics, deviceWidth} from '../../helpers/metrics'
+import {theme} from '../../theme'
 
 interface IProgressProps {
   /**
@@ -29,12 +30,10 @@ interface IProgressProps {
   borderRadius?: number
   /**
    * Defines color of Track Bar
-   * default #49BE25
    */
   filledTrackColor?: string
   /**
    * Defines background color of Progress bar
-   * default #E5E5E5
    */
   backgroundColor?: string
   /**
@@ -64,8 +63,8 @@ const Progress = forwardRef<View, IProgressProps>(
       value = 0,
       size = metrics.small,
       borderRadius = 0,
-      filledTrackColor = '#49BE25',
-      backgroundColor = '#E5E5E5',
+      filledTrackColor = theme.colors.primary,
+      backgroundColor = theme.colors.gray,
       isIndeterminateProgress = false,
     },
     ref,
