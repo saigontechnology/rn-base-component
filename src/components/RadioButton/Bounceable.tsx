@@ -1,4 +1,4 @@
-import React, {PropsWithChildren} from 'react'
+import React from 'react'
 import {ViewStyle, StyleProp, Pressable, PressableProps, View} from 'react-native'
 import Animated, {withSpring, useSharedValue, useAnimatedStyle} from 'react-native-reanimated'
 
@@ -6,7 +6,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 
-export interface IBounceableProps extends Omit<PressableProps, 'children'>, PropsWithChildren {
+export interface IBounceableProps extends PressableProps {
   /**
    * The target value when onPressIn
    * default: 0.93
@@ -38,14 +38,21 @@ export interface IBounceableProps extends Omit<PressableProps, 'children'>, Prop
   style?: CustomStyleProp
 }
 
+const BOUNCE_EFFECT_IN_DEFAULT = 0.93
+const BOUNCE_EFFECT_OUT_DEFAULT = 1
+const BOUNCE_VELOCITY_IN_DEFAULT = 0.1
+const BOUNCE_VELOCITY_OUT_DEFAULT = 0.4
+const BOUNCINESS_VALUE_DEFAULT = 80
+const SCALE_DEFAULT = 1
+
 const Bounceable = React.forwardRef<View, IBounceableProps>(
   (
     {
-      bounceEffectIn = 0.93,
-      bounceEffectOut = 1,
-      bounceVelocityIn = 0.1,
-      bounceVelocityOut = 0.4,
-      bouncinessValue = 80,
+      bounceEffectIn = BOUNCE_EFFECT_IN_DEFAULT,
+      bounceEffectOut = BOUNCE_EFFECT_OUT_DEFAULT,
+      bounceVelocityIn = BOUNCE_VELOCITY_IN_DEFAULT,
+      bounceVelocityOut = BOUNCE_VELOCITY_OUT_DEFAULT,
+      bouncinessValue = BOUNCINESS_VALUE_DEFAULT,
       children,
       style,
       onPress,
@@ -53,7 +60,7 @@ const Bounceable = React.forwardRef<View, IBounceableProps>(
     },
     ref,
   ) => {
-    const scale = useSharedValue(1)
+    const scale = useSharedValue(SCALE_DEFAULT)
     const velocity = useSharedValue(bounceVelocityIn)
     const bounciness = useSharedValue(bouncinessValue)
 

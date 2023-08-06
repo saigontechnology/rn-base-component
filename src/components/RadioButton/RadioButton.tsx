@@ -78,15 +78,18 @@ export interface IRadioButtonProps extends IBounceableProps {
    */
   text?: string
 }
+const OUTER_SIZE_DEFAULT = 45
+const INNER_SIZE_DEFAULT = 25
+const OPACITY_DEFAULT = 0.5
 
 const RadioButton = forwardRef<View, IRadioButtonProps>(
   (
     {
       style,
-      isRemainActive = undefined,
+      isRemainActive,
       innerContainerStyle,
-      outerSize = 45,
-      innerSize = 25,
+      outerSize = OUTER_SIZE_DEFAULT,
+      innerSize = INNER_SIZE_DEFAULT,
       ringColor = theme.colors.darkBlue,
       innerBackgroundColor = theme.colors.darkBlue,
       onPressButton,
@@ -94,7 +97,7 @@ const RadioButton = forwardRef<View, IRadioButtonProps>(
       textComponent,
       textContainerStyle,
       disable,
-      disableOpacity = 0.5,
+      disableOpacity = OPACITY_DEFAULT,
       textStyle,
       text,
       wrapperStyle,
