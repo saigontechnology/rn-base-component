@@ -1,7 +1,7 @@
 import React, {forwardRef, useMemo, useRef, useState} from 'react'
 import {StyleProp, ViewStyle, TextStyle, LayoutChangeEvent, View, Text} from 'react-native'
 import styled from 'styled-components/native'
-import {metrics, responsiveHeight, responsiveWidth} from 'src/helpers'
+import {metrics, responsiveHeight, responsiveWidth} from '../../helpers/metrics'
 import Bounceable, {IBounceableProps} from './Bounceable'
 import {theme, ITheme} from '../../theme'
 
