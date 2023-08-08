@@ -11,7 +11,7 @@ const PREVIOUS_STEP = 1
 const FIRST_POINT = 1
 const DURATION = 200
 
-const ThumbPosition = {left: 'left', right: 'right'}
+const THUMB_POSITION = {left: 'left', right: 'right'}
 
 export {
   DEFAULT_MINIMUM_VALUE,
@@ -20,7 +20,7 @@ export {
   INIT_POINT,
   FIRST_POINT,
   MINIMUM_TRACK_WIDTH,
-  ThumbPosition,
+  THUMB_POSITION,
   INIT_VALUE,
   VISIBLE,
   INVISIBLE,

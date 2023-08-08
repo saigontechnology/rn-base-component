@@ -23,7 +23,7 @@ import {
   INIT_VALUE,
   INVISIBLE,
   MINIMUM_TRACK_WIDTH,
-  ThumbPosition,
+  THUMB_POSITION,
   VISIBLE,
 } from './constants'
 import {useTheme} from '../../hooks'
@@ -144,22 +144,22 @@ const SliderRange: React.FC<SliderRangeProps> = ({
 
       // When sliding the thumb across a distance shorter than the track's width
       if (leftProgressing < MINIMUM_TRACK_WIDTH) {
-        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, minimumValue, ThumbPosition.left)
+        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, minimumValue, THUMB_POSITION.left)
       }
       // When sliding the thumb over the track's width
       else if (leftProgressing > rightProgress.value) {
-        runOnJS(updateSlider)(rightProgress.value, right, ThumbPosition.left)
+        runOnJS(updateSlider)(rightProgress.value, right, THUMB_POSITION.left)
       }
       // When sliding steadily increases
       else if (leftProgressing >= rightProgress.value) {
-        runOnJS(updateSlider)(rightProgress.value, right, ThumbPosition.left)
+        runOnJS(updateSlider)(rightProgress.value, right, THUMB_POSITION.left)
       }
       // When sliding steadily decreases
       else {
         const currentProgressValue = leftProgressing / (sliderWidth / (maximumValue - minimumValue))
         const value = currentProgressValue + minimumValue
         const roundedValue = roundToValue ? value.toFixed(roundToValue) : value
-        runOnJS(updateSlider)(leftProgressing, roundedValue as number, ThumbPosition.left)
+        runOnJS(updateSlider)(leftProgressing, roundedValue as number, THUMB_POSITION.left)
       }
     },
     onEnd: () => {
@@ -172,7 +172,7 @@ const SliderRange: React.FC<SliderRangeProps> = ({
         const leftProgressRatio = Math.round(leftProgress.value / range)
         value = minimumValue + leftProgressRatio * stepValue
         const roundedProgress = leftProgressRatio * range
-        runOnJS(updateSlider)(roundedProgress, value, ThumbPosition.left)
+        runOnJS(updateSlider)(roundedProgress, value, THUMB_POSITION.left)
       }
 
       runOnJS(onValueChange)({
@@ -201,22 +201,22 @@ const SliderRange: React.FC<SliderRangeProps> = ({
 
       // When sliding the thumb across a distance shorter than the track's width
       if (rightProgressing < leftProgress.value) {
-        runOnJS(updateSlider)(leftProgress.value, left, ThumbPosition.right)
+        runOnJS(updateSlider)(leftProgress.value, left, THUMB_POSITION.right)
       }
       // When sliding the thumb over the track's width
       else if (rightProgressing > sliderWidth) {
-        runOnJS(updateSlider)(sliderWidth, maximumValue, ThumbPosition.right)
+        runOnJS(updateSlider)(sliderWidth, maximumValue, THUMB_POSITION.right)
       }
       // When sliding steadily increases
       else if (rightProgressing <= leftProgress.value) {
-        runOnJS(updateSlider)(leftProgress.value, left, ThumbPosition.right)
+        runOnJS(updateSlider)(leftProgress.value, left, THUMB_POSITION.right)
       }
       // When sliding steadily decreases
       else {
         const currentProgressValue = rightProgressing / (sliderWidth / (maximumValue - minimumValue))
         const value = currentProgressValue + minimumValue
         const roundedValue = roundToValue ? value.toFixed(roundToValue) : value
-        runOnJS(updateSlider)(rightProgressing, roundedValue as number, ThumbPosition.right)
+        runOnJS(updateSlider)(rightProgressing, roundedValue as number, THUMB_POSITION.right)
       }
     },
     onEnd: () => {
@@ -229,7 +229,7 @@ const SliderRange: React.FC<SliderRangeProps> = ({
         const rightProgressRatio = Math.round(rightProgress.value / range)
         value = minimumValue + rightProgressRatio * stepValue
         const roundedProgress = rightProgressRatio * range
-        runOnJS(updateSlider)(roundedProgress, value, ThumbPosition.right)
+        runOnJS(updateSlider)(roundedProgress, value, THUMB_POSITION.right)
       }
       runOnJS(onValueChange)({
         minimum: sliderValue.value.left,
@@ -309,7 +309,7 @@ const SliderRange: React.FC<SliderRangeProps> = ({
         minimum: isPointToLeft ? pointValue : left,
         maximum: isPointToLeft ? right : pointValue,
       }
-      updateSlider(range * curPoint, pointValue, isPointToLeft ? ThumbPosition.left : ThumbPosition.right)
+      updateSlider(range * curPoint, pointValue, isPointToLeft ? THUMB_POSITION.left : THUMB_POSITION.right)
       onValueChange(value)
     },
     [sliderValue, minimumValue, onValueChange, range, stepValue, updateSlider],

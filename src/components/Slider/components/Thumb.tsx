@@ -89,14 +89,14 @@ const TriangleDown = styled(View)<ViewStyle & {background?: string; theme: IThem
 
 const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   position: 'absolute' as Position,
-  top: -responsiveHeight(props.theme?.spacing?.titanic),
+  top: -responsiveHeight(props.theme?.spacing?.titanic || 0),
   bottom: props.thumbSize.height + metrics.xxs,
   borderRadius: props.theme?.borderWidths.compact,
   backgroundColor: props.background || props.theme?.colors.primary,
   alignSelf: 'center',
   justifyContent: 'center',
   alignItems: 'center',
-  margin: !isIOS ? -(responsiveHeight(props.theme?.spacing.tiny) || 0) : 0,
+  margin: !isIOS ? -(responsiveHeight(props.theme?.spacing.tiny || 0) || 0) : 0,
 }))
 
 const Label = styled(AnimatedText)(({theme}: {theme: ITheme}) => ({

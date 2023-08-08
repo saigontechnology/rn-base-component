@@ -49,7 +49,7 @@ const SliderFixed: React.FC<SliderProps> = ({
   thumbSize = {width: metrics.medium, height: metrics.medium},
   trackPointStyle,
   onValueChange = () => null,
-}: SliderProps) => {
+}) => {
   const sliderInfo = useSharedValue<SliderInfo>({range: INIT_VALUE, trackWidth: INIT_VALUE})
   const sliderValue = useSharedValue<number>(INIT_POINT)
   const progress = useSharedValue<number>(INIT_VALUE)

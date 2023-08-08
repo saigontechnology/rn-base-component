@@ -25,7 +25,7 @@ import {
   MINIMUM_TRACK_WIDTH,
   NEXT_STEP,
   PREVIOUS_STEP,
-  ThumbPosition,
+  THUMB_POSITION,
   VISIBLE,
 } from './constants'
 import {useTheme} from '../../hooks'
@@ -111,24 +111,24 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
 
       // When sliding the thumb across a distance shorter than the track's width
       if (leftProgressing < MINIMUM_TRACK_WIDTH) {
-        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, INIT_POINT, ThumbPosition.left)
+        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, INIT_POINT, THUMB_POSITION.left)
       }
       // When sliding the thumb over the track's width
       else if (leftProgressing > rightProgress.value) {
-        runOnJS(updateSlider)(rightProgress.value, right, ThumbPosition.left)
+        runOnJS(updateSlider)(rightProgress.value, right, THUMB_POSITION.left)
       }
       // When sliding steadily increases
       else if (leftProgressing > range * (left + NEXT_STEP)) {
         const currentProgress = range * Math.floor(leftProgressRatio)
         const point = Math.floor(leftProgressRatio)
-        runOnJS(updateSlider)(currentProgress, point, ThumbPosition.left)
+        runOnJS(updateSlider)(currentProgress, point, THUMB_POSITION.left)
       }
       // When sliding steadily decreases
       else if (leftProgressing < range * (left - PREVIOUS_STEP)) {
         const currentProgress = range * Math.ceil(leftProgressRatio)
         const point = Math.ceil(leftProgressRatio)
 
-        runOnJS(updateSlider)(currentProgress, point, ThumbPosition.left)
+        runOnJS(updateSlider)(currentProgress, point, THUMB_POSITION.left)
       }
     },
     onEnd: () => {
@@ -155,23 +155,23 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
 
       // When sliding the thumb across a distance shorter than the track's width
       if (rightProgressing < leftProgress.value) {
-        runOnJS(updateSlider)(leftProgress.value, left, ThumbPosition.right)
+        runOnJS(updateSlider)(leftProgress.value, left, THUMB_POSITION.right)
       }
       // When sliding the thumb over the track's width
       else if (rightProgressing > sliderWidth) {
-        runOnJS(updateSlider)(sliderWidth, totalPoint, ThumbPosition.right)
+        runOnJS(updateSlider)(sliderWidth, totalPoint, THUMB_POSITION.right)
       }
       // When sliding steadily increases
       else if (rightProgressing > range * (right + NEXT_STEP)) {
         const currentProgress = range * Math.floor(rightProgressRatio)
         const point = Math.floor(rightProgressRatio)
-        runOnJS(updateSlider)(currentProgress, point, ThumbPosition.right)
+        runOnJS(updateSlider)(currentProgress, point, THUMB_POSITION.right)
       }
       // When sliding steadily decreases
       else if (rightProgressing < range * (right - PREVIOUS_STEP)) {
         const currentProgress = range * Math.ceil(rightProgressRatio)
         const point = Math.ceil(rightProgressRatio)
-        runOnJS(updateSlider)(currentProgress, point, ThumbPosition.right)
+        runOnJS(updateSlider)(currentProgress, point, THUMB_POSITION.right)
       }
     },
     onEnd: () => {
@@ -214,17 +214,11 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
    * Display the current slider value in real time as the user slides the thumb along the slider track
    */
   const leftAnimatedProps = useAnimatedProps(
-    () =>
-      ({
-        text: `${minimumValue + sliderValue.value.left * step}`,
-      } as AnimatedLabelProps),
+    () => ({text: `${minimumValue + sliderValue.value.left * step}`} as AnimatedLabelProps),
   )
 
   const rightAnimatedProps = useAnimatedProps(
-    () =>
-      ({
-        text: `${minimumValue + sliderValue.value.right * step}`,
-      } as AnimatedLabelProps),
+    () => ({text: `${minimumValue + sliderValue.value.right * step}`} as AnimatedLabelProps),
   )
 
   /**
@@ -253,7 +247,7 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
         maximum: isPointToLeft ? getSliderValue(right) : getSliderValue(curPoint),
       }
 
-      updateSlider(range * curPoint, curPoint, isPointToLeft ? ThumbPosition.left : ThumbPosition.right)
+      updateSlider(range * curPoint, curPoint, isPointToLeft ? THUMB_POSITION.left : THUMB_POSITION.right)
       onValueChange(value)
     },
     [sliderValue, minimumValue, step, updateSlider, range, onValueChange],
