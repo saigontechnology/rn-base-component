@@ -1,4 +1,4 @@
-import React, {useEffect, forwardRef, useImperativeHandle, useState, useCallback} from 'react'
+import React, {useEffect, forwardRef, useImperativeHandle, useState, useCallback, memo} from 'react'
 import {
   Text,
   View,
@@ -203,7 +203,7 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
 
 Checkbox.displayName = 'Checkbox'
 
-export default Checkbox
+export default memo(Checkbox)
 
 const Container = styled(Pressable)({
   alignItems: 'center',
