@@ -9,7 +9,7 @@ import type {
   TextInputRef,
   Theme,
 } from './TextInput'
-import {isIOS} from '../../helpers/metrics'
+import {isIOS, metrics, responsiveHeight} from '../../helpers/metrics'
 import Animated, {interpolate, useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated'
 import {useTheme} from '../../hooks'
 import {
@@ -206,9 +206,9 @@ const Content = styled(Animated.View)((props: InputContainerProps) => ({
 const Label = styled(Animated.Text)(({theme}: Theme) => ({
   position: 'absolute' as Position,
   width: '100%',
-  left: isIOS ? -(theme?.spacing?.puny || 0) : 0,
-  paddingHorizontal: theme?.spacing?.micro,
-  paddingTop: theme?.spacing?.mini,
+  left: isIOS ? -responsiveHeight(theme?.spacing?.tiny ?? 0) : 0,
+  paddingHorizontal: responsiveHeight(theme?.spacing?.small ?? metrics.paddingHorizontal),
+  paddingTop: responsiveHeight(theme?.spacing?.tiny ?? metrics.tiny),
   paddingBottom: theme?.spacing?.tiny,
   zIndex: 1,
   backgroundColor: theme?.colors?.lightBackground,
