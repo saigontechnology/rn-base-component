@@ -18,12 +18,12 @@ describe('Progress', () => {
     const progressWrapper = getByTestId('progress-wrapper')
     const filledTrack = getByTestId('filled-track')
 
-    expect(progressWrapper.props.backgroundColor).toBe('#454545')
+    expect(progressWrapper.props.backgroundColor).toBe('#3f3f46')
     expect(progressWrapper.props.borderRadius).toBe(0)
     expect(progressWrapper.props.width).toBeUndefined()
     expect(progressWrapper.props.size).toBe(responsiveHeight(16))
 
-    expect(filledTrack.props.style.backgroundColor).toBe('#7239E5')
+    expect(filledTrack.props.style.backgroundColor).toBe('#0e7490')
     expect(filledTrack.props.style.borderRadius).toBe(0)
     expect(filledTrack.props.style.width).toBe(0)
     expect(filledTrack.props.style.height).toBe(responsiveHeight(16))
