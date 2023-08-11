@@ -10,9 +10,9 @@ export default {
   component: RadioButton,
 } as ComponentMeta<typeof RadioButton>
 
-export const Basic: ComponentStory<typeof RadioButton> = args => (
+export const Basic: ComponentStory<typeof RadioButton> = rest => (
   <View style={styles.container}>
-    <RadioButton {...args} />
+    <RadioButton {...rest} />
   </View>
 )
 

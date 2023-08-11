@@ -101,7 +101,7 @@ const RadioButton = forwardRef<View, IRadioButtonProps>(
       textStyle,
       text,
       wrapperStyle,
-      ...props
+      ...rest
     },
     ref,
   ) => {
@@ -167,7 +167,7 @@ const RadioButton = forwardRef<View, IRadioButtonProps>(
           onLayout={handleLayout}
           style={style}
           onPress={handlePress}
-          {...props}>
+          {...rest}>
           <RadioButtonInnerContainer
             maxWidth={widthBounceableRef.value}
             maxHeight={heightBounceableRef.value}
