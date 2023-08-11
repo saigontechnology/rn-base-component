@@ -49,11 +49,12 @@ try {
 
 const getStories = () => {
   return {
-    './src/stories/Button.stories.tsx': require('../src/stories/Button.stories.tsx'),
-    './src/stories/CodeInput.stories.tsx': require('../src/stories/CodeInput.stories.tsx'),
-    './src/stories/Text.stories.tsx': require('../src/stories/Text.stories.tsx'),
-    './src/stories/Checkbox.stories.tsx': require('../src/stories/Checkbox.stories.tsx'),
-  }
-}
+    "./src/stories/Button.stories.tsx": require("../src/stories/Button.stories.tsx"),
+    "./src/stories/Progress.stories.tsx": require("../src/stories/Progress.stories.tsx"),
+    "./src/stories/CodeInput.stories.tsx": require("../src/stories/CodeInput.stories.tsx"),
+    "./src/stories/Text.stories.tsx": require("../src/stories/Text.stories.tsx"),
+    "./src/stories/Checkbox.stories.tsx": require("../src/stories/Checkbox.stories.tsx"),
+  };
+};
 
 configure(getStories, module, false)
