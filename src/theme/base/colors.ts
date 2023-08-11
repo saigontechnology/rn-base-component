@@ -37,6 +37,7 @@ const colors = {
   coolGray: '#374151',
   blueGray: '#334155',
   dark: '#18181b',
+  transparent: '#00000000',
 }
 
 export type IColors = keyof typeof colors
