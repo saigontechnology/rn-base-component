@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {theme as defaultTheme, Theme} from './../theme'
 import _ from 'lodash'
 
