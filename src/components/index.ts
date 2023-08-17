@@ -1,9 +1,10 @@
-import RadioButton from './RadioButton/RadioButton'
+import Accordion from './Accordion/Accordion'
 import Button from './Button'
+import RadioButton from './RadioButton/RadioButton'
 
-import Progress from './Progress/Progress'
 import Checkbox from './Checkbox/Checkbox'
 import CodeInput from './CodeInput/CodeInput'
+import Progress from './Progress/Progress'
 
-export {Button, CodeInput, Checkbox, Progress, RadioButton}
 export * from './Text/Text'
+export {Accordion, Button, Checkbox, CodeInput, Progress, RadioButton}
