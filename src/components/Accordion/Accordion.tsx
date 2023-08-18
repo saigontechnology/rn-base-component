@@ -112,22 +112,22 @@ const Accordion = React.forwardRef<FlatList, AccordionProps>(
 
     const onPress = useCallback(
       (key: string) => {
-        const index = array.findIndex(e => e === key)
-        let newArray = [...array]
-
-        if (expandMultiple) {
-          if (index >= 0) {
-            newArray.splice(index, 1)
+        setArray(previousArray => {
+          const index = previousArray.indexOf(key)
+          let newArray = [...previousArray]
+          if (expandMultiple) {
+            if (index >= 0) {
+              newArray.splice(index, 1)
+            } else {
+              newArray.push(key)
+            }
           } else {
-            newArray.push(key)
+            newArray = index >= 0 ? [] : [key]
           }
-        } else {
-          newArray = index >= 0 ? [] : [key]
-        }
-
-        setArray(newArray)
+          return newArray
+        })
       },
-      [array, expandMultiple],
+      [expandMultiple],
     )
 
     const renderItem = useCallback(
@@ -154,6 +154,7 @@ const Accordion = React.forwardRef<FlatList, AccordionProps>(
         ref={ref}
         keyExtractor={keyExtractor}
         renderItem={renderItem}
+        extraData={array}
         {...props}
       />
     )

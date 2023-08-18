@@ -29,7 +29,13 @@ const data = [
 ]
 
 export const Basic: ComponentStory<typeof Accordion> = args => <Accordion {...args} />
+export const ExpandMultiple: ComponentStory<typeof Accordion> = args => <Accordion {...args} />
 
 Basic.args = {
   sections: data,
+}
+
+ExpandMultiple.args = {
+  sections: data,
+  expandMultiple: true,
 }

@@ -1,19 +1,15 @@
-import React, {useCallback} from 'react'
-import {LayoutAnimation, View, TouchableOpacity, Text} from 'react-native'
-import {toggleAnimation} from './ToggleAnimation'
+import React, {PropsWithChildren, useCallback, useMemo} from 'react'
+import {LayoutAnimation, Text, TouchableOpacity, View} from 'react-native'
 import styled from 'styled-components/native'
 import type {ITheme} from '../../theme'
-import type {Section, CommonAccordionProps} from './Accordion'
+import type {CommonAccordionProps, Section} from './Accordion'
+import {toggleAnimation} from './ToggleAnimation'
 
 export type Theme = {
   theme?: ITheme
 }
 
-export interface AccordionItemProps extends CommonAccordionProps {
-  /**
-   * content of accordion
-   */
-  children?: React.ReactElement
+export interface AccordionItemProps extends PropsWithChildren<CommonAccordionProps> {
   /**
    * onPress item event
    */
@@ -28,7 +24,6 @@ export interface AccordionItemProps extends CommonAccordionProps {
 }
 
 const AccordionItem: React.FC<AccordionItemProps> = ({
-  children,
   title = '',
   onPress,
   keyExtractorItem,
@@ -46,23 +41,41 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   renderHeader = () => null,
   renderSectionTitle,
   renderContent,
+  children,
 }) => {
-  const content = expanded ? (
-    renderContent ? (
-      renderContent(item, index, expanded, keyExtractorItem)
-    ) : (
-      <AccordionBody style={contentContainerStyle}>{children}</AccordionBody>
-    )
-  ) : null
-
-  const header = renderHeader(item, index, expanded, keyExtractorItem) || (
-    <AccordionHeader style={headerContainerStyle}>
-      {renderSectionTitle ? (
-        renderSectionTitle(item, index, expanded)
+  const content = useMemo(() => {
+    if (expanded) {
+      return renderContent ? (
+        renderContent(item, index, expanded, keyExtractorItem)
       ) : (
-        <Title style={titleStyle}>{title}</Title>
-      )}
-    </AccordionHeader>
+        <AccordionBody style={contentContainerStyle}>{children}</AccordionBody>
+      )
+    }
+    return null
+  }, [renderContent, expanded, keyExtractorItem, index, item, children, contentContainerStyle])
+
+  const header = useMemo(
+    () =>
+      renderHeader(item, index, expanded, keyExtractorItem) || (
+        <AccordionHeader style={headerContainerStyle}>
+          {renderSectionTitle ? (
+            renderSectionTitle(item, index, expanded)
+          ) : (
+            <Title style={titleStyle}>{title}</Title>
+          )}
+        </AccordionHeader>
+      ),
+    [
+      renderHeader,
+      item,
+      index,
+      expanded,
+      keyExtractorItem,
+      renderSectionTitle,
+      headerContainerStyle,
+      title,
+      titleStyle,
+    ],
   )
 
   const onPressItem = useCallback(() => {
