@@ -5,6 +5,7 @@ import StorybookUIRoot from '../.ondevice/Storybook'
 const theme = extendTheme({
   colors: {
     cardPrimaryBackground: 'green',
+    primary: 'grey',
   },
   darkColors: {
     cardPrimaryBackground: 'gray',
