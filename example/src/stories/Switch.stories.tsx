@@ -10,7 +10,7 @@ export default {
   component: Switch,
 } as ComponentMeta<typeof Switch>
 
-export const Basic: ComponentStory<typeof Switch> = args => {
+export const Basic: ComponentStory<typeof Switch> = rest => {
   const [isActive, setIsActive] = useState(false)
 
   const onValueChange = () => {
@@ -20,7 +20,7 @@ export const Basic: ComponentStory<typeof Switch> = args => {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Switch
-        {...args}
+        {...rest}
         variant="outside"
         value={isActive}
         onValueChange={onValueChange}
@@ -31,7 +31,7 @@ export const Basic: ComponentStory<typeof Switch> = args => {
   )
 }
 
-export const Inside: ComponentStory<typeof Switch> = args => {
+export const Inside: ComponentStory<typeof Switch> = rest => {
   const [isActive, setIsActive] = useState(false)
 
   const onValueChange = () => {
@@ -41,7 +41,7 @@ export const Inside: ComponentStory<typeof Switch> = args => {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Switch
-        {...args}
+        {...rest}
         variant="inside"
         value={isActive}
         onValueChange={onValueChange}
