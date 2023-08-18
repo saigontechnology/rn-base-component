@@ -3,7 +3,7 @@ import type {ComponentMeta, ComponentStory} from '@storybook/react'
 import React, {useState} from 'react'
 
 import {View} from 'react-native'
-import {Switch} from 'rn-base-component'
+import {Switch, useTheme} from 'rn-base-component'
 
 export default {
   title: 'components/Switch',
@@ -12,6 +12,7 @@ export default {
 
 export const Basic: ComponentStory<typeof Switch> = rest => {
   const [isActive, setIsActive] = useState(false)
+  const theme = useTheme()
 
   const onValueChange = () => {
     setIsActive(prev => !prev)
@@ -25,7 +26,7 @@ export const Basic: ComponentStory<typeof Switch> = rest => {
         value={isActive}
         onValueChange={onValueChange}
         thumbColor="green"
-        trackColor={{active: 'blue', inActive: 'gray'}}
+        trackColor={{active: theme.colors.blue, inActive: theme.colors.red}}
       />
     </View>
   )
@@ -33,6 +34,7 @@ export const Basic: ComponentStory<typeof Switch> = rest => {
 
 export const Inside: ComponentStory<typeof Switch> = rest => {
   const [isActive, setIsActive] = useState(false)
+  const theme = useTheme()
 
   const onValueChange = () => {
     setIsActive(prev => !prev)
@@ -45,7 +47,7 @@ export const Inside: ComponentStory<typeof Switch> = rest => {
         variant="inside"
         value={isActive}
         onValueChange={onValueChange}
-        trackColor={{active: 'green', inActive: 'gray'}}
+        trackColor={{active: theme.colors.gray, inActive: theme.colors.red}}
       />
     </View>
   )
