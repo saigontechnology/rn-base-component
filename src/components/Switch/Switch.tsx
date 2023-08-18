@@ -25,15 +25,68 @@ export interface SwitchTheme {
 }
 
 export interface SwitchProps {
+  /**
+   * current value of switch
+   * default: false
+   */
   value: boolean
+
+  /**
+   * function call when value changes
+   */
   onValueChange: () => void
+
+  /**
+   * track color for switch
+   * default: defaultTheme.colors.darkText: #27272a
+   */
   trackColor?: string | SwitchTheme
+
+  /**
+   * thumb size of switch
+   * default: 30
+   */
   thumbSize?: number
+
+  /**
+   * thumb color of switch
+   * default: white
+   */
   thumbColor?: string | SwitchTheme
+
+  /**
+   * variant to render if thumb outside or inside switch
+   * default: outside
+   */
   variant?: 'inside' | 'outside'
+
+  /**
+   * disabled to change switch
+   * default: false
+   */
   disabled?: boolean
+
+  /**
+   * props to show text in switch
+   * default: {
+   *  active: 'On',
+      inActive: 'Off'
+   * }
+   */
   textInside?: SwitchTheme
+  /**
+   * props to show text with color in switch
+   * default: {
+   *  active: 'white',
+      inActive: 'black',
+   * }
+   */
   textInsideColor?: SwitchTheme
+
+  /**
+   * number for padding inside trach
+   * default: 3
+   */
   trackPaddingInside?: number
 }
 
