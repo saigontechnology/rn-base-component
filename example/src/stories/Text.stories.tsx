@@ -1,12 +1,12 @@
-import React from 'react'
 import type {ComponentMeta, ComponentStory} from '@storybook/react'
+import React from 'react'
 
-import {Text, TextBold, TextItalic} from 'rn-base-component'
 import {StyleSheet, View} from 'react-native'
+import {Text, TextBold, TextItalic} from 'rn-base-component'
 import {metrics} from '../../../src/helpers'
 
 export default {
-  title: 'Text',
+  title: 'components/Text',
   component: Text,
 } as ComponentMeta<typeof Text>
 
