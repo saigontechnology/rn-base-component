@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native'
 import styled from 'styled-components/native'
 import {Thumb, Track, TrackPoint} from './components'
 import {GestureHandlerRootView, PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
-import type {AnimatedGHContext, AnimatedLabelProps, SliderCommonProps} from './Slider'
+import type {AnimatedGHContext, AnimatedLabelProps, ISliderCommonProps} from './Slider'
 import type {ITheme} from '../../theme'
 import {
   useAnimatedStyle,
@@ -32,7 +32,7 @@ import {useTheme} from '../../hooks'
 import {hitSlop} from '../../helpers/metrics'
 import type {Value, SliderAnimated, ContainerProps, NumberRange} from './SliderRange'
 
-export interface SliderFixedRangeProps extends SliderCommonProps {
+export interface SliderFixedRangeProps extends ISliderCommonProps {
   /** The width of the slider */
   sliderWidth: number
 

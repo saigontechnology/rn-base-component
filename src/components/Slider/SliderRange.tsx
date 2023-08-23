@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native'
 import styled from 'styled-components/native'
 import {Thumb, Track, TrackPoint} from './components'
 import {GestureHandlerRootView, PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
-import type {AnimatedGHContext, AnimatedLabelProps, SliderCommonProps} from './Slider'
+import type {AnimatedGHContext, AnimatedLabelProps, ISliderCommonProps} from './Slider'
 import type {ITheme} from '../../theme'
 import {
   useAnimatedStyle,
@@ -48,7 +48,7 @@ export type NumberRange = {
   minimum: number
 }
 
-export interface SliderRangeProps extends SliderCommonProps {
+export interface SliderRangeProps extends ISliderCommonProps {
   roundToValue?: number
 
   sliderWidth: number
