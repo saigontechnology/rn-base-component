@@ -73,7 +73,7 @@ interface AnimatedLabelProps extends TextInputProps {
   text: string
 }
 
-type ISlider = {
+type InnerSliderProps = {
   /** The value to which the slider thumb should be rounded */
   roundToValue?: number
 
@@ -84,7 +84,7 @@ type ISlider = {
   onValueChange?: (value: number) => void
 }
 
-export interface SliderCommonProps {
+export interface ISliderCommonProps {
   /** The maximum value of the slider */
   maximumValue?: number
 
@@ -136,7 +136,7 @@ type SliderPropsWithOptionalWidth = {sliderWidth?: number} & (
   | {showTrackPoint?: false; sliderWidth?: number}
 )
 
-type SliderProps = SliderCommonProps & ISlider & SliderPropsWithOptionalWidth
+type SliderProps = ISliderCommonProps & InnerSliderProps & SliderPropsWithOptionalWidth
 
 type SliderComponentProps = React.FC<SliderProps> & {
   Range: React.FC<SliderRangeProps>
