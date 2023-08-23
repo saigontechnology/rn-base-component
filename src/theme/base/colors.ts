@@ -38,6 +38,10 @@ const colors = {
   blueGray: '#334155',
   dark: '#18181b',
   transparent: '#00000000',
+  mainBackground: '#F0F2F3',
+  cardPrimaryBackground: '#0A906E',
+  textColor: '#0B0B0B',
+  cardBackground: '#ffffff',
 }
 
 export type IColors = keyof typeof colors

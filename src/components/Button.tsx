@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/native'
 import {metrics} from '../helpers/metrics'
+import {Text, TouchableOpacity} from 'react-native'
 
 export type ButtonProps = {
   onPress: () => void
@@ -15,10 +16,7 @@ const Button: React.FC<ButtonProps> = ({text, onPress, color, textColor}) => (
   </ButtonWrapper>
 )
 
-interface IButtonWrapper {
-  color?: string
-}
-const ButtonWrapper = styled.TouchableOpacity<IButtonWrapper>(({theme, color}) => ({
+const ButtonWrapper = styled(TouchableOpacity)<{color?: string}>(({theme, color}) => ({
   paddingVertical: metrics.xxs,
   paddingHorizontal: metrics.small,
   borderRadius: metrics.borderRadius,
@@ -26,10 +24,7 @@ const ButtonWrapper = styled.TouchableOpacity<IButtonWrapper>(({theme, color}) =
   alignSelf: 'flex-start',
 }))
 
-interface ILabel {
-  color?: string
-}
-const Label = styled.Text<ILabel>(({theme, color}) => ({
+const Label = styled(Text)<{color?: string}>(({theme, color}) => ({
   color: color || 'white',
   fontWeight: theme?.fontWeights?.bold,
 }))
