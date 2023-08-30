@@ -1,10 +1,7 @@
 import React from 'react'
 import {act, fireEvent, render} from '@testing-library/react-native'
 import TextInput, {TextInputRef} from '../components/TextInput/TextInput'
-import '@testing-library/jest-native/extend-expect'
-import 'jest-styled-components'
 import {Text, View} from 'react-native'
-import '@testing-library/jest-dom/extend-expect'
 import {BaseProvider} from '../core'
 
 describe('TextInput component', () => {
@@ -37,10 +34,9 @@ describe('TextInput component', () => {
     const textInput = getByTestId('test-TextInputOutlined')
 
     expect(textInput).toBeDefined()
-    expect(textInput).toHaveProp('testID', 'test-TextInputOutlined')
-    expect(textInput).toHaveProp('value', '')
-    // expect(textInput).toHaveProp('onChangeText', onChangeText)
-    expect(textInput).toHaveProp('onSubmitEditing', onSubmitEditing)
+    expect(textInput.props.testID).toEqual('test-TextInputOutlined')
+    expect(textInput.props.value).toEqual('')
+    expect(textInput.props.onSubmitEditing).toEqual(onSubmitEditing)
   })
 
   it('renders correctly TextInput Flat', () => {

@@ -89,9 +89,9 @@ const TriangleDown = styled(View)<ViewStyle & {background?: string; theme: IThem
 
 const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   position: 'absolute' as Position,
-  top: -responsiveHeight(props.theme?.spacing?.titanic || 0),
+  top: -responsiveHeight(props.theme?.spacing?.xxxl || 0),
   bottom: props.thumbSize.height + metrics.xxs,
-  borderRadius: props.theme?.borderWidths.compact,
+  borderRadius: props.theme?.borderWidths.medium,
   backgroundColor: props.background || props.theme?.colors.primary,
   alignSelf: 'center',
   justifyContent: 'center',
@@ -101,7 +101,7 @@ const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
 
 const Label = styled(AnimatedText)(({theme}: {theme: ITheme}) => ({
   color: theme.colors.white,
-  padding: responsiveHeight(isIOS ? theme.spacing.petite : theme.spacing.miniature),
+  padding: responsiveHeight(isIOS ? theme.borderWidths.small : theme.spacing.tiny),
   textAlign: 'center' as TextAlign,
   fontWeight: theme.fontWeights.bold,
   fontSize: theme.fontSizes.sm,

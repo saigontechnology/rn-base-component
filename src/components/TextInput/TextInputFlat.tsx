@@ -196,7 +196,7 @@ const TextInputContent = styled.View(() => ({
 const Content = styled(Animated.View)((props: InputContainerProps) => ({
   flexDirection: 'row' as FlexDirection,
   height: props.theme?.sizes?.extensive,
-  borderWidth: props.theme?.borderWidths?.smallest,
+  borderWidth: props.theme?.borderWidths?.tiny,
   borderRadius: props.theme?.borderWidths?.small,
   paddingHorizontal: props.theme?.spacing?.micro,
   backgroundColor: props.theme?.colors?.lightBackground,
