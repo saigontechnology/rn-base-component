@@ -1,25 +1,22 @@
-const spacing = {
-  tiny: 2,
-  miniature: 4,
-  petite: 6,
-  small: 8,
-  little: 10,
-  compact: 12,
-  narrow: 14,
-  slim: 16,
-  moderate: 18,
-  average: 20,
-  substantial: 22,
-  large: 24,
-  big: 26,
-  grand: 28,
-  huge: 30,
-  giant: 32,
-  colossal: 34,
-  enormous: 36,
-  mammoth: 38,
-  titanic: 40,
-}
+import {responsiveHeight} from '../../helpers/metrics'
 
+const spacing = {
+  mini: responsiveHeight(2),
+  tiny: responsiveHeight(4),
+  puny: responsiveHeight(5),
+  micro: responsiveHeight(6),
+  xxs: responsiveHeight(8),
+  xs: responsiveHeight(12),
+  small: responsiveHeight(16),
+  sMedium: responsiveHeight(18),
+  medium: responsiveHeight(20),
+  large: responsiveHeight(24),
+  xl: responsiveHeight(28),
+  xxl: responsiveHeight(32),
+  xxxl: responsiveHeight(40),
+  huge: responsiveHeight(48),
+  massive: responsiveHeight(64),
+  giant: responsiveHeight(80),
+}
 export type ISpacing = keyof typeof spacing
 export default spacing
