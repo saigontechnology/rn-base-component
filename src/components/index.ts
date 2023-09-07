@@ -6,6 +6,7 @@ import Checkbox from './Checkbox/Checkbox'
 import CodeInput from './CodeInput/CodeInput'
 import Slider from './Slider/Slider'
 import Card from './Card/Card'
+import TextInput from './TextInput/TextInput'
 
-export {Button, CodeInput, Checkbox, Progress,Slider, RadioButton, Card}
+export {Button, CodeInput, Checkbox, Progress, Slider, RadioButton, Card, TextInput}
 export * from './Text/Text'
