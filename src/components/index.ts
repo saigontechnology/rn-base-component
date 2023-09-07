@@ -7,4 +7,5 @@ import HighlightText from './HighlightText/HighlightText'
 import Progress from './Progress/Progress'
 
 export * from './Text/Text'
-export {Button, Checkbox, CodeInput, HighlightText, Progress, RadioButton}
+export {Button, Checkbox, CodeInput, HighlightText, Progress, RadioButton, HighlightText}
+
