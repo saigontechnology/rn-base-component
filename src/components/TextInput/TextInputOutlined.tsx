@@ -202,17 +202,17 @@ const TextInputContent = styled.View(() => ({
 
 const Content = styled(Animated.View)((props: InputContainerProps) => ({
   flexDirection: 'row' as FlexDirection,
-  height: props.theme?.sizes?.massive,
-  borderWidth: props.theme?.borderWidths?.smallest,
+  height: props.theme?.sizes?.substantial,
+  borderWidth: props.theme?.borderWidths?.tiny,
   borderRadius: props.theme?.borderWidths?.small,
-  paddingHorizontal: props.theme?.spacing?.micro,
+  paddingHorizontal: props.theme?.spacing?.petite,
   backgroundColor: props.theme?.colors?.lightBackground,
   alignItems: 'center',
 }))
 
 const Label = styled(Animated.Text)(({theme}: Theme) => ({
   position: 'absolute' as Position,
-  paddingHorizontal: theme?.spacing?.micro,
+  paddingHorizontal: theme?.spacing?.petite,
   zIndex: 1,
   backgroundColor: theme?.colors?.lightBackground,
 }))
