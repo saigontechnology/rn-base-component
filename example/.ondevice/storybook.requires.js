@@ -53,6 +53,7 @@ const getStories = () => {
     "./src/stories/Card.stories.tsx": require("../src/stories/Card.stories.tsx"),
     "./src/stories/Checkbox.stories.tsx": require("../src/stories/Checkbox.stories.tsx"),
     "./src/stories/CodeInput.stories.tsx": require("../src/stories/CodeInput.stories.tsx"),
+    "./src/stories/HighlightText.stories.tsx": require("../src/stories/HighlightText.stories.tsx"),
     "./src/stories/Progress.stories.tsx": require("../src/stories/Progress.stories.tsx"),
     "./src/stories/RadioButton.stories.tsx": require("../src/stories/RadioButton.stories.tsx"),
     "./src/stories/Slider.stories.tsx": require("../src/stories/Slider.stories.tsx"),
