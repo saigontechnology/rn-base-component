@@ -184,7 +184,7 @@ const Container = styled.View({})
 const Wrapper = styled.TouchableWithoutFeedback({})
 
 const LeftContainer = styled.View(({theme}: Theme) => ({
-  marginBottom: isIOS ? 0 : -(theme?.spacing?.micro || 0),
+  marginBottom: isIOS ? 0 : -(theme?.spacing?.petite || 0),
 }))
 
 const TextInputContent = styled.View(() => ({
@@ -195,10 +195,10 @@ const TextInputContent = styled.View(() => ({
 
 const Content = styled(Animated.View)((props: InputContainerProps) => ({
   flexDirection: 'row' as FlexDirection,
-  height: props.theme?.sizes?.extensive,
+  height: props.theme?.sizes?.substantial,
   borderWidth: props.theme?.borderWidths?.tiny,
   borderRadius: props.theme?.borderWidths?.small,
-  paddingHorizontal: props.theme?.spacing?.micro,
+  paddingHorizontal: props.theme?.spacing?.petite,
   backgroundColor: props.theme?.colors?.lightBackground,
   alignItems: 'center',
 }))
@@ -223,7 +223,7 @@ const TextInput = styled.TextInput(({theme}: Theme) => ({
   paddingVertical: 0,
   fontSize: theme?.fontSizes?.xs,
   textAlignVertical: 'bottom',
-  marginRight: theme?.spacing?.puny,
+  marginRight: theme?.spacing?.miniature,
   color: theme?.colors?.darkTextColor,
 }))
 

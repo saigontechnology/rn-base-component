@@ -157,8 +157,8 @@ const Container = styled.View({})
 const TouchableContainer = styled.TouchableOpacity(({theme}: Theme) => ({
   flexDirection: 'row' as FlexDirection,
   borderColor: theme?.colors?.primaryBorder,
-  height: theme?.sizes?.norm,
-  borderBottomWidth: theme?.borderWidths?.smallest,
+  height: theme?.sizes?.narrow,
+  borderBottomWidth: theme?.borderWidths?.tiny,
   alignItems: 'center',
 }))
 
@@ -166,7 +166,7 @@ const Title = styled.Text(({theme}: Theme) => ({
   fontSize: theme?.fontSizes?.xs,
   color: theme?.colors?.textColor,
   paddingLeft: isIOS ? 0 : theme?.spacing?.tiny,
-  paddingBottom: theme?.spacing?.mini,
+  paddingBottom: theme?.spacing?.tiny,
 }))
 
 const StarText = styled.Text(({theme}: Theme) => ({

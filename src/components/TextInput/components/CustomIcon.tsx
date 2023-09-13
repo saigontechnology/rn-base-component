@@ -38,5 +38,5 @@ export const CustomIcon: React.FC<CustomIconProps> = ({
 )
 
 const IconWrapper = styled.View(({theme}: Theme) => ({
-  marginHorizontal: theme?.spacing?.xxs,
+  marginHorizontal: theme?.spacing?.small,
 }))
