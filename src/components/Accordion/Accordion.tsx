@@ -102,7 +102,7 @@ export interface AccordionProps extends CommonAccordionProps {
 }
 
 const Accordion = React.forwardRef<FlatList, AccordionProps>(
-  ({sections, expandMultiple = false, keyExtractor, wrapperStyle, ...props}, ref) => {
+  ({sections, expandMultiple = false, keyExtractor, wrapperStyle, ...rest}, ref) => {
     const [array, setArray] = useState<string[]>([])
 
     const _keyExtractor = useMemo(
@@ -136,7 +136,7 @@ const Accordion = React.forwardRef<FlatList, AccordionProps>(
           key={_keyExtractor(item, index)}
           title={item?.title}
           expanded={array.includes(_keyExtractor(item, index))}
-          {...props}
+          {...rest}
           item={item}
           keyExtractorItem={_keyExtractor(item, index)}
           onPress={onPress}
@@ -144,7 +144,7 @@ const Accordion = React.forwardRef<FlatList, AccordionProps>(
           <Text>{item?.content ?? ''}</Text>
         </AccordionItem>
       ),
-      [_keyExtractor, onPress, array, props],
+      [_keyExtractor, onPress, array, rest],
     )
 
     return (
@@ -155,7 +155,7 @@ const Accordion = React.forwardRef<FlatList, AccordionProps>(
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         extraData={array}
-        {...props}
+        {...rest}
       />
     )
   },
