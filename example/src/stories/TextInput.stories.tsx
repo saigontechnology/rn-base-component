@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     marginHorizontal: metrics.medium,
   },
   inputContainer: {
-    borderWidth: theme?.borderWidths.smallest,
+    borderWidth: theme?.borderWidths.tiny,
     borderRadius: metrics.borderRadius,
     paddingHorizontal: metrics.xs,
     height: metrics.xxxl,
