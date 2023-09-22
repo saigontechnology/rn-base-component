@@ -16,7 +16,7 @@ export const Basic: ComponentStory<typeof BottomSheet> = args => {
 
   return (
     <>
-      <Button text="wefiowejfi" onPress={() => ref?.current?.open?.()} />
+      <Button text="Open Bottom Sheet" onPress={() => ref?.current?.open?.()} />
 
       <BottomSheet
         {...args}
@@ -30,15 +30,9 @@ export const Basic: ComponentStory<typeof BottomSheet> = args => {
           backgroundColor: 'white',
           justifyContent: 'space-between',
         }}>
-        <TextInput placeholder="weoifjewoi" />
-        <Text>ewoifjweoij</Text>
-        <Text>footer</Text>
-        <Text>footer</Text>
-        <Text>footer</Text>
-        <Text>footer</Text>
-        <Text>footer</Text>
-        <Text>footer</Text>
-        <Text>footer</Text>
+        <Text>Header</Text>
+        <TextInput placeholder="Search" />
+        <Text>Content</Text>
         <Text>footer</Text>
       </BottomSheet>
     </>
