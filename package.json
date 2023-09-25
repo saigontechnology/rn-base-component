@@ -82,6 +82,8 @@
     "react-addons-test-utils": "^15.6.2",
     "react-native": "0.71.4",
     "react-native-builder-bob": "^0.20.4",
+    "react-native-gesture-handler": "^2.13.1",
+    "react-native-reanimated": "^3.5.4",
     "react-test-renderer": "^18.2.0",
     "release-it": "^15.0.0",
     "styled-components": "^5.3.6",
@@ -95,6 +97,8 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
+    "react-native-gesture-handler": "*",
+    "react-native-reanimated": "*",
     "styled-components": "*"
   },
   "engines": {
@@ -136,10 +140,5 @@
         }
       ]
     ]
-  },
-  "dependencies": {
-    "eslint-plugin-ft-flow": "^2.0.3",
-    "react-native-gesture-handler": "^2.9.0",
-    "react-native-reanimated": "3.0.2"
   }
 }

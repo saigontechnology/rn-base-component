@@ -1,5 +1,5 @@
 import type {ComponentMeta, ComponentStory} from '@storybook/react'
-import React, {useRef} from 'react'
+import React, {useRef, useState} from 'react'
 import {Text, TextInput} from 'react-native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import {BottomSheet, Button} from 'rn-base-component'
@@ -14,6 +14,8 @@ export const Basic: ComponentStory<typeof BottomSheet> = args => {
   const ref = useRef<BottomSheetMethods>(null)
   const insets = useSafeAreaInsets()
 
+  const [isVisible, setIsVisible] = useState(false)
+
   return (
     <>
       <Button text="Open Bottom Sheet" onPress={() => ref?.current?.open?.()} />
@@ -21,17 +23,48 @@ export const Basic: ComponentStory<typeof BottomSheet> = args => {
       <BottomSheet
         {...args}
         ref={ref}
-        topInset={insets.top}
+        isVisible={isVisible}
+        onChangeValue={setIsVisible}
         bottomInset={insets.bottom}
-        snapPoints={[200, 500]}
-        index={0}
-        style={{
-          width: '100%',
-          backgroundColor: 'white',
-          justifyContent: 'space-between',
-        }}>
+        title="Header">
         <Text>Header</Text>
         <TextInput placeholder="Search" />
+        <Text>Content</Text>
+        <Text>Content</Text>
+        <Text>Content</Text>
+        <Text>Content</Text>
+        <Text>Content</Text>
+        <Text>Content</Text>
+        <Text>footer</Text>
+      </BottomSheet>
+    </>
+  )
+}
+
+export const ContentHeight: ComponentStory<typeof BottomSheet> = args => {
+  const ref = useRef<BottomSheetMethods>(null)
+  const insets = useSafeAreaInsets()
+
+  const [isVisible, setIsVisible] = useState(false)
+
+  return (
+    <>
+      <Button text="Open Bottom Sheet" onPress={() => ref?.current?.open?.()} />
+
+      <BottomSheet
+        {...args}
+        ref={ref}
+        isVisible={isVisible}
+        onChangeValue={setIsVisible}
+        bottomInset={insets.bottom}
+        title="Header">
+        <Text>Header</Text>
+        <TextInput placeholder="Search" />
+        <Text>Content</Text>
+        <Text>Content</Text>
+        <Text>Content</Text>
+        <Text>Content</Text>
+        <Text>Content</Text>
         <Text>Content</Text>
         <Text>footer</Text>
       </BottomSheet>
@@ -40,3 +73,7 @@ export const Basic: ComponentStory<typeof BottomSheet> = args => {
 }
 
 Basic.args = {}
+
+ContentHeight.args = {
+  contentHeight: 400,
+}

@@ -2,10 +2,7 @@ import {createContext} from 'react'
 import type {SharedValue} from 'react-native-reanimated'
 
 export interface BottomSheetContextType {
-  animatedContainerTranslateY: SharedValue<number>
-  shouldHandleKeyboardEvents: SharedValue<boolean>
-  animatedPositionIndex: SharedValue<number>
-  animatedPosition: SharedValue<number>
+  animatedIsVisible: SharedValue<boolean>
 
   open: () => void
   close: () => void

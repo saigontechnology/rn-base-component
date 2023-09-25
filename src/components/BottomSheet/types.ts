@@ -1,43 +1,25 @@
 import type React from 'react'
-import type {Insets, ViewStyle} from 'react-native'
-import type Animated from 'react-native-reanimated'
-import type {AnimatedStyleProp} from 'react-native-reanimated'
-import {BottomSheetContextType} from './contexts/BottomSheetProvider'
-
-export interface BottomSheetBackgroundProps {}
-export interface BottomSheetFooterProps {}
+import type {ViewStyle} from 'react-native'
+import type {BottomSheetContextType} from './contexts/BottomSheetProvider'
 
 export interface BottomSheetProps {
   // configurations
-  index?: number
-  snapPoints?: Array<number>
-  enableDynamicSizing?: boolean
-  enablePanDownToClose?: boolean
-
-  // styles
-  style?: ViewStyle | AnimatedStyleProp<ViewStyle>
-  backgroundStyle?: ViewStyle
-  handleIndicatorStyle?: ViewStyle
-
-  // layout
-  containerHeight: number
-  contentHeight: number | Animated.SharedValue<number>
-  containerOffset: Animated.SharedValue<Insets>
-  topInset?: number
-  bottomInset?: number
-  maxDynamicContentSize?: number
-
-  // keyboard
-  keyboardBehavior?: 'extend' | 'fillParent' | 'interactive'
-
+  isVisible: boolean
+  contentHeight?: number
+  title?: string
+  bottomInset: number
+  shouldPushContentWithKeyboardSize?: boolean
   // callbacks
-  onChange?: (index: number) => void
-  onAnimate?: (fromIndex: number, toIndex: number) => void
-
+  onChangeValue: (value: boolean) => void
+  onConfirm?: () => void
+  // styles
+  style?: ViewStyle
+  backdropStyle?: ViewStyle
+  contentContainerStyle?: ViewStyle
+  contentHeaderStyle?: ViewStyle
+  contentStyle?: ViewStyle
   // components
-  backdropComponent?: React.FC<BottomSheetBackgroundProps>
-  backgroundComponent?: React.FC<BottomSheetBackgroundProps>
-  footerComponent?: React.FC<BottomSheetBackgroundProps>
+  children?: React.ReactNode
 }
 
-export interface BottomSheetMethods extends BottomSheetContextType {}
+export type BottomSheetMethods = BottomSheetContextType

@@ -1,4 +1,4 @@
-import {Text} from './Text/Text'
+import {Text, TextBold, TextItalic} from './Text/Text'
 import Accordion from './Accordion/Accordion'
 import RadioButton from './RadioButton/RadioButton'
 import Button from './Button'
@@ -21,5 +21,7 @@ export {
   TextInput,
   Accordion,
   Text,
+  TextBold,
+  TextItalic,
   BottomSheet,
 }
