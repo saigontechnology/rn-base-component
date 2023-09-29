@@ -1,18 +1,22 @@
 import React from 'react'
 import styled from 'styled-components/native'
 import {metrics} from '../helpers/metrics'
-import {Text, TouchableOpacity} from 'react-native'
+import {Text, TextStyle, TouchableOpacity, ViewStyle} from 'react-native'
 
 export type ButtonProps = {
-  onPress: () => void
+  onPress?: () => void
   text: string
   color?: string
   textColor?: string
+  style?: ViewStyle
+  textStyle?: TextStyle
 }
 
-const Button: React.FC<ButtonProps> = ({text, onPress, color, textColor}) => (
-  <ButtonWrapper onPress={onPress} activeOpacity={0.8} color={color}>
-    <Label color={textColor}>{text}</Label>
+const Button: React.FC<ButtonProps> = ({text, onPress, color, textColor, style, textStyle}) => (
+  <ButtonWrapper onPress={onPress} activeOpacity={0.8} color={color} style={style}>
+    <Label color={textColor} style={textStyle}>
+      {text}
+    </Label>
   </ButtonWrapper>
 )
 

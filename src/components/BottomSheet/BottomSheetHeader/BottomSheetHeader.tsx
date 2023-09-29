@@ -1,10 +1,13 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {memo, useCallback} from 'react'
-import {LayoutChangeEvent, Text, TouchableOpacity, View} from 'react-native'
+import {LayoutChangeEvent, View} from 'react-native'
 import Animated, {useAnimatedStyle, useSharedValue} from 'react-native-reanimated'
+import Button from '../../Button'
+import type {ITheme} from 'src/theme'
 import styled from 'styled-components/native'
 import {useBottomSheet} from '../hooks/useBottomSheet'
 import type {BottomSheetHeaderProps} from './types'
-import type {ITheme} from 'src/theme'
+import {useTheme} from '../../../hooks'
 
 const Container = styled(View)<{theme: ITheme}>(({theme}) => ({
   flexDirection: 'row',
@@ -16,10 +19,6 @@ const Title = styled(Animated.Text)<{theme: ITheme}>(() => ({
   flex: 1,
   textAlign: 'center',
 }))
-
-const Button = styled(TouchableOpacity)(() => ({}))
-
-const ButtonTxt = styled(Text)(() => ({}))
 
 const RightContainer = styled(View)<{theme: ITheme}>(({theme}) => ({
   position: 'absolute',
@@ -44,6 +43,7 @@ const BottomSheetHeaderComponent: React.FC<BottomSheetHeaderProps> = ({
   rightComponent,
   leftComponent,
 }) => {
+  const theme = useTheme()
   const {close} = useBottomSheet()
   const animatedMarginLeftTitle = useSharedValue(0)
   const animatedMarginRightTitle = useSharedValue(0)
@@ -79,9 +79,13 @@ const BottomSheetHeaderComponent: React.FC<BottomSheetHeaderProps> = ({
 
   const renderButton = useCallback(
     (text: string, onPress?: () => void) => (
-      <Button onPress={onPress}>
-        <ButtonTxt>{text}</ButtonTxt>
-      </Button>
+      <Button
+        onPress={onPress}
+        text={text}
+        textColor={theme.colors.black}
+        style={{backgroundColor: theme.colors.white, paddingHorizontal: 0, paddingVertical: 0}}
+        textStyle={{fontWeight: 'normal'}}
+      />
     ),
     [],
   )
