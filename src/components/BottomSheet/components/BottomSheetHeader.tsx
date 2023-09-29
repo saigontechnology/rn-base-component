@@ -1,13 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {memo, useCallback} from 'react'
-import {LayoutChangeEvent, View} from 'react-native'
+import {LayoutChangeEvent, View, ViewStyle} from 'react-native'
 import Animated, {useAnimatedStyle, useSharedValue} from 'react-native-reanimated'
-import Button from '../../Button'
 import type {ITheme} from 'src/theme'
 import styled from 'styled-components/native'
-import {useBottomSheet} from '../hooks/useBottomSheet'
-import type {BottomSheetHeaderProps} from './types'
 import {useTheme} from '../../../hooks'
+import Button from '../../Button'
+import {useBottomSheet} from '../hooks/useBottomSheet'
 
 const Container = styled(View)<{theme: ITheme}>(({theme}) => ({
   flexDirection: 'row',
@@ -29,6 +28,21 @@ const LeftContainer = styled(View)<{theme: ITheme}>(({theme}) => ({
   position: 'absolute',
   left: theme?.sizes?.petite,
 }))
+
+export interface BottomSheetHeaderProps {
+  // configurations
+  title?: string
+  // styles
+  style?: ViewStyle
+  rightComponentStyle?: ViewStyle
+  leftComponentStyle?: ViewStyle
+  // callbacks
+  onConfirm?: () => void
+  // components
+  children?: React.ReactNode
+  rightComponent?: React.ReactNode
+  leftComponent?: React.ReactNode
+}
 
 const BottomSheetHeaderComponent: React.FC<BottomSheetHeaderProps> = ({
   // configurations

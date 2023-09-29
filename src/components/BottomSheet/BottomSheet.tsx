@@ -1,13 +1,35 @@
 import React, {forwardRef, memo, useCallback, useImperativeHandle, useMemo} from 'react'
 import {runOnJS, useAnimatedKeyboard, useDerivedValue, useSharedValue} from 'react-native-reanimated'
-import BottomSheetBackdrop from './BottomSheetBackdrop/BottomSheetBackdrop'
-import BottomSheetContainer from './BottomSheetContainer/BottomSheetContainer'
-import BottomSheetContent from './BottomSheetContent/BottomSheetContent'
-import BottomSheetContentContainer from './BottomSheetContentContainer/BottomSheetContentContainer'
-import BottomSheetHeader from './BottomSheetHeader/BottomSheetHeader'
+import BottomSheetBackdrop from './components/BottomSheetBackdrop'
+import BottomSheetContainer from './components/BottomSheetContainer'
+import BottomSheetContent from './components/BottomSheetContent'
+import BottomSheetContentContainer from './components/BottomSheetContentContainer'
+import BottomSheetHeader from './components/BottomSheetHeader'
 import {DEFAULT_CONTENT_HEIGHT, INITIAL_CONTENT_HEIGHT_POSITIVE} from './constants'
 import {BottomSheetContextType, BottomSheetProvider} from './contexts/BottomSheetProvider'
-import type {BottomSheetMethods, BottomSheetProps} from './types'
+import type {ViewStyle} from 'react-native'
+
+export interface BottomSheetProps {
+  // configurations
+  isVisible: boolean
+  contentHeight?: number
+  title?: string
+  bottomInset: number
+  shouldPushContentWithKeyboardSize?: boolean
+  // callbacks
+  onChangeValue: (value: boolean) => void
+  onConfirm?: () => void
+  // styles
+  style?: ViewStyle
+  backdropStyle?: ViewStyle
+  contentContainerStyle?: ViewStyle
+  contentHeaderStyle?: ViewStyle
+  contentStyle?: ViewStyle
+  // components
+  children?: React.ReactNode
+}
+
+export type BottomSheetMethods = BottomSheetContextType
 
 const BottomSheetComponent = forwardRef<BottomSheetMethods, BottomSheetProps>(
   (

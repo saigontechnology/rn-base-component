@@ -8,8 +8,8 @@ import Animated, {
 } from 'react-native-reanimated'
 import styled from 'styled-components'
 import {useBottomSheet} from '../hooks/useBottomSheet'
-import type {BottomSheetBackdropProps} from './types'
 import type {ITheme} from 'src/theme'
+import type {StyleProp, ViewStyle} from 'react-native'
 
 const Container = styled(Animated.View)<{theme: ITheme}>(({theme}) => ({
   position: 'absolute',
@@ -20,6 +20,11 @@ const Container = styled(Animated.View)<{theme: ITheme}>(({theme}) => ({
   backgroundColor: theme?.colors?.black,
   opacity: theme?.opacity?.partiallyOpaque,
 }))
+
+export interface BottomSheetBackdropProps {
+  style?: StyleProp<ViewStyle>
+  children?: React.ReactNode
+}
 
 const BottomSheetBackdropComponent: React.FC<BottomSheetBackdropProps> = ({style, children}) => {
   const {animatedIsVisible, close} = useBottomSheet()

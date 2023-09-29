@@ -1,10 +1,14 @@
 import React, {memo, useMemo} from 'react'
+import type {ViewProps} from 'react-native'
 import {StyleProp, StyleSheet, ViewStyle} from 'react-native'
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
 import Animated, {useAnimatedProps} from 'react-native-reanimated'
 import {useBottomSheet} from '../hooks/useBottomSheet'
-import type {BottomSheetContainerProps} from './types'
-import type {ViewProps} from 'react-native'
+
+export interface BottomSheetContainerProps {
+  style?: StyleProp<ViewStyle>
+  children?: React.ReactNode
+}
 
 const BottomSheetContainerComponent: React.FC<BottomSheetContainerProps> = ({style, children}) => {
   const {animatedIsVisible} = useBottomSheet()

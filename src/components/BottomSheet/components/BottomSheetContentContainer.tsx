@@ -1,15 +1,27 @@
 import React, {memo, useCallback, useMemo, useRef} from 'react'
-import type {LayoutChangeEvent, View} from 'react-native'
-import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated'
+import type {LayoutChangeEvent, StyleProp, View, ViewStyle} from 'react-native'
+import Animated, {SharedValue, useAnimatedStyle, withTiming} from 'react-native-reanimated'
 import type {ITheme} from 'src/theme'
 import styled from 'styled-components/native'
-import type {BottomSheetContentContainerProps} from './types'
 import {useTheme} from '../../../hooks'
 
 const Container = styled(Animated.View)<{theme: ITheme}>(({theme}) => ({
   borderTopRightRadius: theme?.sizes?.petite,
   borderTopLeftRadius: theme?.sizes?.petite,
 }))
+
+export interface BottomSheetContentContainerProps {
+  // configurations
+  animatedCalculateContentHeight: SharedValue<number>
+  animatedContentHeight: SharedValue<number>
+  animatedContentTranslateY: SharedValue<number>
+
+  // styles
+  style?: StyleProp<ViewStyle>
+
+  // components
+  children?: React.ReactNode
+}
 
 const BottomSheetContentContainerComponent: React.FC<BottomSheetContentContainerProps> = ({
   animatedCalculateContentHeight,
