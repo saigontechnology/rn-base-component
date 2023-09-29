@@ -4,6 +4,7 @@ import Animated, {useAnimatedStyle, withTiming} from 'react-native-reanimated'
 import type {ITheme} from 'src/theme'
 import styled from 'styled-components/native'
 import type {BottomSheetContentContainerProps} from './types'
+import {useTheme} from '../../../hooks'
 
 const Container = styled(Animated.View)<{theme: ITheme}>(({theme}) => ({
   borderTopRightRadius: theme?.sizes?.petite,
@@ -18,6 +19,7 @@ const BottomSheetContentContainerComponent: React.FC<BottomSheetContentContainer
   style,
   children,
 }) => {
+  const theme = useTheme()
   const containerRef = useRef<View>(null)
 
   const animatedContentStyle = useAnimatedStyle(
@@ -29,8 +31,8 @@ const BottomSheetContentContainerComponent: React.FC<BottomSheetContentContainer
   )
 
   const contentStyle = useMemo(
-    () => [{backgroundColor: 'white'}, style, animatedContentStyle],
-    [animatedContentStyle, style],
+    () => [{backgroundColor: theme.colors.white}, style, animatedContentStyle],
+    [animatedContentStyle, style, theme.colors.white],
   )
 
   const handleLayout = useCallback(
