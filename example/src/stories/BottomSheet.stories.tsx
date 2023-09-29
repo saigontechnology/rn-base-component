@@ -10,7 +10,7 @@ export default {
   component: BottomSheet,
 } as ComponentMeta<typeof BottomSheet>
 
-export const Basic: ComponentStory<typeof BottomSheet> = args => {
+export const Basic: ComponentStory<typeof BottomSheet> = rest => {
   const ref = useRef<BottomSheetMethods>(null)
   const insets = useSafeAreaInsets()
 
@@ -21,7 +21,7 @@ export const Basic: ComponentStory<typeof BottomSheet> = args => {
       <Button text="Open Bottom Sheet" onPress={() => ref?.current?.open?.()} />
 
       <BottomSheet
-        {...args}
+        {...rest}
         ref={ref}
         isVisible={isVisible}
         onChangeValue={setIsVisible}
