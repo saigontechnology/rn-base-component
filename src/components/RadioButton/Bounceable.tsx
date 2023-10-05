@@ -56,7 +56,7 @@ const Bounceable = React.forwardRef<View, IBounceableProps>(
       children,
       style,
       onPress,
-      ...props
+      ...rest
     },
     ref,
   ) => {
@@ -90,7 +90,7 @@ const Bounceable = React.forwardRef<View, IBounceableProps>(
 
     return (
       <AnimatedPressable
-        {...props}
+        {...rest}
         ref={ref}
         style={[animatedStyle, style]}
         onPressIn={handlePressIn}

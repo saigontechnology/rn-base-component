@@ -211,21 +211,21 @@ const Container = styled(Pressable)({
 })
 
 const StyledImage = styled(Image)((props: StyledImageStyle) => ({
-  width: props.theme?.sizes?.small,
-  height: props.theme?.sizes?.small,
+  width: props.theme?.sizes?.petite,
+  height: props.theme?.sizes?.petite,
 }))
 
 const TextContainer = styled(View)((props: TextContainerStyle) => ({
-  marginLeft: props.theme?.sizes?.small,
+  marginLeft: props.theme?.sizes?.petite,
   opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
 
 const IconContainer = styled(Animated.View)((props: IconContainerStyle) => ({
   alignItems: 'center',
   justifyContent: 'center',
-  width: props.size || props.theme?.sizes?.huge,
-  height: props.size || props.theme?.sizes?.huge,
-  borderRadius: props.size || props.theme?.sizes?.huge,
+  width: props.size || props.theme?.sizes?.narrow,
+  height: props.size || props.theme?.sizes?.narrow,
+  borderRadius: props.size || props.theme?.sizes?.narrow,
   backgroundColor: props.backgroundColor,
   opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
@@ -234,8 +234,8 @@ const InnerIconContainer = styled(View)((props: InnerIconContainerStyle) => ({
   borderWidth: props.theme?.borderWidths?.tiny,
   alignItems: 'center',
   justifyContent: 'center',
-  width: props.size || props.theme?.sizes?.huge,
-  height: props.size || props.theme?.sizes?.huge,
-  borderRadius: props.size || props.theme?.sizes?.huge,
+  width: props.size || props.theme?.sizes?.narrow,
+  height: props.size || props.theme?.sizes?.narrow,
+  borderRadius: props.size || props.theme?.sizes?.narrow,
   borderColor: props?.borderColor,
 }))

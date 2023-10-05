@@ -64,6 +64,22 @@ const responsiveWidth = <T extends number>(value: T) => ((width * value) / DESIG
 
 const responsiveHeight = <T extends number>(value: T) => ((height * value) / DESIGN_HEIGHT) as T
 
+export type IActiveOpacity = {
+  readonly none: number
+  readonly low: number
+  readonly medium: number
+  readonly high: number
+  readonly veryHigh: number
+}
+
+const activeOpacity: IActiveOpacity = {
+  none: 1,
+  low: 0.8,
+  medium: 0.6,
+  high: 0.4,
+  veryHigh: 0.2,
+}
+
 const isIOS: boolean = Platform.OS === 'ios'
 
 const metrics = {
@@ -101,4 +117,14 @@ const metrics = {
   icon: responsiveHeight(30),
 } as const
 
-export {metrics, isIOS, hitSlop, responsiveFont, responsiveHeight, responsiveWidth, deviceWidth, deviceHeight}
+export {
+  metrics,
+  isIOS,
+  hitSlop,
+  activeOpacity,
+  responsiveFont,
+  responsiveHeight,
+  responsiveWidth,
+  deviceWidth,
+  deviceHeight,
+}
