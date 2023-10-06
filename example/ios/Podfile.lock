@@ -425,7 +425,7 @@ PODS:
     - React-Core
   - RNGestureHandler (2.12.0):
     - React-Core
-  - RNReanimated (3.3.0):
+  - RNReanimated (3.5.4):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -645,11 +645,11 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 791fe035093b84822da7f0870421a25839ca7870
-  hermes-engine: 5d86dc4303697a1251c830f0ee45e6e9f33877d4
+  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  hermes-engine: a1f157c49ea579c28b0296bda8530e980c45bdb3
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  RCT-Folly: 186619bc27c1f94f2f7c6ef60927516c71005915
+  RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 5a024fdf458fa8c0d82fc262e76f982d4dcdecdd
   RCTTypeSafety: b6c253064466411c6810b45f66bc1e43ce0c54ba
   React: 715292db5bd46989419445a5547954b25d2090f0
@@ -682,11 +682,11 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 4b98ac3c64efa4e35c1197cb0c5ca5e9f5d4c666
   RNDateTimePicker: 65e1d202799460b286ff5e741d8baf54695e8abd
   RNGestureHandler: dec4645026e7401a0899f2846d864403478ff6a5
-  RNReanimated: 9976fbaaeb8a188c36026154c844bf374b3b7eeb
+  RNReanimated: be07c7ae209074d0e8a84cf38b7909457ac59a32
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   Yoga: 79dd7410de6f8ad73a77c868d3d368843f0c93e0
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
 PODFILE CHECKSUM: 41b345e700f785c9a103f926104c4c507c89b32e
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

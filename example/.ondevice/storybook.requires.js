@@ -50,6 +50,7 @@ try {
 const getStories = () => {
   return {
     "./src/stories/Accordion.stories.tsx": require("../src/stories/Accordion.stories.tsx"),
+    "./src/stories/BottomSheet.stories.tsx": require("../src/stories/BottomSheet.stories.tsx"),
     "./src/stories/Button.stories.tsx": require("../src/stories/Button.stories.tsx"),
     "./src/stories/Card.stories.tsx": require("../src/stories/Card.stories.tsx"),
     "./src/stories/Checkbox.stories.tsx": require("../src/stories/Checkbox.stories.tsx"),
