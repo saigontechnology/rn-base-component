@@ -21,13 +21,14 @@ const BottomSheetContainerComponent: React.FC<BottomSheetContainerProps> = ({sty
   )
 
   const containerStyle = useMemo<StyleProp<ViewStyle>>(
-    () => [
-      {
-        ...StyleSheet.absoluteFillObject,
-        justifyContent: 'flex-end',
-      },
-      style,
-    ],
+    () =>
+      StyleSheet.flatten([
+        {
+          ...StyleSheet.absoluteFillObject,
+          justifyContent: 'flex-end',
+        },
+        style,
+      ]),
     [style],
   )
 

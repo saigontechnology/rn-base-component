@@ -9,14 +9,10 @@ import Animated, {
 import styled from 'styled-components'
 import {useBottomSheet} from '../hooks'
 import type {ITheme} from 'src/theme'
-import type {StyleProp, ViewStyle} from 'react-native'
+import {StyleSheet, type StyleProp, type ViewStyle} from 'react-native'
 
 const Container = styled(Animated.View)<{theme: ITheme}>(({theme}) => ({
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
+  ...StyleSheet.absoluteFillObject,
   backgroundColor: theme?.colors?.black,
   opacity: theme?.opacity?.partiallyOpaque,
 }))
@@ -36,7 +32,7 @@ const BottomSheetBackdropComponent: React.FC<BottomSheetBackdropProps> = ({style
     [],
   )
 
-  const containerStyle = useMemo(() => [animatedStyle, style], [animatedStyle, style])
+  const containerStyle = useMemo(() => StyleSheet.flatten([animatedStyle, style]), [animatedStyle, style])
 
   const gestureHandler = useAnimatedGestureHandler<TapGestureHandlerGestureEvent>(
     {

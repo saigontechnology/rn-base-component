@@ -1,5 +1,5 @@
 import React, {memo, useCallback, useMemo, useRef} from 'react'
-import type {LayoutChangeEvent, StyleProp, View, ViewStyle} from 'react-native'
+import {StyleSheet, type LayoutChangeEvent, type StyleProp, type View, type ViewStyle} from 'react-native'
 import Animated, {SharedValue, useAnimatedStyle, withTiming} from 'react-native-reanimated'
 import type {ITheme} from 'src/theme'
 import styled from 'styled-components/native'
@@ -43,7 +43,7 @@ const BottomSheetContentContainerComponent: React.FC<BottomSheetContentContainer
   )
 
   const contentStyle = useMemo(
-    () => [{backgroundColor: theme.colors.white}, style, animatedContentStyle],
+    () => StyleSheet.flatten([{backgroundColor: theme.colors.white}, style, animatedContentStyle]),
     [animatedContentStyle, style, theme.colors.white],
   )
 
