@@ -1,8 +1,7 @@
 import React, {memo} from 'react'
-import {View} from 'react-native'
+import {StyleProp, View, ViewStyle} from 'react-native'
 import type {ITheme} from 'src/theme'
 import styled from 'styled-components/native'
-import type {BottomSheetContentProps} from '../BottomSheetContent/types'
 
 const Container = styled(View)<{theme: ITheme}>(({theme}) => ({
   padding: theme?.sizes?.petite,
@@ -15,6 +14,12 @@ export interface BottomSheetContentProps {
   // components
   children?: React.ReactNode
 }
+
+/**
+ *
+ * TODO: integrate ScrollView, Flatlist, etc...
+ *
+ */
 
 const BottomSheetContentComponent: React.FC<BottomSheetContentProps> = ({style, children}) => (
   <Container style={style}>{children}</Container>
