@@ -6,7 +6,7 @@ import BottomSheetContent from './components/BottomSheetContent'
 import BottomSheetContentContainer from './components/BottomSheetContentContainer'
 import BottomSheetHeader from './components/BottomSheetHeader'
 import {DEFAULT_CONTENT_HEIGHT, INITIAL_CONTENT_HEIGHT_POSITIVE} from './constants'
-import {BottomSheetContextType, BottomSheetProvider} from './contexts/BottomSheetProvider'
+import {BottomSheetContextType, BottomSheetProvider} from './contexts'
 import type {ViewStyle} from 'react-native'
 
 export interface BottomSheetProps {

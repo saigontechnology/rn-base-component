@@ -7,7 +7,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import styled from 'styled-components'
-import {useBottomSheet} from '../hooks/useBottomSheet'
+import {useBottomSheet} from '../hooks'
 import type {ITheme} from 'src/theme'
 import type {StyleProp, ViewStyle} from 'react-native'
 

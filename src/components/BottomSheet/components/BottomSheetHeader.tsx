@@ -6,7 +6,7 @@ import type {ITheme} from 'src/theme'
 import styled from 'styled-components/native'
 import {useTheme} from '../../../hooks'
 import Button from '../../Button'
-import {useBottomSheet} from '../hooks/useBottomSheet'
+import {useBottomSheet} from '../hooks'
 
 const Container = styled(View)<{theme: ITheme}>(({theme}) => ({
   flexDirection: 'row',

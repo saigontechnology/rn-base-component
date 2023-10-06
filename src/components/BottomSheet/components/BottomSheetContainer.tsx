@@ -3,7 +3,7 @@ import type {ViewProps} from 'react-native'
 import {StyleProp, StyleSheet, ViewStyle} from 'react-native'
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
 import Animated, {useAnimatedProps} from 'react-native-reanimated'
-import {useBottomSheet} from '../hooks/useBottomSheet'
+import {useBottomSheet} from '../hooks'
 
 export interface BottomSheetContainerProps {
   style?: StyleProp<ViewStyle>

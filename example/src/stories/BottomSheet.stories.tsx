@@ -3,7 +3,7 @@ import React, {useRef, useState} from 'react'
 import {Text, TextInput} from 'react-native'
 import {useSafeAreaInsets} from 'react-native-safe-area-context'
 import {BottomSheet, Button} from 'rn-base-component'
-import type {BottomSheetMethods} from 'src/components/BottomSheet/types'
+import type {BottomSheetMethods} from 'src/components/BottomSheet/BottomSheet'
 
 export default {
   title: 'components/BottomSheet',
