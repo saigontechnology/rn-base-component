@@ -10,7 +10,7 @@ Before you install `rn-base-component`, make sure you have the following prerequ
 - [styled-components](https://styled-components.com/)
 - [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/)
 
-You can install these dependencies using npm or yarn:
+You can install these dependencies using npm or yarn (note: Current, we dont support react-native-reanimated v3 and styled-components 6.*):
 
 ```sh
 npm install react-native-reanimated styled-components react-native-gesture-handler
