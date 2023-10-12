@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import {requireNativeComponent, UIManager, Platform, ViewStyle} from 'react-native'
 import type {ITheme} from './theme'
-import Button from './components/Button'
+import Button from './components/Button/Button'
 import Card from './components/Card/Card'
 import {default as TextInputComponent} from './components/TextInput/TextInput'
 
