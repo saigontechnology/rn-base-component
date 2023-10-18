@@ -1,5 +1,5 @@
 import React, {useEffect, forwardRef, useCallback, useState, memo} from 'react'
-import {View, LayoutChangeEvent} from 'react-native'
+import type {LayoutChangeEvent, View} from 'react-native'
 import styled from 'styled-components/native'
 import Animated, {
   useSharedValue,
@@ -143,7 +143,7 @@ Progress.displayName = 'Progress'
 
 export default memo(Progress)
 
-const ProgressWrapper = styled(View)((props: ProgressStyle) => ({
+const ProgressWrapper = styled.View((props: ProgressStyle) => ({
   overflow: 'hidden',
   width: props.width,
   height: props.size,

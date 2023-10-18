@@ -1,13 +1,10 @@
 import React, {useEffect, forwardRef, useImperativeHandle, useState, useCallback, memo} from 'react'
 import {
   Text,
-  View,
-  Image,
   StyleProp,
   ViewStyle,
   TextStyle,
   ImageStyle,
-  Pressable,
   ImageSourcePropType,
   TouchableWithoutFeedbackProps,
   StyleSheet,
@@ -150,7 +147,7 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       const checkStatus = disableBuiltInState ? isChecked : checked
 
       return (
-        <IconContainer
+        <IconContainerAnimated
           testID={'icon-container'}
           size={size}
           backgroundColor={checked ? fillColor : unfillColor}
@@ -161,7 +158,7 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
             {iconComponent ||
               (checkStatus && <StyledImage source={checkIconImageSource} style={iconImageStyle} />)}
           </InnerIconContainer>
-        </IconContainer>
+        </IconContainerAnimated>
       )
     }
 
@@ -205,22 +202,22 @@ Checkbox.displayName = 'Checkbox'
 
 export default memo(Checkbox)
 
-const Container = styled(Pressable)({
+const Container = styled.Pressable({
   alignItems: 'center',
   flexDirection: 'row',
 })
 
-const StyledImage = styled(Image)((props: StyledImageStyle) => ({
+const StyledImage = styled.Image((props: StyledImageStyle) => ({
   width: props.theme?.sizes?.petite,
   height: props.theme?.sizes?.petite,
 }))
 
-const TextContainer = styled(View)((props: TextContainerStyle) => ({
+const TextContainer = styled.View((props: TextContainerStyle) => ({
   marginLeft: props.theme?.sizes?.petite,
   opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
 
-const IconContainer = styled(Animated.View)((props: IconContainerStyle) => ({
+const IconContainer = styled.View((props: IconContainerStyle) => ({
   alignItems: 'center',
   justifyContent: 'center',
   width: props.size || props.theme?.sizes?.narrow,
@@ -229,8 +226,9 @@ const IconContainer = styled(Animated.View)((props: IconContainerStyle) => ({
   backgroundColor: props.backgroundColor,
   opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
+const IconContainerAnimated = Animated.createAnimatedComponent(IconContainer)
 
-const InnerIconContainer = styled(View)((props: InnerIconContainerStyle) => ({
+const InnerIconContainer = styled.View((props: InnerIconContainerStyle) => ({
   borderWidth: props.theme?.borderWidths?.tiny,
   alignItems: 'center',
   justifyContent: 'center',
