@@ -144,8 +144,8 @@ export default memo(CodeInput)
 const CodeInputContainer = styled.View({})
 
 const Cell = styled.Pressable((props: CellStyle) => ({
-  width: metrics.huge,
-  height: metrics.huge,
+  width: props?.theme?.spacing.gigantic,
+  height: props?.theme?.spacing.gigantic,
   borderRadius: metrics.tiny,
   borderWidth: 1,
   borderColor: props?.theme?.colors?.coolGray,
@@ -155,8 +155,8 @@ const Cell = styled.Pressable((props: CellStyle) => ({
 }))
 
 const SecureView = styled.Pressable((props: SecureViewStyle) => ({
-  width: metrics.small,
-  height: metrics.small,
+  width: props?.theme?.spacing.slim,
+  height: props?.theme?.spacing.slim,
   borderRadius: metrics.small,
   backgroundColor: props?.theme?.colors?.darkText,
 }))
