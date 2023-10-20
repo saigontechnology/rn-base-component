@@ -1,6 +1,5 @@
 {
-  "preset": "ts-jest",
-  "testEnvironment": "node",
+  "preset": "react-native",
   "roots": ["<rootDir>/src"],
   "collectCoverage": true,
   "moduleFileExtensions": ["ts", "tsx", "js"],
@@ -8,7 +7,6 @@
     "^.+\\.(js)$": "<rootDir>/node_modules/babel-jest",
     "\\.(ts|tsx)$": "ts-jest"
   },
-  "transformIgnorePatterns": ["node_modules/(?!variables/.*)"],
   "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
   "testPathIgnorePatterns": ["\\.snap$", "<rootDir>/node_modules/"],
   "cacheDirectory": ".jest/cache"
