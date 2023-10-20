@@ -187,7 +187,7 @@ const SliderFixed: React.FC<SliderProps> = ({
         )}
         <Track
           style={StyleSheet.flatten([
-            styles.track,
+            StyleSheet.absoluteFillObject,
             {backgroundColor: theme?.colors.primary},
             trackedStyle,
             animatedTrackStyle,
@@ -213,12 +213,6 @@ const SliderFixed: React.FC<SliderProps> = ({
 
 const Container = styled.View({
   justifyContent: 'center',
-})
-
-const styles = StyleSheet.create({
-  track: {
-    ...StyleSheet.absoluteFillObject,
-  },
 })
 
 export default SliderFixed

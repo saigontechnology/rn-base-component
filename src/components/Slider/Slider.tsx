@@ -314,7 +314,7 @@ const Slider: SliderComponentProps = ({
         )}
         <Track
           style={StyleSheet.flatten([
-            styles.track,
+            StyleSheet.absoluteFillObject,
             {backgroundColor: theme?.colors.primary},
             trackedStyle,
             animatedTrackStyle,
@@ -346,12 +346,6 @@ const Container = styled.View(() => ({
 Slider.Range = SliderRange
 Slider.FixedRange = SliderFixedRange
 Slider.Fixed = SliderFixed
-
-const styles = StyleSheet.create({
-  track: {
-    ...StyleSheet.absoluteFillObject,
-  },
-})
 
 export type {
   Size,

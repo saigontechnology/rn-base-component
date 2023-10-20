@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import Animated, {useSharedValue, withSequence, withSpring, withTiming} from 'react-native-reanimated'
 import styled from 'styled-components/native'
-import type {ITheme} from 'src/theme'
+import type {ITheme} from '../../theme'
 import {theme, Images} from '../../theme'
 import {
   BOUNCE_EFFECT_IN,

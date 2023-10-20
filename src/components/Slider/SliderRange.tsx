@@ -330,7 +330,7 @@ const SliderRange: React.FC<SliderRangeProps> = ({
         )}
         <Track
           style={StyleSheet.flatten([
-            styles.track,
+            StyleSheet.absoluteFillObject,
             {backgroundColor: theme?.colors.primary},
             trackedStyle,
             animatedTrackStyle,
@@ -371,11 +371,5 @@ const Container = styled.View((props: ContainerProps) => ({
   justifyContent: 'center',
   width: props.width,
 }))
-
-const styles = StyleSheet.create({
-  track: {
-    ...StyleSheet.absoluteFillObject,
-  },
-})
 
 export default SliderRange

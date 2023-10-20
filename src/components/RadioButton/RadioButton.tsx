@@ -2,7 +2,7 @@ import React, {forwardRef, useMemo, useRef, useState} from 'react'
 import {StyleSheet} from 'react-native'
 import type {LayoutChangeEvent, StyleProp, ViewStyle, TextStyle, View} from 'react-native'
 import styled from 'styled-components/native'
-import {metrics, responsiveHeight, responsiveWidth} from '../../helpers/metrics'
+import {responsiveHeight, responsiveWidth} from '../../helpers/metrics'
 import Bounceable, {IBounceableProps} from './Bounceable'
 import {theme, ITheme} from '../../theme'
 
@@ -170,6 +170,7 @@ const RadioButton = forwardRef<View, IRadioButtonProps>(
               borderRadius: outer.border,
               borderColor: ringColor,
               opacity: disable ? disableOpacity : 1,
+              borderWidth: theme.borderWidths.little,
             },
             style,
           ])}
@@ -229,7 +230,6 @@ const LabelText = styled.Text((props: {theme: ITheme}) => ({
 
 const styles = StyleSheet.create({
   bounceStyle: {
-    borderWidth: metrics.borderRadius,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'transparent',

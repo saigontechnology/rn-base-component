@@ -26,11 +26,10 @@ const Card: React.FC<CardProps> = ({onPress, style, children}) => (
   </CardWrapper>
 )
 
-const CardWrapper = styled.TouchableOpacity`
-  ${(props: {theme: ITheme}) => ({
-    padding: metrics.small,
-    borderRadius: metrics.borderRadius,
-    backgroundColor: props?.theme?.colors?.cardBackground,
-  })}
-`
+const CardWrapper = styled.TouchableOpacity((props: {theme: ITheme}) => ({
+  padding: metrics.small,
+  borderRadius: metrics.borderRadius,
+  backgroundColor: props?.theme?.colors?.cardBackground,
+}))
+
 export default Card
