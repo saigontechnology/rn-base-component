@@ -9,16 +9,12 @@ interface ITrack {
   onLayout?: (event: LayoutChangeEvent) => void
 }
 
-const Track: React.FC<ITrack> = ({style, onLayout}) => (
-  <TrackAnimatedComponent style={style} onLayout={onLayout} />
-)
+const Track: React.FC<ITrack> = ({style, onLayout}) => <TrackComponent style={style} onLayout={onLayout} />
 
-const TrackComponent = styled.View(({theme}: {theme: ITheme}) => ({
+const TrackComponent = styled(Animated.View)(({theme}: {theme: ITheme}) => ({
   flex: 1,
   borderRadius: theme.borderWidths.huge,
   backgroundColor: theme.colors.backgroundPrimary,
 }))
-
-const TrackAnimatedComponent = Animated.createAnimatedComponent(TrackComponent)
 
 export {Track}

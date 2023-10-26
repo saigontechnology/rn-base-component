@@ -147,7 +147,7 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       const checkStatus = disableBuiltInState ? isChecked : checked
 
       return (
-        <IconContainerAnimated
+        <IconContainer
           testID={'icon-container'}
           size={size}
           backgroundColor={checked ? fillColor : unfillColor}
@@ -158,7 +158,7 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
             {iconComponent ||
               (checkStatus && <StyledImage source={checkIconImageSource} style={iconImageStyle} />)}
           </InnerIconContainer>
-        </IconContainerAnimated>
+        </IconContainer>
       )
     }
 
@@ -217,7 +217,7 @@ const TextContainer = styled.View((props: TextContainerStyle) => ({
   opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
 
-const IconContainer = styled.View((props: IconContainerStyle) => ({
+const IconContainer = styled(Animated.View)((props: IconContainerStyle) => ({
   alignItems: 'center',
   justifyContent: 'center',
   width: props.size || props.theme?.sizes?.narrow,
@@ -226,7 +226,6 @@ const IconContainer = styled.View((props: IconContainerStyle) => ({
   backgroundColor: props.backgroundColor,
   opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
-const IconContainerAnimated = Animated.createAnimatedComponent(IconContainer)
 
 const InnerIconContainer = styled.View((props: InnerIconContainerStyle) => ({
   borderWidth: props.theme?.borderWidths?.tiny,
