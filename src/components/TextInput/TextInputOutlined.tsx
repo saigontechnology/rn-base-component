@@ -1,16 +1,16 @@
 import React, {forwardRef, useCallback, useImperativeHandle, useMemo, useRef} from 'react'
 import type {TextInput as Input, LayoutChangeEvent} from 'react-native'
+import Animated, {interpolate, useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated'
 import styled from 'styled-components/native'
+import {useTheme} from '../../hooks'
 import type {
   FlexDirection,
   InputContainerProps,
-  TextInputProps,
   Position,
+  TextInputProps,
   TextInputRef,
   Theme,
 } from './TextInput'
-import Animated, {interpolate, useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated'
-import {useTheme} from '../../hooks'
 import {
   BLURRED,
   DEFAULT_HEIGHT,
@@ -195,7 +195,7 @@ const TextInputOutlined = forwardRef<TextInputRef, TextInputProps>(
 
 const Container = styled.View({})
 
-const Wrapper = styled.TouchableWithoutFeedback({})
+const Wrapper = styled.Pressable({})
 
 const TextInputContent = styled.View(() => ({
   flex: 1,

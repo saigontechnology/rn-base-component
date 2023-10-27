@@ -1,17 +1,17 @@
 import React, {forwardRef, useCallback, useImperativeHandle, useRef} from 'react'
 import type {TextInput as Input, LayoutChangeEvent} from 'react-native'
+import Animated, {interpolate, useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated'
 import styled from 'styled-components/native'
+import {isIOS, metrics, responsiveHeight} from '../../helpers/metrics'
+import {useTheme} from '../../hooks'
 import type {
   FlexDirection,
-  TextInputProps,
   InputContainerProps,
   Position,
+  TextInputProps,
   TextInputRef,
   Theme,
 } from './TextInput'
-import {isIOS, metrics, responsiveHeight} from '../../helpers/metrics'
-import Animated, {interpolate, useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated'
-import {useTheme} from '../../hooks'
 import {
   BLURRED,
   DEFAULT_HEIGHT,
@@ -184,7 +184,7 @@ const TextInputFlat = forwardRef<TextInputRef, TextInputProps>(
 
 const Container = styled.View({})
 
-const Wrapper = styled.TouchableWithoutFeedback({})
+const Wrapper = styled.Pressable({})
 
 const LeftContainer = styled.View(({theme}: Theme) => ({
   marginBottom: isIOS ? 0 : -(theme?.spacing?.petite || 0),
