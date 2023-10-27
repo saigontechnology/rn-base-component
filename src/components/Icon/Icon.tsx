@@ -1,15 +1,13 @@
 import React from 'react'
-import type {ImageStyle} from 'react-native'
-import {
-  Image,
-  ImageResizeMode,
+import type {
+  ImageStyle,
   ImageSourcePropType,
+  ImageResizeMode,
   StyleProp,
-  StyleSheet,
-  TouchableOpacity,
   ViewStyle,
   Insets,
 } from 'react-native'
+import {Image, StyleSheet, TouchableOpacity} from 'react-native'
 import {metrics, hitSlop as defaultHitSlop} from '../../helpers/metrics'
 
 export type IconProps = {

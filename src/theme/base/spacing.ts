@@ -19,6 +19,7 @@ const spacing = {
   enormous: 36,
   mammoth: 38,
   titanic: 40,
+  gigantic: 48,
 }
 
 export type ISpacing = keyof typeof spacing

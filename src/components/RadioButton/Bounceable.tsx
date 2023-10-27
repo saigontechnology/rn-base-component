@@ -1,5 +1,6 @@
 import React from 'react'
-import {ViewStyle, StyleProp, Pressable, PressableProps, View} from 'react-native'
+import {Pressable, StyleSheet, View} from 'react-native'
+import type {PressableProps, ViewStyle, StyleProp} from 'react-native'
 import Animated, {withSpring, useSharedValue, useAnimatedStyle} from 'react-native-reanimated'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
@@ -92,7 +93,7 @@ const Bounceable = React.forwardRef<View, IBounceableProps>(
       <AnimatedPressable
         {...rest}
         ref={ref}
-        style={[animatedStyle, style]}
+        style={[animatedStyle, StyleSheet.flatten(style)]}
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         onPress={onPress}>

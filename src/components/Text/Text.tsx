@@ -1,4 +1,4 @@
-import {Text as RNText, TextProps as TextProperties, TextStyle} from 'react-native'
+import type {TextProps as TextProperties, TextStyle} from 'react-native'
 import {metrics} from '../../helpers/metrics'
 import styled from 'styled-components/native'
 
@@ -8,7 +8,7 @@ type TextProps = {
   fontWeight?: TextStyle['fontWeight']
 } & TextProperties
 
-export const Text = styled(RNText)<TextProps>(props => ({
+export const Text = styled.Text<TextProps>(props => ({
   fontSize: props?.fontSize || metrics.span,
   color: props?.color || props?.theme?.colors?.black,
   fontFamily: props?.theme?.fonts?.regular,

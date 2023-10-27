@@ -133,13 +133,16 @@ const TextInputFlat = forwardRef<TextInputRef, TextInputProps>(
     return (
       <Container style={containerStyle}>
         <Wrapper testID="test-Wrapper" onPress={setFocus} onLayout={getWrapperInfo}>
-          <Content style={[animatedContentStyle, inputContainerStyle]}>
+          <ContentAnimated style={[animatedContentStyle, inputContainerStyle]}>
             <LeftContainer>{!!leftComponent && leftComponent}</LeftContainer>
             <TextInputContent testID="test-TextInputContent" onLayout={getTextInputContentInfo}>
               {!!label && (
-                <Label testID={'test-Label'} onLayout={getLabelInfo} style={[animatedLabelStyle, labelStyle]}>
+                <LabelAnimated
+                  testID={'test-Label'}
+                  onLayout={getLabelInfo}
+                  style={[animatedLabelStyle, labelStyle]}>
                   {label}
-                </Label>
+                </LabelAnimated>
               )}
               <TextInput
                 testID={'test-TextInputFlat'}
@@ -167,7 +170,7 @@ const TextInputFlat = forwardRef<TextInputRef, TextInputProps>(
               />
             </TextInputContent>
             {!!rightComponent && rightComponent}
-          </Content>
+          </ContentAnimated>
         </Wrapper>
         {!!errorText && (
           <ErrorText testID="test-ErrorText" {...errorProps}>
@@ -193,7 +196,7 @@ const TextInputContent = styled.View(() => ({
   justifyContent: 'center',
 }))
 
-const Content = styled(Animated.View)((props: InputContainerProps) => ({
+const Content = styled.View((props: InputContainerProps) => ({
   flexDirection: 'row' as FlexDirection,
   height: props.theme?.sizes?.substantial,
   borderWidth: props.theme?.borderWidths?.tiny,
@@ -202,8 +205,9 @@ const Content = styled(Animated.View)((props: InputContainerProps) => ({
   backgroundColor: props.theme?.colors?.lightBackground,
   alignItems: 'center',
 }))
+const ContentAnimated = Animated.createAnimatedComponent(Content)
 
-const Label = styled(Animated.Text)(({theme}: Theme) => ({
+const Label = styled.Text(({theme}: Theme) => ({
   position: 'absolute' as Position,
   width: '100%',
   left: isIOS ? -responsiveHeight(theme?.spacing?.tiny ?? 0) : 0,
@@ -213,6 +217,7 @@ const Label = styled(Animated.Text)(({theme}: Theme) => ({
   zIndex: 1,
   backgroundColor: theme?.colors?.lightBackground,
 }))
+const LabelAnimated = Animated.createAnimatedComponent(Label)
 
 const ErrorText = styled.Text(({theme}: Theme) => ({
   fontSize: theme?.fontSizes?.md,

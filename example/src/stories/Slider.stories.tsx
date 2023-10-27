@@ -53,7 +53,7 @@ export const Basic: ComponentStory<typeof Slider> = () => {
           step={2}
           maximumValue={40}
           style={styles.height10}
-          trackedStyle={{backgroundColor: 'blue'}}
+          trackedStyle={styles.backgroundBlue}
           onValueChange={setRangeValue}
           leftThumbComponent={
             <Image
@@ -113,8 +113,8 @@ export const Basic: ComponentStory<typeof Slider> = () => {
           maximumValue={10}
           onValueChange={setValue1}
           style={styles.height10}
-          trackStyle={{backgroundColor: 'red'}}
-          trackedStyle={{backgroundColor: 'green'}}
+          trackStyle={styles.backgroundRed}
+          trackedStyle={styles.backgroundGreen}
           bgColorLabelView={'#00FFFF'}
           thumbStyle={styles.bgColorThumb}
           labelStyle={styles.black}
@@ -184,5 +184,14 @@ const styles = StyleSheet.create({
   },
   black: {
     color: 'black',
+  },
+  backgroundRed: {
+    backgroundColor: 'red',
+  },
+  backgroundBlue: {
+    backgroundColor: 'blue',
+  },
+  backgroundGreen: {
+    backgroundColor: 'green',
   },
 })

@@ -1,5 +1,5 @@
 import React, {PropsWithChildren} from 'react'
-import {StyleProp, TouchableOpacity, ViewStyle} from 'react-native'
+import type {StyleProp, ViewStyle} from 'react-native'
 import styled from 'styled-components/native'
 import {activeOpacity, metrics} from '../../helpers/metrics'
 import type {ITheme} from '../../theme'
@@ -26,11 +26,10 @@ const Card: React.FC<CardProps> = ({onPress, style, children}) => (
   </CardWrapper>
 )
 
-const CardWrapper = styled(TouchableOpacity)`
-  ${(props: {theme: ITheme}) => ({
-    padding: metrics.small,
-    borderRadius: metrics.borderRadius,
-    backgroundColor: props?.theme?.colors?.cardBackground,
-  })}
-`
+const CardWrapper = styled.TouchableOpacity((props: {theme: ITheme}) => ({
+  padding: props?.theme?.spacing.slim,
+  borderRadius: metrics.borderRadius,
+  backgroundColor: props?.theme?.colors?.cardBackground,
+}))
+
 export default Card

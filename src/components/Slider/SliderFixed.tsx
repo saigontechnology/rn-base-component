@@ -3,8 +3,8 @@ import type {PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
 import {hitSlop, metrics} from '../../helpers/metrics'
 import {Thumb, Track, TrackPoint} from './components'
 import styled from 'styled-components/native'
-import type {ITheme} from '../../theme'
-import {StyleSheet, LayoutChangeEvent, View} from 'react-native'
+import {StyleSheet} from 'react-native'
+import type {LayoutChangeEvent} from 'react-native'
 import {
   useAnimatedStyle,
   useSharedValue,
@@ -29,6 +29,7 @@ import {
 } from './constants'
 import type {AnimatedGHContext, AnimatedLabelProps, SliderInfo, SliderProps} from './Slider'
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
+import {useTheme} from '../../hooks'
 
 const SliderFixed: React.FC<SliderProps> = ({
   minimumValue = DEFAULT_MINIMUM_VALUE,
@@ -50,6 +51,7 @@ const SliderFixed: React.FC<SliderProps> = ({
   trackPointStyle,
   onValueChange = () => null,
 }) => {
+  const theme = useTheme()
   const sliderInfo = useSharedValue<SliderInfo>({range: INIT_VALUE, trackWidth: INIT_VALUE})
   const sliderValue = useSharedValue<number>(INIT_POINT)
   const progress = useSharedValue<number>(INIT_VALUE)
@@ -183,7 +185,14 @@ const SliderFixed: React.FC<SliderProps> = ({
             onPressPoint={(point: number) => tapToSeek && onPressPoint(point)}
           />
         )}
-        <Tracked style={[trackedStyle, animatedTrackStyle]} />
+        <Track
+          style={StyleSheet.flatten([
+            StyleSheet.absoluteFillObject,
+            {backgroundColor: theme?.colors.primary},
+            trackedStyle,
+            animatedTrackStyle,
+          ])}
+        />
         <Thumb
           text={minimumValue?.toString()}
           bgColorLabelView={bgColorLabelView}
@@ -202,13 +211,8 @@ const SliderFixed: React.FC<SliderProps> = ({
   )
 }
 
-const Container = styled(View)({
+const Container = styled.View({
   justifyContent: 'center',
 })
-
-const Tracked = styled(Track)(({theme}: {theme: ITheme}) => ({
-  ...StyleSheet.absoluteFillObject,
-  backgroundColor: theme?.colors.primary,
-}))
 
 export default SliderFixed

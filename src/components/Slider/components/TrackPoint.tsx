@@ -1,6 +1,5 @@
 import React from 'react'
 import type {Insets, StyleProp, ViewStyle} from 'react-native'
-import {TouchableOpacity} from 'react-native'
 import styled from 'styled-components/native'
 import type {FlexDirection, Position, TrackPointStyle} from '../Slider'
 import type {ITheme} from '../../../theme'
@@ -58,7 +57,7 @@ const TrackPointComponent = styled.View((props: TrackPointStyle) => ({
   overflow: 'hidden',
 }))
 
-const Point = styled(TouchableOpacity)(({theme}: {theme: ITheme}) => ({
+const Point = styled.TouchableOpacity(({theme}: {theme: ITheme}) => ({
   height: '100%',
   width: 1,
   backgroundColor: theme.colors.primary,

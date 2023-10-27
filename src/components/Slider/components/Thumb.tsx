@@ -1,19 +1,11 @@
 import React from 'react'
-import {
-  GestureEvent,
-  PanGestureHandler,
-  PanGestureHandlerEventPayload,
-  TextInput,
-} from 'react-native-gesture-handler'
+import {GestureEvent, PanGestureHandler, PanGestureHandlerEventPayload} from 'react-native-gesture-handler'
 import styled from 'styled-components/native'
 import Animated, {useAnimatedProps, useAnimatedStyle} from 'react-native-reanimated'
 import type {Position, Size, TextAlign, ThumbContainerStyle} from '../Slider'
 import {isIOS, metrics, responsiveHeight} from '../../../helpers/metrics'
 import type {StyleProp, TextProps, ViewStyle} from 'react-native'
-import {View} from 'react-native'
 import type {ITheme} from '../../../theme'
-
-const AnimatedText = Animated.createAnimatedComponent(TextInput)
 
 interface ThumbProps {
   text: string
@@ -43,23 +35,23 @@ const Thumb: React.FunctionComponent<ThumbProps> = ({
   onGestureEvent,
 }) => (
   <PanGestureHandler onGestureEvent={onGestureEvent}>
-    <ThumbContainer
+    <ThumbContainerAnimaged
       thumbSize={thumbSize}
       hasThumbComponent={!!thumbComponent}
       style={[thumbStyle, animatedThumbStyle]}>
-      <LabelContainer
+      <LabelContainerAnimated
         background={bgColorLabelView}
         style={!alwaysShowValue && opacityStyle}
         thumbSize={thumbSize}>
         <TriangleDown background={bgColorLabelView} />
-        <Label {...{animatedProps}} style={labelStyle} editable={false} defaultValue={text} />
-      </LabelContainer>
+        <LabelAnimated {...{animatedProps}} style={labelStyle} editable={false} defaultValue={text} />
+      </LabelContainerAnimated>
       {thumbComponent}
-    </ThumbContainer>
+    </ThumbContainerAnimaged>
   </PanGestureHandler>
 )
 
-const ThumbContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
+const ThumbContainer = styled.View((props: ThumbContainerStyle) => ({
   position: 'absolute' as Position,
   height: props.thumbSize.height,
   width: props.thumbSize.width,
@@ -68,26 +60,25 @@ const ThumbContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   // backgroundColor: props.hasThumbComponent ? 'transparent' : props.theme?.colors.backgroundColor,
   backgroundColor: 'transparent',
 }))
+const ThumbContainerAnimaged = Animated.createAnimatedComponent(ThumbContainer)
 
-const TriangleDown = styled(View)<ViewStyle & {background?: string; theme: ITheme}>(
-  ({background, theme}) => ({
-    position: 'absolute' as Position,
-    bottom: -5,
-    width: 0,
-    height: 0,
-    backgroundColor: 'transparent',
-    borderStyle: 'solid',
-    borderLeftWidth: 5,
-    borderRightWidth: 5,
-    borderBottomWidth: 10,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    borderBottomColor: background || theme?.colors.primary,
-    transform: [{rotate: '180deg'}] as any,
-  }),
-)
+const TriangleDown = styled.View<ViewStyle & {background?: string; theme: ITheme}>(({background, theme}) => ({
+  position: 'absolute' as Position,
+  bottom: -5,
+  width: 0,
+  height: 0,
+  backgroundColor: 'transparent',
+  borderStyle: 'solid',
+  borderLeftWidth: 5,
+  borderRightWidth: 5,
+  borderBottomWidth: 10,
+  borderLeftColor: 'transparent',
+  borderRightColor: 'transparent',
+  borderBottomColor: background || theme?.colors.primary,
+  transform: [{rotate: '180deg'}] as unknown as string,
+}))
 
-const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
+const LabelContainer = styled.View((props: ThumbContainerStyle) => ({
   position: 'absolute' as Position,
   top: -responsiveHeight(props.theme?.spacing?.titanic || 0),
   bottom: props.thumbSize.height + metrics.xxs,
@@ -98,8 +89,9 @@ const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   alignItems: 'center',
   margin: !isIOS ? -(responsiveHeight(props.theme?.spacing.tiny || 0) || 0) : 0,
 }))
+const LabelContainerAnimated = Animated.createAnimatedComponent(LabelContainer)
 
-const Label = styled(AnimatedText)(({theme}: {theme: ITheme}) => ({
+const Label = styled.TextInput(({theme}: {theme: ITheme}) => ({
   color: theme.colors.white,
   padding: responsiveHeight(isIOS ? theme.borderWidths.small : theme.spacing.tiny),
   textAlign: 'center' as TextAlign,
@@ -107,5 +99,6 @@ const Label = styled(AnimatedText)(({theme}: {theme: ITheme}) => ({
   fontSize: theme.fontSizes.sm,
   width: '100%',
 }))
+const LabelAnimated = Animated.createAnimatedComponent(Label)
 
 export {Thumb}
