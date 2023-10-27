@@ -35,23 +35,23 @@ const Thumb: React.FunctionComponent<ThumbProps> = ({
   onGestureEvent,
 }) => (
   <PanGestureHandler onGestureEvent={onGestureEvent}>
-    <ThumbContainer
+    <ThumbContainerAnimaged
       thumbSize={thumbSize}
       hasThumbComponent={!!thumbComponent}
       style={[thumbStyle, animatedThumbStyle]}>
-      <LabelContainer
+      <LabelContainerAnimated
         background={bgColorLabelView}
         style={!alwaysShowValue && opacityStyle}
         thumbSize={thumbSize}>
         <TriangleDown background={bgColorLabelView} />
-        <Label {...{animatedProps}} style={labelStyle} editable={false} defaultValue={text} />
-      </LabelContainer>
+        <LabelAnimated {...{animatedProps}} style={labelStyle} editable={false} defaultValue={text} />
+      </LabelContainerAnimated>
       {thumbComponent}
-    </ThumbContainer>
+    </ThumbContainerAnimaged>
   </PanGestureHandler>
 )
 
-const ThumbContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
+const ThumbContainer = styled.View((props: ThumbContainerStyle) => ({
   position: 'absolute' as Position,
   height: props.thumbSize.height,
   width: props.thumbSize.width,
@@ -60,6 +60,7 @@ const ThumbContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   // backgroundColor: props.hasThumbComponent ? 'transparent' : props.theme?.colors.backgroundColor,
   backgroundColor: 'transparent',
 }))
+const ThumbContainerAnimaged = Animated.createAnimatedComponent(ThumbContainer)
 
 const TriangleDown = styled.View(({background, theme}: {background?: string; theme: ITheme}) => ({
   position: 'absolute' as Position,
@@ -77,7 +78,7 @@ const TriangleDown = styled.View(({background, theme}: {background?: string; the
   transform: [{rotate: '180deg'}] as unknown as string,
 }))
 
-const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
+const LabelContainer = styled.View((props: ThumbContainerStyle) => ({
   position: 'absolute' as Position,
   top: -responsiveHeight(props.theme?.spacing?.titanic || 0),
   bottom: props.thumbSize.height + metrics.xxs,
@@ -88,6 +89,7 @@ const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   alignItems: 'center',
   margin: !isIOS ? -(responsiveHeight(props.theme?.spacing.tiny || 0) || 0) : 0,
 }))
+const LabelContainerAnimated = Animated.createAnimatedComponent(LabelContainer)
 
 const Label = styled(Animated.createAnimatedComponent(TextInput))(({theme}: {theme: ITheme}) => ({
   color: theme.colors.white,
@@ -97,5 +99,6 @@ const Label = styled(Animated.createAnimatedComponent(TextInput))(({theme}: {the
   fontSize: theme.fontSizes.sm,
   width: '100%',
 }))
+const LabelAnimated = Animated.createAnimatedComponent(Label)
 
 export {Thumb}
