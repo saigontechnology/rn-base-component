@@ -11,3 +11,4 @@ import TextInput from './TextInput/TextInput'
 
 export {Button, CodeInput, Checkbox, Progress, Slider, RadioButton, Card, TextInput, Accordion}
 export * from './Text/Text'
+export * from './Pressable'
