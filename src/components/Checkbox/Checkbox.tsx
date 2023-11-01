@@ -9,7 +9,13 @@ import {
   TouchableWithoutFeedbackProps,
   StyleSheet,
 } from 'react-native'
-import Animated, {useSharedValue, withSequence, withSpring, withTiming} from 'react-native-reanimated'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated'
 import styled from 'styled-components/native'
 import type {ITheme} from '../../theme'
 import {theme, Images} from '../../theme'
@@ -143,6 +149,10 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       bounceValue.value = withSequence(withTiming(bounceEffectIn), withSpring(bounceEffectOut))
     }, [bounceValue, bounceEffectIn, bounceEffectOut])
 
+    const animatedIconContainerStyle = useAnimatedStyle(() => ({
+      transform: [{scale: withSequence(withTiming(bounceEffectIn), withSpring(bounceEffectOut))}],
+    }))
+
     const renderCheckIcon = () => {
       const checkStatus = disableBuiltInState ? isChecked : checked
 
@@ -153,7 +163,7 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
           backgroundColor={checked ? fillColor : unfillColor}
           disabled={disabled}
           disableOpacity={disableOpacity}
-          style={StyleSheet.flatten([{transform: [{scale: bounceValue}]}, iconStyle])}>
+          style={[animatedIconContainerStyle, StyleSheet.flatten(iconStyle)]}>
           <InnerIconContainer style={innerIconStyle} size={size} borderColor={fillColor}>
             {iconComponent ||
               (checkStatus && <StyledImage source={checkIconImageSource} style={iconImageStyle} />)}
@@ -226,7 +236,9 @@ const IconContainer = styled.View((props: IconContainerStyle) => ({
   backgroundColor: props.backgroundColor,
   opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
-const IconContainerAnimated = Animated.createAnimatedComponent(IconContainer)
+const IconContainerAnimated = Animated.createAnimatedComponent<ICheckboxProps & {backgroundColor: string}>(
+  IconContainer,
+)
 
 const InnerIconContainer = styled.View((props: InnerIconContainerStyle) => ({
   borderWidth: props.theme?.borderWidths?.tiny,

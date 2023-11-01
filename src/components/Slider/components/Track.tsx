@@ -19,6 +19,6 @@ const TrackComponent = styled.View(({theme}: {theme: ITheme}) => ({
   backgroundColor: theme.colors.backgroundPrimary,
 }))
 
-const TrackAnimatedComponent = Animated.createAnimatedComponent(TrackComponent)
+const TrackAnimatedComponent = Animated.createAnimatedComponent<ITrack>(TrackComponent)
 
 export {Track}
