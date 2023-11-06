@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/native'
 import {metrics} from '../../helpers'
-import type {TouchableOpacityProps, TextProps, StyleProp} from 'react-native'
+import type {TouchableOpacityProps, TextProps, StyleProp, TextStyle} from 'react-native'
 import type {ITheme} from 'src/theme'
 
 export type ButtonProps = {
@@ -39,7 +39,7 @@ export type ButtonProps = {
   /**
    * Custom text style.
    */
-  textStyle?: StyleProp<TextProps>
+  textStyle?: StyleProp<TextStyle>
 } & TouchableOpacityProps
 
 const Button: React.FC<ButtonProps> = ({
