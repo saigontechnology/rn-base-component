@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/native'
-import {metrics} from '../../helpers/metrics'
+import {metrics} from '../../helpers'
+import type {TouchableOpacityProps as TouchableOpacityProperties} from 'react-native'
 import type {ITheme} from 'src/theme'
 
 export type ButtonProps = {
@@ -31,7 +32,7 @@ export type ButtonProps = {
    * Custom border radius.
    */
   borderRadius?: number
-}
+} & TouchableOpacityProperties
 
 const Button: React.FC<ButtonProps> = ({
   onPress,
@@ -43,6 +44,7 @@ const Button: React.FC<ButtonProps> = ({
   outlineWidth,
   borderRadius,
   disabled,
+  ...props
 }) => (
   <ButtonWrapper
     onPress={onPress}
@@ -52,7 +54,8 @@ const Button: React.FC<ButtonProps> = ({
     outlineColor={outlineColor}
     outlineWidth={outlineWidth}
     borderRadius={borderRadius}
-    disabled={disabled}>
+    disabled={disabled}
+    {...props}>
     <Label color={textColor}>{text}</Label>
   </ButtonWrapper>
 )

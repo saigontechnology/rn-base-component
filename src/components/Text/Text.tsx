@@ -3,7 +3,7 @@ import {metrics} from '../../helpers/metrics'
 import styled from 'styled-components/native'
 import type {Theme} from 'src/theme'
 
-type TextProps = {
+export type TextProps = {
   fontSize?: TextStyle['fontSize']
   color?: string
   fontWeight?: TextStyle['fontWeight']
