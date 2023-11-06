@@ -1,8 +1,15 @@
 import React from 'react'
 import styled from 'styled-components/native'
-import {metrics} from '../../helpers'
-import type {TouchableOpacityProps, TextProps, StyleProp, TextStyle, ViewStyle} from 'react-native'
-import type {ITheme} from 'src/theme'
+import {
+  type TouchableOpacityProps,
+  type TextProps,
+  type StyleProp,
+  type TextStyle,
+  type ViewStyle,
+  StyleSheet,
+} from 'react-native'
+import type {ITheme} from '../../theme'
+import {useTheme} from '../../hooks'
 
 export type ButtonProps = {
   onPress: () => void
@@ -57,23 +64,26 @@ const Button: React.FC<ButtonProps> = ({
   textStyle,
   style,
   ...props
-}) => (
-  <ButtonWrapper
-    onPress={onPress}
-    activeOpacity={0.8}
-    backgroundColor={backgroundColor}
-    outline={outline}
-    outlineColor={outlineColor}
-    outlineWidth={outlineWidth}
-    borderRadius={borderRadius}
-    disabled={disabled}
-    style={style}
-    {...props}>
-    <Label {...textProps} style={textStyle} color={textColor}>
-      {text}
-    </Label>
-  </ButtonWrapper>
-)
+}) => {
+  const ButtonTheme = useTheme().components.Button
+  return (
+    <ButtonWrapper
+      onPress={onPress}
+      activeOpacity={0.8}
+      backgroundColor={disabled ? ButtonTheme.disabledColor : backgroundColor ?? ButtonTheme.backgroundColor}
+      outline={outline}
+      outlineColor={outlineColor}
+      outlineWidth={outlineWidth}
+      borderRadius={borderRadius ?? ButtonTheme.borderRadius}
+      disabled={disabled}
+      style={[{height: ButtonTheme.height}, StyleSheet.flatten(style)]}
+      {...props}>
+      <Label {...textProps} style={textStyle} color={textColor ?? ButtonTheme.labelColor}>
+        {text}
+      </Label>
+    </ButtonWrapper>
+  )
+}
 
 const ButtonWrapper = styled.TouchableOpacity(
   ({
@@ -87,7 +97,7 @@ const ButtonWrapper = styled.TouchableOpacity(
   }: Omit<ButtonProps, 'text' | 'onPress'> & {theme?: ITheme}) => ({
     paddingVertical: theme?.spacing.small,
     paddingHorizontal: theme?.spacing.slim,
-    borderRadius: borderRadius || metrics.borderRadius,
+    borderRadius: borderRadius,
     backgroundColor: disabled ? theme?.colors.muted : backgroundColor || theme?.colors.green,
     alignSelf: 'center',
     ...(outline && {
@@ -98,7 +108,7 @@ const ButtonWrapper = styled.TouchableOpacity(
 )
 
 const Label = styled.Text(({theme, color}: {color?: string; theme?: ITheme}) => ({
-  color: color || 'white',
+  color: color,
   fontWeight: theme?.fontWeights?.bold,
 }))
 

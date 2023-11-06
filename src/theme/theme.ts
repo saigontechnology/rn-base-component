@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import type {ColorModeOptions} from '../core/color-mode/type'
 import base from './base'
+import components from './components'
 
 const config: ColorModeOptions = {
   useSystemColorMode: false,
@@ -11,6 +12,7 @@ const darkColors = base.colors
 
 const theme = {
   ...base,
+  components,
   config,
   darkColors,
 }
