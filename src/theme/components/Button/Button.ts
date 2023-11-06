@@ -7,11 +7,13 @@ export type ButtonThemeProps = {
   disabledColor?: string
   borderRadius?: number
   labelColor?: string
+  outlineWidth?: number
+  outlineColor?: string
 }
 
 export const ButtonTheme: ButtonThemeProps = {
   height: metrics.xxl,
-  backgroundColor: base.colors.green,
+  backgroundColor: base.colors.primary,
   disabledColor: base.colors.muted,
   borderRadius: metrics.borderRadius,
   labelColor: base.colors.white,
