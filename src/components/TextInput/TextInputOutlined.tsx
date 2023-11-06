@@ -1,16 +1,16 @@
 import React, {forwardRef, useCallback, useImperativeHandle, useMemo, useRef} from 'react'
 import type {TextInput as Input, LayoutChangeEvent} from 'react-native'
+import Animated, {interpolate, useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated'
 import styled from 'styled-components/native'
+import {useTheme} from '../../hooks'
 import type {
   FlexDirection,
   InputContainerProps,
-  TextInputProps,
   Position,
+  TextInputProps,
   TextInputRef,
   Theme,
 } from './TextInput'
-import Animated, {interpolate, useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated'
-import {useTheme} from '../../hooks'
 import {
   BLURRED,
   DEFAULT_HEIGHT,
@@ -22,6 +22,7 @@ import {
   OUT_OF_FOCUS,
   UNFOCUSED_FONTSIZE,
 } from './constants'
+import {StyleSheet} from 'react-native'
 
 interface Size {
   width: number
@@ -144,14 +145,14 @@ const TextInputOutlined = forwardRef<TextInputRef, TextInputProps>(
     return (
       <Container style={containerStyle}>
         <Wrapper testID="test-Wrapper" onPress={setFocus} onLayout={getWrapperInfo}>
-          <ContentAnimated style={[animatedContentStyle, inputContainerStyle]}>
+          <ContentAnimated style={[animatedContentStyle, StyleSheet.flatten(inputContainerStyle)]}>
             {!!leftComponent && leftComponent}
             <TextInputContent testID="test-TextInputContent" onLayout={getTextInputContentInfo}>
               {!!label && (
                 <LabelAnimated
                   testID={'test-Label'}
                   onLayout={getLabelInfo}
-                  style={[animatedLabelStyle, labelStyle]}>
+                  style={[animatedLabelStyle, StyleSheet.flatten(labelStyle)]}>
                   {label}
                 </LabelAnimated>
               )}
@@ -195,7 +196,7 @@ const TextInputOutlined = forwardRef<TextInputRef, TextInputProps>(
 
 const Container = styled.View({})
 
-const Wrapper = styled.TouchableWithoutFeedback({})
+const Wrapper = styled.Pressable({})
 
 const TextInputContent = styled.View(() => ({
   flex: 1,
@@ -212,7 +213,7 @@ const Content = styled.View((props: InputContainerProps) => ({
   backgroundColor: props.theme?.colors?.lightBackground,
   alignItems: 'center',
 }))
-const ContentAnimated = Animated.createAnimatedComponent(Content)
+const ContentAnimated = Animated.createAnimatedComponent<TextInputProps>(Content)
 
 const Label = styled.Text(({theme}: Theme) => ({
   position: 'absolute' as Position,
@@ -220,7 +221,7 @@ const Label = styled.Text(({theme}: Theme) => ({
   zIndex: 1,
   backgroundColor: theme?.colors?.lightBackground,
 }))
-const LabelAnimated = Animated.createAnimatedComponent(Label)
+const LabelAnimated = Animated.createAnimatedComponent<TextInputProps>(Label)
 
 const ErrorText = styled.Text(({theme}: Theme) => ({
   fontSize: theme?.fontSizes?.sm,

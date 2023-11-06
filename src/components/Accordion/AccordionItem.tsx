@@ -104,7 +104,7 @@ const AccordionHeader = styled.View(({theme}: Theme) => ({
   padding: theme?.spacing?.compact,
 }))
 
-const Title = styled.Text<Theme>(({theme}) => ({
+const Title = styled.Text(({theme}: Theme) => ({
   fontSize: theme?.fontSizes?.xl,
   textAlign: 'center',
   color: theme?.colors?.amber,
