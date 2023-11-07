@@ -31,12 +31,11 @@ exports[`Card applies background color correctly 1`] = `
   onStartShouldSetResponder={[Function]}
   style={
     {
-      "borderRadius": 8.214285714285714,
+      "borderBottomLeftRadius": 8.214285714285714,
+      "borderBottomRightRadius": 8.214285714285714,
+      "borderTopLeftRadius": 8.214285714285714,
+      "borderTopRightRadius": 8.214285714285714,
       "opacity": 1,
-      "paddingBottom": 26.285714285714285,
-      "paddingLeft": 26.285714285714285,
-      "paddingRight": 26.285714285714285,
-      "paddingTop": 26.285714285714285,
     }
   }
   testID="card"
@@ -74,12 +73,11 @@ exports[`Card renders correctly 1`] = `
   onStartShouldSetResponder={[Function]}
   style={
     {
-      "borderRadius": 8.214285714285714,
+      "borderBottomLeftRadius": 8.214285714285714,
+      "borderBottomRightRadius": 8.214285714285714,
+      "borderTopLeftRadius": 8.214285714285714,
+      "borderTopRightRadius": 8.214285714285714,
       "opacity": 1,
-      "paddingBottom": 26.285714285714285,
-      "paddingLeft": 26.285714285714285,
-      "paddingRight": 26.285714285714285,
-      "paddingTop": 26.285714285714285,
     }
   }
   testID="card"
