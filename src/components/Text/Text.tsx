@@ -1,5 +1,4 @@
 import type {TextProps as TextProperties, TextStyle} from 'react-native'
-import {metrics} from '../../helpers/metrics'
 import styled from 'styled-components/native'
 import type {Theme} from 'src/theme'
 
@@ -11,8 +10,8 @@ export type TextProps = {
 } & TextProperties
 
 export const Text = styled.Text((props: TextProps) => ({
-  fontSize: props?.fontSize || metrics.span,
-  color: props?.color || props?.theme?.colors?.black,
+  fontSize: props?.fontSize || props?.theme?.components.Text.fontSize,
+  color: props?.color || props?.theme?.components.Text.color,
   fontFamily: props?.theme?.fonts?.regular,
 }))
 
