@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, {ReactNode} from 'react'
 import styled from 'styled-components/native'
 import {
   type TouchableOpacityProps,
@@ -90,7 +90,6 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
       style={[{height: ButtonTheme.height}, StyleSheet.flatten(style)]}
       {...props}>
-
       {!!leftIcon && leftIcon}
       <Label {...textProps} style={textStyle} color={textColor ?? ButtonTheme.textColor}>
         {text}
@@ -118,6 +117,7 @@ const ButtonWrapper = styled.TouchableOpacity(
     backgroundColor: disabled ? theme?.colors.muted : backgroundColor || theme?.colors.green,
     ...((leftIcon || rightIcon) && {
       alignItems: 'center',
+      fexDirection: 'row',
     }),
     alignSelf: 'center',
     ...(outline && {
