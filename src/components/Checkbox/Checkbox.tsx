@@ -18,7 +18,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import styled from 'styled-components/native'
 import type {ITheme} from '../../theme'
-import {theme, Images} from '../../theme'
+import {Images} from '../../theme'
 import {
   BOUNCE_EFFECT_IN,
   BOUNCE_EFFECT_OUT,
@@ -26,6 +26,7 @@ import {
   DEFAULT_OPACITY,
   DEFAULT_BOUNCE_EFFECT,
 } from './constants'
+import {useTheme} from '../../hooks'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 type CustomTextStyleProp = StyleProp<TextStyle> | Array<StyleProp<TextStyle>>
@@ -48,11 +49,14 @@ type IconContainerStyle = {
   backgroundColor: string
   disabled: boolean
   disableOpacity: number
+  borderRadius?: number
 }
 type InnerIconContainerStyle = {
   theme?: ITheme
   size?: number
   borderColor: string
+  borderRadius?: number
+  borderWidth?: number
 }
 
 export interface ICheckboxProps extends BaseTouchableProps {
@@ -60,6 +64,10 @@ export interface ICheckboxProps extends BaseTouchableProps {
   size?: number
   /** the text of the checkbox */
   text?: string
+  /** border radius of the checkbox */
+  borderRadius?: number
+  /** border width the checkbox */
+  borderWidth?: number
   /** color when checkbox is checked, default #ffc484 */
   fillColor?: string
   /** define the status of checkbox */
@@ -110,8 +118,10 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       iconStyle,
       iconComponent,
       iconImageStyle,
-      fillColor = theme.colors.primary,
-      unfillColor = theme.colors.transparent,
+      fillColor,
+      unfillColor,
+      borderRadius,
+      borderWidth,
       disableBuiltInState = false,
       isChecked,
       innerIconStyle,
@@ -130,6 +140,7 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
     },
     forwardedRef,
   ) => {
+    const CheckboxTheme = useTheme().components.Checkbox
     const [checked, setChecked] = useState(false)
     const bounceValue = useSharedValue(DEFAULT_BOUNCE_EFFECT)
 
@@ -159,12 +170,22 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       return (
         <IconContainerAnimated
           testID={'icon-container'}
-          size={size}
-          backgroundColor={checked ? fillColor : unfillColor}
+          size={size ?? CheckboxTheme.size}
+          backgroundColor={
+            checked
+              ? fillColor ?? (CheckboxTheme.fillColor as string)
+              : unfillColor ?? (CheckboxTheme.unfillColor as string)
+          }
           disabled={disabled}
           disableOpacity={disableOpacity}
+          borderRadius={borderRadius ?? CheckboxTheme.borderRadius}
           style={[animatedIconContainerStyle, StyleSheet.flatten(iconStyle)]}>
-          <InnerIconContainer style={innerIconStyle} size={size} borderColor={fillColor}>
+          <InnerIconContainer
+            style={innerIconStyle}
+            size={size ?? CheckboxTheme.size}
+            borderColor={fillColor ?? CheckboxTheme.fillColor}
+            borderRadius={borderRadius ?? CheckboxTheme.borderRadius}
+            borderWidth={borderWidth ?? CheckboxTheme.borderWidth}>
             {iconComponent ||
               (checkStatus && <StyledImage source={checkIconImageSource} style={iconImageStyle} />)}
           </InnerIconContainer>
@@ -230,22 +251,23 @@ const TextContainer = styled.View((props: TextContainerStyle) => ({
 const IconContainer = styled.View((props: IconContainerStyle) => ({
   alignItems: 'center',
   justifyContent: 'center',
-  width: props.size || props.theme?.sizes?.narrow,
-  height: props.size || props.theme?.sizes?.narrow,
-  borderRadius: props.size || props.theme?.sizes?.narrow,
+  width: props.size,
+  height: props.size,
+  borderRadius: props.borderRadius || props.size,
   backgroundColor: props.backgroundColor,
   opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
+
 const IconContainerAnimated = Animated.createAnimatedComponent<ICheckboxProps & {backgroundColor: string}>(
   IconContainer,
 )
 
 const InnerIconContainer = styled.View((props: InnerIconContainerStyle) => ({
-  borderWidth: props.theme?.borderWidths?.tiny,
+  borderWidth: props.borderWidth,
   alignItems: 'center',
   justifyContent: 'center',
-  width: props.size || props.theme?.sizes?.narrow,
-  height: props.size || props.theme?.sizes?.narrow,
-  borderRadius: props.size || props.theme?.sizes?.narrow,
+  width: props.size,
+  height: props.size,
+  borderRadius: props.borderRadius || props.size,
   borderColor: props?.borderColor,
 }))

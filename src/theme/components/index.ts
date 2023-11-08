@@ -5,6 +5,7 @@ import {
   ButtonSecondaryTheme,
   ButtonTransparentTheme,
 } from './Button'
+import {CheckboxTheme} from './Checkbox'
 
 export default {
   Button: ButtonTheme,
@@ -12,4 +13,5 @@ export default {
   ButtonPrimary: ButtonPrimaryTheme,
   ButtonSecondary: ButtonSecondaryTheme,
   ButtonTransparent: ButtonTransparentTheme,
+  Checkbox: CheckboxTheme,
 }
