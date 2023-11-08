@@ -7,6 +7,7 @@ import Checkbox from './Checkbox/Checkbox'
 import CodeInput from './CodeInput/CodeInput'
 import Slider from './Slider/Slider'
 import Card from './Card/Card'
+import Header from './Header/Header'
 import TextInput from './TextInput/TextInput'
 
 export {
@@ -17,6 +18,7 @@ export {
   ButtonTransparent,
   CodeInput,
   Checkbox,
+  Header,
   Progress,
   Slider,
   RadioButton,
@@ -24,4 +26,5 @@ export {
   TextInput,
   Accordion,
 }
+
 export * from './Text/Text'

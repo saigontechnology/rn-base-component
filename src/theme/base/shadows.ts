@@ -99,7 +99,6 @@ const shadows = {
     shadowRadius: 6.27,
     elevation: 10,
   },
-}
+} as const
 
-export type IShadows = keyof typeof shadows
 export default shadows

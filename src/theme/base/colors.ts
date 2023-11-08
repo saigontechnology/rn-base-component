@@ -53,7 +53,6 @@ const colors = {
   darkTextColor: '#333333',
   placeHolderText: '#929298',
   errorText: '#ff0009',
-}
+} as const
 
-export type IColors = keyof typeof colors
 export default colors

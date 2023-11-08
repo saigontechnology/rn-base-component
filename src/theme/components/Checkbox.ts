@@ -8,7 +8,7 @@ export type CheckboxThemeProps = Pick<
 >
 
 export const CheckboxTheme: CheckboxThemeProps = {
-  size: base.sizes.narrow,
+  size: metrics.xl,
   borderRadius: metrics.borderRadius,
   fillColor: base.colors.primary,
   unfillColor: base.colors.transparent,
