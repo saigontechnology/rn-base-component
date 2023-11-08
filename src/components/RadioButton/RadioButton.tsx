@@ -1,7 +1,8 @@
 import React, {forwardRef, useMemo, useRef, useState} from 'react'
-import {StyleProp, ViewStyle, TextStyle, LayoutChangeEvent, View, Text} from 'react-native'
+import {StyleSheet} from 'react-native'
+import type {LayoutChangeEvent, StyleProp, ViewStyle, TextStyle, View} from 'react-native'
 import styled from 'styled-components/native'
-import {metrics, responsiveHeight, responsiveWidth} from '../../helpers/metrics'
+import {responsiveHeight, responsiveWidth} from '../../helpers/metrics'
 import Bounceable, {IBounceableProps} from './Bounceable'
 import {theme, ITheme} from '../../theme'
 
@@ -156,16 +157,23 @@ const RadioButton = forwardRef<View, IRadioButtonProps>(
 
     return (
       <RadioButtonWrapper testID="container" style={wrapperStyle}>
-        <BounceableStyle
-          outer={outer}
-          disable={!!disable}
-          disableOpacity={disableOpacity}
-          ringColor={ringColor}
+        <Bounceable
           testID="bounceable"
           ref={ref}
           disabled={disable}
           onLayout={handleLayout}
-          style={style}
+          style={StyleSheet.flatten([
+            styles.bounceStyle,
+            {
+              width: outer.width,
+              height: outer.height,
+              borderRadius: outer.border,
+              borderColor: ringColor,
+              opacity: disable ? disableOpacity : 1,
+              borderWidth: theme.borderWidths.little,
+            },
+            style,
+          ])}
           onPress={handlePress}
           {...rest}>
           <RadioButtonInnerContainer
@@ -177,7 +185,7 @@ const RadioButton = forwardRef<View, IRadioButtonProps>(
             style={innerContainerStyle}
             testID="circle"
           />
-        </BounceableStyle>
+        </Bounceable>
         {renderLabelText()}
       </RadioButtonWrapper>
     )
@@ -188,51 +196,50 @@ RadioButton.displayName = 'RadioButton'
 
 export default RadioButton
 
-const BounceableStyle = styled(Bounceable)<{
-  outer: {width: number; height: number; border: number}
-  ringColor: string
-  disable: boolean
-  disableOpacity: number
-}>(({outer, ringColor, disable, disableOpacity}) => ({
-  width: outer.width,
-  height: outer.height,
-  borderWidth: metrics.borderRadius,
-  borderRadius: outer.border,
-  borderColor: ringColor,
-  alignItems: 'center',
-  justifyContent: 'center',
-  opacity: disable ? disableOpacity : 1,
-  backgroundColor: 'transparent',
-}))
-
-const RadioButtonWrapper = styled(View)({
+const RadioButtonWrapper = styled.View({
   flexDirection: 'row',
   alignItems: 'center',
 })
 
-const RadioButtonInnerContainer = styled(View)<{
-  inner: {width: number; height: number; border: number}
-  maxWidth: number
-  maxHeight: number
-  isActive: boolean
-  innerBackgroundColor: string
-}>(({inner, maxWidth, maxHeight, isActive, innerBackgroundColor}) => ({
-  maxWidth: maxWidth,
-  maxHeight: maxHeight,
-  width: inner.width,
-  height: inner.height,
-  borderRadius: inner.border,
-  backgroundColor: isActive ? innerBackgroundColor : 'transparent',
-}))
+const RadioButtonInnerContainer = styled.View(
+  ({
+    inner,
+    maxWidth,
+    maxHeight,
+    isActive,
+    innerBackgroundColor,
+  }: {
+    inner: {width: number; height: number; border: number}
+    maxWidth: number
+    maxHeight: number
+    isActive: boolean
+    innerBackgroundColor: string
+  }) => ({
+    maxWidth: maxWidth,
+    maxHeight: maxHeight,
+    width: inner.width,
+    height: inner.height,
+    borderRadius: inner.border,
+    backgroundColor: isActive ? innerBackgroundColor : 'transparent',
+  }),
+)
 
-const LabelTextView = styled(View)<{disable: boolean; disableOpacity: number}>(
-  ({disable, disableOpacity}) => ({
+const LabelTextView = styled.View(
+  ({disable, disableOpacity}: {disable: boolean; disableOpacity: number}) => ({
     marginLeft: responsiveWidth(16),
     opacity: disable ? disableOpacity : 1,
   }),
 )
 
-const LabelText = styled(Text)((props: {theme: ITheme}) => ({
+const LabelText = styled.Text((props: {theme: ITheme}) => ({
   color: props?.theme?.colors?.black,
   fontSize: props?.theme?.fontSizes?.md,
 }))
+
+const styles = StyleSheet.create({
+  bounceStyle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+})

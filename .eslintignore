@@ -7,3 +7,4 @@ example/react-native.config.js
 example/metro.config.js
 example/babel.config.js
 example/node_modules
+lib

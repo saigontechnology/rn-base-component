@@ -1,5 +1,6 @@
 import React, {ReactNode, useCallback, useRef, useState, memo} from 'react'
-import {TextInput, Text, StyleProp, ViewStyle, KeyboardTypeOptions, TextStyle, Pressable} from 'react-native'
+import {TextInput, Text} from 'react-native'
+import type {KeyboardTypeOptions, StyleProp, TextStyle, ViewStyle} from 'react-native'
 import {metrics} from '../../helpers/metrics'
 import styled from 'styled-components/native'
 import Cursor from './Cursor'
@@ -142,9 +143,9 @@ export default memo(CodeInput)
 
 const CodeInputContainer = styled.View({})
 
-const Cell = styled(Pressable)((props: CellStyle) => ({
-  width: metrics.huge,
-  height: metrics.huge,
+const Cell = styled.Pressable((props: CellStyle) => ({
+  width: props?.theme?.spacing.gigantic,
+  height: props?.theme?.spacing.gigantic,
   borderRadius: metrics.tiny,
   borderWidth: 1,
   borderColor: props?.theme?.colors?.coolGray,
@@ -153,9 +154,9 @@ const Cell = styled(Pressable)((props: CellStyle) => ({
   margin: metrics.tiny,
 }))
 
-const SecureView = styled(Pressable)((props: SecureViewStyle) => ({
-  width: metrics.small,
-  height: metrics.small,
+const SecureView = styled.Pressable((props: SecureViewStyle) => ({
+  width: props?.theme?.spacing.slim,
+  height: props?.theme?.spacing.slim,
   borderRadius: metrics.small,
   backgroundColor: props?.theme?.colors?.darkText,
 }))
@@ -166,7 +167,7 @@ const CellContainer = styled.View({
   flexWrap: 'wrap',
 })
 
-const StyledTextInput = styled(TextInput)({
+const StyledTextInput = styled.TextInput({
   opacity: 0,
   position: 'absolute',
   top: 0,

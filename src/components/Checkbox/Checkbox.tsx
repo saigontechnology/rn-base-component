@@ -1,21 +1,24 @@
 import React, {useEffect, forwardRef, useImperativeHandle, useState, useCallback, memo} from 'react'
 import {
   Text,
-  View,
-  Image,
   StyleProp,
   ViewStyle,
   TextStyle,
   ImageStyle,
-  Pressable,
   ImageSourcePropType,
   TouchableWithoutFeedbackProps,
   StyleSheet,
 } from 'react-native'
-import Animated, {useSharedValue, withSequence, withSpring, withTiming} from 'react-native-reanimated'
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated'
 import styled from 'styled-components/native'
-import type {ITheme} from 'src/theme'
-import {theme, Images} from '../../theme'
+import type {ITheme} from '../../theme'
+import {Images} from '../../theme'
 import {
   BOUNCE_EFFECT_IN,
   BOUNCE_EFFECT_OUT,
@@ -23,6 +26,7 @@ import {
   DEFAULT_OPACITY,
   DEFAULT_BOUNCE_EFFECT,
 } from './constants'
+import {useTheme} from '../../hooks'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 type CustomTextStyleProp = StyleProp<TextStyle> | Array<StyleProp<TextStyle>>
@@ -45,11 +49,14 @@ type IconContainerStyle = {
   backgroundColor: string
   disabled: boolean
   disableOpacity: number
+  borderRadius?: number
 }
 type InnerIconContainerStyle = {
   theme?: ITheme
   size?: number
   borderColor: string
+  borderRadius?: number
+  borderWidth?: number
 }
 
 export interface ICheckboxProps extends BaseTouchableProps {
@@ -57,12 +64,18 @@ export interface ICheckboxProps extends BaseTouchableProps {
   size?: number
   /** the text of the checkbox */
   text?: string
+  /** border radius of the checkbox */
+  borderRadius?: number
+  /** border width the checkbox */
+  borderWidth?: number
   /** color when checkbox is checked, default #ffc484 */
   fillColor?: string
   /** define the status of checkbox */
   isChecked?: boolean
   /** color when checkbox is unchecked, default transparent */
   unfillColor?: string
+  /** color of the check mark, default is white */
+  checkMarkColor?: string
   /** opacity of checkbox when disable, default 0.5 */
   disableOpacity?: number
   /** disable the checkbox text */
@@ -107,8 +120,11 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       iconStyle,
       iconComponent,
       iconImageStyle,
-      fillColor = theme.colors.primary,
-      unfillColor = theme.colors.transparent,
+      fillColor,
+      unfillColor,
+      checkMarkColor,
+      borderRadius,
+      borderWidth,
       disableBuiltInState = false,
       isChecked,
       innerIconStyle,
@@ -127,6 +143,7 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
     },
     forwardedRef,
   ) => {
+    const CheckboxTheme = useTheme().components.Checkbox
     const [checked, setChecked] = useState(false)
     const bounceValue = useSharedValue(DEFAULT_BOUNCE_EFFECT)
 
@@ -146,22 +163,36 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       bounceValue.value = withSequence(withTiming(bounceEffectIn), withSpring(bounceEffectOut))
     }, [bounceValue, bounceEffectIn, bounceEffectOut])
 
+    const animatedIconContainerStyle = useAnimatedStyle(() => ({
+      transform: [{scale: withSequence(withTiming(bounceEffectIn), withSpring(bounceEffectOut))}],
+    }))
+
     const renderCheckIcon = () => {
       const checkStatus = disableBuiltInState ? isChecked : checked
 
       return (
-        <IconContainer
+        <IconContainerAnimated
           testID={'icon-container'}
-          size={size}
-          backgroundColor={checked ? fillColor : unfillColor}
           disabled={disabled}
           disableOpacity={disableOpacity}
-          style={StyleSheet.flatten([{transform: [{scale: bounceValue}]}, iconStyle])}>
-          <InnerIconContainer style={innerIconStyle} size={size} borderColor={fillColor}>
+          {...CheckboxTheme}
+          backgroundColor={
+            checked
+              ? fillColor ?? (CheckboxTheme.fillColor as string)
+              : unfillColor ?? (CheckboxTheme.unfillColor as string)
+          }
+          style={[animatedIconContainerStyle, StyleSheet.flatten(iconStyle)]}>
+          <InnerIconContainer style={innerIconStyle} {...CheckboxTheme}>
             {iconComponent ||
-              (checkStatus && <StyledImage source={checkIconImageSource} style={iconImageStyle} />)}
+              (checkStatus && (
+                <StyledImage
+                  source={checkIconImageSource}
+                  style={iconImageStyle}
+                  tintColor={checkMarkColor ?? CheckboxTheme.checkMarkColor}
+                />
+              ))}
           </InnerIconContainer>
-        </IconContainer>
+        </IconContainerAnimated>
       )
     }
 
@@ -205,37 +236,41 @@ Checkbox.displayName = 'Checkbox'
 
 export default memo(Checkbox)
 
-const Container = styled(Pressable)({
+const Container = styled.Pressable({
   alignItems: 'center',
   flexDirection: 'row',
 })
 
-const StyledImage = styled(Image)((props: StyledImageStyle) => ({
+const StyledImage = styled.Image((props: StyledImageStyle) => ({
   width: props.theme?.sizes?.petite,
   height: props.theme?.sizes?.petite,
 }))
 
-const TextContainer = styled(View)((props: TextContainerStyle) => ({
+const TextContainer = styled.View((props: TextContainerStyle) => ({
   marginLeft: props.theme?.sizes?.petite,
   opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
 
-const IconContainer = styled(Animated.View)((props: IconContainerStyle) => ({
+const IconContainer = styled.View((props: IconContainerStyle) => ({
   alignItems: 'center',
   justifyContent: 'center',
-  width: props.size || props.theme?.sizes?.narrow,
-  height: props.size || props.theme?.sizes?.narrow,
-  borderRadius: props.size || props.theme?.sizes?.narrow,
+  width: props.size,
+  height: props.size,
+  borderRadius: props.borderRadius || props.size,
   backgroundColor: props.backgroundColor,
   opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
 
-const InnerIconContainer = styled(View)((props: InnerIconContainerStyle) => ({
-  borderWidth: props.theme?.borderWidths?.tiny,
+const IconContainerAnimated = Animated.createAnimatedComponent<ICheckboxProps & {backgroundColor: string}>(
+  IconContainer,
+)
+
+const InnerIconContainer = styled.View((props: InnerIconContainerStyle) => ({
+  borderWidth: props.borderWidth,
   alignItems: 'center',
   justifyContent: 'center',
-  width: props.size || props.theme?.sizes?.narrow,
-  height: props.size || props.theme?.sizes?.narrow,
-  borderRadius: props.size || props.theme?.sizes?.narrow,
+  width: props.size,
+  height: props.size,
+  borderRadius: props.borderRadius || props.size,
   borderColor: props?.borderColor,
 }))

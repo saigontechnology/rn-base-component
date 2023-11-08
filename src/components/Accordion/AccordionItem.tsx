@@ -1,5 +1,5 @@
 import React, {PropsWithChildren, useCallback, useMemo} from 'react'
-import {LayoutAnimation, Text, TouchableOpacity, View} from 'react-native'
+import {LayoutAnimation, TouchableOpacity} from 'react-native'
 import styled from 'styled-components/native'
 import type {ITheme} from '../../theme'
 import type {CommonAccordionProps, Section} from './Accordion'
@@ -95,23 +95,23 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
 export default React.memo(AccordionItem)
 
-const AccordionContainer = styled(View)(({theme}: Theme) => ({
+const AccordionContainer = styled.View(({theme}: Theme) => ({
   paddingBottom: theme?.spacing?.petite,
   overflow: 'hidden',
 }))
 
-const AccordionHeader = styled(View)(({theme}: Theme) => ({
+const AccordionHeader = styled.View(({theme}: Theme) => ({
   padding: theme?.spacing?.compact,
 }))
 
-const Title = styled(Text)<Theme>(({theme}) => ({
+const Title = styled.Text(({theme}: Theme) => ({
   fontSize: theme?.fontSizes?.xl,
   textAlign: 'center',
   color: theme?.colors?.amber,
   fontWeight: theme?.fontWeights?.bold,
 }))
 
-const AccordionBody = styled(View)(({theme}: Theme) => ({
+const AccordionBody = styled.View(({theme}: Theme) => ({
   padding: theme?.spacing?.compact,
   justifyContent: 'center',
   alignItems: 'center',

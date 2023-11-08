@@ -1,13 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, {createContext, useCallback, useMemo, useState} from 'react'
-import {ThemeProvider as ThemeProviderStyled, ThemeProviderComponent} from 'styled-components'
+import {ThemeProvider} from 'styled-components'
 import {ITheme, theme as defaultTheme} from '../theme'
 import type {ColorMode, IColorModeContextProps} from './color-mode/type'
 
 export type IBaseContext = {theme: ITheme} | IColorModeContextProps
 export const BaseContext = createContext<IBaseContext | null>(null)
-type AnyIfEmpty<T extends object> = keyof T extends never ? any : T
-const ThemeProvider: ThemeProviderComponent<AnyIfEmpty<ITheme>> = ThemeProviderStyled
 
 export interface BaseProviderProps {
   children?: React.ReactNode

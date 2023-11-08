@@ -1,19 +1,11 @@
 import React from 'react'
-import {
-  GestureEvent,
-  PanGestureHandler,
-  PanGestureHandlerEventPayload,
-  TextInput,
-} from 'react-native-gesture-handler'
+import {GestureEvent, PanGestureHandler, PanGestureHandlerEventPayload} from 'react-native-gesture-handler'
 import styled from 'styled-components/native'
 import Animated, {useAnimatedProps, useAnimatedStyle} from 'react-native-reanimated'
 import type {Position, Size, TextAlign, ThumbContainerStyle} from '../Slider'
 import {isIOS, metrics, responsiveHeight} from '../../../helpers/metrics'
-import type {StyleProp, TextProps, ViewStyle} from 'react-native'
-import {View} from 'react-native'
+import {TextInput, type StyleProp, type TextProps, type ViewStyle} from 'react-native'
 import type {ITheme} from '../../../theme'
-
-const AnimatedText = Animated.createAnimatedComponent(TextInput)
 
 interface ThumbProps {
   text: string
@@ -69,23 +61,21 @@ const ThumbContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   backgroundColor: 'transparent',
 }))
 
-const TriangleDown = styled(View)<ViewStyle & {background?: string; theme: ITheme}>(
-  ({background, theme}) => ({
-    position: 'absolute' as Position,
-    bottom: -5,
-    width: 0,
-    height: 0,
-    backgroundColor: 'transparent',
-    borderStyle: 'solid',
-    borderLeftWidth: 5,
-    borderRightWidth: 5,
-    borderBottomWidth: 10,
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    borderBottomColor: background || theme?.colors.primary,
-    transform: [{rotate: '180deg'}] as any,
-  }),
-)
+const TriangleDown = styled.View(({background, theme}: {background?: string; theme: ITheme}) => ({
+  position: 'absolute' as Position,
+  bottom: -5,
+  width: 0,
+  height: 0,
+  backgroundColor: 'transparent',
+  borderStyle: 'solid',
+  borderLeftWidth: 5,
+  borderRightWidth: 5,
+  borderBottomWidth: 10,
+  borderLeftColor: 'transparent',
+  borderRightColor: 'transparent',
+  borderBottomColor: background || theme?.colors.primary,
+  transform: [{rotate: '180deg'}] as unknown as string,
+}))
 
 const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   position: 'absolute' as Position,
@@ -99,7 +89,7 @@ const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   margin: !isIOS ? -(responsiveHeight(props.theme?.spacing.tiny || 0) || 0) : 0,
 }))
 
-const Label = styled(AnimatedText)(({theme}: {theme: ITheme}) => ({
+const Label = styled(Animated.createAnimatedComponent(TextInput))(({theme}: {theme: ITheme}) => ({
   color: theme.colors.white,
   padding: responsiveHeight(isIOS ? theme.borderWidths.small : theme.spacing.tiny),
   textAlign: 'center' as TextAlign,

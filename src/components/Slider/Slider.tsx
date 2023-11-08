@@ -13,7 +13,6 @@ import {
   TextInputProps,
   Insets,
   TextStyle,
-  View,
 } from 'react-native'
 import {
   useAnimatedStyle,
@@ -38,6 +37,7 @@ import {
 import SliderFixed from './SliderFixed'
 import SliderRange, {SliderRangeProps} from './SliderRange'
 import {GestureHandlerRootView} from 'react-native-gesture-handler'
+import {useTheme} from '../../hooks'
 
 type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
 type Position = 'absolute' | 'fixed' | 'relative' | 'static' | 'sticky'
@@ -165,6 +165,7 @@ const Slider: SliderComponentProps = ({
   trackPointStyle,
   onValueChange = () => null,
 }: SliderProps) => {
+  const theme = useTheme()
   const sliderInfo = useSharedValue<SliderInfo>({
     range: INIT_VALUE,
     trackWidth: INIT_VALUE,
@@ -311,7 +312,14 @@ const Slider: SliderComponentProps = ({
             onPressPoint={(point: number) => tapToSeek && onPressPoint(point)}
           />
         )}
-        <Tracked style={[trackedStyle, animatedTrackStyle]} />
+        <Track
+          style={StyleSheet.flatten([
+            StyleSheet.absoluteFillObject,
+            {backgroundColor: theme?.colors.primary},
+            trackedStyle,
+            animatedTrackStyle,
+          ])}
+        />
         <Thumb
           text={minimumValue?.toString()}
           bgColorLabelView={bgColorLabelView}
@@ -330,14 +338,9 @@ const Slider: SliderComponentProps = ({
   )
 }
 
-const Container = styled(View)(() => ({
+const Container = styled.View(() => ({
   justifyContent: 'center',
   height: responsiveHeight(10),
-}))
-
-const Tracked = styled(Track)(({theme}: {theme: ITheme}) => ({
-  ...StyleSheet.absoluteFillObject,
-  backgroundColor: theme?.colors.primary,
 }))
 
 Slider.Range = SliderRange

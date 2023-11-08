@@ -1,10 +1,9 @@
 import React, {useCallback, useMemo} from 'react'
-import {StyleSheet, View} from 'react-native'
+import {StyleSheet} from 'react-native'
 import styled from 'styled-components/native'
 import {Thumb, Track, TrackPoint} from './components'
 import {GestureHandlerRootView, PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
 import type {AnimatedGHContext, AnimatedLabelProps, ISliderCommonProps} from './Slider'
-import type {ITheme} from '../../theme'
 import {
   useAnimatedStyle,
   useSharedValue,
@@ -267,7 +266,14 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
             onPressPoint={(point: number) => tapToSeek && onPressPoint(point)}
           />
         )}
-        <Tracked style={[trackedStyle, animatedTrackStyle]} />
+        <Track
+          style={StyleSheet.flatten([
+            StyleSheet.absoluteFillObject,
+            {backgroundColor: theme?.colors.primary},
+            trackedStyle,
+            animatedTrackStyle,
+          ])}
+        />
         <Thumb
           text={minimumValue?.toString()}
           bgColorLabelView={bgColorLabelView}
@@ -299,14 +305,9 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
   )
 }
 
-const Container = styled(View)((props: ContainerProps) => ({
+const Container = styled.View((props: ContainerProps) => ({
   justifyContent: 'center',
   width: props.width,
-}))
-
-const Tracked = styled(Track)(({theme}: {theme: ITheme}) => ({
-  ...StyleSheet.absoluteFillObject,
-  backgroundColor: theme?.colors.primary,
 }))
 
 export default SliderFixedRange
