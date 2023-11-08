@@ -173,22 +173,16 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       return (
         <IconContainerAnimated
           testID={'icon-container'}
-          size={size ?? CheckboxTheme.size}
+          disabled={disabled}
+          disableOpacity={disableOpacity}
+          {...CheckboxTheme}
           backgroundColor={
             checked
               ? fillColor ?? (CheckboxTheme.fillColor as string)
               : unfillColor ?? (CheckboxTheme.unfillColor as string)
           }
-          disabled={disabled}
-          disableOpacity={disableOpacity}
-          borderRadius={borderRadius ?? CheckboxTheme.borderRadius}
           style={[animatedIconContainerStyle, StyleSheet.flatten(iconStyle)]}>
-          <InnerIconContainer
-            style={innerIconStyle}
-            size={size ?? CheckboxTheme.size}
-            borderColor={fillColor ?? CheckboxTheme.fillColor}
-            borderRadius={borderRadius ?? CheckboxTheme.borderRadius}
-            borderWidth={borderWidth ?? CheckboxTheme.borderWidth}>
+          <InnerIconContainer style={innerIconStyle} {...CheckboxTheme}>
             {iconComponent ||
               (checkStatus && (
                 <StyledImage
