@@ -4,5 +4,5 @@ import {type ButtonThemeProps, ButtonTheme} from './Button'
 export const ButtonTransparentTheme: ButtonThemeProps = {
   ...ButtonTheme,
   backgroundColor: 'transparent',
-  labelColor: base.colors.primary,
+  textColor: base.colors.primary,
 }

@@ -4,5 +4,5 @@ import {type ButtonThemeProps, ButtonTheme} from './Button'
 export const ButtonSecondaryTheme: ButtonThemeProps = {
   ...ButtonTheme,
   backgroundColor: base.colors.secondary,
-  labelColor: base.colors.white,
+  textColor: base.colors.white,
 }

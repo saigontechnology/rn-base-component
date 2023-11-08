@@ -3,19 +3,9 @@ import {useTheme} from '../../hooks'
 import type {ButtonProps} from './Button'
 import Button from './Button'
 
-const ButtonSecondary: React.FC<ButtonProps> = ({textColor, backgroundColor, disabled, ...props}) => {
+const ButtonSecondary: React.FC<ButtonProps> = props => {
   const ButtonSecondaryTheme = useTheme().components.ButtonSecondary
-  return (
-    <Button
-      backgroundColor={
-        disabled
-          ? ButtonSecondaryTheme.disabledColor
-          : backgroundColor ?? ButtonSecondaryTheme.backgroundColor
-      }
-      textColor={textColor ?? ButtonSecondaryTheme.labelColor}
-      {...props}
-    />
-  )
+  return <Button {...ButtonSecondaryTheme} {...props} />
 }
 
 export default ButtonSecondary

@@ -24,6 +24,10 @@ export type ButtonProps = {
    */
   disabled?: boolean
   /**
+   * Color of the disabled button background
+   */
+  disabledColor?: string
+  /**
    * Button will have outline style
    */
   outline?: boolean
@@ -60,6 +64,7 @@ const Button: React.FC<ButtonProps> = ({
   outlineWidth,
   borderRadius,
   disabled,
+  disabledColor,
   textProps,
   textStyle,
   style,
@@ -70,7 +75,9 @@ const Button: React.FC<ButtonProps> = ({
     <ButtonWrapper
       onPress={onPress}
       activeOpacity={0.8}
-      backgroundColor={disabled ? ButtonTheme.disabledColor : backgroundColor ?? ButtonTheme.backgroundColor}
+      backgroundColor={
+        disabled ? disabledColor ?? ButtonTheme.disabledColor : backgroundColor ?? ButtonTheme.backgroundColor
+      }
       outline={outline}
       outlineColor={outlineColor}
       outlineWidth={outlineWidth}
@@ -78,7 +85,7 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
       style={[{height: ButtonTheme.height}, StyleSheet.flatten(style)]}
       {...props}>
-      <Label {...textProps} style={textStyle} color={textColor ?? ButtonTheme.labelColor}>
+      <Label {...textProps} style={textStyle} color={textColor ?? ButtonTheme.textColor}>
         {text}
       </Label>
     </ButtonWrapper>
@@ -97,7 +104,7 @@ const ButtonWrapper = styled.TouchableOpacity(
   }: Omit<ButtonProps, 'text' | 'onPress'> & {theme?: ITheme}) => ({
     paddingVertical: theme?.spacing.small,
     paddingHorizontal: theme?.spacing.slim,
-    borderRadius: borderRadius,
+    borderRadius,
     backgroundColor: disabled ? theme?.colors.muted : backgroundColor || theme?.colors.green,
     alignSelf: 'center',
     ...(outline && {
@@ -108,7 +115,7 @@ const ButtonWrapper = styled.TouchableOpacity(
 )
 
 const Label = styled.Text(({theme, color}: {color?: string; theme?: ITheme}) => ({
-  color: color,
+  color,
   fontWeight: theme?.fontWeights?.bold,
 }))
 

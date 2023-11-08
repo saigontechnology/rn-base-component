@@ -3,19 +3,9 @@ import {useTheme} from '../../hooks'
 import type {ButtonProps} from './Button'
 import Button from './Button'
 
-const ButtonTransparent: React.FC<ButtonProps> = ({textColor, backgroundColor, disabled, ...props}) => {
+const ButtonTransparent: React.FC<ButtonProps> = props => {
   const ButtonTransparentTheme = useTheme().components.ButtonTransparent
-  return (
-    <Button
-      backgroundColor={
-        disabled
-          ? ButtonTransparentTheme.disabledColor
-          : backgroundColor ?? ButtonTransparentTheme.backgroundColor
-      }
-      textColor={textColor ?? ButtonTransparentTheme.labelColor}
-      {...props}
-    />
-  )
+  return <Button outline {...ButtonTransparentTheme} {...props} />
 }
 
 export default ButtonTransparent

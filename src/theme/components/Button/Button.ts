@@ -1,20 +1,18 @@
 import base from '../../base'
 import {metrics} from '../../../helpers'
+import type {ButtonProps} from '../../../components/Button/Button'
 
 export type ButtonThemeProps = {
   height?: number
-  backgroundColor?: string
-  disabledColor?: string
-  borderRadius?: number
-  labelColor?: string
-  outlineWidth?: number
-  outlineColor?: string
-}
+} & Pick<
+  ButtonProps,
+  'backgroundColor' | 'disabledColor' | 'borderRadius' | 'textColor' | 'outlineWidth' | 'outlineColor'
+>
 
 export const ButtonTheme: ButtonThemeProps = {
   height: metrics.xxl,
   backgroundColor: base.colors.primary,
   disabledColor: base.colors.muted,
   borderRadius: metrics.borderRadius,
-  labelColor: base.colors.white,
+  textColor: base.colors.white,
 }
