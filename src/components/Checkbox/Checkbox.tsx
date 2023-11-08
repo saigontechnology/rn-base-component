@@ -74,6 +74,8 @@ export interface ICheckboxProps extends BaseTouchableProps {
   isChecked?: boolean
   /** color when checkbox is unchecked, default transparent */
   unfillColor?: string
+  /** color of the check mark, default is white */
+  checkMarkColor?: string
   /** opacity of checkbox when disable, default 0.5 */
   disableOpacity?: number
   /** disable the checkbox text */
@@ -120,6 +122,7 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       iconImageStyle,
       fillColor,
       unfillColor,
+      checkMarkColor,
       borderRadius,
       borderWidth,
       disableBuiltInState = false,
@@ -187,7 +190,13 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
             borderRadius={borderRadius ?? CheckboxTheme.borderRadius}
             borderWidth={borderWidth ?? CheckboxTheme.borderWidth}>
             {iconComponent ||
-              (checkStatus && <StyledImage source={checkIconImageSource} style={iconImageStyle} />)}
+              (checkStatus && (
+                <StyledImage
+                  source={checkIconImageSource}
+                  style={iconImageStyle}
+                  tintColor={checkMarkColor ?? CheckboxTheme.checkMarkColor}
+                />
+              ))}
           </InnerIconContainer>
         </IconContainerAnimated>
       )
