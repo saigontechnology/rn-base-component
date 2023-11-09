@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {ReactNode} from 'react'
 import styled from 'styled-components/native'
 import {
   type TouchableOpacityProps,
@@ -43,6 +43,9 @@ export type ButtonProps = {
    * Custom border radius.
    */
   borderRadius?: number
+
+  leftIcon?: ReactNode
+  rightIcon?: ReactNode
   /**
    * Custom text props.
    */
@@ -68,6 +71,8 @@ const Button: React.FC<ButtonProps> = ({
   textProps,
   textStyle,
   style,
+  leftIcon,
+  rightIcon,
   ...props
 }) => {
   const ButtonTheme = useTheme().components.Button
@@ -85,9 +90,11 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
       style={[{height: ButtonTheme.height}, StyleSheet.flatten(style)]}
       {...props}>
+      {!!leftIcon && leftIcon}
       <Label {...textProps} style={textStyle} color={textColor ?? ButtonTheme.textColor}>
         {text}
       </Label>
+      {!!rightIcon && rightIcon}
     </ButtonWrapper>
   )
 }
@@ -101,11 +108,18 @@ const ButtonWrapper = styled.TouchableOpacity(
     outlineColor,
     borderRadius,
     disabled,
+    leftIcon,
+    rightIcon,
   }: Omit<ButtonProps, 'text' | 'onPress'> & {theme?: ITheme}) => ({
     paddingVertical: theme?.spacing.small,
+    flexDirection: 'row',
     paddingHorizontal: theme?.spacing.slim,
     borderRadius,
     backgroundColor: disabled ? theme?.colors.muted : backgroundColor || theme?.colors.green,
+    justifyContent: 'center',
+    ...((leftIcon || rightIcon) && {
+      alignItems: 'center',
+    }),
     alignSelf: 'center',
     ...(outline && {
       borderWidth: outlineWidth || 1,
