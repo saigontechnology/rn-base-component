@@ -116,6 +116,7 @@ const ButtonWrapper = styled.TouchableOpacity(
     paddingHorizontal: theme?.spacing.slim,
     borderRadius,
     backgroundColor: disabled ? theme?.colors.muted : backgroundColor || theme?.colors.green,
+    justifyContent: 'center',
     ...((leftIcon || rightIcon) && {
       alignItems: 'center',
     }),
