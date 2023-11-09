@@ -114,7 +114,7 @@ const Header: React.FC<HeaderProps> = ({
       <SidesContainer {...StyleSheet.flatten(leftStyle)}>
         {leftComponent
           ? leftComponent
-          : !!hasBackButton && (
+          : hasBackButton && (
               <TouchableOpacity hitSlop={hitSlop} onPress={() => backButtonPress?.()}>
                 <IconBack
                   source={Images.chevronLeft}
@@ -166,11 +166,10 @@ const TitleContainer = styled.View((style: ViewStyle) => ({
   ...style,
 }))
 
-const IconBack = styled.Image(({tintColor, ...style}: ImageStyle) => ({
+const IconBack = styled.Image(({tintColor}: ImageStyle) => ({
   height: metrics.large,
   aspectRatio: 1,
   tintColor,
-  ...style,
 }))
 
 export default Header
