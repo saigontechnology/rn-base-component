@@ -12,8 +12,8 @@ import type {ITheme} from '../../theme'
 import {useTheme} from '../../hooks'
 
 export type ButtonProps = {
-  onPress: () => void
-  text: string
+  onPress?: () => void
+  text?: string
   textColor?: string
   /**
    * Color of the button background
@@ -45,6 +45,7 @@ export type ButtonProps = {
   borderRadius?: number
 
   leftIcon?: ReactNode
+  children?: ReactNode
   rightIcon?: ReactNode
   /**
    * Custom text props.
@@ -73,6 +74,7 @@ const Button: React.FC<ButtonProps> = ({
   style,
   leftIcon,
   rightIcon,
+  children,
   ...props
 }) => {
   const ButtonTheme = useTheme().components.Button
@@ -91,9 +93,13 @@ const Button: React.FC<ButtonProps> = ({
       style={[{height: ButtonTheme.height}, StyleSheet.flatten(style)]}
       {...props}>
       {!!leftIcon && leftIcon}
-      <Label {...textProps} style={textStyle} color={textColor ?? ButtonTheme.textColor}>
-        {text}
-      </Label>
+      {children ? (
+        children
+      ) : (
+        <Label {...textProps} style={textStyle} color={textColor ?? ButtonTheme.textColor}>
+          {text ?? ''}
+        </Label>
+      )}
       {!!rightIcon && rightIcon}
     </ButtonWrapper>
   )
