@@ -45,7 +45,6 @@ export type ButtonProps = {
   borderRadius?: number
 
   leftIcon?: ReactNode
-  children?: ReactNode
   rightIcon?: ReactNode
   /**
    * Custom text props.
