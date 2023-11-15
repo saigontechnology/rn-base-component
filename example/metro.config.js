@@ -24,6 +24,7 @@ module.exports = {
       acc[name] = path.join(__dirname, 'node_modules', name)
       return acc
     }, {}),
+    resolverMainFields: ['sbmodern', 'react-native', 'browser', 'main'],
   },
 
   transformer: {

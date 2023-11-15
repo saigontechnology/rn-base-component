@@ -2,7 +2,9 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "rn-base-component": ["index"]
+      "rn-base-component": [
+        "./src/index"
+      ]
     },
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
@@ -10,7 +12,9 @@
     "importsNotUsedAsValues": "error",
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
-    "lib": ["esnext"],
+    "lib": [
+      "esnext"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
@@ -25,6 +29,12 @@
     "strict": true,
     "target": "esnext"
   },
-  "include": [".eslintrc.js", "babel.config.js", "**/*.js", "**/*.ts", "**/*.tsx"],
+  "include": [
+    ".eslintrc.js",
+    "babel.config.js",
+    "**/*.js",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
   "exclude": []
 }
