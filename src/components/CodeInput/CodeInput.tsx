@@ -104,7 +104,7 @@ const CodeInput: React.FC<CodeInputProps> = ({
       cells.push(
         <Cell
           testID="cell"
-          style={[cellStyle, code[index] ?? valueCellStyle, isFocused && focusCellStyle]}
+          style={[cellStyle, code[index] && valueCellStyle, isFocused && focusCellStyle]}
           key={index}
           onPress={() => handleCellPress(index)}>
           {withCursor && isFocused ? (
