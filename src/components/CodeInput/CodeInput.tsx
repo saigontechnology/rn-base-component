@@ -10,6 +10,9 @@ interface CodeInputProps extends TextInputProps {
   /** define style for cell */
   cellStyle?: StyleProp<ViewStyle>
 
+  /** define style for valued Cell */
+  valueCellStyle?: StyleProp<ViewStyle>
+
   /** define style for cell when cell is focused */
   focusCellStyle?: StyleProp<ViewStyle>
 
@@ -55,6 +58,7 @@ const DEFAULT_LENGTH = 6
 const CodeInput: React.FC<CodeInputProps> = ({
   cellStyle,
   focusCellStyle,
+  valueCellStyle,
   textStyle,
   focusTextStyle,
   secureViewStyle,
@@ -100,7 +104,7 @@ const CodeInput: React.FC<CodeInputProps> = ({
       cells.push(
         <Cell
           testID="cell"
-          style={[cellStyle, isFocused && focusCellStyle]}
+          style={[cellStyle, code[index] ?? valueCellStyle, isFocused && focusCellStyle]}
           key={index}
           onPress={() => handleCellPress(index)}>
           {withCursor && isFocused ? (
@@ -128,6 +132,7 @@ const CodeInput: React.FC<CodeInputProps> = ({
     placeholder,
     placeholderTextColor,
     cellStyle,
+    valueCellStyle,
     focusCellStyle,
     secureTextEntry,
     secureViewStyle,
