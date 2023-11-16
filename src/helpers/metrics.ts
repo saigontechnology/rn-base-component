@@ -88,6 +88,7 @@ const metrics = {
   span: responsiveFont(14),
 
   // spacing
+  line: responsiveHeight(1),
   tiny: responsiveHeight(4),
   xxs: responsiveHeight(8),
   xs: responsiveHeight(12),

@@ -1,7 +1,7 @@
 import React, {ReactNode, useCallback, useRef, useState, memo} from 'react'
-import {TextInput, Text} from 'react-native'
+import {TextInput, Text, ColorValue} from 'react-native'
 import type {KeyboardTypeOptions, StyleProp, TextStyle, ViewStyle} from 'react-native'
-import {metrics} from '../../helpers/metrics'
+import {metrics} from '../../helpers'
 import styled from 'styled-components/native'
 import Cursor from './Cursor'
 import type {ITheme} from 'src/theme'
@@ -30,12 +30,16 @@ interface CodeInputProps {
 
   /** render custom view for cursor/indicator */
   customCursor?: () => ReactNode
-
   /** render custom view for cursor/indicator */
   secureTextEntry?: boolean
 
   /** keyboard type */
   keyboardType?: KeyboardTypeOptions
+
+  withCursor?: boolean
+
+  placeholder?: string
+  placeholderTextColor?: ColorValue
 }
 
 type CellStyle = {
@@ -59,6 +63,10 @@ const CodeInput: React.FC<CodeInputProps> = ({
   customCursor,
   secureTextEntry,
   keyboardType = 'number-pad',
+  withCursor = false,
+  placeholder,
+  placeholderTextColor,
+  ...rest
 }) => {
   const textInputRef = useRef<TextInput>(null)
   const [code, setCode] = useState<string>('')
@@ -95,16 +103,20 @@ const CodeInput: React.FC<CodeInputProps> = ({
           style={[cellStyle, isFocused && focusCellStyle]}
           key={index}
           onPress={() => handleCellPress(index)}>
-          {code[index] ? (
-            secureTextEntry ? (
-              <SecureView testID="text" style={secureViewStyle} />
+          {withCursor && isFocused ? (
+            customCursor ? (
+              customCursor()
             ) : (
-              <Text testID="text" style={textStyle}>
-                {code[index]}
-              </Text>
+              <Cursor style={focusTextStyle} />
             )
+          ) : secureTextEntry ? (
+            <SecureView testID="text" style={secureViewStyle} />
+          ) : code[index] ? (
+            <Text testID="text" style={textStyle}>
+              {code[index]}
+            </Text>
           ) : (
-            isFocused && (customCursor ? customCursor() : <Cursor style={focusTextStyle} />)
+            <PlaceholderText color={placeholderTextColor}>{placeholder ?? ''}</PlaceholderText>
           )}
         </Cell>,
       )
@@ -112,15 +124,18 @@ const CodeInput: React.FC<CodeInputProps> = ({
     return cells
   }, [
     length,
+    code,
+    placeholder,
+    placeholderTextColor,
     cellStyle,
     focusCellStyle,
-    code,
-    customCursor,
-    textStyle,
-    focusTextStyle,
-    handleCellPress,
     secureTextEntry,
     secureViewStyle,
+    textStyle,
+    withCursor,
+    customCursor,
+    focusTextStyle,
+    handleCellPress,
   ])
 
   return (
@@ -133,6 +148,7 @@ const CodeInput: React.FC<CodeInputProps> = ({
         keyboardType={keyboardType}
         onChangeText={handleOnChangeText}
         maxLength={length}
+        {...rest}
       />
       <CellContainer>{renderCells()}</CellContainer>
     </CodeInputContainer>
@@ -147,7 +163,7 @@ const Cell = styled.Pressable((props: CellStyle) => ({
   width: props?.theme?.spacing.gigantic,
   height: props?.theme?.spacing.gigantic,
   borderRadius: metrics.tiny,
-  borderWidth: 1,
+  borderWidth: metrics.line,
   borderColor: props?.theme?.colors?.coolGray,
   justifyContent: 'center',
   alignItems: 'center',
@@ -162,16 +178,17 @@ const SecureView = styled.Pressable((props: SecureViewStyle) => ({
 }))
 
 const CellContainer = styled.View({
-  display: 'flex',
   flexDirection: 'row',
-  flexWrap: 'wrap',
+  justifyContent: 'space-between',
 })
 
 const StyledTextInput = styled.TextInput({
   opacity: 0,
   position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
+  width: 0,
+  height: 0,
 })
+
+const PlaceholderText = styled.Text(({color}: {color?: string}) => ({
+  color,
+}))
