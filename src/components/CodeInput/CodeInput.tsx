@@ -1,12 +1,12 @@
 import React, {ReactNode, useCallback, useRef, useState, memo} from 'react'
-import {TextInput, Text, ColorValue} from 'react-native'
+import {TextInput, Text, ColorValue, TextInputProps} from 'react-native'
 import type {KeyboardTypeOptions, StyleProp, TextStyle, ViewStyle} from 'react-native'
 import {metrics} from '../../helpers'
 import styled from 'styled-components/native'
 import Cursor from './Cursor'
 import type {ITheme} from 'src/theme'
 
-interface CodeInputProps {
+interface CodeInputProps extends TextInputProps {
   /** define style for cell */
   cellStyle?: StyleProp<ViewStyle>
 
