@@ -26,6 +26,7 @@ module.exports = {
         '@typescript-eslint/no-shadow': ['error'],
         '@typescript-eslint/no-empty-interface': 'warn',
         '@typescript-eslint/ban-types': 'warn',
+        'react/display-name': 'off',
       },
     },
   ],

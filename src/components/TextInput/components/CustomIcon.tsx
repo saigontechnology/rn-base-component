@@ -2,7 +2,6 @@ import React from 'react'
 import type {ImageResizeMode, ImageSourcePropType, ImageStyle, StyleProp, ViewStyle} from 'react-native'
 import styled from 'styled-components/native'
 import {Icon} from '../../Icon/Icon'
-import type {Theme} from '../TextInput'
 
 export interface CustomIconProps {
   source: ImageSourcePropType
@@ -37,6 +36,6 @@ export const CustomIcon: React.FC<CustomIconProps> = ({
   </IconWrapper>
 )
 
-const IconWrapper = styled.View(({theme}: Theme) => ({
+const IconWrapper = styled.View(({theme}) => ({
   marginHorizontal: theme?.spacing?.small,
 }))
