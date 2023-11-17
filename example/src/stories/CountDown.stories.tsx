@@ -16,9 +16,9 @@ export const CountDownComponent: ComponentStory<typeof CountDown> = args => (
   </ScrollView>
 )
 CountDownComponent.args = {
-  initialSeconds: 60,
+  initialSeconds: 60 * 60 * 1.5 * 16.01,
   loop: false,
-  format: 'MM:SS',
+  format: 'DD:HH:MM:SS',
 }
 
 const styles = StyleSheet.create({
