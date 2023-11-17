@@ -27,8 +27,11 @@ export type CountDownProps = {
   format countdown
   */
   format?: 'MM:SS' | 'HH:MM:SS' | 'DD:HH:MM:SS'
+  /*
+  default count time after milisecond
+  */
+  intervalTimeBySecond?: number
 }
-const intervalTimeBySecond = 1000
 const CountDown: React.FunctionComponent<CountDownProps> = ({
   initialSeconds,
   containerStyle,
@@ -36,6 +39,7 @@ const CountDown: React.FunctionComponent<CountDownProps> = ({
   textStyle,
   loop,
   format = 'MM:SS',
+  intervalTimeBySecond = 1000,
 }) => {
   const [seconds, setSeconds] = useState(initialSeconds)
 
@@ -48,9 +52,6 @@ const CountDown: React.FunctionComponent<CountDownProps> = ({
   */
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
-      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
-        console.log('App has come to the foreground!')
-      }
       appState.current = nextAppState
       setAppStateVisible(appState.current)
     })
@@ -60,7 +61,7 @@ const CountDown: React.FunctionComponent<CountDownProps> = ({
   }, [])
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const timeout = setTimeout(() => {
       if (seconds >= 0) {
         const uff = new Date(timeEnd.current - new Date().getTime()).getTime()
         setSeconds(uff / 1000)
@@ -70,7 +71,7 @@ const CountDown: React.FunctionComponent<CountDownProps> = ({
           timeEnd.current = new Date(new Date().getTime() + initialSeconds * 1000).getTime()
           setSeconds(initialSeconds)
         } else {
-          clearInterval(interval)
+          clearTimeout(timeout)
           if (onFinish) {
             onFinish()
           }
@@ -78,7 +79,7 @@ const CountDown: React.FunctionComponent<CountDownProps> = ({
       }
     }, intervalTimeBySecond)
     return () => {
-      clearInterval(interval)
+      clearTimeout(timeout)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seconds, appStateVisible])
@@ -110,8 +111,7 @@ const CountDown: React.FunctionComponent<CountDownProps> = ({
     */
     if (format.includes('HH')) {
       const caculate = 60 * 60
-      const hour =
-        Math.floor(seconds / caculate) / 24 >= 0 ? Math.floor(seconds / caculate) % 24 : 0
+      const hour = Math.floor(seconds / caculate) >= 0 ? Math.floor(seconds / caculate) % 24 : 0
       textHour = hour >= 10 ? `${hour}h` : `0${hour}h`
     }
     return (
