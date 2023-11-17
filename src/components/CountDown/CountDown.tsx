@@ -1,100 +1,133 @@
-import React from 'react'
-import {View, type StyleProp, type TextStyle, type ViewStyle} from 'react-native'
+import React, {useEffect, useRef, useState} from 'react'
+import {AppState, type StyleProp, type ViewStyle, type TextStyle} from 'react-native'
+import styled from 'styled-components/native'
 
-const DEFAULT_SIZE = 20
-const DEFAULT_TIME_TO_SHOW = ['D', 'H', 'M', 'S'] as const
-
-export type ICountDownLabels = {
-  days: string
-  minutes: string
-  hours: string
-  seconds: string
-}
-export type TTimeToShow = (typeof DEFAULT_TIME_TO_SHOW)[number]
-export type TCountDownDisplayUnitType = 'single' | 'double'
-export type TCountDownLabelPosition = 'top' | 'bottom'
-
-export type ICountDownProps = {
-  /** Number of seconds to countdown */
-  until: number
-
-  /**
-   * What Digits to show
-   * Default: ['D','H','M','S']
-   */
-  timeToShow?: TTimeToShow[]
-
-  /**
-   * display unit with 2 or only 1 digit
-   * Default: double
-   */
-  displayUnitType?: TCountDownDisplayUnitType
-
-  /** callback when finish countdown */
+export type CountDownProps = {
+  /*
+  init time countdown by second
+  */
+  initialSeconds: number
+  /*
+  call when count down finish
+  */
   onFinish?: () => void
-
-  /**
-   * show separator
-   * Default: false
-   */
-  showSeparator?: boolean
-
-  /** render custom separator */
-  renderSeparator?: () => React.ReactNode
-
-  /**
-   * size of digit container
-   * Default: 20
-   */
-  size?: number
-
-  /** label text */
-  labels?: ICountDownLabels
-
-  /**
-   * position for display label
-   * Default: bottom
-   */
-  labelPosition?: TCountDownLabelPosition
-
-  /** define style for container */
+  /*
+  container countdown view style
+  */
   containerStyle?: StyleProp<ViewStyle>
+  /*
+  text countdown style
+  */
+  textStyle?: StyleProp<TextStyle>
+  /*
+  loop countdown
+  */
+  loop?: boolean
+  /*
+  format countdown
+  */
+  format?: 'MM:SS' | 'HH:MM:SS' | 'DD:HH:MM:SS'
+}
+const intervalTimeBySecond = 100
+export const CountDown: React.FunctionComponent<CountDownProps> = ({
+  initialSeconds,
+  containerStyle,
+  onFinish,
+  textStyle,
+  loop,
+  format = 'MM:SS',
+}) => {
+  const [seconds, setSeconds] = useState(initialSeconds)
 
-  /** define style for digit & label container */
-  itemContainerStyle?: StyleProp<ViewStyle>
+  const appState = useRef(AppState.currentState)
+  const timeEnd = useRef(new Date(new Date().getTime() + initialSeconds * 1000).getTime())
+  const [appStateVisible, setAppStateVisible] = useState(appState.current)
 
-  /** define style for digit */
-  digitTextStyle?: StyleProp<TextStyle>
+  /*
+    check app state is change
+  */
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+        console.log('App has come to the foreground!')
+      }
+      appState.current = nextAppState
+      setAppStateVisible(appState.current)
+    })
+    return () => {
+      subscription.remove()
+    }
+  }, [])
 
-  /** define style for digit container */
-  digitContainerStyle?: StyleProp<ViewStyle>
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds >= 0) {
+        const uff = new Date(timeEnd.current - new Date().getTime()).getTime()
+        setSeconds(uff / 1000)
+        console.log(uff)
+      }
+      if (seconds < 1) {
+        if (loop) {
+          timeEnd.current = new Date(new Date().getTime() + initialSeconds * 1000).getTime()
+          setSeconds(initialSeconds)
+        } else {
+          clearInterval(interval)
+          if (onFinish) {
+            onFinish()
+          }
+        }
+      }
+    }, intervalTimeBySecond)
+    return () => {
+      clearInterval(interval)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seconds, appStateVisible])
 
-  /** define style for label text */
-  labelTextStyle?: StyleProp<TextStyle>
+  const renderTimer = () => {
+    /*
+    caculate minutes
+    */
+    const minute = Math.floor(seconds / 60) % 60 >= 0 ? Math.floor(seconds / 60) % 60 : 0
+    const textMinute = minute >= 10 ? `${minute}p` : `0${minute}p`
+    /*
+    caculate seconds
+    */
+    const _seconds = Math.round(seconds % 60) >= 0 ? Math.round(seconds % 60) : 0
+    const textSecond = _seconds >= 10 ? `${_seconds}s` : `0${_seconds}s`
+
+    let textDay = null
+    let textHour = null
+    /*
+    caculate day
+    */
+    if (format.includes('DD')) {
+      const caculate = 60 * 60 * 24
+      const day = Math.floor(seconds / caculate) >= 0 ? Math.floor(seconds / caculate) : 0
+      textDay = day >= 10 ? `${day}d` : `0${day}d`
+    }
+    /*
+    caculate hours
+    */
+    if (format.includes('HH')) {
+      const caculate = 60 * 60
+      const hour =
+        Math.floor(seconds / caculate) % caculate >= 0 ? Math.floor(seconds / caculate) % caculate : 0
+      textHour = hour >= 10 ? `${hour}h` : `0${hour}h`
+    }
+    return (
+      <Text style={[textStyle]}>
+        {textDay && `${textDay}:`}
+        {textHour && `${textHour}:`}
+        {textMinute}:{textSecond}
+      </Text>
+    )
+  }
+
+  return <Container style={containerStyle}>{seconds === 0 ? null : renderTimer()}</Container>
 }
 
-interface ICountDownRef {}
-
-const CountDown = React.forwardRef<ICountDownRef, ICountDownProps>(
-  (
-    {
-      until,
-      timeToShow = DEFAULT_TIME_TO_SHOW,
-      displayUnitType = 'double',
-      onFinish,
-      showSeparator,
-      renderSeparator,
-      size = DEFAULT_SIZE,
-      labels,
-      labelPosition = 'bottom',
-      containerStyle,
-      itemContainerStyle,
-      digitStyle,
-      digitContainerStyle,
-      labelTextStyle,
-    },
-    ref,
-  ) => <View />,
-)
-
-export default CountDown
+const Container = styled.View({})
+const Text = styled.Text(() => ({
+  textAlign: 'center',
+}))

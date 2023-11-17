@@ -8,6 +8,7 @@ import {CodeInput} from './CodeInput/CodeInput'
 import Slider from './Slider/Slider'
 import Card from './Card/Card'
 import {TextInput} from './TextInput/TextInput'
+import {CountDown} from './CountDown/CountDown'
 
 export {
   Button,
@@ -23,5 +24,6 @@ export {
   Card,
   TextInput,
   Accordion,
+  CountDown,
 }
 export * from './Text/Text'
