@@ -108,18 +108,14 @@ const ButtonWrapper = styled.TouchableOpacity(
     outlineColor,
     borderRadius,
     disabled,
-    leftIcon,
-    rightIcon,
   }: Omit<ButtonProps, 'text' | 'onPress'> & {theme?: ITheme}) => ({
     paddingVertical: theme?.spacing.small,
     flexDirection: 'row',
     paddingHorizontal: theme?.spacing.slim,
     borderRadius,
-    backgroundColor: disabled ? theme?.colors.muted : backgroundColor || theme?.colors.green,
+    backgroundColor,
     justifyContent: 'center',
-    ...((leftIcon || rightIcon) && {
-      alignItems: 'center',
-    }),
+    alignItems: 'center',
     alignSelf: 'center',
     ...(outline && {
       borderWidth: outlineWidth || 1,

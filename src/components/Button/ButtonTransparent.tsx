@@ -5,7 +5,7 @@ import Button from './Button'
 
 const ButtonTransparent: React.FC<ButtonProps> = props => {
   const ButtonTransparentTheme = useTheme().components.ButtonTransparent
-  return <Button outline {...ButtonTransparentTheme} {...props} />
+  return <Button {...ButtonTransparentTheme} {...props} />
 }
 
 export default ButtonTransparent
