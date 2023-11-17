@@ -111,7 +111,7 @@ const CountDown: React.FunctionComponent<CountDownProps> = ({
     if (format.includes('HH')) {
       const caculate = 60 * 60
       const hour =
-        Math.floor(seconds / caculate) % caculate >= 0 ? Math.floor(seconds / caculate) % caculate : 0
+        Math.floor(seconds / caculate) / 24 >= 0 ? Math.floor(seconds / caculate) % 24 : 0
       textHour = hour >= 10 ? `${hour}h` : `0${hour}h`
     }
     return (
