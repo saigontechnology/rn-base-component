@@ -64,7 +64,6 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
       if (seconds >= 0) {
         const uff = new Date(timeEnd.current - new Date().getTime()).getTime()
         setSeconds(uff / 1000)
-        console.log(uff)
       }
       if (seconds < 1) {
         if (loop) {
