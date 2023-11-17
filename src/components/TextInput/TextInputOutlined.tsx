@@ -1,16 +1,10 @@
 import React, {forwardRef, useCallback, useImperativeHandle, useMemo, useRef} from 'react'
-import type {TextInput as Input, LayoutChangeEvent} from 'react-native'
+import type {LayoutChangeEvent} from 'react-native'
+import {StyleSheet, TextInput as RNTextInput, TextInputProps as RNTextInputProperties} from 'react-native'
 import Animated, {interpolate, useAnimatedStyle, useSharedValue, withTiming} from 'react-native-reanimated'
 import styled from 'styled-components/native'
 import {useTheme} from '../../hooks'
-import type {
-  FlexDirection,
-  InputContainerProps,
-  Position,
-  TextInputProps,
-  TextInputRef,
-  Theme,
-} from './TextInput'
+import type {InputContainerProps, TextInputProps, TextInputRef} from './TextInput'
 import {
   BLURRED,
   DEFAULT_HEIGHT,
@@ -22,7 +16,6 @@ import {
   OUT_OF_FOCUS,
   UNFOCUSED_FONTSIZE,
 } from './constants'
-import {StyleSheet} from 'react-native'
 
 interface Size {
   width: number
@@ -55,7 +48,7 @@ const TextInputOutlined = forwardRef<TextInputRef, TextInputProps>(
     ref,
   ) => {
     const theme = useTheme()
-    const inputRef = useRef<Input>(null)
+    const inputRef = useRef<RNTextInput>(null)
     const valueRef = useRef<string>('')
     const wrapperInfo = useSharedValue<Size>({width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT})
     const labelHeight = useSharedValue<number>(DEFAULT_HEIGHT)
@@ -156,7 +149,7 @@ const TextInputOutlined = forwardRef<TextInputRef, TextInputProps>(
                   {label}
                 </LabelAnimated>
               )}
-              <TextInput
+              <TextInputComponent
                 testID={'test-TextInputOutlined'}
                 ref={inputRef}
                 multiline={multiline}
@@ -204,8 +197,8 @@ const TextInputContent = styled.View(() => ({
   justifyContent: 'center',
 }))
 
-const Content = styled.View((props: InputContainerProps) => ({
-  flexDirection: 'row' as FlexDirection,
+const Content = styled.View<InputContainerProps>(props => ({
+  flexDirection: 'row',
   height: props.theme?.sizes?.substantial,
   borderWidth: props.theme?.borderWidths?.tiny,
   borderRadius: props.theme?.borderWidths?.small,
@@ -215,22 +208,28 @@ const Content = styled.View((props: InputContainerProps) => ({
 }))
 const ContentAnimated = Animated.createAnimatedComponent<TextInputProps>(Content)
 
-const Label = styled.Text(({theme}: Theme) => ({
-  position: 'absolute' as Position,
+const Label = styled.Text(({theme}) => ({
+  position: 'absolute',
   paddingHorizontal: theme?.spacing?.petite,
   zIndex: 1,
   backgroundColor: theme?.colors?.lightBackground,
 }))
 const LabelAnimated = Animated.createAnimatedComponent<TextInputProps>(Label)
 
-const ErrorText = styled.Text(({theme}: Theme) => ({
+const ErrorText = styled.Text(({theme}) => ({
   fontSize: theme?.fontSizes?.sm,
   color: theme?.colors?.errorText,
 }))
 
-const TextInput = styled.TextInput(({theme}: Theme) => ({
+const ForwardRefTextInputComponent = forwardRef<RNTextInput, RNTextInputProperties>((props, ref) => (
+  <RNTextInput {...props} ref={ref} />
+))
+
+const TextInputComponent = styled(ForwardRefTextInputComponent)(({theme}) => ({
   paddingVertical: 0,
-  fontSize: theme?.fontSizes?.sm,
+  fontSize: theme?.fontSizes?.xs,
+  textAlignVertical: 'bottom',
+  marginRight: theme?.spacing?.miniature,
   color: theme?.colors?.darkTextColor,
 }))
 
