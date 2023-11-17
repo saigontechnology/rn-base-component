@@ -28,8 +28,8 @@ export type CountDownProps = {
   */
   format?: 'MM:SS' | 'HH:MM:SS' | 'DD:HH:MM:SS'
 }
-const intervalTimeBySecond = 100
-export const CountDown: React.FunctionComponent<CountDownProps> = ({
+const intervalTimeBySecond = 1000
+const CountDown: React.FunctionComponent<CountDownProps> = ({
   initialSeconds,
   containerStyle,
   onFinish,
