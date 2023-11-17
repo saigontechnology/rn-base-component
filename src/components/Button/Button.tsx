@@ -1,14 +1,13 @@
 import React, {ReactNode} from 'react'
 import styled from 'styled-components/native'
 import {
-  type TouchableOpacityProps,
-  type TextProps,
   type StyleProp,
-  type TextStyle,
-  type ViewStyle,
   StyleSheet,
+  type TextProps,
+  type TextStyle,
+  type TouchableOpacityProps,
+  type ViewStyle,
 } from 'react-native'
-import type {ITheme} from '../../theme'
 import {useTheme} from '../../hooks'
 
 export type ButtonProps = {
@@ -99,7 +98,7 @@ const Button: React.FC<ButtonProps> = ({
   )
 }
 
-const ButtonWrapper = styled.TouchableOpacity(
+const ButtonWrapper = styled.TouchableOpacity<Omit<ButtonProps, 'text' | 'onPress'>>(
   ({
     theme,
     backgroundColor,
@@ -108,7 +107,9 @@ const ButtonWrapper = styled.TouchableOpacity(
     outlineColor,
     borderRadius,
     disabled,
-  }: Omit<ButtonProps, 'text' | 'onPress'> & {theme?: ITheme}) => ({
+    leftIcon,
+    rightIcon,
+  }) => ({
     paddingVertical: theme?.spacing.small,
     flexDirection: 'row',
     paddingHorizontal: theme?.spacing.slim,
@@ -124,7 +125,7 @@ const ButtonWrapper = styled.TouchableOpacity(
   }),
 )
 
-const Label = styled.Text(({theme, color}: {color?: string; theme?: ITheme}) => ({
+const Label = styled.Text<{color?: string}>(({theme, color}) => ({
   color,
   fontWeight: theme?.fontWeights?.bold,
 }))

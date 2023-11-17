@@ -6,7 +6,7 @@ import {StyleSheet, View} from 'react-native'
 import {metrics} from '../../../src/helpers'
 
 export default {
-  title: 'Text',
+  title: 'components/Text',
   component: Text,
 } as ComponentMeta<typeof Text>
 
