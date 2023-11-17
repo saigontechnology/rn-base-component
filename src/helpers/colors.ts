@@ -1,17 +1,6 @@
 import type {ColorValue} from 'react-native'
 
-export interface IColors {
-  readonly primary: string
-  readonly black: string
-  readonly white: string
-  readonly gray: string
-  readonly red: string
-  readonly textDisabled: string
-  readonly placeHolderText: string
-  readonly backgroundDisabled: string
-}
-
-const baseColor: IColors = {
+const baseColor = {
   primary: '#7239E5',
   black: '#1F1F1F',
   white: '#ffffff',
@@ -20,7 +9,7 @@ const baseColor: IColors = {
   textDisabled: '#666666',
   placeHolderText: '#929298',
   backgroundDisabled: '#e3e6e8',
-}
+} as const
 
 const colors = {
   ...baseColor,

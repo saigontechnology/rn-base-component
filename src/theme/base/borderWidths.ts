@@ -19,7 +19,6 @@ const borderWidths = {
   enormous: 18,
   mammoth: 19,
   titanic: 20,
-}
+} as const
 
-export type IBorderWidth = keyof typeof borderWidths
 export default borderWidths
