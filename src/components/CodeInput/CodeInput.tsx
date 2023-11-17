@@ -11,7 +11,7 @@ interface CodeInputProps extends TextInputProps {
   cellStyle?: StyleProp<ViewStyle>
 
   /** define style for valued Cell */
-  valueCellStyle?: StyleProp<ViewStyle>
+  filledCellStyle?: StyleProp<ViewStyle>
 
   /** define style for cell when cell is focused */
   focusCellStyle?: StyleProp<ViewStyle>
@@ -58,7 +58,7 @@ const DEFAULT_LENGTH = 6
 const CodeInput: React.FC<CodeInputProps> = ({
   cellStyle,
   focusCellStyle,
-  valueCellStyle,
+  filledCellStyle,
   textStyle,
   focusTextStyle,
   secureViewStyle,
@@ -96,6 +96,39 @@ const CodeInput: React.FC<CodeInputProps> = ({
     [code],
   )
 
+  const renderCursor = useCallback(
+    () => (customCursor ? customCursor() : <Cursor style={focusTextStyle} />),
+    [customCursor, focusTextStyle],
+  )
+
+  const renderCell = useCallback(
+    (isFocused: boolean, value?: string) => {
+      if (withCursor && isFocused) {
+        return renderCursor()
+      } else if (secureTextEntry) {
+        return <SecureView testID="text" style={secureViewStyle} />
+      } else if (value) {
+        return (
+          <Text testID="text" style={textStyle}>
+            {value}
+          </Text>
+        )
+      } else {
+        return <PlaceholderText color={placeholderTextColor}>{placeholder ?? ''}</PlaceholderText>
+      }
+    },
+
+    [
+      renderCursor,
+      secureTextEntry,
+      secureViewStyle,
+      withCursor,
+      textStyle,
+      placeholderTextColor,
+      placeholder,
+    ],
+  )
+
   const renderCells = useCallback(() => {
     const cells = []
     for (let index = 0; index < length; index++) {
@@ -104,24 +137,10 @@ const CodeInput: React.FC<CodeInputProps> = ({
       cells.push(
         <Cell
           testID="cell"
-          style={[cellStyle, code[index] && valueCellStyle, isFocused && focusCellStyle]}
+          style={[cellStyle, code[index] && filledCellStyle, isFocused && focusCellStyle]}
           key={index}
           onPress={() => handleCellPress(index)}>
-          {withCursor && isFocused ? (
-            customCursor ? (
-              customCursor()
-            ) : (
-              <Cursor style={focusTextStyle} />
-            )
-          ) : secureTextEntry ? (
-            <SecureView testID="text" style={secureViewStyle} />
-          ) : code[index] ? (
-            <Text testID="text" style={textStyle}>
-              {code[index]}
-            </Text>
-          ) : (
-            <PlaceholderText color={placeholderTextColor}>{placeholder ?? ''}</PlaceholderText>
-          )}
+          {renderCell(isFocused, code[index])}
         </Cell>,
       )
     }
@@ -132,14 +151,9 @@ const CodeInput: React.FC<CodeInputProps> = ({
     placeholder,
     placeholderTextColor,
     cellStyle,
-    valueCellStyle,
+    filledCellStyle,
     focusCellStyle,
-    secureTextEntry,
-    secureViewStyle,
-    textStyle,
-    withCursor,
-    customCursor,
-    focusTextStyle,
+    renderCell,
     handleCellPress,
   ])
 
