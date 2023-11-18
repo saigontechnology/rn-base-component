@@ -1,6 +1,7 @@
 import React, {ReactNode} from 'react'
 import styled from 'styled-components/native'
 import {
+  GestureResponderEvent,
   type StyleProp,
   StyleSheet,
   type TextProps,
@@ -9,10 +10,16 @@ import {
   type ViewStyle,
 } from 'react-native'
 import {useTheme} from '../../hooks'
+import {Text} from '../Text/Text'
 
 export type ButtonProps = {
-  onPress: () => void
-  text: string
+  /**
+   * Called when the touch is released, but not if cancelled
+   */
+  onPress?: (e?: GestureResponderEvent) => void | undefined
+  /**
+   * Color of the label
+   */
   textColor?: string
   /**
    * Color of the button background
@@ -42,7 +49,9 @@ export type ButtonProps = {
    * Custom border radius.
    */
   borderRadius?: number
-
+  /**
+   * Custom left/right icon
+   */
   leftIcon?: ReactNode
   rightIcon?: ReactNode
   /**
@@ -53,12 +62,14 @@ export type ButtonProps = {
    * Custom text style.
    */
   textStyle?: StyleProp<TextStyle>
+  /**
+   * Custom container style.
+   */
   style?: StyleProp<ViewStyle>
 } & TouchableOpacityProps
 
 const Button: React.FC<ButtonProps> = ({
   onPress,
-  text,
   textColor,
   backgroundColor,
   outline,
@@ -72,6 +83,7 @@ const Button: React.FC<ButtonProps> = ({
   style,
   leftIcon,
   rightIcon,
+  children,
   ...props
 }) => {
   const ButtonTheme = useTheme().components.Button
@@ -90,9 +102,13 @@ const Button: React.FC<ButtonProps> = ({
       style={[{height: ButtonTheme.height}, StyleSheet.flatten(style)]}
       {...props}>
       {!!leftIcon && leftIcon}
-      <Label {...textProps} style={textStyle} color={textColor ?? ButtonTheme.textColor}>
-        {text}
-      </Label>
+      {typeof children === 'string' ? (
+        <Label {...textProps} style={textStyle} color={textColor ?? ButtonTheme.textColor}>
+          {children}
+        </Label>
+      ) : (
+        children
+      )}
       {!!rightIcon && rightIcon}
     </ButtonWrapper>
   )
@@ -125,7 +141,7 @@ const ButtonWrapper = styled.TouchableOpacity<Omit<ButtonProps, 'text' | 'onPres
   }),
 )
 
-const Label = styled.Text<{color?: string}>(({theme, color}) => ({
+const Label = styled(Text)(({theme, color}) => ({
   color,
   fontWeight: theme?.fontWeights?.bold,
 }))
