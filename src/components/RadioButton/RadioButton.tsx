@@ -201,35 +201,25 @@ const RadioButtonWrapper = styled.View({
   alignItems: 'center',
 })
 
-const RadioButtonInnerContainer = styled.View(
-  ({
-    inner,
-    maxWidth,
-    maxHeight,
-    isActive,
-    innerBackgroundColor,
-  }: {
+const RadioButtonInnerContainer = styled.View<
+  {
     inner: {width: number; height: number; border: number}
     maxWidth: number
     maxHeight: number
-    isActive: boolean
-    innerBackgroundColor: string
-  }) => ({
-    maxWidth: maxWidth,
-    maxHeight: maxHeight,
-    width: inner.width,
-    height: inner.height,
-    borderRadius: inner.border,
-    backgroundColor: isActive ? innerBackgroundColor : 'transparent',
-  }),
-)
+  } & ({isActive: true; innerBackgroundColor: string} | {isActive: false})
+>(({inner, maxWidth, maxHeight, ...rest}) => ({
+  maxWidth: maxWidth,
+  maxHeight: maxHeight,
+  width: inner.width,
+  height: inner.height,
+  borderRadius: inner.border,
+  backgroundColor: rest.isActive ? rest.innerBackgroundColor : 'transparent',
+}))
 
-const LabelTextView = styled.View(
-  ({disable, disableOpacity}: {disable: boolean; disableOpacity: number}) => ({
-    marginLeft: responsiveWidth(16),
-    opacity: disable ? disableOpacity : 1,
-  }),
-)
+const LabelTextView = styled.View<{disable: boolean; disableOpacity?: number}>(props => ({
+  marginLeft: 10,
+  opacity: props.disable ? props.disableOpacity : 1,
+}))
 
 const LabelText = styled.Text((props: {theme: ITheme}) => ({
   color: props?.theme?.colors?.black,

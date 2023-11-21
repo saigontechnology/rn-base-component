@@ -1,5 +1,10 @@
-import React, {ReactNode, useCallback, useRef, useState, memo} from 'react'
-import {TextInput, Text} from 'react-native'
+import React, {ReactNode, useCallback, useRef, useState, memo, forwardRef} from 'react'
+import {
+  TextInput,
+  Text,
+  TextInput as RNTextInput,
+  TextInputProps as RNTextInputProperties,
+} from 'react-native'
 import type {KeyboardTypeOptions, StyleProp, TextStyle, ViewStyle} from 'react-native'
 import {metrics} from '../../helpers/metrics'
 import styled from 'styled-components/native'
@@ -167,11 +172,15 @@ const CellContainer = styled.View({
   flexWrap: 'wrap',
 })
 
-const StyledTextInput = styled.TextInput({
+const ForwardRefTextInputComponent = forwardRef<RNTextInput, RNTextInputProperties>((props, ref) => (
+  <RNTextInput {...props} ref={ref} />
+))
+
+const StyledTextInput = styled(ForwardRefTextInputComponent)(() => ({
   opacity: 0,
   position: 'absolute',
   top: 0,
   left: 0,
   right: 0,
   bottom: 0,
-})
+}))

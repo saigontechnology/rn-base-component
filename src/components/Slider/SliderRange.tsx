@@ -367,7 +367,7 @@ const SliderRange: React.FC<SliderRangeProps> = ({
   )
 }
 
-const Container = styled.View((props: ContainerProps) => ({
+const Container = styled.View<ContainerProps>(props => ({
   justifyContent: 'center',
   width: props.width,
 }))
