@@ -10,7 +10,6 @@ export const FormatTime = {
   ddhhmmss: 'DD:HH:mm:ss',
 } as const
 
-type FormatTime = 'MM:SS' | 'HH:MM:SS' | 'DD:HH:MM:SS'
 
 export type CountDownProps = {
   /*
@@ -119,6 +118,7 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
   )
 
   const renderTimer = () => {
+    const numberSecondPerMinute = 60
     /*
     caculate minutes
     */
