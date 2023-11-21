@@ -117,7 +117,6 @@ const CodeInput: React.FC<CodeInputProps> = ({
         return <PlaceholderText color={placeholderTextColor}>{placeholder ?? ''}</PlaceholderText>
       }
     },
-
     [
       renderCursor,
       secureTextEntry,
