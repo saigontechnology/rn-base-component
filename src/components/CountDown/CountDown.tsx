@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
 import {AppState, type StyleProp, type ViewStyle, type TextStyle} from 'react-native'
 import styled from 'styled-components/native'
-
+import {Text} from 'rn-base-component'
 export const FormatTime = {
   mmss: 'mm:ss',
   hhmmss: 'HH:mm:ss',
@@ -179,6 +179,3 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
 const Container = styled.View({
   flexDirection: 'row',
 })
-const Text = styled.Text(() => ({
-  textAlign: 'center',
-}))
