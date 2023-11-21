@@ -144,7 +144,7 @@ const Label = styled(Text)(
   ({theme, color, textSize}: {color?: string; theme?: ITheme; textSize?: number}) => ({
     color,
     fontWeight: theme?.fontWeights?.bold,
-    fontSize: textSize ? textSize : metrics.xs,
+    fontSize: textSize ?? metrics.xs,
   }),
 )
 
