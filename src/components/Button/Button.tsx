@@ -115,17 +115,7 @@ const Button: React.FC<ButtonProps> = ({
 }
 
 const ButtonWrapper = styled.TouchableOpacity<Omit<ButtonProps, 'text' | 'onPress'>>(
-  ({
-    theme,
-    backgroundColor,
-    outline,
-    outlineWidth,
-    outlineColor,
-    borderRadius,
-    disabled,
-    leftIcon,
-    rightIcon,
-  }) => ({
+  ({theme, backgroundColor, outline, outlineWidth, outlineColor, borderRadius, disabled}) => ({
     paddingVertical: theme?.spacing.small,
     flexDirection: 'row',
     paddingHorizontal: theme?.spacing.slim,
