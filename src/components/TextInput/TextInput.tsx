@@ -1,27 +1,19 @@
 import React, {forwardRef, ForwardRefExoticComponent, useCallback, useImperativeHandle, useRef} from 'react'
 import type {
-  TextInput as Input,
   StyleProp,
-  ViewStyle,
-  TextStyle,
+  TextInputProps as RNTextInputProperties,
   TextProps,
-  TextInputProps as NativeInputProps,
+  TextStyle,
+  ViewStyle,
 } from 'react-native'
-import TextInputOutlined from './TextInputOutlined'
-import {Error, CustomIcon, CustomIconProps} from './components'
+import {TextInput as RNTextInput, View} from 'react-native'
 import styled from 'styled-components/native'
-import {isIOS} from '../../helpers/metrics'
+import TextInputOutlined from './TextInputOutlined'
+import {CustomIcon, CustomIconProps, Error} from './components'
+import {isIOS} from '../../helpers'
 import TextInputFlat from './TextInputFlat'
-import type {ITheme} from '../../theme'
 
-type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
-type Position = 'absolute' | 'fixed' | 'relative' | 'static' | 'sticky'
-
-export type Theme = {
-  theme?: ITheme
-}
-
-export interface TextInputProps extends NativeInputProps {
+export interface TextInputProps extends RNTextInputProperties {
   /** Style for container */
   containerStyle?: StyleProp<ViewStyle>
 
@@ -72,15 +64,14 @@ interface CompoundedComponent
   Icon: React.FC<CustomIconProps>
 }
 
-export type TextInputRef = Pick<Input, 'focus' | 'blur' | 'clear'>
+export type TextInputRef = Pick<RNTextInput, 'focus' | 'blur' | 'clear'>
 
 export interface InputContainerProps {
   multiline?: boolean
   isFocused?: boolean
-  theme?: ITheme
 }
 
-const TextInput = forwardRef<TextInputRef, TextInputProps>(
+export const TextInput = forwardRef<any, TextInputProps>(
   (
     {
       containerStyle,
@@ -105,7 +96,7 @@ const TextInput = forwardRef<TextInputRef, TextInputProps>(
     },
     ref,
   ) => {
-    const inputRef = useRef<Input>(null)
+    const inputRef = useRef<RNTextInput>(null)
 
     useImperativeHandle(ref, () => ({
       focus: () => inputRef.current?.focus(),
@@ -118,7 +109,7 @@ const TextInput = forwardRef<TextInputRef, TextInputProps>(
     }, [])
 
     return (
-      <Container style={containerStyle}>
+      <View style={containerStyle}>
         {!!label && (
           <Title testID="test-title" style={labelStyle} {...labelProps}>
             {label}
@@ -147,45 +138,41 @@ const TextInput = forwardRef<TextInputRef, TextInputProps>(
           {!!rightComponent && rightComponent}
         </TouchableContainer>
         {!!errorText && <Error errorProps={errorProps} errorText={errorText} />}
-      </Container>
+      </View>
     )
   },
 ) as CompoundedComponent
 
-const Container = styled.View({})
-
-const TouchableContainer = styled.TouchableOpacity(({theme}: Theme) => ({
-  flexDirection: 'row' as FlexDirection,
+const TouchableContainer = styled.TouchableOpacity(({theme}) => ({
+  flexDirection: 'row',
   borderColor: theme?.colors?.primaryBorder,
   height: theme?.sizes?.narrow,
   borderBottomWidth: theme?.borderWidths?.tiny,
   alignItems: 'center',
 }))
 
-const Title = styled.Text(({theme}: Theme) => ({
+const Title = styled.Text(({theme}) => ({
   fontSize: theme?.fontSizes?.xs,
   color: theme?.colors?.textColor,
   paddingLeft: isIOS ? 0 : theme?.spacing?.tiny,
   paddingBottom: theme?.spacing?.tiny,
 }))
 
-const StarText = styled.Text(({theme}: Theme) => ({
+const StarText = styled.Text(({theme}) => ({
   color: theme?.colors?.errorText,
 }))
 
-const TextInputComponent = styled.TextInput(({theme}: Theme) => ({
+const ForwardRefTextInputComponent = forwardRef<RNTextInput, RNTextInputProperties>((props, ref) => (
+  <RNTextInput {...props} ref={ref} />
+))
+
+const TextInputComponent = styled(ForwardRefTextInputComponent)(({theme}) => ({
   flex: 1,
   paddingVertical: 0,
   fontSize: theme?.fontSizes?.sm,
   color: theme?.colors?.darkTextColor,
 }))
 
-TextInput.displayName = 'TextInput'
-
 TextInput.Outlined = TextInputOutlined
 TextInput.Flat = TextInputFlat
 TextInput.Icon = CustomIcon
-
-export {FlexDirection, Position}
-
-export default TextInput

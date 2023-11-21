@@ -1,7 +1,14 @@
 import React from 'react'
 import type {ComponentMeta, ComponentStory} from '@storybook/react'
 
-import {Button, ButtonOutline, ButtonPrimary, ButtonSecondary, ButtonTransparent} from 'rn-base-component'
+import {
+  Button,
+  ButtonOutline,
+  ButtonPrimary,
+  ButtonSecondary,
+  ButtonTransparent,
+  Text,
+} from 'rn-base-component'
 import {StyleSheet, View} from 'react-native'
 
 export default {
@@ -13,21 +20,24 @@ export const Basic: ComponentStory<typeof Button> = args => (
   <View style={styles.container}>
     <Button {...args} />
     <View style={styles.spacer} />
-    <Button {...args} text="Disable me!" disabled />
+    <Button {...args} disabled>
+      Disable me!
+    </Button>
     <View style={styles.spacer} />
-    <ButtonOutline {...args} text="I'm an outline button" />
+    <ButtonOutline {...args}>
+      <Text>{"I'm an outline button"}</Text>
+      <Text>Description outline</Text>
+    </ButtonOutline>
     <View style={styles.spacer} />
-    <ButtonPrimary {...args} text="I'm a primary button" />
+    <ButtonPrimary {...args}>{"I'm a primary button"}</ButtonPrimary>
     <View style={styles.spacer} />
-    <ButtonSecondary {...args} text="I'm a primary button" />
+    <ButtonSecondary {...args}>{"I'm a secondary button"}</ButtonSecondary>
     <View style={styles.spacer} />
-    <ButtonTransparent {...args} text="I'm a primary button" />
+    <ButtonTransparent {...args}>{"I'm a transparent button"}</ButtonTransparent>
   </View>
 )
 
-Basic.args = {
-  text: 'Hello STS Team!',
-}
+Basic.args = {}
 
 const styles = StyleSheet.create({
   container: {
