@@ -1,7 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react'
 import {AppState, type StyleProp, type ViewStyle, type TextStyle} from 'react-native'
 import styled from 'styled-components/native'
-import {Text} from 'rn-base-component'
+import {Text} from '../Text/Text'
+import {useTheme} from '../../hooks'
+
 export const FormatTime = {
   mmss: 'mm:ss',
   hhmmss: 'HH:mm:ss',
@@ -38,7 +40,7 @@ export type CountDownProps = {
   */
   loop?: boolean
   /*
-  format countdown as key 
+  format countdown as key
   */
   format?: keyof typeof FormatTime
   /*
@@ -57,6 +59,8 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
   elementStyle,
   colonsStyle,
 }) => {
+  const CountDownTheme = useTheme().components.CountDown
+
   const [seconds, setSeconds] = useState(initialSeconds)
   const appState = useRef(AppState.currentState)
   const milisecond = 1000
@@ -103,7 +107,7 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
 
   const renderColons = () => (
     <Container>
-      <Text style={[textStyle, colonsStyle]}>:</Text>
+      <Label style={[CountDownTheme.textStyle, textStyle, colonsStyle]}>:</Label>
     </Container>
   )
 
@@ -116,7 +120,7 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
     const minute = resultCaculatMinute >= 0 ? resultCaculatMinute : 0
     const textMinute = (
       <Container style={elementStyle}>
-        <Text style={[textStyle]}>{minute >= 10 ? `${minute}` : `0${minute}`}</Text>
+        <Label style={[CountDownTheme.textStyle, textStyle]}>{minute.toString().padStart(2, '0')}</Label>
       </Container>
     )
     /*
@@ -126,7 +130,7 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
     const second = resultCaculatSecond >= 0 ? resultCaculatSecond : 0
     const textSecond = (
       <Container style={elementStyle}>
-        <Text style={[textStyle]}>{second >= 10 ? `${second}` : `0${second}`}</Text>
+        <Label style={[CountDownTheme.textStyle, textStyle]}>{second.toString().padStart(2, '0')}</Label>
       </Container>
     )
     let textDay = null
@@ -141,7 +145,7 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
       const day = resultCaculatDay >= 0 ? resultCaculatDay : 0
       textDay = (
         <Container style={elementStyle}>
-          <Text style={[textStyle]}>{day >= 10 ? `${day}` : `0${day}`}</Text>
+          <Label style={[CountDownTheme.textStyle, textStyle]}>{day.toString().padStart(2, '0')}</Label>
         </Container>
       )
     }
@@ -155,13 +159,13 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
       const hour = resultCaculatHour >= 0 ? resultCaculatHour % hourPerDay : 0
       textHour = (
         <Container style={elementStyle}>
-          <Text style={[textStyle]}>{hour >= 10 ? `${hour}` : `0${hour}`}</Text>
+          <Label style={[CountDownTheme.textStyle, textStyle]}>{hour.toString().padStart(2, '0')}</Label>
         </Container>
       )
     }
 
     return (
-      <Container style={containerStyle}>
+      <Container style={[CountDownTheme.containerStyle, containerStyle]}>
         {textDay && textDay}
         {textDay && renderColons()}
         {textHour && textHour}
@@ -179,3 +183,8 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
 const Container = styled.View({
   flexDirection: 'row',
 })
+
+const Label = styled(Text)(({theme}) => ({
+  color: theme?.colors?.black,
+  fontSize: theme?.fontSizes?.xl,
+}))
