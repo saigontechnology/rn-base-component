@@ -105,17 +105,18 @@ const CodeInput: React.FC<CodeInputProps> = ({
     (isFocused: boolean, value?: string) => {
       if (withCursor && isFocused) {
         return renderCursor()
-      } else if (secureTextEntry) {
+      }
+      if (secureTextEntry) {
         return <SecureView testID="text" style={secureViewStyle} />
-      } else if (value) {
+      }
+      if (value) {
         return (
           <Text testID="text" style={textStyle}>
             {value}
           </Text>
         )
-      } else {
-        return <PlaceholderText color={placeholderTextColor}>{placeholder ?? ''}</PlaceholderText>
       }
+      return <PlaceholderText color={placeholderTextColor}>{placeholder ?? ''}</PlaceholderText>
     },
     [
       renderCursor,
