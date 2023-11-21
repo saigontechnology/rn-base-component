@@ -141,7 +141,7 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
       const day = resultCaculatDay >= 0 ? resultCaculatDay : 0
       textDay = (
         <Container style={elementStyle}>
-          <Text style={[textStyle]}>{day >= 10 ? `${day}d` : `0${day}`}</Text>
+          <Text style={[textStyle]}>{day >= 10 ? `${day}` : `0${day}`}</Text>
         </Container>
       )
     }
