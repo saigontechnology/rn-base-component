@@ -2,7 +2,11 @@ import React, {useEffect, useRef, useState} from 'react'
 import {AppState, type StyleProp, type ViewStyle, type TextStyle} from 'react-native'
 import styled from 'styled-components/native'
 
-type FormatTime = 'MM:SS' | 'HH:MM:SS' | 'DD:HH:MM:SS'
+export const FormatTime = {
+  mmss: 'mm:ss',
+  hhmmss: 'HH:mm:ss',
+  ddhhmmss: 'DD:HH:mm:ss',
+} as const
 
 export type CountDownProps = {
   /*
@@ -34,29 +38,29 @@ export type CountDownProps = {
   */
   loop?: boolean
   /*
-  format countdown
+  format countdown as key 
   */
-  format?: FormatTime
+  format?: keyof typeof FormatTime
   /*
   default count time after milisecond
   */
   intervalTimeBySecond?: number
 }
-const CountDown: React.FunctionComponent<CountDownProps> = ({
+export const CountDown: React.FunctionComponent<CountDownProps> = ({
   initialSeconds = 300,
   containerStyle,
   onFinish,
   textStyle,
   loop,
-  format = 'MM:SS',
+  format = 'mmss',
   intervalTimeBySecond = 1000,
   elementStyle,
   colonsStyle,
 }) => {
   const [seconds, setSeconds] = useState(initialSeconds)
-
   const appState = useRef(AppState.currentState)
-  const timeEnd = useRef(new Date().getTime() + initialSeconds * 1000)
+  const milisecond = 1000
+  const timeEnd = useRef(new Date().getTime() + initialSeconds * milisecond)
   const [appStateVisible, setAppStateVisible] = useState(appState.current)
 
   /*
@@ -77,7 +81,7 @@ const CountDown: React.FunctionComponent<CountDownProps> = ({
     const timeout = setTimeout(() => {
       if (seconds >= 0) {
         const uff = timeEnd.current - new Date().getTime()
-        setSeconds(uff / 1000)
+        setSeconds(uff / milisecond)
       }
       if (seconds < 1) {
         if (loop) {
@@ -97,57 +101,61 @@ const CountDown: React.FunctionComponent<CountDownProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seconds, appStateVisible])
 
-  const renderColons = () => {
-    return (
-      <Container>
-        <Text style={[textStyle, colonsStyle]}>:</Text>
-      </Container>
-    )
-  }
+  const renderColons = () => (
+    <Container>
+      <Text style={[textStyle, colonsStyle]}>:</Text>
+    </Container>
+  )
+
   const renderTimer = () => {
+    const numberSecondPerMinute = 60
     /*
     caculate minutes
     */
-    const minute = Math.floor(seconds / 60) % 60 >= 0 ? Math.floor(seconds / 60) % 60 : 0
+    const resultCaculatMinute = Math.floor(seconds / numberSecondPerMinute) % numberSecondPerMinute
+    const minute = resultCaculatMinute >= 0 ? resultCaculatMinute : 0
     const textMinute = (
       <Container style={elementStyle}>
-        <Text style={[textStyle]}>{minute >= 10 ? `${minute}p` : `0${minute}p`}</Text>
+        <Text style={[textStyle]}>{minute >= 10 ? `${minute}` : `0${minute}`}</Text>
       </Container>
     )
     /*
     caculate seconds
     */
-    const second = Math.round(seconds % 60) >= 0 ? Math.round(seconds % 60) : 0
+    const resultCaculatSecond = Math.round(seconds % numberSecondPerMinute)
+    const second = resultCaculatSecond >= 0 ? resultCaculatSecond : 0
     const textSecond = (
       <Container style={elementStyle}>
-        <Text style={[textStyle]}>{second >= 10 ? `${second}s` : `0${second}s`}</Text>
+        <Text style={[textStyle]}>{second >= 10 ? `${second}` : `0${second}`}</Text>
       </Container>
     )
     let textDay = null
     let textHour = null
-    const formatDate = 'DD'
-    const formatHour = 'HH'
+
     /*
     caculate day
     */
-    if (format.includes(formatDate)) {
-      const caculate = 60 * 60 * 24
-      const day = Math.floor(seconds / caculate) >= 0 ? Math.floor(seconds / caculate) : 0
+    if (FormatTime.ddhhmmss === FormatTime[format]) {
+      const secondPerDay = 86400
+      const resultCaculatDay = Math.floor(seconds / secondPerDay)
+      const day = resultCaculatDay >= 0 ? resultCaculatDay : 0
       textDay = (
         <Container style={elementStyle}>
-          <Text style={[textStyle]}>{day >= 10 ? `${day}d` : `0${day}d`}</Text>
+          <Text style={[textStyle]}>{day >= 10 ? `${day}d` : `0${day}`}</Text>
         </Container>
       )
     }
     /*
     caculate hours
     */
-    if (format.includes(formatHour)) {
-      const caculate = 60 * 60
-      const hour = Math.floor(seconds / caculate) >= 0 ? Math.floor(seconds / caculate) % 24 : 0
+    if (FormatTime.hhmmss === FormatTime[format] || FormatTime.ddhhmmss === FormatTime[format]) {
+      const secondPerHour = 3600
+      const resultCaculatHour = Math.floor(seconds / secondPerHour)
+      const hourPerDay = 24
+      const hour = resultCaculatHour >= 0 ? resultCaculatHour % hourPerDay : 0
       textHour = (
         <Container style={elementStyle}>
-          <Text style={[textStyle]}>{hour >= 10 ? `${hour}h` : `0${hour}h`}</Text>
+          <Text style={[textStyle]}>{hour >= 10 ? `${hour}` : `0${hour}`}</Text>
         </Container>
       )
     }
@@ -168,7 +176,6 @@ const CountDown: React.FunctionComponent<CountDownProps> = ({
   return renderTimer()
 }
 
-export default CountDown
 const Container = styled.View({
   flexDirection: 'row',
 })

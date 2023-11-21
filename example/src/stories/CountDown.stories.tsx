@@ -18,7 +18,7 @@ export const CountDownComponent: ComponentStory<typeof CountDown> = args => (
 CountDownComponent.args = {
   initialSeconds: 60 * 60 * 1.5 * 16.01,
   loop: false,
-  format: 'DD:HH:MM:SS',
+  format: 'ddhhmmss',
 }
 
 const styles = StyleSheet.create({
