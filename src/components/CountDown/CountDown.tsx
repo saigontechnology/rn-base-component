@@ -48,6 +48,12 @@ export type CountDownProps = {
   */
   intervalTimeBySecond?: number
 }
+const milisecond = 1000
+const numberSecondPerMinute = 60
+const secondPerHour = 3600
+const hourPerDay = 24
+const secondPerDay = 86400
+
 export const CountDown: React.FunctionComponent<CountDownProps> = ({
   initialSeconds = 300,
   containerStyle,
@@ -63,7 +69,6 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
 
   const [seconds, setSeconds] = useState(initialSeconds)
   const appState = useRef(AppState.currentState)
-  const milisecond = 1000
   const timeEnd = useRef(new Date().getTime() + initialSeconds * milisecond)
   const [appStateVisible, setAppStateVisible] = useState(appState.current)
 
@@ -112,7 +117,6 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
   )
 
   const renderTimer = () => {
-    const numberSecondPerMinute = 60
     /*
     caculate minutes
     */
@@ -140,7 +144,6 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
     caculate day
     */
     if (FormatTime.ddhhmmss === FormatTime[format]) {
-      const secondPerDay = 86400
       const resultCaculatDay = Math.floor(seconds / secondPerDay)
       const day = resultCaculatDay >= 0 ? resultCaculatDay : 0
       textDay = (
@@ -153,9 +156,7 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
     caculate hours
     */
     if (FormatTime.hhmmss === FormatTime[format] || FormatTime.ddhhmmss === FormatTime[format]) {
-      const secondPerHour = 3600
       const resultCaculatHour = Math.floor(seconds / secondPerHour)
-      const hourPerDay = 24
       const hour = resultCaculatHour >= 0 ? resultCaculatHour % hourPerDay : 0
       textHour = (
         <Container style={elementStyle}>
