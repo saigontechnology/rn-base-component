@@ -9,16 +9,16 @@ export type TextProps = {
   theme: Theme
 } & TextProperties
 
-export const Text = styled.Text((props: TextProps) => ({
+export const Text = styled.Text<TextProps>(props => ({
   fontSize: props?.fontSize || props?.theme?.components.Text.fontSize,
   color: props?.color || props?.theme?.components.Text.color,
   fontFamily: props?.theme?.fonts?.regular,
 }))
 
-export const TextBold = styled(Text)((props: TextProps) => ({
+export const TextBold = styled(Text)(props => ({
   fontFamily: props?.theme?.fonts?.bold,
 }))
 
-export const TextItalic = styled(Text)<TextProps>(() => ({
+export const TextItalic = styled(Text)(() => ({
   fontStyle: 'italic',
 }))

@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components/native'
 import type {TextProps} from 'react-native'
-import type {Theme} from '../TextInput'
 
 interface ErrorTextProps {
   errorText?: string
@@ -12,7 +11,7 @@ export const Error: React.FC<ErrorTextProps> = ({errorText, errorProps}) => (
   <ErrorText {...errorProps}>{errorText}</ErrorText>
 )
 
-const ErrorText = styled.Text(({theme}: Theme) => ({
+const ErrorText = styled.Text(({theme}) => ({
   fontSize: theme?.fontSizes?.['2xs'],
   color: theme?.colors?.errorText,
 }))
