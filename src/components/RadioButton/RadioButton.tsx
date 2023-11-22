@@ -1,10 +1,10 @@
 import React, {forwardRef, useMemo, useRef, useState} from 'react'
+import type {LayoutChangeEvent, StyleProp, TextStyle, View, ViewStyle} from 'react-native'
 import {StyleSheet} from 'react-native'
-import type {LayoutChangeEvent, StyleProp, ViewStyle, TextStyle, View} from 'react-native'
 import styled from 'styled-components/native'
 import {responsiveHeight, responsiveWidth} from '../../helpers'
 import Bounceable, {IBounceableProps} from './Bounceable'
-import {theme, ITheme} from '../../theme'
+import {theme} from '../../theme'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 type CustomTextStyleProp = StyleProp<TextStyle>
@@ -83,7 +83,7 @@ const OUTER_SIZE_DEFAULT = 45
 const INNER_SIZE_DEFAULT = 25
 const OPACITY_DEFAULT = 0.5
 
-const RadioButton = forwardRef<View, IRadioButtonProps>(
+export const RadioButton = forwardRef<View, IRadioButtonProps>(
   (
     {
       style,
@@ -192,10 +192,6 @@ const RadioButton = forwardRef<View, IRadioButtonProps>(
   },
 )
 
-RadioButton.displayName = 'RadioButton'
-
-export default RadioButton
-
 const RadioButtonWrapper = styled.View({
   flexDirection: 'row',
   alignItems: 'center',
@@ -221,7 +217,7 @@ const LabelTextView = styled.View<{disable: boolean; disableOpacity?: number}>(p
   opacity: props.disable ? props.disableOpacity : 1,
 }))
 
-const LabelText = styled.Text((props: {theme: ITheme}) => ({
+const LabelText = styled.Text(props => ({
   color: props?.theme?.colors?.black,
   fontSize: props?.theme?.fontSizes?.md,
 }))
