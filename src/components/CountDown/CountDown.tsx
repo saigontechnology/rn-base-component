@@ -118,7 +118,6 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
   )
 
   const renderTimer = () => {
-    const numberSecondPerMinute = 60
     /*
     caculate minutes
     */
