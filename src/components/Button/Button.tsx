@@ -11,6 +11,8 @@ import {
 } from 'react-native'
 import {useTheme} from '../../hooks'
 import {Text} from '../Text/Text'
+import {metrics} from '../../../src/helpers'
+import {ITheme} from '../../theme'
 
 export type ButtonProps = {
   /**
@@ -51,7 +53,9 @@ export type ButtonProps = {
   borderRadius?: number
   /**
    * Custom left/right icon
+   * the size text.
    */
+  textSize?: number
   leftIcon?: ReactNode
   rightIcon?: ReactNode
   /**
@@ -84,6 +88,7 @@ const Button: React.FC<ButtonProps> = ({
   leftIcon,
   rightIcon,
   children,
+  textSize,
   ...props
 }) => {
   const ButtonTheme = useTheme().components.Button
@@ -99,11 +104,15 @@ const Button: React.FC<ButtonProps> = ({
       outlineWidth={outlineWidth}
       borderRadius={borderRadius ?? ButtonTheme.borderRadius}
       disabled={disabled}
-      style={[{height: ButtonTheme.height}, StyleSheet.flatten(style)]}
+      style={[{minHeight: ButtonTheme.height}, StyleSheet.flatten(style)]}
       {...props}>
       {!!leftIcon && leftIcon}
       {typeof children === 'string' ? (
-        <Label {...textProps} style={textStyle} color={textColor ?? ButtonTheme.textColor}>
+        <Label
+          {...textProps}
+          textSize={textSize}
+          style={textStyle}
+          color={textColor ?? ButtonTheme.textColor}>
           {children}
         </Label>
       ) : (
@@ -131,9 +140,12 @@ const ButtonWrapper = styled.TouchableOpacity<Omit<ButtonProps, 'text' | 'onPres
   }),
 )
 
-const Label = styled(Text)(({theme, color}) => ({
-  color,
-  fontWeight: theme?.fontWeights?.bold,
-}))
+const Label = styled(Text)(
+  ({theme, color, textSize}: {color?: string; theme?: ITheme; textSize?: number}) => ({
+    color,
+    fontWeight: theme?.fontWeights?.bold,
+    fontSize: textSize ?? metrics.xs,
+  }),
+)
 
 export default Button
