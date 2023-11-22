@@ -71,7 +71,7 @@ export interface InputContainerProps {
   isFocused?: boolean
 }
 
-export const TextInput = forwardRef<any, TextInputProps>(
+export const TextInput = forwardRef<TextInputRef, TextInputProps>(
   (
     {
       containerStyle,

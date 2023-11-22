@@ -4,13 +4,12 @@ import {
   GestureResponderEvent,
   type StyleProp,
   StyleSheet,
-  type TextProps,
   type TextStyle,
   type TouchableOpacityProps,
   type ViewStyle,
 } from 'react-native'
 import {useTheme} from '../../hooks'
-import {Text} from '../Text/Text'
+import {Text, TextProps} from '../Text/Text'
 
 export type ButtonProps = {
   /**
@@ -50,6 +49,10 @@ export type ButtonProps = {
    */
   borderRadius?: number
   /**
+   * The size of text.
+   */
+  textSize?: number
+  /**
    * Custom left/right icon
    */
   leftIcon?: ReactNode
@@ -84,6 +87,7 @@ const Button: React.FC<ButtonProps> = ({
   leftIcon,
   rightIcon,
   children,
+  textSize,
   ...props
 }) => {
   const ButtonTheme = useTheme().components.Button
@@ -99,7 +103,7 @@ const Button: React.FC<ButtonProps> = ({
       outlineWidth={outlineWidth}
       borderRadius={borderRadius ?? ButtonTheme.borderRadius}
       disabled={disabled}
-      style={[{height: ButtonTheme.height}, StyleSheet.flatten(style)]}
+      style={[{minHeight: ButtonTheme.height}, StyleSheet.flatten(style)]}
       {...props}>
       {!!leftIcon && leftIcon}
       {typeof children === 'string' ? (
@@ -115,26 +119,14 @@ const Button: React.FC<ButtonProps> = ({
 }
 
 const ButtonWrapper = styled.TouchableOpacity<Omit<ButtonProps, 'text' | 'onPress'>>(
-  ({
-    theme,
-    backgroundColor,
-    outline,
-    outlineWidth,
-    outlineColor,
-    borderRadius,
-    disabled,
-    leftIcon,
-    rightIcon,
-  }) => ({
+  ({theme, backgroundColor, outline, outlineWidth, outlineColor, borderRadius, disabled}) => ({
     paddingVertical: theme?.spacing.small,
     flexDirection: 'row',
     paddingHorizontal: theme?.spacing.slim,
     borderRadius,
-    backgroundColor: disabled ? theme?.colors.muted : backgroundColor || theme?.colors.green,
+    backgroundColor,
     justifyContent: 'center',
-    ...((leftIcon || rightIcon) && {
-      alignItems: 'center',
-    }),
+    alignItems: 'center',
     alignSelf: 'center',
     ...(outline && {
       borderWidth: outlineWidth || 1,
@@ -143,7 +135,7 @@ const ButtonWrapper = styled.TouchableOpacity<Omit<ButtonProps, 'text' | 'onPres
   }),
 )
 
-const Label = styled(Text)(({theme, color}) => ({
+const Label = styled(Text)<{color?: string}>(({theme, color}) => ({
   color,
   fontWeight: theme?.fontWeights?.bold,
 }))

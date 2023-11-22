@@ -17,7 +17,6 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import styled from 'styled-components/native'
-import type {ITheme} from '../../theme'
 import {Images} from '../../theme'
 import {
   BOUNCE_EFFECT_IN,
@@ -36,16 +35,13 @@ type BaseTouchableProps = Pick<
   Exclude<keyof TouchableWithoutFeedbackProps, 'onPress'>
 >
 type StyledImageStyle = {
-  theme?: ITheme
   tintColor?: string
 }
 type TextContainerStyle = {
-  theme?: ITheme
   disabled: boolean
   disableOpacity: number
 }
 type IconContainerStyle = {
-  theme?: ITheme
   size?: number
   backgroundColor: string
   disabled: boolean
@@ -53,7 +49,6 @@ type IconContainerStyle = {
   borderRadius?: number
 }
 type InnerIconContainerStyle = {
-  theme?: ITheme
   size?: number
   borderColor: string
   borderRadius?: number

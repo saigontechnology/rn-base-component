@@ -1,12 +1,10 @@
 import type {TextProps as TextProperties, TextStyle} from 'react-native'
 import styled from 'styled-components/native'
-import type {Theme} from 'src/theme'
 
 export type TextProps = {
   fontSize?: TextStyle['fontSize']
   color?: string
   fontWeight?: TextStyle['fontWeight']
-  theme: Theme
 } & TextProperties
 
 export const Text = styled.Text<TextProps>(props => ({

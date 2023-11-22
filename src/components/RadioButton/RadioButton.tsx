@@ -2,7 +2,7 @@ import React, {forwardRef, useMemo, useRef, useState} from 'react'
 import {StyleSheet} from 'react-native'
 import type {LayoutChangeEvent, StyleProp, ViewStyle, TextStyle, View} from 'react-native'
 import styled from 'styled-components/native'
-import {responsiveHeight, responsiveWidth} from '../../helpers/metrics'
+import {responsiveHeight, responsiveWidth} from '../../helpers'
 import Bounceable, {IBounceableProps} from './Bounceable'
 import {theme, ITheme} from '../../theme'
 
@@ -217,7 +217,7 @@ const RadioButtonInnerContainer = styled.View<
 }))
 
 const LabelTextView = styled.View<{disable: boolean; disableOpacity?: number}>(props => ({
-  marginLeft: 10,
+  marginLeft: props.theme?.spacing?.small,
   opacity: props.disable ? props.disableOpacity : 1,
 }))
 

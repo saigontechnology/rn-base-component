@@ -2,7 +2,6 @@ import React from 'react'
 import type {Insets, StyleProp, ViewStyle} from 'react-native'
 import styled from 'styled-components/native'
 import type {FlexDirection, Position, TrackPointStyle} from '../Slider'
-import type {ITheme} from '../../../theme'
 import {FIRST_POINT} from '../constants'
 
 interface TrackPointProps {
@@ -49,7 +48,7 @@ const TrackPoint: React.FunctionComponent<TrackPointProps> = React.memo(
   },
 )
 
-const TrackPointComponent = styled.View((props: TrackPointStyle) => ({
+const TrackPointComponent = styled.View<TrackPointStyle>(props => ({
   width: props.width,
   flexDirection: 'row' as FlexDirection,
   height: '100%',
@@ -57,7 +56,7 @@ const TrackPointComponent = styled.View((props: TrackPointStyle) => ({
   overflow: 'hidden',
 }))
 
-const Point = styled.TouchableOpacity(({theme}: {theme: ITheme}) => ({
+const Point = styled.TouchableOpacity(({theme}) => ({
   height: '100%',
   width: 1,
   backgroundColor: theme.colors.primary,
