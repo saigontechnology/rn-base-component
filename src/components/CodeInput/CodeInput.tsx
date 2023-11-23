@@ -1,12 +1,18 @@
-import React, {forwardRef, ReactNode, useCallback, useRef, useState} from 'react'
-import type {KeyboardTypeOptions, StyleProp, TextStyle, ViewStyle} from 'react-native'
+import React, {ReactNode, useCallback, useRef, useState} from 'react'
+import type {
+  KeyboardTypeOptions,
+  StyleProp,
+  TextInput,
+  TextInputProps,
+  TextStyle,
+  ViewStyle,
+} from 'react-native'
 import {View} from 'react-native'
 import styled from 'styled-components/native'
-
 import {metrics} from '../../helpers'
 import Cursor from './Cursor'
 import {Text} from '../Text/Text'
-import {TextInput, TextInputProps, TextInputRef} from '../TextInput/TextInput'
+// import {TextInput, TextInputProps, TextInputRef} from '../TextInput/TextInput'
 
 interface CodeInputProps extends TextInputProps {
   /** define style for cell */
@@ -67,7 +73,7 @@ export const CodeInput: React.FC<CodeInputProps> = ({
   placeholderTextColor,
   ...rest
 }) => {
-  const textInputRef = useRef<TextInputRef>(null)
+  const textInputRef = useRef<TextInput>(null)
   const [code, setCode] = useState<string>('')
 
   const handleOnChangeText = useCallback(
@@ -182,11 +188,11 @@ const CellContainer = styled.View({
   justifyContent: 'space-between',
 })
 
-const ForwardRefTextInputComponent = forwardRef<TextInputRef, TextInputProps>((props, ref) => (
-  <TextInput {...props} ref={ref} />
-))
+// const ForwardRefTextInputComponent = forwardRef<TextInputRef, TextInputProps>((props, ref) => (
+//   <TextInput {...props} ref={ref} />
+// ))
 
-const StyledTextInput = styled(ForwardRefTextInputComponent)(() => ({
+const StyledTextInput = styled.TextInput<{ref?: React.RefObject<TextInput>}>(() => ({
   opacity: 0,
   position: 'absolute',
   width: 0,
