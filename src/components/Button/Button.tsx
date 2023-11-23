@@ -1,7 +1,6 @@
 import React, {ReactNode} from 'react'
 import styled from 'styled-components/native'
 import {
-  GestureResponderEvent,
   type StyleProp,
   StyleSheet,
   type TextStyle,
@@ -12,10 +11,6 @@ import {useTheme} from '../../hooks'
 import {Text, TextProps} from '../Text/Text'
 
 export type ButtonProps = {
-  /**
-   * Called when the touch is released, but not if cancelled
-   */
-  onPress?: (e?: GestureResponderEvent) => void | undefined
   /**
    * Color of the label
    */
@@ -72,7 +67,6 @@ export type ButtonProps = {
 } & TouchableOpacityProps
 
 const Button: React.FC<ButtonProps> = ({
-  onPress,
   textColor,
   backgroundColor,
   outline,
@@ -93,7 +87,6 @@ const Button: React.FC<ButtonProps> = ({
   const ButtonTheme = useTheme().components.Button
   return (
     <ButtonWrapper
-      onPress={onPress}
       activeOpacity={0.8}
       backgroundColor={
         disabled ? disabledColor ?? ButtonTheme.disabledColor : backgroundColor ?? ButtonTheme.backgroundColor
