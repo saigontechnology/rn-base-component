@@ -1,10 +1,12 @@
-import React, {ReactNode, useCallback, useRef, useState, memo} from 'react'
-import {TextInput, Text, ColorValue, TextInputProps} from 'react-native'
+import React, {forwardRef, ReactNode, useCallback, useRef, useState} from 'react'
 import type {KeyboardTypeOptions, StyleProp, TextStyle, ViewStyle} from 'react-native'
-import {metrics} from '../../helpers'
+import {View} from 'react-native'
 import styled from 'styled-components/native'
+
+import {metrics} from '../../helpers'
 import Cursor from './Cursor'
-import type {ITheme} from 'src/theme'
+import {Text} from '../Text/Text'
+import {TextInput, TextInputProps, TextInputRef} from '../TextInput/TextInput'
 
 interface CodeInputProps extends TextInputProps {
   /** define style for cell */
@@ -33,6 +35,7 @@ interface CodeInputProps extends TextInputProps {
 
   /** render custom view for cursor/indicator */
   customCursor?: () => ReactNode
+
   /** render custom view for cursor/indicator */
   secureTextEntry?: boolean
 
@@ -42,20 +45,12 @@ interface CodeInputProps extends TextInputProps {
   withCursor?: boolean
 
   placeholder?: string
-  placeholderTextColor?: ColorValue
-}
-
-type CellStyle = {
-  theme: ITheme
-}
-
-type SecureViewStyle = {
-  theme: ITheme
+  placeholderTextColor?: string
 }
 
 const DEFAULT_LENGTH = 6
 
-const CodeInput: React.FC<CodeInputProps> = ({
+export const CodeInput: React.FC<CodeInputProps> = ({
   cellStyle,
   focusCellStyle,
   filledCellStyle,
@@ -72,7 +67,7 @@ const CodeInput: React.FC<CodeInputProps> = ({
   placeholderTextColor,
   ...rest
 }) => {
-  const textInputRef = useRef<TextInput>(null)
+  const textInputRef = useRef<TextInputRef>(null)
   const [code, setCode] = useState<string>('')
 
   const handleOnChangeText = useCallback(
@@ -137,7 +132,7 @@ const CodeInput: React.FC<CodeInputProps> = ({
       cells.push(
         <Cell
           testID="cell"
-          style={[cellStyle, code[index] && filledCellStyle, isFocused && focusCellStyle]}
+          style={[cellStyle, code[index] ? filledCellStyle : {}, isFocused && focusCellStyle]}
           key={index}
           onPress={() => handleCellPress(index)}>
           {renderCell(isFocused, code[index])}
@@ -145,20 +140,10 @@ const CodeInput: React.FC<CodeInputProps> = ({
       )
     }
     return cells
-  }, [
-    length,
-    code,
-    placeholder,
-    placeholderTextColor,
-    cellStyle,
-    filledCellStyle,
-    focusCellStyle,
-    renderCell,
-    handleCellPress,
-  ])
+  }, [length, code, cellStyle, filledCellStyle, focusCellStyle, renderCell, handleCellPress])
 
   return (
-    <CodeInputContainer>
+    <View>
       <StyledTextInput
         testID="input"
         ref={textInputRef}
@@ -170,15 +155,11 @@ const CodeInput: React.FC<CodeInputProps> = ({
         {...rest}
       />
       <CellContainer>{renderCells()}</CellContainer>
-    </CodeInputContainer>
+    </View>
   )
 }
 
-export default memo(CodeInput)
-
-const CodeInputContainer = styled.View({})
-
-const Cell = styled.Pressable((props: CellStyle) => ({
+const Cell = styled.Pressable(props => ({
   width: props?.theme?.spacing.gigantic,
   height: props?.theme?.spacing.gigantic,
   borderRadius: metrics.tiny,
@@ -189,7 +170,7 @@ const Cell = styled.Pressable((props: CellStyle) => ({
   margin: metrics.tiny,
 }))
 
-const SecureView = styled.Pressable((props: SecureViewStyle) => ({
+const SecureView = styled.Pressable(props => ({
   width: props?.theme?.spacing.slim,
   height: props?.theme?.spacing.slim,
   borderRadius: metrics.small,
@@ -201,13 +182,17 @@ const CellContainer = styled.View({
   justifyContent: 'space-between',
 })
 
-const StyledTextInput = styled.TextInput({
+const ForwardRefTextInputComponent = forwardRef<TextInputRef, TextInputProps>((props, ref) => (
+  <TextInput {...props} ref={ref} />
+))
+
+const StyledTextInput = styled(ForwardRefTextInputComponent)(() => ({
   opacity: 0,
   position: 'absolute',
   width: 0,
   height: 0,
-})
+}))
 
-const PlaceholderText = styled.Text(({color}: {color?: string}) => ({
+const PlaceholderText = styled.Text<{color?: string}>(({color}) => ({
   color,
 }))
