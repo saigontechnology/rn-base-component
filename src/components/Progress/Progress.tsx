@@ -9,7 +9,7 @@ import Animated, {
   Easing,
   interpolate,
 } from 'react-native-reanimated'
-import {metrics, deviceWidth} from '../../helpers/metrics'
+import {metrics, deviceWidth} from '../../helpers'
 import {theme} from '../../theme'
 
 interface IProgressProps {
@@ -143,7 +143,7 @@ Progress.displayName = 'Progress'
 
 export default memo(Progress)
 
-const ProgressWrapper = styled.View<ProgressStyle>(props => ({
+const ProgressWrapper = styled.View<ProgressStyle & {ref?: React.ForwardedRef<View>}>(props => ({
   overflow: 'hidden',
   width: props.width,
   height: props.size,

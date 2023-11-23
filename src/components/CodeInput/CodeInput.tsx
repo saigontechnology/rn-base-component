@@ -1,6 +1,14 @@
 import React, {ReactNode, useCallback, useRef, useState, memo} from 'react'
-import {TextInput, Text, ColorValue, TextInputProps} from 'react-native'
-import type {KeyboardTypeOptions, StyleProp, TextStyle, ViewStyle} from 'react-native'
+import type {
+  TextInput,
+  ColorValue,
+  TextInputProps,
+  KeyboardTypeOptions,
+  StyleProp,
+  TextStyle,
+  ViewStyle,
+} from 'react-native'
+import {Text} from '../Text/Text'
 import {metrics} from '../../helpers'
 import styled from 'styled-components/native'
 import Cursor from './Cursor'
@@ -137,7 +145,7 @@ const CodeInput: React.FC<CodeInputProps> = ({
       cells.push(
         <Cell
           testID="cell"
-          style={[cellStyle, code[index] && filledCellStyle, isFocused && focusCellStyle]}
+          style={[cellStyle, code[index] ? filledCellStyle : undefined, isFocused && focusCellStyle]}
           key={index}
           onPress={() => handleCellPress(index)}>
           {renderCell(isFocused, code[index])}
@@ -145,17 +153,7 @@ const CodeInput: React.FC<CodeInputProps> = ({
       )
     }
     return cells
-  }, [
-    length,
-    code,
-    placeholder,
-    placeholderTextColor,
-    cellStyle,
-    filledCellStyle,
-    focusCellStyle,
-    renderCell,
-    handleCellPress,
-  ])
+  }, [length, code, cellStyle, filledCellStyle, focusCellStyle, renderCell, handleCellPress])
 
   return (
     <CodeInputContainer>
@@ -201,13 +199,11 @@ const CellContainer = styled.View({
   justifyContent: 'space-between',
 })
 
-const StyledTextInput = styled.TextInput<TextInputProps>({
+const StyledTextInput = styled.TextInput<TextInputProps & {ref?: React.RefObject<TextInput>}>({
   opacity: 0,
   position: 'absolute',
   width: 0,
   height: 0,
 })
 
-const PlaceholderText = styled.Text<TextStyle & {color?: ColorValue}>(props => ({
-  color: props.color,
-}))
+const PlaceholderText = styled(Text)<TextStyle>({})
