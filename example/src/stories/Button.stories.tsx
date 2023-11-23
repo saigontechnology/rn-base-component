@@ -37,10 +37,7 @@ export const Basic: ComponentStory<typeof Button> = args => (
   </View>
 )
 
-Basic.args = {
-  text: 'Hello STS Team!',
-  textSize: 20,
-}
+Basic.args = {}
 
 const styles = StyleSheet.create({
   container: {

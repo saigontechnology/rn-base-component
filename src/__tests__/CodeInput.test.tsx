@@ -1,5 +1,5 @@
 import React from 'react'
-import CodeInput from '../components/CodeInput/CodeInput'
+import {CodeInput} from 'rn-base-component'
 import {fireEvent, render} from '@testing-library/react-native'
 
 describe('CodeInput', () => {

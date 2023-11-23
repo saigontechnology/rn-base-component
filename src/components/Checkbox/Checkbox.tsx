@@ -17,7 +17,6 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated'
 import styled from 'styled-components/native'
-import type {ITheme} from '../../theme'
 import {Images} from '../../theme'
 import {
   BOUNCE_EFFECT_IN,
@@ -36,15 +35,13 @@ type BaseTouchableProps = Pick<
   Exclude<keyof TouchableWithoutFeedbackProps, 'onPress'>
 >
 type StyledImageStyle = {
-  theme?: ITheme
+  tintColor?: string
 }
 type TextContainerStyle = {
-  theme?: ITheme
   disabled: boolean
   disableOpacity: number
 }
 type IconContainerStyle = {
-  theme?: ITheme
   size?: number
   backgroundColor: string
   disabled: boolean
@@ -52,7 +49,6 @@ type IconContainerStyle = {
   borderRadius?: number
 }
 type InnerIconContainerStyle = {
-  theme?: ITheme
   size?: number
   borderColor: string
   borderRadius?: number
@@ -241,17 +237,17 @@ const Container = styled.Pressable({
   flexDirection: 'row',
 })
 
-const StyledImage = styled.Image((props: StyledImageStyle) => ({
+const StyledImage = styled.Image<StyledImageStyle>(props => ({
   width: props.theme?.sizes?.petite,
   height: props.theme?.sizes?.petite,
 }))
 
-const TextContainer = styled.View((props: TextContainerStyle) => ({
+const TextContainer = styled.View<TextContainerStyle>(props => ({
   marginLeft: props.theme?.sizes?.petite,
   opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
 
-const IconContainer = styled.View((props: IconContainerStyle) => ({
+const IconContainer = styled.View<IconContainerStyle>(props => ({
   alignItems: 'center',
   justifyContent: 'center',
   width: props.size,
@@ -265,7 +261,7 @@ const IconContainerAnimated = Animated.createAnimatedComponent<ICheckboxProps & 
   IconContainer,
 )
 
-const InnerIconContainer = styled.View((props: InnerIconContainerStyle) => ({
+const InnerIconContainer = styled.View<InnerIconContainerStyle>(props => ({
   borderWidth: props.borderWidth,
   alignItems: 'center',
   justifyContent: 'center',
