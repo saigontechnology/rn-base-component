@@ -196,36 +196,28 @@ RadioButton.displayName = 'RadioButton'
 
 export default RadioButton
 
-const RadioButtonWrapper = styled.View({
+const RadioButtonWrapper = styled.View<{}>({
   flexDirection: 'row',
   alignItems: 'center',
 })
 
-const RadioButtonInnerContainer = styled.View(
-  ({
-    inner,
-    maxWidth,
-    maxHeight,
-    isActive,
-    innerBackgroundColor,
-  }: {
-    inner: {width: number; height: number; border: number}
-    maxWidth: number
-    maxHeight: number
-    isActive: boolean
-    innerBackgroundColor: string
-  }) => ({
-    maxWidth: maxWidth,
-    maxHeight: maxHeight,
-    width: inner.width,
-    height: inner.height,
-    borderRadius: inner.border,
-    backgroundColor: isActive ? innerBackgroundColor : 'transparent',
-  }),
-)
+const RadioButtonInnerContainer = styled.View<{
+  inner: {width: number; height: number; border: number}
+  maxWidth: number
+  maxHeight: number
+  isActive: boolean
+  innerBackgroundColor: string
+}>(({inner, maxWidth, maxHeight, isActive, innerBackgroundColor}) => ({
+  maxWidth: maxWidth,
+  maxHeight: maxHeight,
+  width: inner.width,
+  height: inner.height,
+  borderRadius: inner.border,
+  backgroundColor: isActive ? innerBackgroundColor : 'transparent',
+}))
 
-const LabelTextView = styled.View(
-  ({disable, disableOpacity}: {disable: boolean; disableOpacity: number}) => ({
+const LabelTextView = styled.View<{disable: boolean; disableOpacity: number}>(
+  ({disable, disableOpacity}) => ({
     marginLeft: responsiveWidth(16),
     opacity: disable ? disableOpacity : 1,
   }),

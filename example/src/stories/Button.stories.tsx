@@ -38,7 +38,7 @@ export const Basic: ComponentStory<typeof Button> = args => (
 )
 
 Basic.args = {
-  text: 'Hello STS Team!',
+  children: 'Hello STS Team!',
   textSize: 20,
 }
 

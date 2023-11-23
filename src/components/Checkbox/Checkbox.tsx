@@ -241,17 +241,17 @@ const Container = styled.Pressable({
   flexDirection: 'row',
 })
 
-const StyledImage = styled.Image((props: StyledImageStyle) => ({
+const StyledImage = styled.Image<StyledImageStyle & {tintColor?: string}>(props => ({
   width: props.theme?.sizes?.petite,
   height: props.theme?.sizes?.petite,
 }))
 
-const TextContainer = styled.View((props: TextContainerStyle) => ({
+const TextContainer = styled.View<TextContainerStyle>(props => ({
   marginLeft: props.theme?.sizes?.petite,
   opacity: props.disabled ? props.disableOpacity : DEFAULT_OPACITY,
 }))
 
-const IconContainer = styled.View((props: IconContainerStyle) => ({
+const IconContainer = styled.View<IconContainerStyle>(props => ({
   alignItems: 'center',
   justifyContent: 'center',
   width: props.size,
@@ -265,7 +265,7 @@ const IconContainerAnimated = Animated.createAnimatedComponent<ICheckboxProps & 
   IconContainer,
 )
 
-const InnerIconContainer = styled.View((props: InnerIconContainerStyle) => ({
+const InnerIconContainer = styled.View<InnerIconContainerStyle>(props => ({
   borderWidth: props.borderWidth,
   alignItems: 'center',
   justifyContent: 'center',

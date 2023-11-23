@@ -51,7 +51,7 @@ const Thumb: React.FunctionComponent<ThumbProps> = ({
   </PanGestureHandler>
 )
 
-const ThumbContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
+const ThumbContainer = styled(Animated.View)<ThumbContainerStyle>(props => ({
   position: 'absolute' as Position,
   height: props.thumbSize.height,
   width: props.thumbSize.width,
@@ -61,7 +61,7 @@ const ThumbContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
   backgroundColor: 'transparent',
 }))
 
-const TriangleDown = styled.View(({background, theme}: {background?: string; theme: ITheme}) => ({
+const TriangleDown = styled.View<{background?: string; theme: ITheme}>(({background, theme}) => ({
   position: 'absolute' as Position,
   bottom: -5,
   width: 0,
@@ -77,7 +77,7 @@ const TriangleDown = styled.View(({background, theme}: {background?: string; the
   transform: [{rotate: '180deg'}] as unknown as string,
 }))
 
-const LabelContainer = styled(Animated.View)((props: ThumbContainerStyle) => ({
+const LabelContainer = styled(Animated.View)<ThumbContainerStyle>(props => ({
   position: 'absolute' as Position,
   top: -responsiveHeight(props.theme?.spacing?.titanic || 0),
   bottom: props.thumbSize.height + metrics.xxs,

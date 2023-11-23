@@ -143,7 +143,7 @@ Progress.displayName = 'Progress'
 
 export default memo(Progress)
 
-const ProgressWrapper = styled.View((props: ProgressStyle) => ({
+const ProgressWrapper = styled.View<ProgressStyle>(props => ({
   overflow: 'hidden',
   width: props.width,
   height: props.size,

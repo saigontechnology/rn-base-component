@@ -49,7 +49,7 @@ const TrackPoint: React.FunctionComponent<TrackPointProps> = React.memo(
   },
 )
 
-const TrackPointComponent = styled.View((props: TrackPointStyle) => ({
+const TrackPointComponent = styled.View<TrackPointStyle>(props => ({
   width: props.width,
   flexDirection: 'row' as FlexDirection,
   height: '100%',

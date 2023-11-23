@@ -201,13 +201,13 @@ const CellContainer = styled.View({
   justifyContent: 'space-between',
 })
 
-const StyledTextInput = styled.TextInput({
+const StyledTextInput = styled.TextInput<TextInputProps>({
   opacity: 0,
   position: 'absolute',
   width: 0,
   height: 0,
 })
 
-const PlaceholderText = styled.Text(({color}: {color?: string}) => ({
-  color,
+const PlaceholderText = styled.Text<TextStyle & {color?: ColorValue}>(props => ({
+  color: props.color,
 }))

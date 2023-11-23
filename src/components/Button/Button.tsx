@@ -4,15 +4,13 @@ import {
   GestureResponderEvent,
   type StyleProp,
   StyleSheet,
-  type TextProps,
   type TextStyle,
   type TouchableOpacityProps,
   type ViewStyle,
 } from 'react-native'
 import {useTheme} from '../../hooks'
-import {Text} from '../Text/Text'
-import {metrics} from '../../../src/helpers'
-import {ITheme} from '../../theme'
+import {Text, TextProps} from '../Text/Text'
+import {metrics} from '../../helpers'
 
 export type ButtonProps = {
   /**
@@ -110,7 +108,7 @@ const Button: React.FC<ButtonProps> = ({
       {typeof children === 'string' ? (
         <Label
           {...textProps}
-          textSize={textSize}
+          fontSize={textSize}
           style={textStyle}
           color={textColor ?? ButtonTheme.textColor}>
           {children}
@@ -140,12 +138,10 @@ const ButtonWrapper = styled.TouchableOpacity<Omit<ButtonProps, 'text' | 'onPres
   }),
 )
 
-const Label = styled(Text)(
-  ({theme, color, textSize}: {color?: string; theme?: ITheme; textSize?: number}) => ({
-    color,
-    fontWeight: theme?.fontWeights?.bold,
-    fontSize: textSize ?? metrics.xs,
-  }),
-)
+const Label = styled(Text)(({theme, color, fontSize}: TextProps) => ({
+  color,
+  fontWeight: theme?.fontWeights?.bold,
+  fontSize: fontSize ?? metrics.xs,
+}))
 
 export default Button
