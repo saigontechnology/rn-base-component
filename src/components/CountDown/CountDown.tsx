@@ -75,6 +75,8 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
 
   /*
     check app state is change
+    JS don't run setTimeout in background
+    so we need to check appstate to make sure countdown is correct
   */
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
@@ -138,9 +140,9 @@ export const CountDown: React.FunctionComponent<CountDownProps> = ({
         <Label style={[CountDownTheme.textStyle, textStyle]}>{second.toString().padStart(2, '0')}</Label>
       </Container>
     )
-    let textDay = null
-    let textHour = null
 
+    let textDay: React.ReactNode | null = null
+    let textHour: React.ReactNode | null = null
     /*
     caculate day
     */
