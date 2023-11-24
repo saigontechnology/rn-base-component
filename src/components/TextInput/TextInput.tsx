@@ -147,7 +147,6 @@ const TouchableContainer = styled.TouchableOpacity(({theme}) => ({
   flexDirection: 'row',
   borderColor: theme?.colors?.primaryBorder,
   height: theme?.sizes?.narrow,
-  borderBottomWidth: theme?.borderWidths?.tiny,
   alignItems: 'center',
 }))
 
