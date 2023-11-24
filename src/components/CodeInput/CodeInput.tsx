@@ -1,13 +1,13 @@
-import React, {ReactNode, useCallback, useRef, useState} from 'react'
-import type {
+import React, {forwardRef, ReactNode, useCallback, useRef, useState} from 'react'
+import {
   KeyboardTypeOptions,
   StyleProp,
   TextInput,
   TextInputProps,
   TextStyle,
   ViewStyle,
+  View,
 } from 'react-native'
-import {View} from 'react-native'
 import styled from 'styled-components/native'
 import {metrics} from '../../helpers'
 import Cursor from './Cursor'
@@ -187,7 +187,11 @@ const CellContainer = styled.View({
   justifyContent: 'space-between',
 })
 
-const StyledTextInput = styled.TextInput<{ref?: React.RefObject<TextInput>}>(() => ({
+const ForwardRefTextInputComponent = forwardRef<TextInput, TextInputProps>((props, ref) => (
+  <TextInput {...props} ref={ref} />
+))
+
+const StyledTextInput = styled(ForwardRefTextInputComponent)(() => ({
   opacity: 0,
   position: 'absolute',
   width: 0,
