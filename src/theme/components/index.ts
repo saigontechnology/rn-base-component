@@ -5,6 +5,7 @@ import {
   ButtonSecondaryTheme,
   ButtonTransparentTheme,
 } from './Button'
+import {CountDownTheme} from './Countdown/Countdown'
 import {CheckboxTheme} from './Checkbox'
 import {TextTheme} from './Text'
 
@@ -16,4 +17,5 @@ export default {
   ButtonTransparent: ButtonTransparentTheme,
   Checkbox: CheckboxTheme,
   Text: TextTheme,
+  CountDown: CountDownTheme,
 }
