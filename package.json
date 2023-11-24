@@ -17,7 +17,7 @@
     "update-test": "jest -u",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepare": "bob build",
+    "prepack": "bob build",
     "example": "yarn --cwd example",
     "release": "release-it",
     "lint:fix": "eslint . --fix",
