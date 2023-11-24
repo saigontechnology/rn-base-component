@@ -12,7 +12,6 @@ import styled from 'styled-components/native'
 import {metrics} from '../../helpers'
 import Cursor from './Cursor'
 import {Text} from '../Text/Text'
-// import {TextInput, TextInputProps, TextInputRef} from '../TextInput/TextInput'
 
 interface CodeInputProps extends TextInputProps {
   /** define style for cell */
@@ -187,10 +186,6 @@ const CellContainer = styled.View({
   flexDirection: 'row',
   justifyContent: 'space-between',
 })
-
-// const ForwardRefTextInputComponent = forwardRef<TextInputRef, TextInputProps>((props, ref) => (
-//   <TextInput {...props} ref={ref} />
-// ))
 
 const StyledTextInput = styled.TextInput<{ref?: React.RefObject<TextInput>}>(() => ({
   opacity: 0,
