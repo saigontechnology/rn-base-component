@@ -159,9 +159,12 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       bounceValue.value = withSequence(withTiming(bounceEffectIn), withSpring(bounceEffectOut))
     }, [bounceValue, bounceEffectIn, bounceEffectOut])
 
-    const animatedIconContainerStyle = useAnimatedStyle(() => ({
-      transform: [{scale: withSequence(withTiming(bounceEffectIn), withSpring(bounceEffectOut))}],
-    }))
+    const animatedIconContainerStyle = useAnimatedStyle(
+      () => ({
+        transform: [{scale: withSequence(withTiming(bounceEffectIn), withSpring(bounceEffectOut))}],
+      }),
+      [bounceValue.value],
+    )
 
     const renderCheckIcon = () => {
       const checkStatus = disableBuiltInState ? isChecked : checked

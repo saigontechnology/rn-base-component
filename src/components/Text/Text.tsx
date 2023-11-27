@@ -8,8 +8,8 @@ export type TextProps = {
 } & TextProperties
 
 export const Text = styled.Text<TextProps>(props => ({
-  fontSize: props?.fontSize || props?.theme?.components.Text.fontSize,
-  color: props?.color || props?.theme?.components.Text.color,
+  fontSize: props?.fontSize || props?.theme?.components?.Text?.fontSize,
+  color: props?.color || props?.theme?.components?.Text?.color,
   fontFamily: props?.theme?.fonts?.regular,
 }))
 

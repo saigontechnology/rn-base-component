@@ -213,7 +213,7 @@ describe('TextInput component', () => {
       fireEvent(textInputContent, 'layout', event)
     })
 
-    expect(textInputContent.props.style[0].height).toBe('100%')
+    expect(textInputContent.props.style.height).toBe('100%')
   })
 
   it('should get the text input content info text input flat', async () => {
@@ -234,7 +234,7 @@ describe('TextInput component', () => {
       fireEvent(textInputContent, 'layout', event)
     })
 
-    expect(textInputContent.props.style[0].height).toBe('100%')
+    expect(textInputContent.props.style.height).toBe('100%')
   })
 
   it('calls the onFocus and onBlur functions when TextInput is focused and blurred', () => {

@@ -2,10 +2,15 @@ import React from 'react'
 import {render} from '@testing-library/react-native'
 import Progress from '../components/Progress/Progress'
 import {responsiveHeight} from '../helpers/metrics'
+import {ThemeProvider} from 'styled-components/native'
+import {theme} from '../theme'
+
+const renderElement = (Component: React.ReactElement) =>
+  render(<ThemeProvider theme={theme}>{Component}</ThemeProvider>)
 
 describe('Progress', () => {
   it('renders correctly', () => {
-    const {getByTestId} = render(<Progress />)
+    const {getByTestId} = renderElement(<Progress />)
     const progressWrapper = getByTestId('progress-wrapper')
     const filledTrack = getByTestId('filled-track')
 
@@ -14,7 +19,7 @@ describe('Progress', () => {
   })
 
   it('renders with default props', () => {
-    const {getByTestId} = render(<Progress />)
+    const {getByTestId} = renderElement(<Progress />)
     const progressWrapper = getByTestId('progress-wrapper')
     const filledTrack = getByTestId('filled-track')
 
@@ -23,14 +28,14 @@ describe('Progress', () => {
     expect(progressWrapper.props.width).toBeUndefined()
     expect(progressWrapper.props.size).toBe(responsiveHeight(16))
 
-    expect(filledTrack.props.style.backgroundColor).toBe('#0e7490')
-    expect(filledTrack.props.style.borderRadius).toBe(0)
-    expect(filledTrack.props.style.width).toBe(0)
-    expect(filledTrack.props.style.height).toBe(responsiveHeight(16))
+    expect(filledTrack.props.style[1].backgroundColor).toBe('#0e7490')
+    expect(filledTrack.props.style[1].borderRadius).toBe(0)
+    expect(filledTrack.props.style[1].width).toBe(0)
+    expect(filledTrack.props.style[1].height).toBe(responsiveHeight(16))
   })
 
   it('renders with custom props', () => {
-    const {getByTestId} = render(
+    const {getByTestId} = renderElement(
       <Progress
         value={50}
         size={20}
@@ -48,17 +53,18 @@ describe('Progress', () => {
     expect(progressWrapper.props.width).toBe(200)
     expect(progressWrapper.props.size).toBe(20)
 
-    expect(filledTrack.props.style.backgroundColor).toBe('red')
-    expect(filledTrack.props.style.borderRadius).toBe(8)
-    expect(filledTrack.props.style.width).toBe(0)
-    expect(filledTrack.props.style.height).toBe(20)
+    expect(filledTrack.props.style[1].backgroundColor).toBe('red')
+    expect(filledTrack.props.style[1].borderRadius).toBe(8)
+    expect(filledTrack.props.style[1].width).toBe(0)
+    expect(filledTrack.props.style[1].height).toBe(20)
   })
 
   it('should animate progress when isIndeterminateProgress is true', async () => {
-    const {getByTestId} = render(<Progress isIndeterminateProgress={true} />)
+    const {getByTestId} = renderElement(<Progress isIndeterminateProgress={true} />)
 
     const filledTrack = getByTestId('filled-track')
-    const initialTranslateX = filledTrack.props.style.transform[0].translateX
+
+    const initialTranslateX = filledTrack.props.style[0].transform[0].translateX
 
     expect(initialTranslateX).not.toBeUndefined()
   })
