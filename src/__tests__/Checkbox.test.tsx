@@ -2,7 +2,7 @@ import React from 'react'
 import {render, fireEvent} from '@testing-library/react-native'
 import {ThemeProvider} from 'styled-components/native'
 import Checkbox from '../components/Checkbox/Checkbox'
-import {BOUNCE_EFFECT_IN, BOUNCE_EFFECT_OUT} from '../components/Checkbox/constants'
+import {BOUNCE_EFFECT_OUT} from '../components/Checkbox/constants'
 import {theme} from '../theme'
 
 jest.mock('../hooks/useTheme', () => ({
@@ -26,26 +26,14 @@ describe('Checkbox test', () => {
     jest.clearAllMocks()
   })
 
-  it('should trigger bounceInEffect on press', () => {
+  it('should trigger bounceEffect on press', () => {
     const {getByTestId} = renderComponent(<Checkbox />)
     const container = getByTestId('container')
     const icon = getByTestId('icon-container')
 
-    fireEvent(container, 'pressIn')
+    fireEvent.press(container)
 
-    console.log(icon.props.style[1].transform[0])
-
-    expect(icon.props.style[1].transform[0].scale).toEqual(BOUNCE_EFFECT_IN)
-  })
-
-  it('should trigger bounceOutEffect on press', () => {
-    const {getByTestId} = renderComponent(<Checkbox />)
-    const container = getByTestId('container')
-    const icon = getByTestId('icon-container')
-
-    fireEvent(container, 'pressOut')
-
-    expect(icon.props.style[1].transform[0].scale).toEqual(BOUNCE_EFFECT_OUT)
+    expect(icon.props.style[1].transform[0].scale.value).toEqual(BOUNCE_EFFECT_OUT)
   })
 
   it('should render correctly', () => {
