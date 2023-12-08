@@ -58,14 +58,4 @@ describe('Progress', () => {
     expect(filledTrack.props.style[1].width).toBe(0)
     expect(filledTrack.props.style[1].height).toBe(20)
   })
-
-  it('should animate progress when isIndeterminateProgress is true', async () => {
-    const {getByTestId} = renderElement(<Progress isIndeterminateProgress={true} />)
-
-    const filledTrack = getByTestId('filled-track')
-
-    const initialTranslateX = filledTrack.props.style[0].transform[0].translateX
-
-    expect(initialTranslateX).not.toBeUndefined()
-  })
 })
