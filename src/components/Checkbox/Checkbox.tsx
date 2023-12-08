@@ -9,13 +9,7 @@ import {
   TouchableWithoutFeedbackProps,
   StyleSheet,
 } from 'react-native'
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSequence,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated'
+import Animated, {useSharedValue, withSequence, withSpring, withTiming} from 'react-native-reanimated'
 import styled from 'styled-components/native'
 import {Images} from '../../theme'
 import {
@@ -156,13 +150,6 @@ export const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       bounceValue.value = withSequence(withTiming(bounceEffectIn), withSpring(bounceEffectOut))
     }, [bounceValue, bounceEffectIn, bounceEffectOut])
 
-    const animatedIconContainerStyle = useAnimatedStyle(
-      () => ({
-        transform: [{scale: withSequence(withTiming(bounceEffectIn), withSpring(bounceEffectOut))}],
-      }),
-      [bounceValue.value],
-    )
-
     const renderCheckIcon = () => {
       const checkStatus = disableBuiltInState ? isChecked : checked
 
@@ -177,7 +164,7 @@ export const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
               ? fillColor ?? (CheckboxTheme.fillColor as string)
               : unfillColor ?? (CheckboxTheme.unfillColor as string)
           }
-          style={[animatedIconContainerStyle, StyleSheet.flatten(iconStyle)]}>
+          style={StyleSheet.flatten([{transform: [{scale: bounceValue}]}, iconStyle])}>
           <InnerIconContainer style={innerIconStyle} {...CheckboxTheme}>
             {iconComponent ||
               (checkStatus && (
