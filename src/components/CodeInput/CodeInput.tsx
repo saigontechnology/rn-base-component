@@ -165,8 +165,8 @@ export const CodeInput: React.FC<CodeInputProps> = ({
 }
 
 const Cell = styled.Pressable(props => ({
-  width: props?.theme?.spacing.gigantic,
-  height: props?.theme?.spacing.gigantic,
+  width: props?.theme?.spacing?.gigantic,
+  height: props?.theme?.spacing?.gigantic,
   borderRadius: metrics.tiny,
   borderWidth: metrics.line,
   borderColor: props?.theme?.colors?.coolGray,
