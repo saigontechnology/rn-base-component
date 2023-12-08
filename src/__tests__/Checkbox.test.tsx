@@ -26,7 +26,7 @@ describe('Checkbox test', () => {
     jest.clearAllMocks()
   })
 
-  it('should trigger bounceInEffect on press', () => {
+  it('should trigger bounceEffect on press', () => {
     const {getByTestId} = renderComponent(<Checkbox />)
     const container = getByTestId('container')
     const icon = getByTestId('icon-container')
