@@ -306,7 +306,7 @@ const Slider: SliderComponentProps = ({
   const onLayout = (event: LayoutChangeEvent) => {
     const { width } = event.nativeEvent.layout;
     if (value && value > minimumValue && value < maximumValue) {
-      const percent = value / maximumValue;
+      const percent = (value - minimumValue) / (maximumValue - minimumValue);
       progress.value = width * percent
     }
   }
