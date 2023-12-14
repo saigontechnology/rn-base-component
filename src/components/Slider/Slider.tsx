@@ -1,10 +1,10 @@
-import React, {useCallback, useMemo} from 'react'
-import type {PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
-import {hitSlop, metrics, responsiveHeight} from '../../helpers/metrics'
-import SliderFixedRange, {SliderFixedRangeProps} from './SliderFixedRange'
-import {Thumb, Track, TrackPoint} from './components'
+import React, { useCallback, useMemo } from 'react'
+import type { PanGestureHandlerGestureEvent } from 'react-native-gesture-handler'
+import { hitSlop, metrics, responsiveHeight } from '../../helpers/metrics'
+import SliderFixedRange, { SliderFixedRangeProps } from './SliderFixedRange'
+import { Thumb, Track, TrackPoint } from './components'
 import styled from 'styled-components/native'
-import type {ITheme} from '../../theme'
+import type { ITheme } from '../../theme'
 import {
   StyleProp,
   ViewStyle,
@@ -35,9 +35,9 @@ import {
   VISIBLE,
 } from './constants'
 import SliderFixed from './SliderFixed'
-import SliderRange, {SliderRangeProps} from './SliderRange'
-import {GestureHandlerRootView} from 'react-native-gesture-handler'
-import {useTheme} from '../../hooks'
+import SliderRange, { SliderRangeProps } from './SliderRange'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { useTheme } from '../../hooks'
 
 type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
 type Position = 'absolute' | 'fixed' | 'relative' | 'static' | 'sticky'
@@ -128,12 +128,15 @@ export interface ISliderCommonProps {
   thumbStyle?: StyleProp<ViewStyle>
 
   /** Size of the slider's thumb */
-  thumbSize?: Size
+  thumbSize?: Size,
+
+  /** init position slider's thumb */
+  value?: number,
 }
 
-type SliderPropsWithOptionalWidth = {sliderWidth?: number} & (
-  | {showTrackPoint: true; sliderWidth: number}
-  | {showTrackPoint?: false; sliderWidth?: number}
+type SliderPropsWithOptionalWidth = { sliderWidth?: number } & (
+  | { showTrackPoint: true; sliderWidth: number }
+  | { showTrackPoint?: false; sliderWidth?: number }
 )
 
 type SliderProps = ISliderCommonProps & InnerSliderProps & SliderPropsWithOptionalWidth
@@ -161,16 +164,17 @@ const Slider: SliderComponentProps = ({
   tapToSeek,
   hitSlopPoint = hitSlop,
   sliderWidth,
-  thumbSize = {width: metrics.medium, height: metrics.medium},
+  thumbSize = { width: metrics.medium, height: metrics.medium },
   trackPointStyle,
   onValueChange = () => null,
+  value
 }: SliderProps) => {
   const theme = useTheme()
   const sliderInfo = useSharedValue<SliderInfo>({
     range: INIT_VALUE,
     trackWidth: INIT_VALUE,
   })
-  const sliderValue = useSharedValue<number>(INIT_POINT)
+  const sliderValue = useSharedValue<number>(value ?? INIT_POINT)
   const progress = useSharedValue<number>(INIT_VALUE)
   const opacity = useSharedValue(INIT_VALUE)
   const stepValue = useMemo(() => step || DEFAULT_STEP, [step])
@@ -186,11 +190,11 @@ const Slider: SliderComponentProps = ({
    * @param {number} value - The value of the slider
    */
   const updateSlider = useCallback(
-    (progressing: number, value: number) => {
+    (progressing: number, updateValue: number) => {
       progress.value = progressing
-      sliderValue.value = value
+      sliderValue.value = updateValue
     },
-    [sliderValue, progress],
+    [sliderValue, progress, value],
   )
 
   const handler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent, AnimatedGHContext>({
@@ -198,7 +202,7 @@ const Slider: SliderComponentProps = ({
       ctx.startX = progress.value
     },
     onActive: (event, ctx) => {
-      const {trackWidth} = sliderInfo.value
+      const { trackWidth } = sliderInfo.value
       const progressing = ctx.startX + event.translationX
 
       opacity.value = VISIBLE
@@ -216,7 +220,7 @@ const Slider: SliderComponentProps = ({
       }
     },
     onEnd: () => {
-      const {range} = sliderInfo.value
+      const { range } = sliderInfo.value
       let value = roundToValue ? sliderValue.value.toFixed(roundToValue) : sliderValue.value
       opacity.value = INVISIBLE
       if (step) {
@@ -235,9 +239,9 @@ const Slider: SliderComponentProps = ({
    */
   const animatedTrackStyle = useAnimatedStyle(
     () => ({
-      width: withTiming(progress.value, {duration: 1}),
+      width: withTiming(progress.value, { duration: 1 }),
     }),
-    [progress],
+    [progress, value],
   )
 
   /**
@@ -245,10 +249,11 @@ const Slider: SliderComponentProps = ({
    */
   const animatedThumbStyle = useAnimatedStyle(
     () => ({
-      transform: [{translateX: progress.value}],
+      transform: [{ translateX: progress.value }],
     }),
     [progress],
   )
+
 
   /**
    * Update opacity when touching the thumb
@@ -268,17 +273,17 @@ const Slider: SliderComponentProps = ({
    */
   const animatedProps = useAnimatedProps(
     () =>
-      ({
-        text: `${roundToValue !== undefined ? sliderValue.value.toFixed(roundToValue) : sliderValue.value}`,
-      } as AnimatedLabelProps),
+    ({
+      text: `${roundToValue !== undefined ? sliderValue.value.toFixed(roundToValue) : sliderValue.value}`,
+    } as AnimatedLabelProps),
   )
 
   const getTrackWidth = (event: LayoutChangeEvent) => {
-    const {width} = event.nativeEvent.layout
+    const { width } = event.nativeEvent.layout
     // Range refers to the width of a point
     // It is used to calculate the correct position of the slider while sliding
     const range = width / totalPoint
-    sliderInfo.value = {range, trackWidth: width}
+    sliderInfo.value = { range, trackWidth: width }
   }
 
   /**
@@ -298,9 +303,16 @@ const Slider: SliderComponentProps = ({
     [minimumValue, onValueChange, sliderInfo.value.range, stepValue, updateSlider],
   )
 
+  const onLayout = (event: LayoutChangeEvent) => {
+    const { width } = event.nativeEvent.layout;
+    if (value && value > minimumValue && value < maximumValue) {
+      const percent = value / maximumValue;
+      progress.value = width * percent
+    }
+  }
   return (
     <GestureHandlerRootView>
-      <Container style={[!!sliderWidth && {width: sliderWidth}, style]}>
+      <Container style={[!!sliderWidth && { width: sliderWidth }, style]} onLayout={onLayout} >
         <Track style={trackStyle} onLayout={getTrackWidth} />
         {!!showTrackPoint && (
           <TrackPoint
@@ -315,7 +327,7 @@ const Slider: SliderComponentProps = ({
         <Track
           style={StyleSheet.flatten([
             StyleSheet.absoluteFillObject,
-            {backgroundColor: theme?.colors.primary},
+            { backgroundColor: theme?.colors.primary },
             trackedStyle,
             animatedTrackStyle,
           ])}
@@ -328,7 +340,7 @@ const Slider: SliderComponentProps = ({
           thumbSize={thumbSize}
           thumbComponent={thumbComponent}
           animatedProps={animatedProps}
-          thumbStyle={[thumbStyle, {left: -thumbSize.width / 2}]}
+          thumbStyle={[thumbStyle, { left: -thumbSize.width / 2 }]}
           animatedThumbStyle={animatedThumbStyle}
           opacityStyle={opacityStyle}
           onGestureEvent={handler}
