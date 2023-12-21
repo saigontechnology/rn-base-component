@@ -27,7 +27,7 @@ const TrackPoint: React.FunctionComponent<TrackPointProps> = React.memo(
 
     // Render the track points based on the range
     return (
-      <TrackPointComponent width={sliderWidth}>
+      <TrackPointComponent width={sliderWidth} testID="track-point">
         {/**
          * Loop through the range of the slider track and render a point for each value
          */}
