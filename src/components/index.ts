@@ -5,6 +5,7 @@ import {Button, ButtonOutline, ButtonPrimary, ButtonSecondary, ButtonTransparent
 import Progress from './Progress/Progress'
 import Checkbox from './Checkbox/Checkbox'
 import {CodeInput} from './CodeInput/CodeInput'
+import Cursor from './CodeInput/Cursor'
 import Slider from './Slider/Slider'
 import Card from './Card/Card'
 import {TextInput} from './TextInput/TextInput'
@@ -16,6 +17,7 @@ export {
   ButtonSecondary,
   ButtonTransparent,
   CodeInput,
+  Cursor,
   Checkbox,
   Progress,
   Slider,
