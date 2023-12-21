@@ -299,7 +299,7 @@ const Slider: SliderComponentProps = ({
   )
 
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView testID="slider">
       <Container style={[!!sliderWidth && {width: sliderWidth}, style]}>
         <Track style={trackStyle} onLayout={getTrackWidth} />
         {!!showTrackPoint && (
