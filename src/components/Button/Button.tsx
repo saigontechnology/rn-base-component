@@ -81,7 +81,6 @@ const Button: React.FC<ButtonProps> = ({
   leftIcon,
   rightIcon,
   children,
-  textSize,
   ...props
 }) => {
   const ButtonTheme = useTheme().components.Button

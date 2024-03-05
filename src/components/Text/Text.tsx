@@ -5,12 +5,13 @@ export type TextProps = {
   fontSize?: TextStyle['fontSize']
   color?: string
   fontWeight?: TextStyle['fontWeight']
+  fontFamily?: string
 } & TextProperties
 
 export const Text = styled.Text<TextProps>(props => ({
   fontSize: props?.fontSize || props?.theme?.components.Text.fontSize,
   color: props?.color || props?.theme?.components.Text.color,
-  fontFamily: props?.theme?.fonts?.regular,
+  fontFamily: props?.fontFamily || props?.theme?.fonts?.regular,
 }))
 
 export const TextBold = styled(Text)(props => ({
