@@ -7,7 +7,8 @@ import Checkbox from './Checkbox/Checkbox'
 import {CodeInput} from './CodeInput/CodeInput'
 import Slider from './Slider/Slider'
 import Card from './Card/Card'
-import {TextInput} from './TextInput/TextInput'
+
+export * from './TextInput'
 
 export {
   Button,
@@ -21,7 +22,6 @@ export {
   Slider,
   RadioButton,
   Card,
-  TextInput,
   Accordion,
 }
 export * from './Text/Text'

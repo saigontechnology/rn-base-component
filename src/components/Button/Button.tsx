@@ -120,6 +120,7 @@ const ButtonWrapper = styled.TouchableOpacity<Omit<ButtonProps, 'text' | 'onPres
     backgroundColor,
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
     alignSelf: 'center',
     ...(outline && {
       borderWidth: outlineWidth || 1,
