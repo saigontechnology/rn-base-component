@@ -1,6 +1,6 @@
 import React from 'react'
 import {render, fireEvent} from '@testing-library/react-native'
-import Checkbox from '../components/Checkbox/Checkbox'
+import {Checkbox} from '../components'
 import {BOUNCE_EFFECT_OUT} from '../components/Checkbox/constants'
 
 describe('Checkbox test', () => {
@@ -64,17 +64,17 @@ describe('Checkbox test', () => {
     expect(icon.props.style.backgroundColor).toEqual('#00000000')
   })
 
-  it('text should be null', () => {
+  it('label should be null', () => {
     const {queryByTestId} = render(<Checkbox disableText={true} />)
-    const text = queryByTestId('text')
+    const label = queryByTestId('label')
 
-    expect(text).toBeNull()
+    expect(label).toBeNull()
   })
 
-  it('text should be set', () => {
-    const {getByTestId} = render(<Checkbox text="checkbox text" />)
-    const text = getByTestId('text')
+  it('label should be set', () => {
+    const {getByTestId} = render(<Checkbox label="checkbox text" />)
+    const label = getByTestId('label')
 
-    expect(text.props.children).toEqual('checkbox text')
+    expect(label.props.children).toEqual('checkbox label')
   })
 })
