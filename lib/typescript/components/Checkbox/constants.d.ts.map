@@ -1,0 +1,1 @@
+{"version":3,"file":"constants.d.ts","sourceRoot":"","sources":["../../../../src/components/Checkbox/constants.ts"],"names":[],"mappings":"AAAA,QAAA,MAAM,gBAAgB,MAAM,CAAA;AAC5B,QAAA,MAAM,iBAAiB,IAAI,CAAA;AAC3B,QAAA,MAAM,eAAe,MAAM,CAAA;AAC3B,QAAA,MAAM,eAAe,IAAI,CAAA;AACzB,QAAA,MAAM,qBAAqB,IAAI,CAAA;AAE/B,OAAO,EAAC,gBAAgB,EAAE,iBAAiB,EAAE,eAAe,EAAE,eAAe,EAAE,qBAAqB,EAAC,CAAA"}

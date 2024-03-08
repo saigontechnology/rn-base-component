@@ -1,0 +1,1 @@
+{"version":3,"names":["metrics","base","TextTheme","fontSize","span","color","colors","black"],"sourceRoot":"../../../../src","sources":["theme/components/Text.ts"],"mappings":"AACA,SAAQA,OAAO,QAAO,eAAe;AACrC,OAAOC,IAAI,MAAM,SAAS;AAI1B,OAAO,MAAMC,SAAyB,GAAG;EACvCC,QAAQ,EAAEH,OAAO,CAACI,IAAI;EACtBC,KAAK,EAAEJ,IAAI,CAACK,MAAM,CAACC;AACrB,CAAC"}

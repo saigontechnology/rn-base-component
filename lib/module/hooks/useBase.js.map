@@ -1,0 +1,1 @@
+{"version":3,"names":["useContext","BaseContext","useBase","base","Error"],"sourceRoot":"../../../src","sources":["hooks/useBase.tsx"],"mappings":"AAAA,SAAQA,UAAU,QAAO,OAAO;AAChC,SAAQC,WAAW,QAAqB,sBAAsB;AAE9D,OAAO,MAAMC,OAAO,GAAGA,CAAA,KAAM;EAC3B,MAAMC,IAAI,GAAGH,UAAU,CAACC,WAAW,CAAC;EAEpC,IAAI,CAACE,IAAI,EAAE;IACT,MAAMC,KAAK,CAAC,8EAA8E,CAAC;EAC7F;EAEA,OAAOD,IAAI;AACb,CAAC"}

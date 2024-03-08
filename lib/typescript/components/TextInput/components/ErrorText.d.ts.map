@@ -1,0 +1,1 @@
+{"version":3,"file":"ErrorText.d.ts","sourceRoot":"","sources":["../../../../../src/components/TextInput/components/ErrorText.tsx"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,OAAO,CAAA;AAEzB,OAAO,KAAK,EAAC,SAAS,EAAC,MAAM,cAAc,CAAA;AAE3C,UAAU,cAAc;IACtB,SAAS,CAAC,EAAE,MAAM,CAAA;IAClB,UAAU,CAAC,EAAE,SAAS,CAAA;CACvB;AAED,eAAO,MAAM,KAAK,EAAE,KAAK,CAAC,EAAE,CAAC,cAAc,CAE1C,CAAA"}
