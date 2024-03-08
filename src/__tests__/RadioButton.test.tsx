@@ -41,9 +41,9 @@ describe('RadioButton test', () => {
 
   it('should not change state when disabled', () => {
     const {getByTestId} = render(<RadioButton onPress={onPressMock} disable={true} />)
-    const radionButton = getByTestId('bounceable')
+    const radioButton = getByTestId('bounceable')
 
-    fireEvent.press(radionButton)
+    fireEvent.press(radioButton)
     expect(onPressMock).not.toHaveBeenCalled()
   })
 

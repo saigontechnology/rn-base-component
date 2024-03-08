@@ -1,6 +1,6 @@
 {
   "name": "rn-base-component",
-  "version": "0.0.6",
+  "version": "0.0.10",
   "description": "test",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
