@@ -12,9 +12,9 @@ export const Basic: ComponentStory<typeof Checkbox> = () => (
   <View style={styles.container}>
     <Checkbox />
     <View style={styles.spacer} />
-    <Checkbox text="checkbox label" />
+    <Checkbox label="checkbox label" />
     <View style={styles.spacer} />
-    <Checkbox disabled={true} text="disable checkbox" />
+    <Checkbox disabled={true} label="disable checkbox" />
   </View>
 )
 
