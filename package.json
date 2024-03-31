@@ -1,6 +1,6 @@
 {
   "name": "rn-base-component",
-  "version": "0.0.6",
+  "version": "0.0.10",
   "description": "test",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -17,7 +17,7 @@
     "update-test": "jest -u",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,ts,tsx}\"",
-    "prepack": "bob build",
+    "prepare": "bob build",
     "example": "yarn --cwd example",
     "release": "release-it",
     "lint:fix": "eslint . --fix",

@@ -1,4 +1,4 @@
-import React, {useEffect, forwardRef, useImperativeHandle, useState, useCallback, memo} from 'react'
+import React, {useEffect, forwardRef, useImperativeHandle, useState, useCallback} from 'react'
 import {
   Text,
   StyleProp,
@@ -59,7 +59,7 @@ export interface ICheckboxProps extends BaseTouchableProps {
   /** size of the checkbox */
   size?: number
   /** the text of the checkbox */
-  text?: string
+  label?: string
   /** border radius of the checkbox */
   borderRadius?: number
   /** border width the checkbox */
@@ -72,7 +72,7 @@ export interface ICheckboxProps extends BaseTouchableProps {
   unfillColor?: string
   /** color of the check mark, default is white */
   checkMarkColor?: string
-  /** opacity of checkbox when disable, default 0.5 */
+  /** opacity of checkbox when disabled, default 0.5 */
   disableOpacity?: number
   /** disable the checkbox text */
   disableText?: boolean
@@ -93,7 +93,7 @@ export interface ICheckboxProps extends BaseTouchableProps {
   /** style of container view  */
   style?: CustomStyleProp
   /** style of checkbox text */
-  textStyle?: CustomTextStyleProp
+  labelStyle?: CustomTextStyleProp
   /** style icon image */
   iconImageStyle?: CustomImageStyleProp
   /** checkbox text container style */
@@ -108,26 +108,23 @@ interface ICheckboxMethods {
   onHandlePress: () => void
 }
 
-const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
+export const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
   (
     {
       style,
-      size,
       iconStyle,
       iconComponent,
       iconImageStyle,
       fillColor,
       unfillColor,
       checkMarkColor,
-      borderRadius,
-      borderWidth,
       disableBuiltInState = false,
       isChecked,
       innerIconStyle,
       checkIconImageSource = Images.check,
-      text,
+      label,
       textComponent,
-      textStyle,
+      labelStyle,
       textContainerStyle,
       disableText = false,
       disabled = false,
@@ -192,12 +189,12 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       )
     }
 
-    const renderCheckboxText = () =>
+    const renderCheckboxLabel = () =>
       !disableText &&
       (textComponent || (
         <TextContainer style={textContainerStyle} disabled={disabled} disableOpacity={disableOpacity}>
-          <Text testID="text" style={textStyle}>
-            {text}
+          <Text testID="text" style={labelStyle}>
+            {label}
           </Text>
         </TextContainer>
       ))
@@ -222,15 +219,13 @@ const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
         onPress={onHandlePress}
         {...rest}>
         {renderCheckIcon()}
-        {renderCheckboxText()}
+        {renderCheckboxLabel()}
       </Container>
     )
   },
 )
 
 Checkbox.displayName = 'Checkbox'
-
-export default memo(Checkbox)
 
 const Container = styled.Pressable({
   alignItems: 'center',
