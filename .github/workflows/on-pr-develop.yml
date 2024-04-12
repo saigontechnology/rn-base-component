@@ -1,7 +1,7 @@
 name: Validate changes against develop
 on:
   pull_request:
-    branches: ['main']
+    branches: ['develop']
 
 jobs:
   linting-typechecking:
