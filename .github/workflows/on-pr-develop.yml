@@ -16,14 +16,8 @@ jobs:
       - name: Linting, Typechecking
         run: yarn lint
 
-#  test:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#
-#      - name: Setup
-#        uses: ./.github/actions/setup
-#
-#      - name: Run unit tests
-#        run: yarn test --maxWorkers=2 --coverage
+      - name: Comment with Test Coverage
+        uses: dkershner6/jest-coverage-commenter-action@v1
+        with:
+          github_token: '${{ secrets.GITHUB_TOKEN }}'
+          comment_prefix: '## Test Result'
