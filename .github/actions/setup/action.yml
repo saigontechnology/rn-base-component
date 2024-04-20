@@ -12,7 +12,7 @@ runs:
       with:
         node-version-file: .nvmrc
     - name: Install yarn
-      run: corepack yarn
+      run: corepack yarn@@1.22.22
       shell: bash
     - name: Cache dependencies
       id: yarn-cache
