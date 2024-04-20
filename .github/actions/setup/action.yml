@@ -5,12 +5,17 @@ runs:
   using: composite
   steps:
     - name: Enable Corepack before setting up Node
-      run: npm install -g corepack && corepack enable
+      run: npm uninstall -g yarn && npm install -g corepack && corepack enable
       shell: bash
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version-file: .nvmrc
+    - name: Install yarn
+      run: corepact yarn
+      shell: bash
+      with:
+       node-version-file: .nvmrc
     - name: Cache dependencies
       id: yarn-cache
       uses: actions/cache@v3
