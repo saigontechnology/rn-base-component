@@ -16,6 +16,15 @@ jobs:
       - name: Linting, Typechecking
         run: yarn lint
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Project and Cache
+        uses: ./.github/actions/setup
+
       - name: Comment with Test Coverage
         uses: dkershner6/jest-coverage-commenter-action@v1
         with:
