@@ -11,6 +11,9 @@ runs:
       uses: actions/setup-node@v3
       with:
         node-version-file: .nvmrc
+    - name: Install Yarn
+      run: npm install -g yarn
+      shell: bash
 
     - name: Cache dependencies
       id: yarn-cache
