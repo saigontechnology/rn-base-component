@@ -5,7 +5,7 @@ runs:
   using: composite
   steps:
     - name: Enable Corepack before setting up Node
-      run: corepack enable
+      run: npm install -g corepack && corepack enable
       shell: bash
     - name: Setup Node.js
       uses: actions/setup-node@v3
