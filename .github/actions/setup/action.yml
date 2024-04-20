@@ -4,24 +4,22 @@ description: Setup Node.js and install dependencies
 runs:
   using: composite
   steps:
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version-file: .nvmrc
-
-    - name: Cache dependencies
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: |
+        dir=$(yarn cache dir)
+        echo "YARN_CACHE_DIR=$dir" >> $GITHUB_ENV
+      shell: bash
+    # Note that the cache is unique to the runner
+    - name: Restore node_modules from cache
+      uses: actions/cache@v4
       id: yarn-cache
-      uses: actions/cache@v3
       with:
-        path: |
-          **/node_modules
+        path: ${{ env.YARN_CACHE_DIR }}
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      if: steps.yarn-cache.outputs.cache-hit != 'true'
-      run: |
-        yarn install --cwd example --frozen-lockfile
-        yarn install --frozen-lockfile
+      run: yarn install --frozen-lockfile --network-timeout 300000
       shell: bash
