@@ -59,6 +59,7 @@ const getStories = () => {
     "./src/stories/Slider.stories.tsx": require("../src/stories/Slider.stories.tsx"),
     "./src/stories/Text.stories.tsx": require("../src/stories/Text.stories.tsx"),
     "./src/stories/TextInput.stories.tsx": require("../src/stories/TextInput.stories.tsx"),
+    "./src/stories/Typography.stories.tsx": require("../src/stories/Typography.stories.tsx"),
   };
 };
 

@@ -8,7 +8,7 @@
     "storybook-watcher": "sb-rn-watcher --config-path .ondevice",
     "storybook": "start-storybook -p 6006",
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --simulator=\\\"iPhone 15\\\" --mode Debug",
     "start": "react-native start",
     "pods": "pod-install --quiet"
   },

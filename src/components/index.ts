@@ -9,6 +9,7 @@ import Card from './Card/Card'
 
 export * from './TextInput'
 export * from './Checkbox'
+export * from './Typography/Typography'
 
 export {
   Button,
