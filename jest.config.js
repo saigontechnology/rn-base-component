@@ -7,6 +7,7 @@ module.exports = {
   roots: ['<rootDir>'],
   collectCoverage: true,
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  modulePathIgnorePatterns: ['docs', 'lib', '.eslintrc'],
   transformIgnorePatterns: ['jest-runner'],
   transform: {
     '^.+\\.(js)$': '<rootDir>/node_modules/babel-jest',
