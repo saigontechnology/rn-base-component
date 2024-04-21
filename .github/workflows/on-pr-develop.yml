@@ -16,7 +16,7 @@ jobs:
       - name: Linting, Typechecking
         run: yarn lint
 
-  test:
+  unit-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
