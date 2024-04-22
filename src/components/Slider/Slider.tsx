@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo} from 'react'
-import type {PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
+import {Gesture, GestureHandlerRootView} from 'react-native-gesture-handler'
 import {hitSlop, metrics, responsiveHeight} from '../../helpers/metrics'
 import SliderFixedRange, {SliderFixedRangeProps} from './SliderFixedRange'
 import {Thumb, Track, TrackPoint} from './components'
@@ -17,10 +17,9 @@ import {
 import {
   useAnimatedStyle,
   useSharedValue,
-  useAnimatedGestureHandler,
-  runOnJS,
   useAnimatedProps,
   withTiming,
+  runOnJS,
 } from 'react-native-reanimated'
 import {
   DEFAULT_MAXIMUM_VALUE,
@@ -36,7 +35,6 @@ import {
 } from './constants'
 import SliderFixed from './SliderFixed'
 import SliderRange, {SliderRangeProps} from './SliderRange'
-import {GestureHandlerRootView} from 'react-native-gesture-handler'
 import {useTheme} from '../../hooks'
 
 type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
@@ -172,6 +170,7 @@ const Slider: SliderComponentProps = ({
   })
   const sliderValue = useSharedValue<number>(INIT_POINT)
   const progress = useSharedValue<number>(INIT_VALUE)
+  const prevPositionX = useSharedValue<number>(INIT_VALUE)
   const opacity = useSharedValue(INIT_VALUE)
   const stepValue = useMemo(() => step || DEFAULT_STEP, [step])
 
@@ -193,13 +192,13 @@ const Slider: SliderComponentProps = ({
     [sliderValue, progress],
   )
 
-  const handler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent, AnimatedGHContext>({
-    onStart: (_, ctx) => {
-      ctx.startX = progress.value
-    },
-    onActive: (event, ctx) => {
+  const handler = Gesture.Pan()
+    .onStart(() => {
+      prevPositionX.value = progress.value
+    })
+    .onUpdate(e => {
       const {trackWidth} = sliderInfo.value
-      const progressing = ctx.startX + event.translationX
+      const progressing = prevPositionX.value + e.translationX
 
       opacity.value = VISIBLE
 
@@ -214,8 +213,8 @@ const Slider: SliderComponentProps = ({
         const value = progressing / (trackWidth / (maximumValue - minimumValue))
         runOnJS(updateSlider)(progressing, value + minimumValue)
       }
-    },
-    onEnd: () => {
+    })
+    .onEnd(() => {
       const {range} = sliderInfo.value
       let value = roundToValue ? sliderValue.value.toFixed(roundToValue) : sliderValue.value
       opacity.value = INVISIBLE
@@ -227,9 +226,7 @@ const Slider: SliderComponentProps = ({
         runOnJS(updateSlider)(roundedProgress, value)
       }
       runOnJS(onValueChange)(value as number)
-    },
-  })
-
+    })
   /**
    * Update the tracked width based on the thumb sliding
    */
@@ -315,7 +312,7 @@ const Slider: SliderComponentProps = ({
         <Track
           style={StyleSheet.flatten([
             StyleSheet.absoluteFillObject,
-            {backgroundColor: theme?.colors.primary},
+            {backgroundColor: theme?.colors?.primary},
             trackedStyle,
             animatedTrackStyle,
           ])}

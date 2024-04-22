@@ -2,12 +2,11 @@ import React, {useCallback, useMemo} from 'react'
 import {StyleSheet} from 'react-native'
 import styled from 'styled-components/native'
 import {Thumb, Track, TrackPoint} from './components'
-import {GestureHandlerRootView, PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
-import type {AnimatedGHContext, AnimatedLabelProps, ISliderCommonProps} from './Slider'
+import {Gesture, GestureHandlerRootView} from 'react-native-gesture-handler'
+import type {AnimatedLabelProps, ISliderCommonProps} from './Slider'
 import {
   useAnimatedStyle,
   useSharedValue,
-  useAnimatedGestureHandler,
   runOnJS,
   useAnimatedProps,
   withTiming,
@@ -77,6 +76,8 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
   const sliderValue = useSharedValue<Value>({left: INIT_POINT, right: maximumValue})
   const leftProgress = useSharedValue<number>(INIT_VALUE)
   const rightProgress = useSharedValue<number>(sliderWidth)
+  const prevLeftPositionX = useSharedValue<number>(INIT_VALUE)
+  const prevRightPositionX = useSharedValue<number>(INIT_VALUE)
   const leftAnimated = useSharedValue<SliderAnimated>({opacity: INIT_VALUE, zIndex: INIT_VALUE})
   const rightAnimated = useSharedValue<SliderAnimated>({opacity: INIT_VALUE, zIndex: INIT_VALUE})
 
@@ -95,13 +96,13 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
     [sliderValue, leftProgress, rightProgress],
   )
 
-  const leftHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent, AnimatedGHContext>({
-    onStart: (_, ctx) => {
-      ctx.startX = leftProgress.value
-    },
-    onActive: (event, ctx) => {
+  const leftHandler = Gesture.Pan()
+    .onStart(() => {
+      prevLeftPositionX.value = leftProgress.value
+    })
+    .onUpdate(e => {
       const {left, right} = sliderValue.value
-      const leftProgressing = ctx.startX + event.translationX
+      const leftProgressing = prevLeftPositionX.value + e.translationX
       // Calculate the ratio of the current left thumb position with respect to the entire range of the slider
       const leftProgressRatio = leftProgressing / range
 
@@ -129,24 +130,23 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
 
         runOnJS(updateSlider)(currentProgress, point, THUMB_POSITION.left)
       }
-    },
-    onEnd: () => {
+    })
+    .onEnd(() => {
       // This line sets the opacity of the left label animated
       leftAnimated.value = {...leftAnimated.value, opacity: INVISIBLE}
       runOnJS(onValueChange)({
         minimum: minimumValue + sliderValue.value.left * step,
         maximum: minimumValue + sliderValue.value.right * step,
       })
-    },
-  })
+    })
 
-  const rightHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent, AnimatedGHContext>({
-    onStart: (_, ctx) => {
-      ctx.startX = rightProgress.value
-    },
-    onActive: (event, ctx) => {
+  const rightHandler = Gesture.Pan()
+    .onStart(() => {
+      prevRightPositionX.value = rightProgress.value
+    })
+    .onUpdate(e => {
       const {left, right} = sliderValue.value
-      const rightProgressing = ctx.startX + event.translationX
+      const rightProgressing = prevRightPositionX.value + e.translationX
       // Calculate the ratio of the current right thumb position with respect to the entire range of the slider
       const rightProgressRatio = rightProgressing / range
       leftAnimated.value = {zIndex: INVISIBLE, opacity: INVISIBLE}
@@ -172,16 +172,15 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
         const point = Math.ceil(rightProgressRatio)
         runOnJS(updateSlider)(currentProgress, point, THUMB_POSITION.right)
       }
-    },
-    onEnd: () => {
+    })
+    .onEnd(() => {
       // This line sets the opacity of the right label animated
       rightAnimated.value = {...rightAnimated.value, opacity: INVISIBLE}
       runOnJS(onValueChange)({
         minimum: minimumValue + sliderValue.value.left * step,
         maximum: minimumValue + sliderValue.value.right * step,
       })
-    },
-  })
+    })
 
   const leftThumbRangeStyle = useAnimatedStyle(() => ({
     transform: [{translateX: withTiming(leftProgress.value, {duration: 1})}],
@@ -269,7 +268,7 @@ const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
         <Track
           style={StyleSheet.flatten([
             StyleSheet.absoluteFillObject,
-            {backgroundColor: theme?.colors.primary},
+            {backgroundColor: theme?.colors?.primary},
             trackedStyle,
             animatedTrackStyle,
           ])}

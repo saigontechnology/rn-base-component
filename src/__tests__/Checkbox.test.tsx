@@ -26,14 +26,14 @@ describe('Checkbox test', () => {
     jest.clearAllMocks()
   })
 
-  it('should trigger bounceEffect on press', () => {
+  it('should trigger bounceEffect on press', async () => {
     const {getByTestId} = renderComponent(<Checkbox />)
     const container = getByTestId('container')
     const icon = getByTestId('icon-container')
 
-    fireEvent.press(container)
+    fireEvent(container, 'pressIn')
 
-    expect(icon.props.style[1].transform[0].scale).toEqual(BOUNCE_EFFECT_IN)
+    expect(icon.props.style[1].transform[0].scale).toEqual({value: BOUNCE_EFFECT_IN})
   })
 
   it('should trigger bounceOutEffect on press', () => {
@@ -43,7 +43,7 @@ describe('Checkbox test', () => {
 
     fireEvent(container, 'pressOut')
 
-    expect(icon.props.style[1].transform[0].scale).toEqual(BOUNCE_EFFECT_OUT)
+    expect(icon.props.style[1].transform[0].scale).toEqual({value: BOUNCE_EFFECT_OUT})
   })
 
   it('should render correctly', () => {
@@ -90,6 +90,6 @@ describe('Checkbox test', () => {
     const {getByTestId} = render(<Checkbox label="checkbox text" />)
     const label = getByTestId('label')
 
-    expect(label.props.children).toEqual('checkbox label')
+    expect(label.props.children).toEqual('checkbox text')
   })
 })

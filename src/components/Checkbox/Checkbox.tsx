@@ -183,7 +183,7 @@ export const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
       !disableText &&
       (textComponent || (
         <TextContainer style={textContainerStyle} disabled={disabled} disableOpacity={disableOpacity}>
-          <Text testID="text" style={labelStyle}>
+          <Text testID="label" style={labelStyle}>
             {label}
           </Text>
         </TextContainer>

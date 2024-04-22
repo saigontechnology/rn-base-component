@@ -1,5 +1,5 @@
 import React from 'react'
-import {GestureEvent, PanGestureHandler, PanGestureHandlerEventPayload} from 'react-native-gesture-handler'
+import {GestureDetector, PanGesture} from 'react-native-gesture-handler'
 import styled from 'styled-components/native'
 import Animated, {useAnimatedProps, useAnimatedStyle} from 'react-native-reanimated'
 import type {Position, Size, TextAlign, ThumbContainerStyle} from '../Slider'
@@ -18,7 +18,7 @@ interface ThumbProps {
   animatedThumbStyle: ReturnType<typeof useAnimatedStyle>
   opacityStyle: ReturnType<typeof useAnimatedStyle>
   animatedProps: ReturnType<typeof useAnimatedProps>
-  onGestureEvent: (event: GestureEvent<PanGestureHandlerEventPayload>) => void
+  onGestureEvent: PanGesture
 }
 
 const Thumb: React.FunctionComponent<ThumbProps> = ({
@@ -34,7 +34,7 @@ const Thumb: React.FunctionComponent<ThumbProps> = ({
   opacityStyle,
   onGestureEvent,
 }) => (
-  <PanGestureHandler onGestureEvent={onGestureEvent}>
+  <GestureDetector gesture={onGestureEvent}>
     <ThumbContainer
       thumbSize={thumbSize}
       hasThumbComponent={!!thumbComponent}
@@ -49,14 +49,14 @@ const Thumb: React.FunctionComponent<ThumbProps> = ({
       </LabelContainer>
       {thumbComponent}
     </ThumbContainer>
-  </PanGestureHandler>
+  </GestureDetector>
 )
 
 const ThumbContainer = styled(Animated.View)<ThumbContainerStyle>(props => ({
   position: 'absolute' as Position,
   height: props.thumbSize.height,
   width: props.thumbSize.width,
-  borderRadius: props.theme?.borderWidths.huge,
+  borderRadius: props.theme.borderWidths?.huge,
   borderWidth: props.hasThumbComponent ? 0 : 1,
   // backgroundColor: props.hasThumbComponent ? 'transparent' : props.theme?.colors.backgroundColor,
   backgroundColor: 'transparent',
@@ -74,7 +74,7 @@ const TriangleDown = styled.View(({background, theme}: {background?: string; the
   borderBottomWidth: 10,
   borderLeftColor: 'transparent',
   borderRightColor: 'transparent',
-  borderBottomColor: background || theme?.colors.primary,
+  borderBottomColor: background || theme?.colors?.primary,
   transform: [{rotate: '180deg'}] as unknown as string,
 }))
 
@@ -82,8 +82,8 @@ const LabelContainer = styled(Animated.View)<ThumbContainerStyle>(props => ({
   position: 'absolute' as Position,
   top: -responsiveHeight(props.theme?.spacing?.titanic || 0),
   bottom: props.thumbSize.height + metrics.xxs,
-  borderRadius: props.theme?.borderWidths.compact,
-  backgroundColor: props.background || props.theme?.colors.primary,
+  borderRadius: props.theme?.borderWidths?.compact,
+  backgroundColor: props.background || props.theme?.colors?.primary,
   alignSelf: 'center',
   justifyContent: 'center',
   alignItems: 'center',

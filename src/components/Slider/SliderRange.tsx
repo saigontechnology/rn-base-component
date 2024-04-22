@@ -2,12 +2,11 @@ import React, {useCallback, useMemo} from 'react'
 import {StyleSheet} from 'react-native'
 import styled from 'styled-components/native'
 import {Thumb, Track, TrackPoint} from './components'
-import {GestureHandlerRootView, PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
-import type {AnimatedGHContext, AnimatedLabelProps, ISliderCommonProps} from './Slider'
+import {Gesture, GestureHandlerRootView} from 'react-native-gesture-handler'
+import type {AnimatedLabelProps, ISliderCommonProps} from './Slider'
 import {
   useAnimatedStyle,
   useSharedValue,
-  useAnimatedGestureHandler,
   runOnJS,
   useAnimatedProps,
   withTiming,
@@ -123,13 +122,13 @@ const SliderRange: React.FC<SliderRangeProps> = ({
     [sliderValue, leftProgress, rightProgress],
   )
 
-  const leftHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent, AnimatedGHContext>({
-    onStart: (_, ctx) => {
-      ctx.startX = leftProgress.value
-    },
-    onActive: (event, ctx) => {
+  const leftHandler = Gesture.Pan()
+    .onStart(e => {
+      e.x = leftProgress.value
+    })
+    .onUpdate(e => {
       const {right} = sliderValue.value
-      const leftProgressing = ctx.startX + event.translationX
+      const leftProgressing = e.x + e.translationX
 
       leftAnimated.value = {zIndex: VISIBLE, opacity: VISIBLE}
       rightAnimated.value = {zIndex: INVISIBLE, opacity: INVISIBLE}
@@ -160,8 +159,8 @@ const SliderRange: React.FC<SliderRangeProps> = ({
         const roundedValue = roundToValue ? value.toFixed(roundToValue) : value
         runOnJS(updateSlider)(leftProgressing, roundedValue as number, THUMB_POSITION.left)
       }
-    },
-    onEnd: () => {
+    })
+    .onEnd(() => {
       // This line sets the opacity of the left label animated
       leftAnimated.value = {...leftAnimated.value, opacity: INVISIBLE}
       let value = sliderValue.value.left
@@ -178,16 +177,15 @@ const SliderRange: React.FC<SliderRangeProps> = ({
         minimum: value as number,
         maximum: sliderValue.value.right,
       })
-    },
-  })
+    })
 
-  const rightHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent, AnimatedGHContext>({
-    onStart: (_, ctx) => {
-      ctx.startX = rightProgress.value
-    },
-    onActive: (event, ctx) => {
+  const rightHandler = Gesture.Pan()
+    .onStart(e => {
+      e.x = rightProgress.value
+    })
+    .onUpdate(e => {
       const {left} = sliderValue.value
-      const rightProgressing = ctx.startX + event.translationX
+      const rightProgressing = e.x + e.translationX
       leftAnimated.value = {zIndex: INVISIBLE, opacity: INVISIBLE}
       rightAnimated.value = {zIndex: VISIBLE, opacity: VISIBLE}
 
@@ -217,8 +215,8 @@ const SliderRange: React.FC<SliderRangeProps> = ({
         const roundedValue = roundToValue ? value.toFixed(roundToValue) : value
         runOnJS(updateSlider)(rightProgressing, roundedValue as number, THUMB_POSITION.right)
       }
-    },
-    onEnd: () => {
+    })
+    .onEnd(() => {
       // This line sets the opacity of the right label animated
       rightAnimated.value = {...rightAnimated.value, opacity: INVISIBLE}
       let value = sliderValue.value.right
@@ -234,8 +232,7 @@ const SliderRange: React.FC<SliderRangeProps> = ({
         minimum: sliderValue.value.left,
         maximum: value as number,
       })
-    },
-  })
+    })
 
   const leftThumbRangeStyle = useAnimatedStyle(() => ({
     transform: [{translateX: leftProgress.value}],
@@ -331,7 +328,7 @@ const SliderRange: React.FC<SliderRangeProps> = ({
         <Track
           style={StyleSheet.flatten([
             StyleSheet.absoluteFillObject,
-            {backgroundColor: theme?.colors.primary},
+            {backgroundColor: theme?.colors?.primary},
             trackedStyle,
             animatedTrackStyle,
           ])}
