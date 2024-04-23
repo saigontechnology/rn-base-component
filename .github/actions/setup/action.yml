@@ -4,11 +4,16 @@ description: Setup Node.js and install dependencies
 runs:
   using: composite
   steps:
+    - name: Enable Corepack before setting up Node
+      run: corepack enable
+      shell: bash
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version-file: .nvmrc
-
+    - name: Setup Yarn
+      run: npm i -g yarn@1.22.22
+      shell: bash
     - name: Cache dependencies
       id: yarn-cache
       uses: actions/cache@v3
