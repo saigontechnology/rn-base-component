@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react'
+import React, { ReactNode } from 'react'
 import styled from 'styled-components/native'
 import {
   type StyleProp,
@@ -7,8 +7,8 @@ import {
   type TouchableOpacityProps,
   type ViewStyle,
 } from 'react-native'
-import {useTheme} from '../../hooks'
-import {Text, TextProps} from '../Text/Text'
+import { useTheme } from '../../hooks'
+import { Text, TextProps } from '../Text/Text'
 
 export type ButtonProps = {
   /**
@@ -87,6 +87,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <ButtonWrapper
       activeOpacity={0.8}
+      testID='container'
       backgroundColor={
         disabled ? disabledColor ?? ButtonTheme.disabledColor : backgroundColor ?? ButtonTheme.backgroundColor
       }
@@ -95,7 +96,7 @@ const Button: React.FC<ButtonProps> = ({
       outlineWidth={outlineWidth}
       borderRadius={borderRadius ?? ButtonTheme.borderRadius}
       disabled={disabled}
-      style={[{minHeight: ButtonTheme.height}, StyleSheet.flatten(style)]}
+      style={[{ minHeight: ButtonTheme.height }, StyleSheet.flatten(style)]}
       {...props}>
       {!!leftIcon && leftIcon}
       {typeof children === 'string' ? (
@@ -111,10 +112,10 @@ const Button: React.FC<ButtonProps> = ({
 }
 
 const ButtonWrapper = styled.TouchableOpacity<Omit<ButtonProps, 'text' | 'onPress'>>(
-  ({theme, backgroundColor, outline, outlineWidth, outlineColor, borderRadius, disabled}) => ({
-    paddingVertical: theme?.spacing.small,
+  ({ theme, backgroundColor, outline, outlineWidth, outlineColor, borderRadius, disabled }) => ({
+    paddingVertical: theme?.spacing?.small,
     flexDirection: 'row',
-    paddingHorizontal: theme?.spacing.slim,
+    paddingHorizontal: theme?.spacing?.slim,
     borderRadius,
     backgroundColor,
     justifyContent: 'center',
@@ -128,7 +129,7 @@ const ButtonWrapper = styled.TouchableOpacity<Omit<ButtonProps, 'text' | 'onPres
   }),
 )
 
-const Label = styled(Text)<{color?: string}>(({theme, color}) => ({
+const Label = styled(Text)<{ color?: string }>(({ theme, color }) => ({
   color,
   fontWeight: theme?.fontWeights?.bold,
 }))
