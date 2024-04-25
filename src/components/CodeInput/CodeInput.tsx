@@ -50,7 +50,10 @@ interface CodeInputProps extends TextInputProps {
   withCursor?: boolean
 
   placeholder?: string
+
   placeholderTextColor?: string
+
+  onClear?: () => void
 }
 
 const DEFAULT_LENGTH = 6
@@ -70,6 +73,7 @@ export const CodeInput: React.FC<CodeInputProps> = ({
   withCursor = false,
   placeholder,
   placeholderTextColor,
+  onClear,
   ...rest
 }) => {
   const textInputRef = useRef<TextInput>(null)
@@ -82,18 +86,28 @@ export const CodeInput: React.FC<CodeInputProps> = ({
         onSubmit?.(val)
         textInputRef.current?.blur()
       }
+
+      if (val.length === 0) {
+        onClear?.()
+      }
     },
-    [length, onSubmit],
+    [length, onSubmit, onClear],
   )
 
   const handleCellPress = useCallback(
     (index: number) => {
+      // This behavior means the user clicked on the first cell to correct the OTP.
+      // Only at the first cell, and the have the OTP code already will trigger onClear method.
+      if (index === 0 && code) {
+        onClear?.()
+      }
+
       if (index < code.length) {
         setCode(code.slice(0, index))
       }
       textInputRef.current?.focus()
     },
-    [code],
+    [code, onClear],
   )
 
   const renderCursor = useCallback(
