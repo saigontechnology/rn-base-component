@@ -417,7 +417,7 @@ PODS:
     - React-jsi (= 0.71.4)
     - React-logger (= 0.71.4)
     - React-perflogger (= 0.71.4)
-  - rn-base-component (0.0.6):
+  - rn-base-component (0.0.10):
     - React-Core
   - RNCAsyncStorage (1.21.0):
     - React-Core
@@ -621,11 +621,11 @@ SPEC CHECKSUMS:
   Flipper-RSocket: d9d9ade67cbecf6ac10730304bf5607266dd2541
   FlipperKit: cbdee19bdd4e7f05472a66ce290f1b729ba3cb86
   fmt: ff9d55029c625d3757ed641535fd4a75fedc7ce9
-  glog: 791fe035093b84822da7f0870421a25839ca7870
-  hermes-engine: 5d86dc4303697a1251c830f0ee45e6e9f33877d4
+  glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
+  hermes-engine: a1f157c49ea579c28b0296bda8530e980c45bdb3
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
-  RCT-Folly: 186619bc27c1f94f2f7c6ef60927516c71005915
+  RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 5a024fdf458fa8c0d82fc262e76f982d4dcdecdd
   RCTTypeSafety: b6c253064466411c6810b45f66bc1e43ce0c54ba
   React: 715292db5bd46989419445a5547954b25d2090f0
@@ -654,7 +654,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: ad17efcfb2fa8f6bfd8ac0cf48d96668b8b28e0b
   React-runtimeexecutor: 8fa50b38df6b992c76537993a2b0553d3b088004
   ReactCommon: b49a4b00ca6d181ff74b17c12b2d59ac4add0bde
-  rn-base-component: 31a8054358e3787b845ccdbc0b9f36c2c95017ea
+  rn-base-component: 2b888aa9eaa489e82c718889d51a1a2edb18ac33
   RNCAsyncStorage: 618d03a5f52fbccb3d7010076bc54712844c18ef
   RNDateTimePicker: 65e1d202799460b286ff5e741d8baf54695e8abd
   RNGestureHandler: 32a01c29ecc9bb0b5bf7bc0a33547f61b4dc2741
@@ -665,4 +665,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 41b345e700f785c9a103f926104c4c507c89b32e
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1
