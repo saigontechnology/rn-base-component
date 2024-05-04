@@ -44,7 +44,7 @@ type IconContainerStyle = {
 }
 type InnerIconContainerStyle = {
   size?: number
-  borderColor: string
+  borderColor?: string
   borderRadius?: number
   borderWidth?: number
 }
