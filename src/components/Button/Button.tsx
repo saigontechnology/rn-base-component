@@ -66,7 +66,7 @@ export type ButtonProps = {
   style?: StyleProp<ViewStyle>
 } & TouchableOpacityProps
 
-const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<ButtonProps> = ({
   textColor,
   backgroundColor,
   outline,
@@ -132,5 +132,3 @@ const Label = styled(Text)<{color?: string}>(({theme, color}) => ({
   color,
   fontWeight: theme?.fontWeights?.bold,
 }))
-
-export default Button

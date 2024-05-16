@@ -1,13 +1,8 @@
 import React, {PropsWithChildren, useCallback, useMemo} from 'react'
 import {LayoutAnimation, TouchableOpacity} from 'react-native'
 import styled from 'styled-components/native'
-import type {ITheme} from '../../theme'
 import type {CommonAccordionProps, Section} from './Accordion'
 import {toggleAnimation} from './ToggleAnimation'
-
-export type Theme = {
-  theme?: ITheme
-}
 
 export interface AccordionItemProps extends PropsWithChildren<CommonAccordionProps> {
   /**
@@ -23,7 +18,7 @@ export interface AccordionItemProps extends PropsWithChildren<CommonAccordionPro
   item: Section
 }
 
-const AccordionItem: React.FC<AccordionItemProps> = ({
+export const AccordionItem: React.FC<AccordionItemProps> = ({
   title = '',
   onPress,
   keyExtractorItem,
@@ -93,25 +88,23 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   )
 }
 
-export default React.memo(AccordionItem)
-
-const AccordionContainer = styled.View(({theme}: Theme) => ({
+const AccordionContainer = styled.View(({theme}) => ({
   paddingBottom: theme?.spacing?.petite,
   overflow: 'hidden',
 }))
 
-const AccordionHeader = styled.View(({theme}: Theme) => ({
+const AccordionHeader = styled.View(({theme}) => ({
   padding: theme?.spacing?.compact,
 }))
 
-const Title = styled.Text(({theme}: Theme) => ({
+const Title = styled.Text(({theme}) => ({
   fontSize: theme?.fontSizes?.xl,
   textAlign: 'center',
   color: theme?.colors?.amber,
   fontWeight: theme?.fontWeights?.bold,
 }))
 
-const AccordionBody = styled.View(({theme}: Theme) => ({
+const AccordionBody = styled.View(({theme}) => ({
   padding: theme?.spacing?.compact,
   justifyContent: 'center',
   alignItems: 'center',

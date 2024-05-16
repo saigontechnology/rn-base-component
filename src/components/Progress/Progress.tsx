@@ -1,4 +1,4 @@
-import React, {useEffect, forwardRef, useCallback, useState, memo} from 'react'
+import React, {useEffect, forwardRef, useCallback, useState} from 'react'
 import type {LayoutChangeEvent, View} from 'react-native'
 import {View as RNView, ViewProps as RNViewProperties} from 'react-native'
 import styled from 'styled-components/native'
@@ -57,7 +57,7 @@ type ProgressStyle = {
 const screenWidth = deviceWidth()
 const MAX_VALUE = 100
 
-const Progress = forwardRef<View, IProgressProps>(
+export const Progress = forwardRef<View, IProgressProps>(
   (
     {
       width,
@@ -139,10 +139,6 @@ const Progress = forwardRef<View, IProgressProps>(
     )
   },
 )
-
-Progress.displayName = 'Progress'
-
-export default memo(Progress)
 
 const ForwardRefProgressWrapperComponent = forwardRef<RNView, RNViewProperties>((props, ref) => (
   <RNView {...props} ref={ref} />

@@ -142,7 +142,7 @@ type SliderComponentProps = React.FC<SliderProps> & {
   Fixed: React.FC<SliderProps>
 }
 
-const Slider: SliderComponentProps = ({
+export const Slider: SliderComponentProps = ({
   minimumValue = DEFAULT_MINIMUM_VALUE,
   maximumValue = DEFAULT_MAXIMUM_VALUE,
   step,
@@ -357,4 +357,3 @@ export type {
   Position,
   TextAlign,
 }
-export default Slider

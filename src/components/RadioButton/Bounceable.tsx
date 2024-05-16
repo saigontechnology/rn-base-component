@@ -46,7 +46,7 @@ const BOUNCE_VELOCITY_OUT_DEFAULT = 0.4
 const BOUNCINESS_VALUE_DEFAULT = 80
 const SCALE_DEFAULT = 1
 
-const Bounceable = React.forwardRef<View, IBounceableProps>(
+export const Bounceable = React.forwardRef<View, IBounceableProps>(
   (
     {
       bounceEffectIn = BOUNCE_EFFECT_IN_DEFAULT,
@@ -102,7 +102,3 @@ const Bounceable = React.forwardRef<View, IBounceableProps>(
     )
   },
 )
-
-Bounceable.displayName = 'Bounceable'
-
-export default React.memo(Bounceable)

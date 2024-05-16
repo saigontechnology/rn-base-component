@@ -16,7 +16,7 @@ export interface CardProps extends PropsWithChildren {
   style?: StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
 }
 
-const Card: React.FC<CardProps> = ({onPress, style, children}) => (
+export const Card: React.FC<CardProps> = ({onPress, style, children}) => (
   <CardWrapper
     onPress={onPress}
     activeOpacity={onPress ? activeOpacity.low : activeOpacity.none}
@@ -31,5 +31,3 @@ const CardWrapper = styled.TouchableOpacity((props: {theme: ITheme}) => ({
   borderRadius: metrics.borderRadius,
   backgroundColor: props?.theme?.colors?.cardBackground,
 }))
-
-export default Card
