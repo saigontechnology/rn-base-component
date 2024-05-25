@@ -15,6 +15,10 @@ export const Basic: ComponentStory<typeof CodeInput> = () => (
     <CodeInput focusCellStyle={styles.focusCellStyle} secureTextEntry />
     <Text>Normal</Text>
     <CodeInput length={4} focusCellStyle={styles.focusCellStyle} />
+    <Text>onSubmit was called</Text>
+    <CodeInput length={4} focusCellStyle={styles.focusCellStyle} onSubmit={(val) => console.log(`onSubmit was called with value ${val}`)}/>
+    <Text>onClear was called</Text>
+    <CodeInput length={4} focusCellStyle={styles.focusCellStyle} onClear={() => console.log('onClear was called')}/>
   </SafeAreaView>
 )
 
