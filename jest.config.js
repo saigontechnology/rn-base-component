@@ -3,6 +3,7 @@ module.exports = {
   setupFilesAfterEnv: [
     '<rootDir>/jest.setup.js',
     '<rootDir>/node_modules/react-native-gesture-handler/jestSetup.js',
+    '<rootDir>/jest.setupFilesAfterEnv.ts',
   ],
   roots: ['<rootDir>'],
   collectCoverage: true,
