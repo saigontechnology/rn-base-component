@@ -1,4 +1,4 @@
-import {useTheme as useThemeStyled} from 'styled-components'
+import {useTheme as useThemeStyled} from 'styled-components/native'
 
 export const useTheme = () => {
   const theme = useThemeStyled()
