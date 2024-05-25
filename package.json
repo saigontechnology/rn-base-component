@@ -47,6 +47,7 @@
     "@evilmartians/lefthook": "^1.2.2",
     "@react-native-community/eslint-config": "^3.0.2",
     "@release-it/conventional-changelog": "^5.0.0",
+    "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^11.5.2",
     "@types/jest": "^29.5.0",
     "@types/lodash": "^4.14.192",
@@ -71,8 +72,8 @@
     "react-addons-test-utils": "^15.6.2",
     "react-native": "0.71.4",
     "react-native-builder-bob": "^0.20.4",
-    "react-native-gesture-handler": "^2.9.0",
-    "react-native-reanimated": "^2.17.0",
+    "react-native-gesture-handler": "^2.14.0",
+    "react-native-reanimated": "^3.6.0",
     "react-test-renderer": "^18.2.0",
     "release-it": "^15.0.0",
     "styled-components": "^6.1.0",
@@ -93,7 +94,7 @@
   "engines": {
     "node": ">= 16.0.0"
   },
-  "packageManager": "^yarn@1.22.15",
+  "packageManager": "yarn@1.22.22",
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"

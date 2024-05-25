@@ -1,15 +1,25 @@
 import React from 'react'
-import {CodeInput} from 'rn-base-component'
+import {CodeInput} from '../components'
 import {fireEvent, render} from '@testing-library/react-native'
 
 describe('CodeInput', () => {
-  test('calls onFulfill with the correct value when input is complete', () => {
-    const onFulfill = jest.fn()
-    const {getByTestId} = render(<CodeInput onSubmit={onFulfill} />)
+  test('calls onSubmit with the correct value when input is complete', () => {
+    const onSubmit = jest.fn()
+    const {getByTestId} = render(<CodeInput onSubmit={onSubmit} />)
     const textInput = getByTestId('input')
 
     fireEvent.changeText(textInput, '123456')
-    expect(onFulfill).toHaveBeenCalledWith('123456')
+    expect(onSubmit).toHaveBeenCalledWith('123456')
+  })
+
+  test('calls onClear with the correct value when input is complete', () => {
+    const onClear = jest.fn()
+    const {getByTestId} = render(<CodeInput onClear={onClear} />)
+    const textInput = getByTestId('input')
+
+    fireEvent.changeText(textInput, '123456')
+    fireEvent.changeText(textInput, '')
+    expect(onClear).toHaveBeenCalled()
   })
 
   test('display correct default number of cells', () => {

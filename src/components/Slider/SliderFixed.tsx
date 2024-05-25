@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo} from 'react'
-import type {PanGestureHandlerGestureEvent} from 'react-native-gesture-handler'
+import {Gesture, GestureHandlerRootView} from 'react-native-gesture-handler'
 import {hitSlop, metrics} from '../../helpers/metrics'
 import {Thumb, Track, TrackPoint} from './components'
 import styled from 'styled-components/native'
@@ -8,7 +8,6 @@ import type {LayoutChangeEvent} from 'react-native'
 import {
   useAnimatedStyle,
   useSharedValue,
-  useAnimatedGestureHandler,
   runOnJS,
   useAnimatedProps,
   withTiming,
@@ -27,8 +26,7 @@ import {
   PREVIOUS_STEP,
   VISIBLE,
 } from './constants'
-import type {AnimatedGHContext, AnimatedLabelProps, SliderInfo, SliderProps} from './Slider'
-import {GestureHandlerRootView} from 'react-native-gesture-handler'
+import type {AnimatedLabelProps, SliderInfo, SliderProps} from './Slider'
 import {useTheme} from '../../hooks'
 
 const SliderFixed: React.FC<SliderProps> = ({
@@ -55,6 +53,8 @@ const SliderFixed: React.FC<SliderProps> = ({
   const sliderInfo = useSharedValue<SliderInfo>({range: INIT_VALUE, trackWidth: INIT_VALUE})
   const sliderValue = useSharedValue<number>(INIT_POINT)
   const progress = useSharedValue<number>(INIT_VALUE)
+  const prevPositionX = useSharedValue<number>(INIT_VALUE)
+
   const opacity = useSharedValue(INIT_VALUE)
 
   const totalPoint = useMemo(() => (maximumValue - minimumValue) / step, [maximumValue, minimumValue, step])
@@ -72,13 +72,13 @@ const SliderFixed: React.FC<SliderProps> = ({
     [sliderValue, progress],
   )
 
-  const handler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent, AnimatedGHContext>({
-    onStart: (_, ctx) => {
-      ctx.startX = progress.value
-    },
-    onActive: (event, ctx) => {
+  const handler = Gesture.Pan()
+    .onStart(() => {
+      prevPositionX.value = progress.value
+    })
+    .onUpdate(e => {
       const {trackWidth, range} = sliderInfo.value
-      const progressing = ctx.startX + event.translationX
+      const progressing = prevPositionX.value + e.translationX
       // Calculate the ratio of the current thumb position with respect to the entire range of the slider
       const progressRatio = progressing / range
       opacity.value = VISIBLE
@@ -105,12 +105,11 @@ const SliderFixed: React.FC<SliderProps> = ({
 
         runOnJS(updateSlider)(currentProgress, point)
       }
-    },
-    onEnd: () => {
+    })
+    .onEnd(() => {
       opacity.value = INVISIBLE
       runOnJS(onValueChange)(minimumValue + sliderValue.value * step)
-    },
-  })
+    })
 
   /**
    * Update the tracked width based on the thumb sliding
@@ -188,7 +187,7 @@ const SliderFixed: React.FC<SliderProps> = ({
         <Track
           style={StyleSheet.flatten([
             StyleSheet.absoluteFillObject,
-            {backgroundColor: theme?.colors.primary},
+            {backgroundColor: theme?.colors?.primary},
             trackedStyle,
             animatedTrackStyle,
           ])}

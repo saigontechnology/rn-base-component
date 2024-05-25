@@ -20,7 +20,6 @@ const spacing = {
   mammoth: 38,
   titanic: 40,
   gigantic: 48,
-}
+} as const
 
-export type ISpacing = keyof typeof spacing
 export default spacing

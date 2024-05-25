@@ -14,7 +14,6 @@ const opacity = {
   dense: 0.9,
   darkened: 0.95,
   blackened: 1,
-}
+} as const
 
-export type IOpacity = keyof typeof opacity
 export default opacity

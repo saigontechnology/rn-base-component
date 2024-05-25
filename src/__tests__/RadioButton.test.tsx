@@ -1,6 +1,6 @@
 import React from 'react'
 import {render, fireEvent} from '@testing-library/react-native'
-import {RadioButton} from 'rn-base-component'
+import {RadioButton} from '../components'
 import {StyleSheet} from 'react-native'
 
 describe('RadioButton test', () => {
@@ -51,7 +51,7 @@ describe('RadioButton test', () => {
     const {getByTestId} = render(<RadioButton initial={true} />)
     const circle = getByTestId('circle')
 
-    expect(circle.props.style[0].backgroundColor).toBe('#004282')
+    expect(circle.props.style.backgroundColor).toBe('#004282')
   })
 
   it('should be remain state', () => {
@@ -62,6 +62,6 @@ describe('RadioButton test', () => {
     fireEvent.press(radionButton)
     expect(onPressMock).not.toHaveBeenCalled()
 
-    expect(circle.props.style[0].backgroundColor).toBe('transparent')
+    expect(circle.props.style.backgroundColor).toBe('transparent')
   })
 })

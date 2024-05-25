@@ -15,8 +15,8 @@ const Track: React.FC<ITrack> = ({style, onLayout}) => (
 
 const TrackComponent = styled.View(({theme}: {theme: ITheme}) => ({
   flex: 1,
-  borderRadius: theme.borderWidths.huge,
-  backgroundColor: theme.colors.backgroundPrimary,
+  borderRadius: theme.borderWidths?.huge,
+  backgroundColor: theme?.colors?.backgroundPrimary,
 }))
 
 const TrackAnimatedComponent = Animated.createAnimatedComponent<ITrack>(TrackComponent)

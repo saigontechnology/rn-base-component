@@ -3,8 +3,5 @@ coverage/**/*.js
 storybook/storyLoader.js
 storybook-static
 scripts/bootstrap.js
-example/react-native.config.js
-example/metro.config.js
-example/babel.config.js
-example/node_modules
+example
 lib
