@@ -1,7 +1,6 @@
 import React from 'react'
 import {render, fireEvent} from '@testing-library/react-native'
-import {Checkbox} from '../components'
-import {BOUNCE_EFFECT_IN, BOUNCE_EFFECT_OUT} from '../components/Checkbox/constants'
+import {BOUNCE_EFFECT_IN, BOUNCE_EFFECT_OUT, Checkbox} from '../components'
 import {ThemeProvider} from 'styled-components/native'
 import {theme} from '../theme'
 

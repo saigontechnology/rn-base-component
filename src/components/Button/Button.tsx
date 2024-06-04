@@ -112,9 +112,9 @@ export const Button: React.FC<ButtonProps> = ({
 
 const ButtonWrapper = styled.TouchableOpacity<Omit<ButtonProps, 'text' | 'onPress'>>(
   ({theme, backgroundColor, outline, outlineWidth, outlineColor, borderRadius, disabled}) => ({
-    paddingVertical: theme?.spacing.small,
+    paddingVertical: theme.spacing.small,
     flexDirection: 'row',
-    paddingHorizontal: theme?.spacing.slim,
+    paddingHorizontal: theme.spacing.slim,
     borderRadius,
     backgroundColor,
     justifyContent: 'center',
@@ -123,12 +123,12 @@ const ButtonWrapper = styled.TouchableOpacity<Omit<ButtonProps, 'text' | 'onPres
     alignSelf: 'center',
     ...(outline && {
       borderWidth: outlineWidth || 1,
-      borderColor: disabled ? theme?.colors.gray : outlineColor || theme?.colors.primaryBorder,
+      borderColor: disabled ? theme.colors.gray : outlineColor || theme.colors.primaryBorder,
     }),
   }),
 )
 
 const Label = styled(Text)<{color?: string}>(({theme, color}) => ({
   color,
-  fontWeight: theme?.fontWeights?.bold,
+  fontWeight: theme.fontWeights.bold,
 }))

@@ -1,5 +1,5 @@
 import React, {createContext, useCallback, useMemo, useState} from 'react'
-import {ThemeProvider} from 'styled-components'
+import {ThemeProvider} from 'styled-components/native'
 import {ITheme, theme as defaultTheme} from '../theme'
 import type {ColorMode, IColorModeContextProps} from './color-mode/type'
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import {render, fireEvent} from '@testing-library/react-native'
-import {Icon} from '../components/Icon/Icon'
+import {Icon} from '../components'
 
 describe('Icon Component', () => {
   const onPressMock = jest.fn()

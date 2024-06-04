@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo, useState} from 'react'
 import {FlatList, StyleProp, Text, TextStyle, ViewStyle} from 'react-native'
-import AccordionItem from './AccordionItem'
+import {AccordionItem} from './AccordionItem'
 import type {AnimationType} from './ToggleAnimation'
 
 type ViewStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>

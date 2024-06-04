@@ -1,6 +1,6 @@
 import React from 'react'
 import {act, fireEvent, render} from '@testing-library/react-native'
-import {TextInput, TextInputRef} from '../components/TextInput/TextInput'
+import {TextInput, TextInputRef} from '../components'
 import {Text, View} from 'react-native'
 import {BaseProvider} from '../core'
 

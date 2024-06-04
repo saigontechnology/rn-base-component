@@ -19,7 +19,6 @@ const sizes = {
   enormous: 224,
   mammoth: 256,
   titanic: 288,
-}
+} as const
 
-export type ISize = keyof typeof sizes
 export default sizes

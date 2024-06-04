@@ -46,7 +46,7 @@ const typography = {
     '8xl': 96,
     '9xl': 128,
   },
-}
+} as const
 
 export type ITypography = typeof typography
 export type IFontSize = keyof typeof typography.fontSizes
