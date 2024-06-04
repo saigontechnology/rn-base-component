@@ -57,7 +57,7 @@ type ProgressStyle = {
 const screenWidth = deviceWidth()
 const MAX_VALUE = 100
 
-export const Progress = forwardRef<View, IProgressProps>(
+const ProgressComponent = forwardRef<View, IProgressProps>(
   (
     {
       width,
@@ -151,3 +151,5 @@ const ProgressWrapper = styled(ForwardRefProgressWrapperComponent)<ProgressStyle
   backgroundColor: props.backgroundColor,
   borderRadius: props.borderRadius,
 }))
+
+export const Progress = React.memo(ProgressComponent)

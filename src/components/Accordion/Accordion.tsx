@@ -101,7 +101,7 @@ export interface AccordionProps extends CommonAccordionProps {
   wrapperStyle?: ViewStyleProp
 }
 
-export const Accordion = React.forwardRef<FlatList, AccordionProps>(
+const AccordionComponent = React.forwardRef<FlatList, AccordionProps>(
   ({sections, expandMultiple = false, keyExtractor, wrapperStyle, ...rest}, ref) => {
     const [array, setArray] = useState<string[]>([])
 
@@ -160,3 +160,5 @@ export const Accordion = React.forwardRef<FlatList, AccordionProps>(
     )
   },
 )
+
+export const Accordion = React.memo(AccordionComponent)
