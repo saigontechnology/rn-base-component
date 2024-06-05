@@ -1,6 +1,6 @@
 import React from 'react'
 import {render} from '@testing-library/react-native'
-import Progress from '../components/Progress/Progress'
+import {Progress} from '../components'
 import {responsiveHeight} from '../helpers/metrics'
 import {ThemeProvider} from 'styled-components/native'
 import {theme} from '../theme'

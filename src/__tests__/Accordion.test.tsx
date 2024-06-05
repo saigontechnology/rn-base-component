@@ -1,8 +1,7 @@
 import React from 'react'
 import {render, fireEvent} from '@testing-library/react-native'
-import Accordion from '../components/Accordion/Accordion'
 import {Text} from 'react-native'
-import AccordionItem from '../components/Accordion/AccordionItem'
+import {Accordion, AccordionItem} from '../components'
 
 // Mock data for testing
 const sections = [

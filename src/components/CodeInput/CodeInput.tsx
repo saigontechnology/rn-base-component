@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import styled from 'styled-components/native'
 import {metrics} from '../../helpers'
-import Cursor from './Cursor'
+import {Cursor} from './Cursor'
 import {Text} from '../Text/Text'
 
 interface CodeInputProps extends TextInputProps {

@@ -1,7 +1,7 @@
 import React, {useCallback, useMemo} from 'react'
 import {Gesture, GestureHandlerRootView} from 'react-native-gesture-handler'
 import {hitSlop, metrics, responsiveHeight} from '../../helpers/metrics'
-import SliderFixedRange, {SliderFixedRangeProps} from './SliderFixedRange'
+import {SliderFixedRange, SliderFixedRangeProps} from './SliderFixedRange'
 import {Thumb, Track, TrackPoint} from './components'
 import styled from 'styled-components/native'
 import type {ITheme} from '../../theme'
@@ -33,8 +33,8 @@ import {
   MINIMUM_TRACK_WIDTH,
   VISIBLE,
 } from './constants'
-import SliderFixed from './SliderFixed'
-import SliderRange, {SliderRangeProps} from './SliderRange'
+import {SliderFixed} from './SliderFixed'
+import {SliderRange, SliderRangeProps} from './SliderRange'
 import {useTheme} from '../../hooks'
 
 type FlexDirection = 'column' | 'column-reverse' | 'row' | 'row-reverse'
@@ -142,7 +142,7 @@ type SliderComponentProps = React.FC<SliderProps> & {
   Fixed: React.FC<SliderProps>
 }
 
-const Slider: SliderComponentProps = ({
+export const Slider: SliderComponentProps = ({
   minimumValue = DEFAULT_MINIMUM_VALUE,
   maximumValue = DEFAULT_MAXIMUM_VALUE,
   step,
@@ -357,4 +357,3 @@ export type {
   Position,
   TextAlign,
 }
-export default Slider

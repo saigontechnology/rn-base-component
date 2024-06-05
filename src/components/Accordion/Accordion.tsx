@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo, useState} from 'react'
 import {FlatList, StyleProp, Text, TextStyle, ViewStyle} from 'react-native'
-import AccordionItem from './AccordionItem'
+import {AccordionItem} from './AccordionItem'
 import type {AnimationType} from './ToggleAnimation'
 
 type ViewStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>
@@ -101,7 +101,7 @@ export interface AccordionProps extends CommonAccordionProps {
   wrapperStyle?: ViewStyleProp
 }
 
-const Accordion = React.forwardRef<FlatList, AccordionProps>(
+const AccordionComponent = React.forwardRef<FlatList, AccordionProps>(
   ({sections, expandMultiple = false, keyExtractor, wrapperStyle, ...rest}, ref) => {
     const [array, setArray] = useState<string[]>([])
 
@@ -161,6 +161,4 @@ const Accordion = React.forwardRef<FlatList, AccordionProps>(
   },
 )
 
-Accordion.displayName = 'Accordion'
-
-export default React.memo(Accordion)
+export const Accordion = React.memo(AccordionComponent)
