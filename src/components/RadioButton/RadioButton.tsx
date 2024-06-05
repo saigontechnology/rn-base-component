@@ -3,7 +3,7 @@ import type {LayoutChangeEvent, StyleProp, TextStyle, View, ViewStyle} from 'rea
 import {StyleSheet} from 'react-native'
 import styled from 'styled-components/native'
 import {responsiveHeight, responsiveWidth} from '../../helpers'
-import Bounceable, {IBounceableProps} from './Bounceable'
+import {Bounceable, IBounceableProps} from './Bounceable'
 import {theme} from '../../theme'
 
 type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>

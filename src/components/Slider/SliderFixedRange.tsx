@@ -47,7 +47,7 @@ export interface SliderFixedRangeProps extends ISliderCommonProps {
   onValueChange?: (value: NumberRange) => void
 }
 
-const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
+export const SliderFixedRange: React.FC<SliderFixedRangeProps> = ({
   minimumValue = DEFAULT_MINIMUM_VALUE,
   maximumValue = DEFAULT_MAXIMUM_VALUE,
   step = DEFAULT_STEP,
@@ -308,5 +308,3 @@ const Container = styled.View<ContainerProps>(props => ({
   justifyContent: 'center',
   width: props.width,
 }))
-
-export default SliderFixedRange

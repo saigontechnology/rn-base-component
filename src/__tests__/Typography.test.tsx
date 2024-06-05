@@ -1,6 +1,6 @@
 import React from 'react'
 import {render} from '@testing-library/react-native'
-import {Typography, typographyVariantStyles} from '../components/Typography/Typography'
+import {Typography, typographyVariantStyles} from '../components'
 import {BaseProvider} from '../core'
 
 describe('Typography Component', () => {

@@ -1,7 +1,7 @@
 import {fireEvent, render} from '@testing-library/react-native'
 import React from 'react'
 import {Text} from 'react-native'
-import Card from '../components/Card/Card'
+import {Card} from '../components'
 import {BaseProvider} from '../core'
 
 describe('Card', () => {

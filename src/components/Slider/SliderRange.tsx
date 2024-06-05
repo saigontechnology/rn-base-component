@@ -58,7 +58,7 @@ export interface SliderRangeProps extends ISliderCommonProps {
   onValueChange?: (value: NumberRange) => void
 }
 
-const SliderRange: React.FC<SliderRangeProps> = ({
+export const SliderRange: React.FC<SliderRangeProps> = ({
   minimumValue = DEFAULT_MINIMUM_VALUE,
   maximumValue = DEFAULT_MAXIMUM_VALUE,
   step,
@@ -368,5 +368,3 @@ const Container = styled.View<ContainerProps>(props => ({
   justifyContent: 'center',
   width: props.width,
 }))
-
-export default SliderRange

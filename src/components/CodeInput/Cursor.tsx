@@ -12,7 +12,7 @@ interface ICursorProps {
   style?: StyleProp<TextStyle>
 }
 
-const Cursor = ({style}: ICursorProps) => {
+export const Cursor = ({style}: ICursorProps) => {
   const animatedValue = useSharedValue(0)
 
   useEffect(() => {
@@ -23,5 +23,3 @@ const Cursor = ({style}: ICursorProps) => {
 
   return <Animated.Text style={[animatedStyle, style]}>|</Animated.Text>
 }
-
-export default Cursor

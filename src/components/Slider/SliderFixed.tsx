@@ -29,7 +29,7 @@ import {
 import type {AnimatedLabelProps, SliderInfo, SliderProps} from './Slider'
 import {useTheme} from '../../hooks'
 
-const SliderFixed: React.FC<SliderProps> = ({
+export const SliderFixed: React.FC<SliderProps> = ({
   minimumValue = DEFAULT_MINIMUM_VALUE,
   maximumValue = DEFAULT_MAXIMUM_VALUE,
   step = DEFAULT_STEP,
@@ -213,5 +213,3 @@ const SliderFixed: React.FC<SliderProps> = ({
 const Container = styled.View({
   justifyContent: 'center',
 })
-
-export default SliderFixed
