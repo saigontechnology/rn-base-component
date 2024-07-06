@@ -23,7 +23,7 @@
     "lint:fix": "npm-run-all --parallel lint:fix:*",
     "lint:fix:eslint": "eslint . --ext .js,.jsx,.ts,.tsx --fix --max-warnings=0",
     "lint:fix:prettier": "prettier --write ./**/*.{ts,js,tsx,jsx,yaml,yml} --no-error-on-unmatched-pattern",
-    "prepack": "bob build",
+    "prepare": "bob build",
     "example": "yarn --cwd example",
     "release": "release-it",
     "pretty": "prettier --write \"./**/*.{js,jsx,json}\"",
