@@ -95,7 +95,7 @@ export const Button: React.FC<ButtonProps> = ({
       outlineWidth={outlineWidth}
       borderRadius={borderRadius ?? ButtonTheme.borderRadius}
       disabled={disabled}
-      style={[{minHeight: ButtonTheme.height}, StyleSheet.flatten(style)]}
+      style={[{height: ButtonTheme.height}, StyleSheet.flatten(style)]}
       {...props}>
       {!!leftIcon && leftIcon}
       {typeof children === 'string' ? (
