@@ -78,6 +78,11 @@ export interface IRadioButtonProps extends IBounceableProps {
    * set value for text label
    */
   text?: string
+
+  /**
+   * update new value
+   */
+  value?: boolean
 }
 const OUTER_SIZE_DEFAULT = 45
 const INNER_SIZE_DEFAULT = 25
@@ -101,6 +106,7 @@ export const RadioButton = forwardRef<View, IRadioButtonProps>(
       disableOpacity = OPACITY_DEFAULT,
       textStyle,
       text,
+      value,
       wrapperStyle,
       ...rest
     },
@@ -180,7 +186,7 @@ export const RadioButton = forwardRef<View, IRadioButtonProps>(
             maxWidth={widthBounceableRef.value}
             maxHeight={heightBounceableRef.value}
             inner={inner}
-            isActive={isActive}
+            isActive={value ?? isActive}
             innerBackgroundColor={innerBackgroundColor}
             style={innerContainerStyle}
             testID="circle"
