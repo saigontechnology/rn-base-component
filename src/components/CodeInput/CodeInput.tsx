@@ -87,8 +87,9 @@ export const CodeInput: React.FC<CodeInputProps> = ({
         textInputRef.current?.blur()
       }
 
-      if (val.length === 0) {
+      if (!val.length) {
         onClear?.()
+        onSubmit?.('')
       }
     },
     [length, onSubmit, onClear],
@@ -104,10 +105,11 @@ export const CodeInput: React.FC<CodeInputProps> = ({
 
       if (index < code.length) {
         setCode(code.slice(0, index))
+        onSubmit?.(code.slice(0, index))
       }
       textInputRef.current?.focus()
     },
-    [code, onClear],
+    [code, onClear, onSubmit],
   )
 
   const renderCursor = useCallback(
