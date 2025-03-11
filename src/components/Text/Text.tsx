@@ -28,7 +28,8 @@ export const Text: React.FC<TextProps> = styled(RNText)<TextProps>(
 
 export const TextBold: React.FC<TextProps> = props => <Text {...props} fontFamily={useTheme().fonts.bold} />
 
-export const TextItalic: React.FC<TextProps> = props => (
-  // eslint-disable-next-line react-native/no-inline-styles
-  <Text {...props} style={[props.style, {fontStyle: 'italic'}]} />
-)
+export const TextItalic: React.FC<TextProps> = props => <StyledTextItalic {...props} />
+
+const StyledTextItalic = styled(Text)`
+  font-style: italic;
+`
