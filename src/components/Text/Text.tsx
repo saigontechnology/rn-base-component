@@ -1,23 +1,74 @@
-import type {TextProps as TextProperties, TextStyle} from 'react-native'
+import React from 'react'
 import styled from 'styled-components/native'
+import {type TextProps as RNTextProps, type TextStyle, Text as RNText, type StyleProp} from 'react-native'
+import {useTheme} from '../../hooks'
 
-export type TextProps = {
+export type TextProps = RNTextProps & {
+  /**
+   * Custom font size
+   */
   fontSize?: TextStyle['fontSize']
+  /**
+   * Text color
+   */
   color?: string
+  /**
+   * Font weight
+   */
   fontWeight?: TextStyle['fontWeight']
+  /**
+   * Custom font family
+   */
   fontFamily?: string
-} & TextProperties
+  /**
+   * Custom text style
+   */
+  textStyle?: StyleProp<TextStyle>
+}
 
-export const Text = styled.Text<TextProps>(props => ({
-  fontSize: props?.fontSize || props?.theme?.components?.Text?.fontSize,
-  color: props?.color || props?.theme?.components?.Text?.color,
-  fontFamily: props?.fontFamily || props?.theme?.fonts?.regular,
+const StyledText = styled(RNText)<TextProps>(({theme, fontSize, color, fontWeight, fontFamily}) => ({
+  fontSize,
+  color,
+  fontWeight: fontWeight ?? 'normal',
+  fontFamily: fontFamily ?? theme.fonts.regular,
 }))
 
-export const TextBold = styled(Text)(props => ({
-  fontFamily: props?.theme?.fonts?.bold,
-}))
+const StyledTextItalic = styled(StyledText)`
+  font-style: italic;
+`
 
-export const TextItalic = styled(Text)(() => ({
-  fontStyle: 'italic',
-}))
+export const Text: React.FC<TextProps> = ({
+  fontSize,
+  color,
+  fontWeight,
+  fontFamily,
+  textStyle,
+  children,
+  ...props
+}) => {
+  const TextTheme = useTheme().components.Text
+
+  return (
+    <StyledText
+      fontSize={fontSize ?? TextTheme.fontSize}
+      color={color ?? TextTheme.color}
+      fontWeight={fontWeight}
+      fontFamily={fontFamily}
+      style={textStyle}
+      {...props}>
+      {children}
+    </StyledText>
+  )
+}
+
+export const TextBold: React.FC<TextProps> = ({textStyle, children, ...props}) => (
+  <StyledText {...props} style={textStyle}>
+    {children}
+  </StyledText>
+)
+
+export const TextItalic: React.FC<TextProps> = ({textStyle, children, ...props}) => (
+  <StyledTextItalic {...props} style={textStyle}>
+    {children}
+  </StyledTextItalic>
+)
