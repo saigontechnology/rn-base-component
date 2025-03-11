@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components/native'
-import {type TextProps as RNTextProps, type TextStyle, Text as RNText, type StyleProp} from 'react-native'
+import {Text as RNText, type TextProps as RNTextProps, type TextStyle} from 'react-native'
 import {useTheme} from '../../hooks'
 
 export type TextProps = RNTextProps & {
@@ -13,62 +13,22 @@ export type TextProps = RNTextProps & {
    */
   color?: string
   /**
-   * Font weight
-   */
-  fontWeight?: TextStyle['fontWeight']
-  /**
    * Custom font family
    */
   fontFamily?: string
-  /**
-   * Custom text style
-   */
-  textStyle?: StyleProp<TextStyle>
 }
 
-const StyledText = styled(RNText)<TextProps>(({theme, fontSize, color, fontWeight, fontFamily}) => ({
-  fontSize,
-  color,
-  fontWeight: fontWeight ?? 'normal',
-  fontFamily: fontFamily ?? theme.fonts.regular,
-}))
-
-const StyledTextItalic = styled(StyledText)`
-  font-style: italic;
-`
-
-export const Text: React.FC<TextProps> = ({
-  fontSize,
-  color,
-  fontWeight,
-  fontFamily,
-  textStyle,
-  children,
-  ...props
-}) => {
-  const TextTheme = useTheme().components.Text
-
-  return (
-    <StyledText
-      fontSize={fontSize ?? TextTheme.fontSize}
-      color={color ?? TextTheme.color}
-      fontWeight={fontWeight}
-      fontFamily={fontFamily}
-      style={textStyle}
-      {...props}>
-      {children}
-    </StyledText>
-  )
-}
-
-export const TextBold: React.FC<TextProps> = ({textStyle, children, ...props}) => (
-  <StyledText {...props} style={textStyle}>
-    {children}
-  </StyledText>
+export const Text: React.FC<TextProps> = styled(RNText)<TextProps>(
+  ({theme, fontSize, color, fontFamily}) => ({
+    fontSize: fontSize ?? theme.components.Text.fontSize,
+    color: color ?? theme.components.Text.color,
+    fontFamily: fontFamily ?? theme.fonts.regular,
+  }),
 )
 
-export const TextItalic: React.FC<TextProps> = ({textStyle, children, ...props}) => (
-  <StyledTextItalic {...props} style={textStyle}>
-    {children}
-  </StyledTextItalic>
+export const TextBold: React.FC<TextProps> = props => <Text {...props} fontFamily={useTheme().fonts.bold} />
+
+export const TextItalic: React.FC<TextProps> = props => (
+  // eslint-disable-next-line react-native/no-inline-styles
+  <Text {...props} style={[props.style, {fontStyle: 'italic'}]} />
 )
