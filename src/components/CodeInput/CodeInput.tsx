@@ -7,6 +7,8 @@ import {
   TextStyle,
   ViewStyle,
   View,
+  StyleSheet,
+  TouchableOpacity,
 } from 'react-native'
 import styled from 'styled-components/native'
 import {metrics} from '../../helpers'
@@ -54,6 +56,8 @@ interface CodeInputProps extends TextInputProps {
   placeholderTextColor?: string
 
   onClear?: () => void
+
+  clearOtpLabel?: string
 }
 
 const DEFAULT_LENGTH = 6
@@ -74,6 +78,7 @@ export const CodeInput: React.FC<CodeInputProps> = ({
   placeholder,
   placeholderTextColor,
   onClear,
+  clearOtpLabel,
   ...rest
 }) => {
   const textInputRef = useRef<TextInput>(null)
@@ -87,7 +92,7 @@ export const CodeInput: React.FC<CodeInputProps> = ({
         textInputRef.current?.blur()
       }
 
-      if (!val.length) {
+      if (val.length === 0) {
         onClear?.()
         onSubmit?.('')
       }
@@ -132,7 +137,11 @@ export const CodeInput: React.FC<CodeInputProps> = ({
           </Text>
         )
       }
-      return <PlaceholderText color={placeholderTextColor}>{placeholder ?? ''}</PlaceholderText>
+      return (
+        <PlaceholderText style={styles.placeholder} color={placeholderTextColor}>
+          {placeholder ?? ''}
+        </PlaceholderText>
+      )
     },
     [
       renderCursor,
@@ -145,19 +154,28 @@ export const CodeInput: React.FC<CodeInputProps> = ({
     ],
   )
 
+  const handleClearOtp = useCallback(() => {
+    setCode('')
+    onSubmit?.('')
+  }, [onSubmit, setCode])
+
   const renderCells = useCallback(() => {
     const cells = []
     for (let index = 0; index < length; index++) {
       const isFocused = code.length === index
 
       cells.push(
-        <Cell
-          testID="cell"
-          style={[cellStyle, code[index] ? filledCellStyle : {}, isFocused && focusCellStyle]}
-          key={index}
-          onPress={() => handleCellPress(index)}>
-          {renderCell(isFocused, code[index])}
-        </Cell>,
+        <View key={index.toString()} style={styles.cell}>
+          <View style={isFocused && styles.focusCell}>
+            <Cell
+              testID="cell"
+              style={[cellStyle, code[index] ? filledCellStyle : {}, isFocused && focusCellStyle]}
+              onPress={() => handleCellPress(index)}>
+              {renderCell(isFocused, code[index])}
+            </Cell>
+          </View>
+          {!!(index === 2) && <Text style={styles.dash}>-</Text>}
+        </View>,
       )
     }
     return cells
@@ -175,15 +193,57 @@ export const CodeInput: React.FC<CodeInputProps> = ({
         maxLength={length}
         {...rest}
       />
+      {!!code.length && (
+        <TouchableOpacity style={styles.clearOtpButton} onPress={handleClearOtp}>
+          <Text style={styles.clearOtpText}>{clearOtpLabel}</Text>
+        </TouchableOpacity>
+      )}
       <CellContainer>{renderCells()}</CellContainer>
     </View>
   )
 }
 
+const styles = StyleSheet.create({
+  cell: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  focusCell: {
+    width: metrics.massive + metrics.xxs,
+    height: metrics.massive + metrics.xxs,
+    borderRadius: metrics.borderRadiusLarge + metrics.xxs / 2,
+    borderWidth: metrics.line * 2,
+    borderColor: '#5588FF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  placeholder: {
+    fontSize: 40,
+    fontWeight: '500',
+    fontFamily: 'Roboto',
+  },
+  dash: {
+    color: '#D6D6D6',
+    fontSize: 56,
+    fontWeight: '700',
+    fontFamily: 'Roboto',
+  },
+  clearOtpButton: {
+    alignSelf: 'flex-end',
+    marginBottom: 6,
+  },
+  clearOtpText: {
+    color: '#335299',
+    fontSize: metrics.span,
+    fontWeight: '600',
+    fontFamily: 'Roboto',
+  },
+})
+
 const Cell = styled.Pressable(props => ({
   width: props?.theme?.spacing?.gigantic,
   height: props?.theme?.spacing?.gigantic,
-  borderRadius: metrics.tiny,
+  borderRadius: metrics.borderRadiusLarge,
   borderWidth: metrics.line,
   borderColor: props?.theme?.colors?.coolGray,
   justifyContent: 'center',
@@ -200,7 +260,8 @@ const SecureView = styled.Pressable(props => ({
 
 const CellContainer = styled.View({
   flexDirection: 'row',
-  justifyContent: 'space-between',
+  alignItems: 'center',
+  justifyContent: 'center',
 })
 
 const ForwardRefTextInputComponent = forwardRef<TextInput, TextInputProps>((props, ref) => (
