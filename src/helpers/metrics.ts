@@ -50,8 +50,8 @@ const hitSlop: IHitSlop = {
   left: 10,
 }
 
-const DESIGN_WIDTH = 375
-const DESIGN_HEIGHT = 812
+const DESIGN_WIDTH = 1133
+const DESIGN_HEIGHT = 744
 const {width, height} = Dimensions.get('window')
 
 const responsiveFont = <T extends number>(value: T) => ((width * value) / DESIGN_WIDTH) as T
