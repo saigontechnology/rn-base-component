@@ -86,13 +86,14 @@ export const CodeInput: React.FC<CodeInputProps> = ({
 
   const handleOnChangeText = useCallback(
     (val: string) => {
-      setCode(val)
-      if (val.length === length) {
-        onSubmit?.(val)
+      const pureNumber = val.replace(/[^0-9]/g, '')
+      setCode(pureNumber)
+      if (pureNumber.length === length) {
+        onSubmit?.(pureNumber)
         textInputRef.current?.blur()
       }
 
-      if (val.length === 0) {
+      if (pureNumber.length === 0) {
         onClear?.()
         onSubmit?.('')
       }
@@ -269,10 +270,14 @@ const ForwardRefTextInputComponent = forwardRef<TextInput, TextInputProps>((prop
 ))
 
 const StyledTextInput = styled(ForwardRefTextInputComponent)(() => ({
-  opacity: 0,
   position: 'absolute',
-  width: 0,
-  height: 0,
+  left: metrics.tiny,
+  top: metrics.tiny,
+  width: metrics.massive,
+  height: metrics.massive,
+  opacity: 0,
+  color: 'transparent',
+  backgroundColor: 'transparent',
 }))
 
 const PlaceholderText = styled.Text<{color?: string}>(({color}) => ({
