@@ -166,7 +166,7 @@ const ForwardRefTextInputComponent = forwardRef<RNTextInput, RNTextInputProperti
 ))
 
 const TextInputComponent = styled(ForwardRefTextInputComponent)(({theme}) => ({
-  flex: 1,
+  // flex: 1,
   paddingVertical: 0,
   fontSize: theme?.fontSizes?.sm,
   color: theme?.colors?.darkTextColor,
