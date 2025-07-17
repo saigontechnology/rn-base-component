@@ -177,6 +177,14 @@ export default function RefExample() {
     borderRadius: 8,
     padding: 4,
   }}
+  focusCellWrapperStyle={{
+    backgroundColor: '#ffffff',
+    shadowColor: '#007AFF',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  }}
 />
 ```
 
@@ -206,6 +214,7 @@ export default function RefExample() {
 | `focusTextStyle` | `StyleProp<TextStyle>` | Style for focused cell text |
 | `cellContainerStyle` | `StyleProp<ViewStyle>` | Style for container holding all cells |
 | `cellWrapperStyle` | `StyleProp<ViewStyle>` | Style for wrapper around each cell |
+| `focusCellWrapperStyle` | `StyleProp<ViewStyle>` | Style for wrapper around focused cell |
 
 ### Placeholder Props
 

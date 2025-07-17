@@ -7,15 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import {
-  KeyboardTypeOptions,
-  StyleProp,
-  TextInput,
-  TextInputProps,
-  TextStyle,
-  View,
-  ViewStyle,
-} from 'react-native'
+import {KeyboardTypeOptions, StyleProp, TextInput, TextInputProps, TextStyle, ViewStyle} from 'react-native'
 import styled from 'styled-components/native'
 import {metrics} from '../../helpers'
 import {Cursor} from './Cursor'
@@ -74,6 +66,9 @@ interface CodeInputProps extends Omit<TextInputProps, 'value' | 'onChangeText' |
   /** Style for wrapper around each cell */
   cellWrapperStyle?: StyleProp<ViewStyle>
 
+  /** Style for wrapper around focused cell */
+  focusCellWrapperStyle?: StyleProp<ViewStyle>
+
   /** Custom cursor component */
   customCursor?: () => ReactNode
 
@@ -130,6 +125,7 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
       secureViewStyle,
       cellContainerStyle,
       cellWrapperStyle,
+      focusCellWrapperStyle,
       customCursor,
       secureTextEntry = false,
       keyboardType = DEFAULT_KEYBOARD_TYPE,
@@ -296,8 +292,10 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
 
         const cellStyles = [cellStyle, hasCellValue && filledCellStyle, isCellFocused && focusCellStyle]
 
+        const wrapperStyles = [cellWrapperStyle, isCellFocused && focusCellWrapperStyle]
+
         return (
-          <View key={cellIndex} style={cellWrapperStyle}>
+          <CellWrapperStyled key={cellIndex} style={wrapperStyles}>
             <Cell
               testID={`${testID}-cell-${cellIndex}`}
               style={cellStyles}
@@ -311,7 +309,7 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
               accessibilityHint={`Tap to ${cellValue ? 'clear and ' : ''}enter code digit`}>
               {renderCellContent(cellIndex, cellValue)}
             </Cell>
-          </View>
+          </CellWrapperStyled>
         )
       },
       [
@@ -322,6 +320,7 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
         filledCellStyle,
         focusCellStyle,
         cellWrapperStyle,
+        focusCellWrapperStyle,
         handleCellPress,
         disabled,
         length,
@@ -384,6 +383,8 @@ CodeInput.displayName = 'CodeInput'
 const Container = styled.View({
   position: 'relative',
 })
+
+const CellWrapperStyled = styled.View({})
 
 const Cell = styled.Pressable<{disabled?: boolean}>(({theme, disabled}) => ({
   width: theme?.spacing?.gigantic || 48,
