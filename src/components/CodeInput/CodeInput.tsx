@@ -1,219 +1,436 @@
-import React, {forwardRef, ReactNode, useCallback, useRef, useState} from 'react'
+import React, {
+  forwardRef,
+  ReactNode,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import {
   KeyboardTypeOptions,
   StyleProp,
   TextInput,
   TextInputProps,
   TextStyle,
-  ViewStyle,
   View,
+  ViewStyle,
 } from 'react-native'
 import styled from 'styled-components/native'
 import {metrics} from '../../helpers'
 import {Cursor} from './Cursor'
 import {Text} from '../Text/Text'
 
-interface CodeInputProps extends TextInputProps {
-  /** define style for cell */
+// Types
+type CodeInputValue = string
+type CodeInputLength = number
+type CellIndex = number
+
+interface CodeInputRef {
+  focus: () => void
+  blur: () => void
+  clear: () => void
+  getValue: () => CodeInputValue
+  setValue: (value: CodeInputValue) => void
+}
+
+interface CodeInputProps extends Omit<TextInputProps, 'value' | 'onChangeText' | 'maxLength'> {
+  /** Number of code input cells */
+  length?: CodeInputLength
+
+  /** Initial value for the code input */
+  value?: CodeInputValue
+
+  /** Callback when code changes */
+  onChangeText?: (code: CodeInputValue) => void
+
+  /** Callback when code input is complete */
+  onSubmit?: (code: CodeInputValue) => void
+
+  /** Callback when code input is cleared */
+  onClear?: () => void
+
+  /** Style for individual cell */
   cellStyle?: StyleProp<ViewStyle>
 
-  /** define style for valued Cell */
+  /** Style for cell when it has a value */
   filledCellStyle?: StyleProp<ViewStyle>
 
-  /** define style for cell when cell is focused */
+  /** Style for cell when it's focused */
   focusCellStyle?: StyleProp<ViewStyle>
 
-  /** define style for text in the cell */
+  /** Style for text inside cells */
   textStyle?: StyleProp<TextStyle>
 
-  /** define secure view style when using secureTextEntry mode */
-  secureViewStyle?: StyleProp<ViewStyle>
-
-  /** define style for text in the cell when cell is focused */
+  /** Style for text when cell is focused */
   focusTextStyle?: StyleProp<TextStyle>
 
-  /** cell count */
-  length?: number
+  /** Style for secure text entry dots */
+  secureViewStyle?: StyleProp<ViewStyle>
 
-  /** callback when complete  */
-  onSubmit?: (val: string) => void
+  /** Style for the container holding all cells */
+  cellContainerStyle?: StyleProp<ViewStyle>
 
-  /** render custom view for cursor/indicator */
+  /** Style for wrapper around each cell */
+  cellWrapperStyle?: StyleProp<ViewStyle>
+
+  /** Custom cursor component */
   customCursor?: () => ReactNode
 
-  /** render custom view for cursor/indicator */
+  /** Enable secure text entry mode */
   secureTextEntry?: boolean
 
-  /** keyboard type */
+  /** Keyboard type for input */
   keyboardType?: KeyboardTypeOptions
 
+  /** Show cursor in focused cell */
   withCursor?: boolean
 
+  /** Placeholder text for empty cells */
   placeholder?: string
 
+  /** Color for placeholder text */
   placeholderTextColor?: string
 
-  onClear?: () => void
+  /** Render placeholder as dot instead of text */
+  placeholderAsDot?: boolean
+
+  /** Style for placeholder dot */
+  placeholderDotStyle?: StyleProp<ViewStyle>
+
+  /** Auto focus on mount */
+  autoFocus?: boolean
+
+  /** Disable input */
+  disabled?: boolean
+
+  /** Test ID for the component */
+  testID?: string
 }
 
+// Constants
 const DEFAULT_LENGTH = 6
+const DEFAULT_KEYBOARD_TYPE: KeyboardTypeOptions = 'number-pad'
+const DEFAULT_PLACEHOLDER = ''
 
-export const CodeInput: React.FC<CodeInputProps> = ({
-  cellStyle,
-  focusCellStyle,
-  filledCellStyle,
-  textStyle,
-  focusTextStyle,
-  secureViewStyle,
-  length = DEFAULT_LENGTH,
-  onSubmit,
-  customCursor,
-  secureTextEntry,
-  keyboardType = 'number-pad',
-  withCursor = false,
-  placeholder,
-  placeholderTextColor,
-  onClear,
-  ...rest
-}) => {
-  const textInputRef = useRef<TextInput>(null)
-  const [code, setCode] = useState<string>('')
-
-  const handleOnChangeText = useCallback(
-    (val: string) => {
-      setCode(val)
-      if (val.length === length) {
-        onSubmit?.(val)
-        textInputRef.current?.blur()
-      }
-
-      if (!val.length) {
-        onClear?.()
-        onSubmit?.('')
-      }
-    },
-    [length, onSubmit, onClear],
-  )
-
-  const handleCellPress = useCallback(
-    (index: number) => {
-      // This behavior means the user clicked on the first cell to correct the OTP.
-      // Only at the first cell, and the have the OTP code already will trigger onClear method.
-      if (index === 0 && code) {
-        onClear?.()
-      }
-
-      if (index < code.length) {
-        setCode(code.slice(0, index))
-        onSubmit?.(code.slice(0, index))
-      }
-      textInputRef.current?.focus()
-    },
-    [code, onClear, onSubmit],
-  )
-
-  const renderCursor = useCallback(
-    () => (customCursor ? customCursor() : <Cursor style={focusTextStyle} />),
-    [customCursor, focusTextStyle],
-  )
-
-  const renderCell = useCallback(
-    (isFocused: boolean, value?: string) => {
-      if (withCursor && isFocused) {
-        return renderCursor()
-      }
-      if (secureTextEntry) {
-        return <SecureView testID="text" style={secureViewStyle} />
-      }
-      if (value) {
-        return (
-          <Text testID="text" style={textStyle}>
-            {value}
-          </Text>
-        )
-      }
-      return <PlaceholderText color={placeholderTextColor}>{placeholder ?? ''}</PlaceholderText>
-    },
-    [
-      renderCursor,
-      secureTextEntry,
-      secureViewStyle,
-      withCursor,
+// Main component
+export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
+  (
+    {
+      length = DEFAULT_LENGTH,
+      value: controlledValue,
+      onChangeText,
+      onSubmit,
+      onClear,
+      cellStyle,
+      focusCellStyle,
+      filledCellStyle,
       textStyle,
+      focusTextStyle,
+      secureViewStyle,
+      cellContainerStyle,
+      cellWrapperStyle,
+      customCursor,
+      secureTextEntry = false,
+      keyboardType = DEFAULT_KEYBOARD_TYPE,
+      withCursor = false,
+      placeholder = DEFAULT_PLACEHOLDER,
       placeholderTextColor,
-      placeholder,
-    ],
-  )
+      placeholderAsDot = false,
+      placeholderDotStyle,
+      autoFocus = false,
+      disabled = false,
+      testID = 'code-input',
+      ...textInputProps
+    },
+    ref,
+  ) => {
+    const textInputRef = useRef<TextInput>(null)
+    const [internalValue, setInternalValue] = useState<CodeInputValue>(controlledValue || '')
+    const [isFocused, setIsFocused] = useState(false)
 
-  const renderCells = useCallback(() => {
-    const cells = []
-    for (let index = 0; index < length; index++) {
-      const isFocused = code.length === index
+    // Use controlled or uncontrolled value
+    const code = controlledValue !== undefined ? controlledValue : internalValue
+    const isControlled = controlledValue !== undefined
 
-      cells.push(
-        <Cell
-          testID="cell"
-          style={[cellStyle, code[index] ? filledCellStyle : {}, isFocused && focusCellStyle]}
-          key={index}
-          onPress={() => handleCellPress(index)}>
-          {renderCell(isFocused, code[index])}
-        </Cell>,
-      )
+    // Validation
+    const isValidLength = useMemo(() => length > 0 && length <= 20, [length])
+    const focusedCellIndex = useMemo(() => Math.min(code.length, length - 1), [code.length, length])
+
+    // Imperative handle for ref
+    useImperativeHandle(ref, () => ({
+      focus: () => textInputRef.current?.focus(),
+      blur: () => textInputRef.current?.blur(),
+      clear: () => handleClear(),
+      getValue: () => code,
+      setValue: (newValue: CodeInputValue) => handleValueChange(newValue),
+    }))
+
+    // Handlers
+    const handleValueChange = useCallback(
+      (newValue: CodeInputValue) => {
+        if (disabled) {
+          return
+        }
+
+        const sanitizedValue = newValue.slice(0, length)
+
+        if (!isControlled) {
+          setInternalValue(sanitizedValue)
+        }
+
+        onChangeText?.(sanitizedValue)
+
+        // Handle completion
+        if (sanitizedValue.length === length) {
+          onSubmit?.(sanitizedValue)
+          textInputRef.current?.blur()
+        }
+
+        // Handle clearing
+        if (sanitizedValue.length === 0) {
+          onClear?.()
+        }
+      },
+      [disabled, length, isControlled, onChangeText, onSubmit, onClear],
+    )
+
+    const handleClear = useCallback(() => {
+      if (disabled) {
+        return
+      }
+
+      handleValueChange('')
+      textInputRef.current?.focus()
+    }, [disabled, handleValueChange])
+
+    const handleCellPress = useCallback(
+      (index: CellIndex) => {
+        if (disabled) {
+          return
+        }
+
+        // Focus the input
+        textInputRef.current?.focus()
+
+        // If pressing the first cell and there's already a value, clear it
+        if (index === 0 && code.length > 0) {
+          handleClear()
+          return
+        }
+
+        // If pressing before the current position, truncate the code
+        if (index < code.length) {
+          const newValue = code.slice(0, index)
+          handleValueChange(newValue)
+        }
+      },
+      [disabled, code, handleClear, handleValueChange],
+    )
+
+    const handleFocus = useCallback(() => {
+      setIsFocused(true)
+    }, [])
+
+    const handleBlur = useCallback(() => {
+      setIsFocused(false)
+    }, [])
+
+    // Render functions
+    const renderCursor = useCallback(
+      () => (customCursor ? customCursor() : <Cursor style={focusTextStyle} />),
+      [customCursor, focusTextStyle],
+    )
+
+    const renderCellContent = useCallback(
+      (cellIndex: CellIndex, cellValue?: string) => {
+        const isCellFocused = isFocused && cellIndex === focusedCellIndex
+
+        if (withCursor && isCellFocused && !cellValue) {
+          return renderCursor()
+        }
+
+        if (secureTextEntry && cellValue) {
+          return <SecureView testID={`${testID}-secure-${cellIndex}`} style={secureViewStyle} />
+        }
+
+        if (cellValue) {
+          return (
+            <Text testID={`${testID}-text-${cellIndex}`} style={textStyle}>
+              {cellValue}
+            </Text>
+          )
+        }
+
+        if (placeholderAsDot && !cellValue) {
+          return <PlaceholderDot style={placeholderDotStyle} />
+        }
+
+        return (
+          <PlaceholderText testID={`${testID}-placeholder-${cellIndex}`} color={placeholderTextColor}>
+            {placeholder}
+          </PlaceholderText>
+        )
+      },
+      [
+        isFocused,
+        focusedCellIndex,
+        withCursor,
+        renderCursor,
+        secureTextEntry,
+        secureViewStyle,
+        textStyle,
+        placeholderTextColor,
+        placeholder,
+        placeholderAsDot,
+        placeholderDotStyle,
+        testID,
+      ],
+    )
+
+    const renderCell = useCallback(
+      (cellIndex: CellIndex) => {
+        const cellValue = code[cellIndex]
+        const isCellFocused = isFocused && cellIndex === focusedCellIndex
+        const hasCellValue = Boolean(cellValue)
+
+        const cellStyles = [cellStyle, hasCellValue && filledCellStyle, isCellFocused && focusCellStyle]
+
+        return (
+          <View key={cellIndex} style={cellWrapperStyle}>
+            <Cell
+              testID={`${testID}-cell-${cellIndex}`}
+              style={cellStyles}
+              onPress={() => handleCellPress(cellIndex)}
+              disabled={disabled}
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel={`Code input cell ${cellIndex + 1} of ${length}${
+                cellValue ? `, contains ${cellValue}` : ', empty'
+              }`}
+              accessibilityHint={`Tap to ${cellValue ? 'clear and ' : ''}enter code digit`}>
+              {renderCellContent(cellIndex, cellValue)}
+            </Cell>
+          </View>
+        )
+      },
+      [
+        code,
+        isFocused,
+        focusedCellIndex,
+        cellStyle,
+        filledCellStyle,
+        focusCellStyle,
+        cellWrapperStyle,
+        handleCellPress,
+        disabled,
+        length,
+        testID,
+        renderCellContent,
+      ],
+    )
+
+    const cells = useMemo(() => {
+      if (!isValidLength) {
+        return []
+      }
+
+      return Array.from({length}, (_, index) => renderCell(index))
+    }, [isValidLength, length, renderCell])
+
+    // Don't render if invalid length
+    if (!isValidLength) {
+      console.warn(`CodeInput: Invalid length ${length}. Length must be between 1 and 20.`)
+      return null
     }
-    return cells
-  }, [length, code, cellStyle, filledCellStyle, focusCellStyle, renderCell, handleCellPress])
 
-  return (
-    <View>
-      <StyledTextInput
-        testID="input"
-        ref={textInputRef}
-        value={code}
-        textContentType="oneTimeCode"
-        keyboardType={keyboardType}
-        onChangeText={handleOnChangeText}
-        maxLength={length}
-        {...rest}
-      />
-      <CellContainer>{renderCells()}</CellContainer>
-    </View>
-  )
-}
+    return (
+      <Container testID={testID}>
+        <HiddenTextInput
+          testID={`${testID}-hidden-input`}
+          ref={textInputRef}
+          value={code}
+          onChangeText={handleValueChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          maxLength={length}
+          keyboardType={keyboardType}
+          textContentType="oneTimeCode"
+          autoComplete="sms-otp"
+          autoFocus={autoFocus}
+          editable={!disabled}
+          accessible={true}
+          accessibilityLabel={`Code input with ${length} digits`}
+          accessibilityHint={`Enter ${length} digit code`}
+          accessibilityValue={{
+            text: `${code.length} of ${length} digits entered`,
+          }}
+          {...textInputProps}
+        />
+        <CellContainer
+          style={cellContainerStyle}
+          accessible={true}
+          accessibilityLabel={`Code input cells, ${code.length} of ${length} filled`}>
+          {cells}
+        </CellContainer>
+      </Container>
+    )
+  },
+)
 
-const Cell = styled.Pressable(props => ({
-  width: props?.theme?.spacing?.gigantic,
-  height: props?.theme?.spacing?.gigantic,
+CodeInput.displayName = 'CodeInput'
+
+// Styled components
+const Container = styled.View({
+  position: 'relative',
+})
+
+const Cell = styled.Pressable<{disabled?: boolean}>(({theme, disabled}) => ({
+  width: theme?.spacing?.gigantic || 48,
+  height: theme?.spacing?.gigantic || 48,
   borderRadius: metrics.tiny,
   borderWidth: metrics.line,
-  borderColor: props?.theme?.colors?.coolGray,
+  borderColor: theme?.colors?.coolGray || '#ccc',
   justifyContent: 'center',
   alignItems: 'center',
   margin: metrics.tiny,
+  opacity: disabled ? 0.5 : 1,
+  backgroundColor: disabled ? '#f5f5f5' : 'transparent',
 }))
 
-const SecureView = styled.Pressable(props => ({
-  width: props?.theme?.spacing.slim,
-  height: props?.theme?.spacing.slim,
+const SecureView = styled.View(({theme}) => ({
+  width: theme?.spacing?.slim || 12,
+  height: theme?.spacing?.slim || 12,
   borderRadius: metrics.small,
-  backgroundColor: props?.theme?.colors?.darkText,
+  backgroundColor: theme?.colors?.darkText || '#333',
 }))
 
 const CellContainer = styled.View({
   flexDirection: 'row',
   justifyContent: 'space-between',
+  alignItems: 'center',
 })
 
-const ForwardRefTextInputComponent = forwardRef<TextInput, TextInputProps>((props, ref) => (
-  <TextInput {...props} ref={ref} />
-))
-
-const StyledTextInput = styled(ForwardRefTextInputComponent)(() => ({
-  opacity: 0,
+const HiddenTextInput = styled(TextInput)({
   position: 'absolute',
-  width: 0,
-  height: 0,
-}))
+  opacity: 0,
+  width: 1,
+  height: 1,
+  top: -1000,
+  left: -1000,
+})
 
 const PlaceholderText = styled.Text<{color?: string}>(({color}) => ({
-  color,
+  color: color || '#999',
+  fontSize: 16,
 }))
+
+const PlaceholderDot = styled.View(({theme}) => ({
+  width: theme?.spacing?.slim || 12,
+  height: theme?.spacing?.slim || 12,
+  borderRadius: metrics.small,
+  backgroundColor: theme?.colors?.coolGray || '#ccc',
+}))
+
+export type {CodeInputProps, CodeInputRef}
+export default CodeInput
