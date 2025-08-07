@@ -116,7 +116,7 @@ export const RadioButton = forwardRef<View, IRadioButtonProps>(
 
     const outer = useMemo(
       () => ({
-        width: responsiveWidth(outerSize),
+        width: responsiveHeight(outerSize),
         height: responsiveHeight(outerSize),
         border: responsiveHeight(outerSize / 2),
       }),
@@ -124,7 +124,7 @@ export const RadioButton = forwardRef<View, IRadioButtonProps>(
     )
     const inner = useMemo(
       () => ({
-        width: responsiveWidth(innerSize),
+        width: responsiveHeight(innerSize),
         height: responsiveHeight(innerSize),
         border: responsiveHeight(innerSize / 2),
       }),
