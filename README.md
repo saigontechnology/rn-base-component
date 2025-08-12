@@ -19,7 +19,7 @@ Before you install `rn-base-component`, make sure you have the following prerequ
 - [styled-components](https://styled-components.com/)
 - [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/)
 
-You can install these dependencies using npm or yarn (note: Current, we dont support react-native-reanimated v3 and styled-components 6.*):
+You can install these dependencies using npm or yarn (note: Current, we dont support react-native-reanimated v3 and styled-components 6.\*):
 
 ```sh
 npm install react-native-reanimated styled-components react-native-gesture-handler
@@ -41,20 +41,14 @@ npm install rn-base-component
 
 ```tsx
 import React from 'react'
-import { BaseProvider, Button, CodeInput } from 'rn-base-component'
+import {BaseProvider, Button, CodeInput} from 'rn-base-component'
 
 export default function App() {
   return (
     <BaseProvider>
-      <Button onPress={() => console.log('Pressed!')}>
-        Click Me
-      </Button>
-      
-      <CodeInput
-        length={6}
-        onSubmit={(code) => console.log('Code:', code)}
-        autoFocus
-      />
+      <Button onPress={() => console.log('Pressed!')}>Click Me</Button>
+
+      <CodeInput length={6} onSubmit={code => console.log('Code:', code)} autoFocus />
     </BaseProvider>
   )
 }
@@ -65,9 +59,11 @@ export default function App() {
 ### Input Components
 
 #### CodeInput
+
 A highly customizable and accessible code input component for OTP, PIN, and verification codes.
 
 **Features:**
+
 - 🎯 Flexible length (1-20 digits)
 - 🔒 Secure text entry mode
 - 🎨 Extensive styling options
@@ -76,14 +72,9 @@ A highly customizable and accessible code input component for OTP, PIN, and veri
 - 📱 Mobile-optimized keyboard handling
 
 **Quick Example:**
+
 ```tsx
-<CodeInput
-  length={6}
-  onSubmit={(code) => verifyOTP(code)}
-  placeholderAsDot
-  secureTextEntry
-  autoFocus
-/>
+<CodeInput length={6} onSubmit={code => verifyOTP(code)} placeholderAsDot secureTextEntry autoFocus />
 ```
 
 [📖 **Full CodeInput Documentation**](src/components/CodeInput/README.md)
@@ -91,42 +82,53 @@ A highly customizable and accessible code input component for OTP, PIN, and veri
 ### Form Components
 
 #### Button
+
 Customizable button component with multiple variants.
 
 #### TextInput
+
 Enhanced text input with validation and styling options.
 
 #### Checkbox
+
 Accessible checkbox component with custom styling.
 
 #### RadioButton
+
 Radio button component with group support.
 
 ### Layout Components
 
 #### Card
+
 Flexible card component for content organization.
 
 #### Accordion
+
 Collapsible content sections with smooth animations.
 
 ### Feedback Components
 
 #### Progress
+
 Progress indicators for loading states.
 
 #### Slider
+
 Interactive slider components for value selection.
 
 ### Display Components
 
 #### Text
+
 Enhanced text component with typography support.
 
 #### Typography
+
 Consistent typography system.
 
 #### Icon
+
 Icon component with customizable styles.
 
 ## Development
@@ -149,9 +151,11 @@ yarn example update-stories
 ## Documentation
 
 ### Component Documentation
+
 - [CodeInput](src/components/CodeInput/README.md) - Code input component for OTP/PIN entry
 
 ### Development Guides
+
 - [Jest Configuration](docs/jest-config.md) - Testing setup and configuration
 - [Theme System](docs/theme.md) - Theming and customization guide
 - [Component Text](docs/component-text.md) - Text component guidelines
@@ -161,7 +165,7 @@ yarn example update-stories
 The library includes a comprehensive theming system:
 
 ```tsx
-import { BaseProvider, extendTheme } from 'rn-base-component'
+import {BaseProvider, extendTheme} from 'rn-base-component'
 
 const customTheme = extendTheme({
   colors: {
@@ -176,11 +180,7 @@ const customTheme = extendTheme({
 })
 
 export default function App() {
-  return (
-    <BaseProvider theme={customTheme}>
-      {/* Your app components */}
-    </BaseProvider>
-  )
+  return <BaseProvider theme={customTheme}>{/* Your app components */}</BaseProvider>
 }
 ```
 
@@ -189,7 +189,7 @@ export default function App() {
 All components are built with TypeScript and include comprehensive type definitions:
 
 ```tsx
-import { CodeInputRef, CodeInputProps } from 'rn-base-component'
+import {CodeInputRef, CodeInputProps} from 'rn-base-component'
 
 const codeInputRef = useRef<CodeInputRef>(null)
 
