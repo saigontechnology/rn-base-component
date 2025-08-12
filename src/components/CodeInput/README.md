@@ -25,16 +25,10 @@ yarn add rn-base-component
 
 ```tsx
 import React from 'react'
-import { CodeInput } from 'rn-base-component'
+import {CodeInput} from 'rn-base-component'
 
 export default function App() {
-  return (
-    <CodeInput
-      length={6}
-      onSubmit={(code) => console.log('Code entered:', code)}
-      autoFocus
-    />
-  )
+  return <CodeInput length={6} onSubmit={code => console.log('Code entered:', code)} autoFocus />
 }
 ```
 
@@ -43,8 +37,8 @@ export default function App() {
 ### Controlled Component
 
 ```tsx
-import React, { useState } from 'react'
-import { CodeInput } from 'rn-base-component'
+import React, {useState} from 'react'
+import {CodeInput} from 'rn-base-component'
 
 export default function ControlledExample() {
   const [code, setCode] = useState('')
@@ -62,13 +56,7 @@ export default function ControlledExample() {
   }
 
   return (
-    <CodeInput
-      value={code}
-      onChangeText={setCode}
-      onSubmit={handleSubmit}
-      disabled={loading}
-      length={6}
-    />
+    <CodeInput value={code} onChangeText={setCode} onSubmit={handleSubmit} disabled={loading} length={6} />
   )
 }
 ```
@@ -76,8 +64,8 @@ export default function ControlledExample() {
 ### With Ref Control
 
 ```tsx
-import React, { useRef } from 'react'
-import { CodeInput, CodeInputRef } from 'rn-base-component'
+import React, {useRef} from 'react'
+import {CodeInput, CodeInputRef} from 'rn-base-component'
 
 export default function RefExample() {
   const codeInputRef = useRef<CodeInputRef>(null)
@@ -92,7 +80,7 @@ export default function RefExample() {
       <CodeInput
         ref={codeInputRef}
         length={4}
-        onSubmit={(code) => {
+        onSubmit={code => {
           if (code !== '1234') {
             codeInputRef.current?.clear()
           }
@@ -126,7 +114,7 @@ export default function RefExample() {
     borderWidth: 2,
     backgroundColor: '#ffffff',
     shadowColor: '#007AFF',
-    shadowOffset: { width: 0, height: 0 },
+    shadowOffset: {width: 0, height: 0},
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 4,
@@ -180,7 +168,7 @@ export default function RefExample() {
   focusCellWrapperStyle={{
     backgroundColor: '#ffffff',
     shadowColor: '#007AFF',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
@@ -192,67 +180,67 @@ export default function RefExample() {
 
 ### Core Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `length` | `number` | `6` | Number of code input cells (1-20) |
-| `value` | `string` | `undefined` | Controlled value |
-| `onChangeText` | `(code: string) => void` | `undefined` | Called when code changes |
-| `onSubmit` | `(code: string) => void` | `undefined` | Called when code is complete |
-| `onClear` | `() => void` | `undefined` | Called when code is cleared |
-| `autoFocus` | `boolean` | `false` | Auto focus on mount |
-| `disabled` | `boolean` | `false` | Disable input |
-| `testID` | `string` | `'code-input'` | Test identifier |
+| Prop           | Type                     | Default        | Description                       |
+| -------------- | ------------------------ | -------------- | --------------------------------- |
+| `length`       | `number`                 | `6`            | Number of code input cells (1-20) |
+| `value`        | `string`                 | `undefined`    | Controlled value                  |
+| `onChangeText` | `(code: string) => void` | `undefined`    | Called when code changes          |
+| `onSubmit`     | `(code: string) => void` | `undefined`    | Called when code is complete      |
+| `onClear`      | `() => void`             | `undefined`    | Called when code is cleared       |
+| `autoFocus`    | `boolean`                | `false`        | Auto focus on mount               |
+| `disabled`     | `boolean`                | `false`        | Disable input                     |
+| `testID`       | `string`                 | `'code-input'` | Test identifier                   |
 
 ### Styling Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `cellStyle` | `StyleProp<ViewStyle>` | Style for individual cells |
-| `filledCellStyle` | `StyleProp<ViewStyle>` | Style for cells with values |
-| `focusCellStyle` | `StyleProp<ViewStyle>` | Style for focused cell |
-| `textStyle` | `StyleProp<TextStyle>` | Style for text inside cells |
-| `focusTextStyle` | `StyleProp<TextStyle>` | Style for focused cell text |
-| `cellContainerStyle` | `StyleProp<ViewStyle>` | Style for container holding all cells |
-| `cellWrapperStyle` | `StyleProp<ViewStyle>` | Style for wrapper around each cell |
+| Prop                    | Type                   | Description                           |
+| ----------------------- | ---------------------- | ------------------------------------- |
+| `cellStyle`             | `StyleProp<ViewStyle>` | Style for individual cells            |
+| `filledCellStyle`       | `StyleProp<ViewStyle>` | Style for cells with values           |
+| `focusCellStyle`        | `StyleProp<ViewStyle>` | Style for focused cell                |
+| `textStyle`             | `StyleProp<TextStyle>` | Style for text inside cells           |
+| `focusTextStyle`        | `StyleProp<TextStyle>` | Style for focused cell text           |
+| `cellContainerStyle`    | `StyleProp<ViewStyle>` | Style for container holding all cells |
+| `cellWrapperStyle`      | `StyleProp<ViewStyle>` | Style for wrapper around each cell    |
 | `focusCellWrapperStyle` | `StyleProp<ViewStyle>` | Style for wrapper around focused cell |
 
 ### Placeholder Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `placeholder` | `string` | `''` | Placeholder text for empty cells |
-| `placeholderTextColor` | `string` | `undefined` | Color for placeholder text |
-| `placeholderAsDot` | `boolean` | `false` | Render placeholder as dot |
-| `placeholderDotStyle` | `StyleProp<ViewStyle>` | `undefined` | Style for placeholder dot |
+| Prop                   | Type                   | Default     | Description                      |
+| ---------------------- | ---------------------- | ----------- | -------------------------------- |
+| `placeholder`          | `string`               | `''`        | Placeholder text for empty cells |
+| `placeholderTextColor` | `string`               | `undefined` | Color for placeholder text       |
+| `placeholderAsDot`     | `boolean`              | `false`     | Render placeholder as dot        |
+| `placeholderDotStyle`  | `StyleProp<ViewStyle>` | `undefined` | Style for placeholder dot        |
 
 ### Security Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `secureTextEntry` | `boolean` | `false` | Hide entered values |
+| Prop              | Type                   | Default     | Description           |
+| ----------------- | ---------------------- | ----------- | --------------------- |
+| `secureTextEntry` | `boolean`              | `false`     | Hide entered values   |
 | `secureViewStyle` | `StyleProp<ViewStyle>` | `undefined` | Style for secure dots |
 
 ### Cursor Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `withCursor` | `boolean` | `false` | Show cursor in focused cell |
-| `customCursor` | `() => ReactNode` | `undefined` | Custom cursor component |
+| Prop           | Type              | Default     | Description                 |
+| -------------- | ----------------- | ----------- | --------------------------- |
+| `withCursor`   | `boolean`         | `false`     | Show cursor in focused cell |
+| `customCursor` | `() => ReactNode` | `undefined` | Custom cursor component     |
 
 ### Input Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `keyboardType` | `KeyboardTypeOptions` | `'number-pad'` | Keyboard type |
-| `...textInputProps` | `TextInputProps` | - | All other TextInput props |
+| Prop                | Type                  | Default        | Description               |
+| ------------------- | --------------------- | -------------- | ------------------------- |
+| `keyboardType`      | `KeyboardTypeOptions` | `'number-pad'` | Keyboard type             |
+| `...textInputProps` | `TextInputProps`      | -              | All other TextInput props |
 
 ## Ref Methods
 
 ```tsx
 interface CodeInputRef {
-  focus: () => void      // Focus the input
-  blur: () => void       // Blur the input
-  clear: () => void      // Clear the code
+  focus: () => void // Focus the input
+  blur: () => void // Blur the input
+  clear: () => void // Clear the code
   getValue: () => string // Get current value
   setValue: (value: string) => void // Set value programmatically
 }
@@ -347,18 +335,22 @@ The component is fully accessible with:
 ### Common Issues
 
 **Input not focusing on cell press**
+
 - Ensure the component is not disabled
 - Check if `autoFocus` conflicts with your navigation
 
 **Styling not applying**
+
 - Verify you're using the correct style prop for the element
 - Check theme integration if using styled-components
 
 **Accessibility issues**
+
 - Test with screen readers enabled
 - Ensure proper labeling for your use case
 
 **Performance with many cells**
+
 - Consider using fewer cells (max 20 supported)
 - Optimize custom render functions
 
@@ -368,4 +360,4 @@ Found a bug or want to contribute? Please check our [Contributing Guide](../../C
 
 ## License
 
-MIT License - see [LICENSE](../../LICENSE) for details. 
+MIT License - see [LICENSE](../../LICENSE) for details.

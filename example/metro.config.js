@@ -1,38 +1,20 @@
-const path = require('path')
-const escape = require('escape-string-regexp')
-const exclusionList = require('metro-config/src/defaults/exclusionList')
-const pak = require('../package.json')
+// example/metro.config.js
+const path = require('path');
+const { getDefaultConfig } = require('expo/metro-config');
 
-const root = path.resolve(__dirname, '..')
+const projectRoot = __dirname;
+const workspaceRoot = path.resolve(projectRoot, '..');
 
-const modules = Object.keys({
-  ...pak.peerDependencies,
-})
+const config = getDefaultConfig(projectRoot);
 
-module.exports = {
-  projectRoot: __dirname,
-  watchFolders: [root],
+config.watchFolders = [workspaceRoot];
 
-  // We need to make sure that only one version is loaded for peerDependencies
-  // So we block them at the root, and alias them to the versions in example's node_modules
-  resolver: {
-    blacklistRE: exclusionList(
-      modules.map(m => new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`)),
-    ),
+// Để tránh lỗi duplicate React hoặc React Native
+config.resolver.nodeModulesPaths = [
+  path.resolve(projectRoot, 'node_modules'),
+  path.resolve(workspaceRoot, 'node_modules'),
+];
 
-    extraNodeModules: modules.reduce((acc, name) => {
-      acc[name] = path.join(__dirname, 'node_modules', name)
-      return acc
-    }, {}),
-    resolverMainFields: ['sbmodern', 'react-native', 'browser', 'main'],
-  },
+config.resolver.disableHierarchicalLookup = true;
 
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: false,
-      },
-    }),
-  },
-}
+module.exports = config;
