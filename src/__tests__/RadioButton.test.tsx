@@ -40,7 +40,7 @@ describe('RadioButton test', () => {
   })
 
   it('should not change state when disabled', () => {
-    const {getByTestId} = render(<RadioButton onPress={onPressMock} disable={true} />)
+    const {getByTestId} = render(<RadioButton onPress={onPressMock} disabled={true} />)
     const radioButton = getByTestId('bounceable')
 
     fireEvent.press(radioButton)

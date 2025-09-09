@@ -64,7 +64,7 @@ export interface IRadioButtonProps extends IBounceableProps {
   /**
    * disable radio button
    */
-  disable?: boolean
+  disabled?: boolean
   /**
    * set opacity for text
    */
@@ -77,7 +77,7 @@ export interface IRadioButtonProps extends IBounceableProps {
   /**
    * set value for text label
    */
-  text?: string
+  label?: string
 
   /**
    * update new value
@@ -102,10 +102,10 @@ export const RadioButton = forwardRef<View, IRadioButtonProps>(
       initial,
       textComponent,
       textContainerStyle,
-      disable,
+      disabled,
       disableOpacity = OPACITY_DEFAULT,
       textStyle,
-      text,
+      label,
       value,
       wrapperStyle,
       ...rest
@@ -139,6 +139,9 @@ export const RadioButton = forwardRef<View, IRadioButtonProps>(
     }).current
 
     const handlePress = () => {
+      if (disabled) {
+        return
+      }
       if (isRemainActive !== undefined && isRemainActive !== null) {
         onPressButton && onPressButton(isRemainActive)
       } else {
@@ -149,9 +152,9 @@ export const RadioButton = forwardRef<View, IRadioButtonProps>(
 
     const renderLabelText = () =>
       textComponent ||
-      (text ? (
-        <LabelTextView disable={!!disable} disableOpacity={disableOpacity} style={textContainerStyle}>
-          <LabelText style={textStyle}>{text}</LabelText>
+      (label ? (
+        <LabelTextView disabled={!!disabled} disableOpacity={disableOpacity} style={textContainerStyle}>
+          <LabelText style={textStyle}>{label}</LabelText>
         </LabelTextView>
       ) : null)
 
@@ -166,7 +169,7 @@ export const RadioButton = forwardRef<View, IRadioButtonProps>(
         <Bounceable
           testID="bounceable"
           ref={ref}
-          disabled={disable}
+          disabled={disabled}
           onLayout={handleLayout}
           style={StyleSheet.flatten([
             styles.bounceStyle,
@@ -175,7 +178,7 @@ export const RadioButton = forwardRef<View, IRadioButtonProps>(
               height: outer.height,
               borderRadius: outer.border,
               borderColor: ringColor,
-              opacity: disable ? disableOpacity : 1,
+              opacity: disabled ? disableOpacity : 1,
               borderWidth: theme.borderWidths.little,
             },
             style,
@@ -218,9 +221,9 @@ const RadioButtonInnerContainer = styled.View<
   backgroundColor: rest.isActive ? rest.innerBackgroundColor : 'transparent',
 }))
 
-const LabelTextView = styled.View<{disable: boolean; disableOpacity?: number}>(props => ({
+const LabelTextView = styled.View<{disabled: boolean; disableOpacity?: number}>(props => ({
   marginLeft: props.theme?.spacing?.small,
-  opacity: props.disable ? props.disableOpacity : 1,
+  opacity: props.disabled ? props.disableOpacity : 1,
 }))
 
 const LabelText = styled.Text(props => ({

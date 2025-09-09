@@ -97,19 +97,26 @@ export default function RefExample() {
 ### Custom Cell Styling
 
 ```tsx
-<CodeInput
+;<CodeInput
   length={6}
-  cellStyle={{
+  cellStyle={styles.cell}
+  filledCellStyle={styles.filledCell}
+  focusCellStyle={styles.focusCell}
+  textStyle={styles.cellText}
+/>
+
+const styles = StyleSheet.create({
+  cell: {
     borderWidth: 2,
     borderColor: '#e0e0e0',
     borderRadius: 8,
     backgroundColor: '#f9f9f9',
-  }}
-  filledCellStyle={{
+  },
+  filledCell: {
     borderColor: '#007AFF',
     backgroundColor: '#ffffff',
-  }}
-  focusCellStyle={{
+  },
+  focusCell: {
     borderColor: '#007AFF',
     borderWidth: 2,
     backgroundColor: '#ffffff',
@@ -118,62 +125,73 @@ export default function RefExample() {
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 4,
-  }}
-  textStyle={{
+  },
+  cellText: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
-  }}
-/>
+  },
+})
 ```
 
 ### Dot Placeholder Style
 
 ```tsx
-<CodeInput
+;<CodeInput
   length={6}
   placeholderAsDot={true}
-  placeholderDotStyle={{
+  placeholderDotStyle={styles.placeholderDot}
+  secureTextEntry={true}
+  secureViewStyle={styles.secureView}
+/>
+
+const styles = StyleSheet.create({
+  placeholderDot: {
     width: 8,
     height: 8,
     backgroundColor: '#ccc',
     borderRadius: 4,
-  }}
-  secureTextEntry={true}
-  secureViewStyle={{
+  },
+  secureView: {
     width: 12,
     height: 12,
     backgroundColor: '#333',
     borderRadius: 6,
-  }}
-/>
+  },
+})
 ```
 
 ### Container Styling
 
 ```tsx
-<CodeInput
+;<CodeInput
   length={4}
-  cellContainerStyle={{
+  cellContainerStyle={styles.cellContainer}
+  cellWrapperStyle={styles.cellWrapper}
+  focusCellWrapperStyle={styles.focusCellWrapper}
+/>
+
+const styles = StyleSheet.create({
+  cellContainer: {
     backgroundColor: '#f0f0f0',
     padding: 16,
     borderRadius: 12,
     gap: 8, // For React Native 0.71+
-  }}
-  cellWrapperStyle={{
+  },
+  cellWrapper: {
     backgroundColor: 'rgba(255,255,255,0.8)',
     borderRadius: 8,
     padding: 4,
-  }}
-  focusCellWrapperStyle={{
+  },
+  focusCellWrapper: {
     backgroundColor: '#ffffff',
     shadowColor: '#007AFF',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
-  }}
-/>
+  },
+})
 ```
 
 ## Props API
@@ -267,57 +285,71 @@ The component is fully accessible with:
 ### OTP Verification
 
 ```tsx
-<CodeInput
+;<CodeInput
   length={6}
   keyboardType="number-pad"
   autoFocus
   onSubmit={verifyOTP}
-  cellStyle={{
+  cellStyle={styles.otpCell}
+  focusCellStyle={styles.otpFocusCell}
+/>
+
+const styles = StyleSheet.create({
+  otpCell: {
     borderWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
-  }}
-  focusCellStyle={{
+  },
+  otpFocusCell: {
     borderColor: '#007AFF',
-  }}
-/>
+  },
+})
 ```
 
 ### PIN Entry
 
 ```tsx
-<CodeInput
+;<CodeInput
   length={4}
   secureTextEntry
   keyboardType="number-pad"
   placeholderAsDot
   onSubmit={verifyPIN}
-  cellStyle={{
+  cellStyle={styles.pinCell}
+/>
+
+const styles = StyleSheet.create({
+  pinCell: {
     backgroundColor: '#f0f0f0',
     borderRadius: 12,
     borderWidth: 0,
-  }}
-/>
+  },
+})
 ```
 
 ### Verification Code
 
 ```tsx
-<CodeInput
+;<CodeInput
   length={8}
   keyboardType="default"
   placeholder="•"
   onSubmit={verifyCode}
-  cellStyle={{
+  cellStyle={styles.verificationCell}
+  focusCellStyle={styles.verificationFocusCell}
+/>
+
+const styles = StyleSheet.create({
+  verificationCell: {
     borderBottomWidth: 2,
     borderBottomColor: '#ddd',
     borderRadius: 0,
     backgroundColor: 'transparent',
-  }}
-  focusCellStyle={{
+  },
+  verificationFocusCell: {
     borderBottomColor: '#007AFF',
-  }}
-/>
+  },
+})
 ```
 
 ## Best Practices
