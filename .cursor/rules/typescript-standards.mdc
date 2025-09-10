@@ -1,0 +1,70 @@
+---
+alwaysApply: true
+---
+# TypeScript Coding Standards
+
+## Type Safety Requirements
+- Always use strict TypeScript settings as defined in [tsconfig.json](mdc:tsconfig.json)
+- Enable `noUncheckedIndexedAccess: true` for safer array/object access
+- Use `noUnusedLocals: true` and `noUnusedParameters: true` to prevent dead code
+- No `any` types - use proper typing or `unknown` with type guards
+
+## Import/Export Standards
+- Use explicit imports and exports
+- Prefer named exports over default exports for components
+- Use barrel exports in `index.ts` files for clean imports
+- Import types with `import type` syntax for type-only imports
+
+## Interface and Type Definitions
+- Use PascalCase for interface names
+- Prefix interfaces with `I` when defining core types (e.g., `ITheme`)
+- Use descriptive names for props interfaces (e.g., `ButtonProps`, `TextInputProps`)
+- Define props interfaces in the same file as the component
+- Use discriminated unions for variant props
+
+## Component Typing
+- Always type component props explicitly
+- Use `React.FC<PropsType>` or direct function typing
+- Type event handlers properly (e.g., `onPress?: () => void`)
+- Use proper React Native types (e.g., `ViewStyle`, `TextStyle`)
+
+## Theme Integration
+- Import theme types: `import type {ITheme} from '../theme'`
+- Use theme interface for styled-components: `DefaultTheme extends ITheme`
+- Type theme props in styled components: `${({theme}: {theme: ITheme}) => ...}`
+
+## Generic Types
+- Use descriptive generic type names (not just `T`)
+- Constrain generics when appropriate
+- Use conditional types for complex prop relationships
+
+## Error Handling
+- Use proper error types, not just `Error`
+- Type async functions with proper return types
+- Use Result types or proper error boundaries for component error handling
+
+## Example Patterns
+```typescript
+// Proper component props interface
+interface ButtonProps {
+  variant: 'primary' | 'secondary' | 'outline'
+  size: 'sm' | 'md' | 'lg'
+  disabled?: boolean
+  onPress?: () => void
+  children: React.ReactNode
+  style?: ViewStyle
+  testID?: string
+}
+
+// Theme-aware styled component
+const StyledButton = styled.TouchableOpacity<{variant: string}>`
+  ${({theme, variant}: {theme: ITheme; variant: string}) => css`
+    background-color: ${theme.colors[variant]};
+    padding: ${theme.space.md}px;
+  `}
+`
+
+// Proper type imports
+import type {ITheme} from '../theme'
+import type {ViewStyle} from 'react-native'
+```

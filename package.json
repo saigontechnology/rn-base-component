@@ -28,6 +28,7 @@
     "release": "release-it",
     "pretty": "prettier --write \"./**/*.{js,jsx,json}\"",
     "bootstrap": "yarn example && yarn install && yarn example pods",
+    "dev": "cd example && npx expo start --clear",
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build",
     "prepare": "husky install",
     "format": "prettier --write .",
@@ -92,6 +93,7 @@
     "react-native": "*",
     "react-native-gesture-handler": "*",
     "react-native-reanimated": "*",
+    "react-native-svg": "*",
     "styled-components": "*"
   },
   "engines": {

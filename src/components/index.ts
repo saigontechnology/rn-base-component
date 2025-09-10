@@ -1,6 +1,7 @@
 export * from './Button'
 export * from './Progress'
 export * from './CodeInput'
+export * from './CountDown'
 export * from './Slider'
 export * from './Card'
 export * from './RadioButton'
