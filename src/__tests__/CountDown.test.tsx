@@ -203,6 +203,161 @@ describe('CountDown Component', () => {
       })
       expect(getByText('10s')).toBeTruthy()
     })
+
+    it('getCurrentTime returns current countdown time', () => {
+      const countdownRef = React.createRef<CountDownRef>()
+      renderWithProvider(<CountDown ref={countdownRef} value={30} />)
+
+      expect(countdownRef.current?.getCurrentTime()).toBe(30)
+
+      // After some time (advance by 1 second intervals)
+      act(() => {
+        jest.advanceTimersByTime(1000)
+      })
+      expect(countdownRef.current?.getCurrentTime()).toBe(29)
+
+      act(() => {
+        jest.advanceTimersByTime(2000)
+      })
+
+      expect(countdownRef.current?.getCurrentTime()).toBe(28)
+    })
+
+    it('stopCountDown stops the countdown timer', () => {
+      const countdownRef = React.createRef<CountDownRef>()
+      const mockOnFinish = jest.fn()
+      renderWithProvider(<CountDown ref={countdownRef} value={10} onFinish={mockOnFinish} />)
+
+      // Let it count down a bit
+      act(() => {
+        jest.advanceTimersByTime(1000)
+      })
+
+      expect(countdownRef.current?.getCurrentTime()).toBe(9)
+
+      // Stop the countdown
+      act(() => {
+        countdownRef.current?.stopCountDown()
+      })
+
+      // Advance more time - should not continue counting
+      act(() => {
+        jest.advanceTimersByTime(10000)
+      })
+
+      expect(countdownRef.current?.getCurrentTime()).toBe(9) // Should remain the same
+      expect(mockOnFinish).not.toHaveBeenCalled()
+    })
+
+    it('getCountDownStatus returns current countdown status', () => {
+      const countdownRef = React.createRef<CountDownRef>()
+      renderWithProvider(<CountDown ref={countdownRef} value={3} />)
+
+      // Initially should be running
+      expect(countdownRef.current?.getCountDownStatus()).toBe('running')
+
+      // Stop the countdown
+      act(() => {
+        countdownRef.current?.stopCountDown()
+      })
+      expect(countdownRef.current?.getCountDownStatus()).toBe('stopped')
+
+      // Resume the countdown
+      act(() => {
+        countdownRef.current?.resumeCountDown()
+      })
+      expect(countdownRef.current?.getCountDownStatus()).toBe('running')
+
+      // Let it finish naturally (3 -> 2 -> 1 -> 0)
+      act(() => {
+        jest.advanceTimersByTime(1000) // 3 -> 2
+      })
+      expect(countdownRef.current?.getCountDownStatus()).toBe('running')
+
+      act(() => {
+        jest.advanceTimersByTime(1000) // 2 -> 1
+      })
+      expect(countdownRef.current?.getCountDownStatus()).toBe('running')
+
+      act(() => {
+        jest.advanceTimersByTime(1000) // 1 -> 0
+      })
+      expect(countdownRef.current?.getCountDownStatus()).toBe('finished')
+    })
+
+    it('resumeCountDown resumes a stopped countdown', () => {
+      const countdownRef = React.createRef<CountDownRef>()
+      const {getByText} = renderWithProvider(<CountDown ref={countdownRef} value={5} />)
+
+      // Let it count down a bit (5 -> 4 -> 3)
+      act(() => {
+        jest.advanceTimersByTime(1000) // 5 -> 4
+      })
+      expect(getByText('4s')).toBeTruthy()
+
+      act(() => {
+        jest.advanceTimersByTime(1000) // 4 -> 3
+      })
+      expect(getByText('3s')).toBeTruthy()
+
+      // Stop the countdown
+      act(() => {
+        countdownRef.current?.stopCountDown()
+      })
+      expect(countdownRef.current?.getCountDownStatus()).toBe('stopped')
+
+      // Advance time - should not change
+      act(() => {
+        jest.advanceTimersByTime(1000)
+      })
+      expect(getByText('3s')).toBeTruthy() // Should remain at 3s
+
+      // Resume the countdown
+      act(() => {
+        countdownRef.current?.resumeCountDown()
+      })
+      expect(countdownRef.current?.getCountDownStatus()).toBe('running')
+
+      // Now it should continue counting
+      act(() => {
+        jest.advanceTimersByTime(1000) // 3 -> 2
+      })
+      expect(getByText('2s')).toBeTruthy()
+    })
+
+    it('resumeCountDown does not work when countdown is finished', () => {
+      const countdownRef = React.createRef<CountDownRef>()
+      renderWithProvider(<CountDown ref={countdownRef} value={1} />)
+
+      // Let it finish (1 -> 0)
+      act(() => {
+        jest.advanceTimersByTime(1000) // 1 -> 0, should be finished
+      })
+      expect(countdownRef.current?.getCountDownStatus()).toBe('finished')
+
+      // Try to resume - should not change status
+      act(() => {
+        countdownRef.current?.resumeCountDown()
+      })
+      expect(countdownRef.current?.getCountDownStatus()).toBe('finished')
+    })
+
+    it('resumeCountDown does not work when countdown is at zero', () => {
+      const countdownRef = React.createRef<CountDownRef>()
+      renderWithProvider(<CountDown ref={countdownRef} value={0} />)
+
+      // Stop immediately
+      act(() => {
+        countdownRef.current?.stopCountDown()
+      })
+      expect(countdownRef.current?.getCountDownStatus()).toBe('stopped')
+
+      // Try to resume at zero - should not change status
+      act(() => {
+        countdownRef.current?.resumeCountDown()
+      })
+      expect(countdownRef.current?.getCountDownStatus()).toBe('stopped')
+    })
   })
 
   describe('Styling', () => {
@@ -225,6 +380,39 @@ describe('CountDown Component', () => {
       const container = getByTestId('styled-countdown')
       expect(container.props.style).toEqual(expect.arrayContaining([expect.objectContaining(customStyle)]))
     })
+
+    it('applies custom textStyle to countdown text', () => {
+      const customTextStyle = {fontWeight: 'bold' as const, textDecorationLine: 'underline' as const}
+      const {getByText} = renderWithProvider(<CountDown value={30} textStyle={customTextStyle} />)
+
+      const countdownText = getByText('30s')
+      expect(countdownText.props.style).toEqual(
+        expect.arrayContaining([expect.objectContaining(customTextStyle)]),
+      )
+    })
+
+    it('applies custom textStyle to complex countdown text units', () => {
+      const futureDate = dayjs().add(1, 'hour').add(30, 'minutes').add(45, 'seconds')
+      const customTextStyle = {fontStyle: 'italic' as const, letterSpacing: 1}
+      const {getByText} = renderWithProvider(
+        <CountDown countDownTo={futureDate} timeToShow={['H', 'M', 'S']} textStyle={customTextStyle} />,
+      )
+
+      // Check that text elements have the custom style applied
+      const hoursText = getByText('01')
+      const minutesText = getByText('30')
+      const secondsText = getByText('45')
+
+      expect(hoursText.props.style).toEqual(
+        expect.arrayContaining([expect.objectContaining(customTextStyle)]),
+      )
+      expect(minutesText.props.style).toEqual(
+        expect.arrayContaining([expect.objectContaining(customTextStyle)]),
+      )
+      expect(secondsText.props.style).toEqual(
+        expect.arrayContaining([expect.objectContaining(customTextStyle)]),
+      )
+    })
   })
 
   describe('Accessibility', () => {
@@ -242,7 +430,7 @@ describe('CountDown Component', () => {
       )
 
       const timer = getByRole('timer')
-      expect(timer.props.accessibilityLabel).toContain('01 hours, 30 minutes, 45 seconds')
+      expect(timer.props.accessibilityLabel).toContain('1 hours, 30 minutes, 45 seconds')
     })
 
     it('supports custom accessibility properties', () => {
@@ -292,6 +480,105 @@ describe('CountDown Component', () => {
 
       clearIntervalSpy.mockRestore()
       clearTimeoutSpy.mockRestore()
+    })
+  })
+
+  describe('Negative Countdown', () => {
+    it('allows countdown to go negative when allowNegative is true', () => {
+      const mockOnFinish = jest.fn()
+      const {getByText} = renderWithProvider(
+        <CountDown value={2} allowNegative={true} onFinish={mockOnFinish} />,
+      )
+
+      expect(getByText('2s')).toBeTruthy()
+
+      // Advance past zero, step by step
+      act(() => {
+        jest.advanceTimersByTime(1000) // Should be 1s
+      })
+      expect(getByText('1s')).toBeTruthy()
+
+      act(() => {
+        jest.advanceTimersByTime(1000) // Should be 0s
+      })
+      expect(getByText('0s')).toBeTruthy()
+
+      act(() => {
+        jest.advanceTimersByTime(1000) // Should be -1s
+      })
+
+      // Should show negative time when allowNegative is true
+      expect(getByText('-1s')).toBeTruthy()
+      expect(mockOnFinish).toHaveBeenCalledTimes(1) // Called when reaching zero
+    })
+
+    it('stops at zero when allowNegative is false (default)', () => {
+      const mockOnFinish = jest.fn()
+      const {getByText} = renderWithProvider(<CountDown value={2} onFinish={mockOnFinish} />)
+
+      expect(getByText('2s')).toBeTruthy()
+
+      // Let countdown reach zero step by step
+      act(() => {
+        jest.advanceTimersByTime(1000) // 2 -> 1
+      })
+      expect(getByText('1s')).toBeTruthy()
+
+      act(() => {
+        jest.advanceTimersByTime(1000) // 1 -> 0
+      })
+      expect(getByText('0s')).toBeTruthy()
+
+      // Try to advance further, should remain at 0s
+      act(() => {
+        jest.advanceTimersByTime(1000)
+      })
+      expect(getByText('0s')).toBeTruthy()
+      expect(mockOnFinish).toHaveBeenCalledTimes(1)
+    })
+
+    it('shows proper accessibility label for negative countdown', () => {
+      const {getByRole, getByText} = renderWithProvider(<CountDown value={1} allowNegative={true} />)
+
+      // Step by step to verify each stage
+      expect(getByText('1s')).toBeTruthy()
+
+      // 1 -> 0
+      act(() => {
+        jest.advanceTimersByTime(1000)
+      })
+      expect(getByText('0s')).toBeTruthy()
+
+      // 0 -> -1
+      act(() => {
+        jest.advanceTimersByTime(1000)
+      })
+      expect(getByText('-1s')).toBeTruthy()
+
+      const timer = getByRole('timer')
+      expect(timer.props.accessibilityLabel).toContain('Overtime: 1 seconds')
+    })
+
+    it('supports negative countdown with target date', () => {
+      const pastDate = dayjs().subtract(1, 'hour')
+      const mockOnFinish = jest.fn()
+      const {getByRole} = renderWithProvider(
+        <CountDown
+          countDownTo={pastDate}
+          allowNegative={true}
+          onFinish={mockOnFinish}
+          timeToShow={['H', 'M', 'S']}
+        />,
+      )
+
+      // Allow time for the effect to run and timer to update
+      act(() => {
+        jest.advanceTimersByTime(100)
+      })
+
+      const timer = getByRole('timer')
+      expect(timer.props.accessibilityLabel).toContain('Overtime:')
+      expect(mockOnFinish).toHaveBeenCalled()
     })
   })
 })

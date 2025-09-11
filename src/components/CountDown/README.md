@@ -8,7 +8,8 @@ A flexible and customizable countdown timer component for React Native that supp
 - 🎨 **Flexible Display** - Show/hide days, hours, minutes, seconds with customizable separators
 - 🏷️ **Time Unit Labels** - Optional time unit labels (d, h, m, s) with customization
 - 🎯 **Precise Timing** - Accurate millisecond-level countdown for target dates
-- 🔄 **Restart Capability** - Programmatic restart functionality via ref
+- 🔄 **Full Timer Control** - Start, stop, pause, resume, and restart functionality via ref
+- 📊 **Status Monitoring** - Real-time status tracking (running, stopped, finished)
 - 🎪 **Theme Integration** - Seamlessly integrates with the design system
 - ♿ **Accessible** - Built-in accessibility features with proper ARIA labels
 - 🔧 **TypeScript Ready** - Full type safety and IntelliSense support
@@ -75,23 +76,54 @@ export default function App() {
 />
 ```
 
-### With Restart Functionality
+### With Ref Control
 
 ```tsx
-import React, {useRef} from 'react'
+import React, {useRef, useState} from 'react'
 import {CountDown, CountDownRef, Button} from 'rn-base-component'
 
 export default function App() {
   const countdownRef = useRef<CountDownRef>(null)
+  const [status, setStatus] = useState<'running' | 'stopped' | 'finished'>('running')
 
   const handleRestart = () => {
     countdownRef.current?.restart()
+    setStatus('running')
+  }
+
+  const handleStop = () => {
+    countdownRef.current?.stopCountDown()
+    setStatus('stopped')
+  }
+
+  const handleResume = () => {
+    countdownRef.current?.resumeCountDown()
+    setStatus('running')
+  }
+
+  const getCurrentTime = () => {
+    const time = countdownRef.current?.getCurrentTime()
+    console.log('Current time:', time)
+  }
+
+  const checkStatus = () => {
+    const currentStatus = countdownRef.current?.getCountDownStatus()
+    setStatus(currentStatus || 'running')
+    console.log('Status:', currentStatus)
   }
 
   return (
     <View>
-      <CountDown ref={countdownRef} value={120} onFinish={() => console.log('Done!')} />
+      <CountDown ref={countdownRef} value={120} onFinish={() => setStatus('finished')} />
+      <Text>Status: {status}</Text>
+
       <Button onPress={handleRestart}>Restart</Button>
+      <Button onPress={handleStop}>Stop</Button>
+      <Button onPress={handleResume} disabled={status !== 'stopped'}>
+        Resume
+      </Button>
+      <Button onPress={getCurrentTime}>Get Current Time</Button>
+      <Button onPress={checkStatus}>Check Status</Button>
     </View>
   )
 }
@@ -183,25 +215,30 @@ const styles = StyleSheet.create({
 
 ### Props
 
-| Prop          | Type          | Default                                               | Description                          |
-| ------------- | ------------- | ----------------------------------------------------- | ------------------------------------ |
-| `value`       | `number`      | `0`                                                   | Initial countdown value in seconds   |
-| `onFinish`    | `() => void`  | -                                                     | Callback when countdown reaches zero |
-| `countDownTo` | `dayjs.Dayjs` | -                                                     | Target date/time to countdown to     |
-| `timeToShow`  | `string[]`    | `['D', 'H', 'M', 'S']`                                | Time units to display                |
-| `fontSize`    | `number`      | theme                                                 | Font size for countdown text         |
-| `textColor`   | `string`      | theme                                                 | Color for countdown text             |
-| `separator`   | `string`      | `' : '`                                               | Separator between time units         |
-| `showLabels`  | `boolean`     | `false`                                               | Show time unit labels                |
-| `timeLabels`  | `object`      | `{days: 'd', hours: 'h', minutes: 'm', seconds: 's'}` | Custom time unit labels              |
-| `style`       | `ViewStyle`   | -                                                     | Custom container style               |
-| `testID`      | `string`      | -                                                     | Test identifier                      |
+| Prop            | Type          | Default                                               | Description                                |
+| --------------- | ------------- | ----------------------------------------------------- | ------------------------------------------ |
+| `value`         | `number`      | `0`                                                   | Initial countdown value in seconds         |
+| `onFinish`      | `() => void`  | -                                                     | Callback when countdown reaches zero       |
+| `countDownTo`   | `dayjs.Dayjs` | -                                                     | Target date/time to countdown to           |
+| `timeToShow`    | `string[]`    | `['D', 'H', 'M', 'S']`                                | Time units to display                      |
+| `allowNegative` | `boolean`     | `false`                                               | Allow countdown to go into negative values |
+| `fontSize`      | `number`      | theme                                                 | Font size for countdown text               |
+| `textColor`     | `string`      | theme                                                 | Color for countdown text                   |
+| `separator`     | `string`      | `' : '`                                               | Separator between time units               |
+| `showLabels`    | `boolean`     | `false`                                               | Show time unit labels                      |
+| `timeLabels`    | `object`      | `{days: 'd', hours: 'h', minutes: 'm', seconds: 's'}` | Custom time unit labels                    |
+| `style`         | `ViewStyle`   | -                                                     | Custom container style                     |
+| `testID`        | `string`      | -                                                     | Test identifier                            |
 
 ### Ref Methods
 
-| Method      | Description                                  |
-| ----------- | -------------------------------------------- |
-| `restart()` | Restart the countdown timer to initial value |
+| Method                 | Description                                           |
+| ---------------------- | ----------------------------------------------------- |
+| `restart()`            | Restart the countdown timer to initial value          |
+| `getCurrentTime()`     | Get the current countdown time in seconds             |
+| `stopCountDown()`      | Stop the countdown timer                              |
+| `getCountDownStatus()` | Get current status ('running', 'stopped', 'finished') |
+| `resumeCountDown()`    | Resume a stopped countdown (if time remaining)        |
 
 ### Time Units
 
@@ -210,7 +247,140 @@ const styles = StyleSheet.create({
 - `'M'` - Minutes
 - `'S'` - Seconds
 
+### Countdown Status
+
+The `getCountDownStatus()` method returns one of these values:
+
+- `'running'` - Countdown is actively running
+- `'stopped'` - Countdown has been paused/stopped
+- `'finished'` - Countdown has reached zero and completed
+
 ## Examples
+
+### Countdown Control Examples
+
+#### Pause/Resume Timer
+
+```tsx
+const PauseResumeTimer = () => {
+  const countdownRef = useRef<CountDownRef>(null)
+  const [isPaused, setIsPaused] = useState(false)
+
+  const togglePause = () => {
+    if (isPaused) {
+      countdownRef.current?.resumeCountDown()
+    } else {
+      countdownRef.current?.stopCountDown()
+    }
+    setIsPaused(!isPaused)
+  }
+
+  return (
+    <View>
+      <CountDown ref={countdownRef} value={300} />
+      <Button onPress={togglePause}>{isPaused ? 'Resume' : 'Pause'}</Button>
+    </View>
+  )
+}
+```
+
+#### Game Timer with Status
+
+```tsx
+const GameTimer = () => {
+  const countdownRef = useRef<CountDownRef>(null)
+  const [gameStatus, setGameStatus] = useState<'waiting' | 'playing' | 'paused' | 'finished'>('waiting')
+
+  const startGame = () => {
+    countdownRef.current?.restart()
+    setGameStatus('playing')
+  }
+
+  const pauseGame = () => {
+    countdownRef.current?.stopCountDown()
+    setGameStatus('paused')
+  }
+
+  const resumeGame = () => {
+    countdownRef.current?.resumeCountDown()
+    setGameStatus('playing')
+  }
+
+  const checkTimeRemaining = () => {
+    const time = countdownRef.current?.getCurrentTime()
+    Alert.alert('Time Remaining', `${time} seconds left`)
+  }
+
+  return (
+    <View>
+      <Text>Game Status: {gameStatus}</Text>
+      <CountDown ref={countdownRef} value={180} onFinish={() => setGameStatus('finished')} />
+
+      <View style={styles.buttonRow}>
+        <Button onPress={startGame}>Start Game</Button>
+        <Button onPress={pauseGame} disabled={gameStatus !== 'playing'}>
+          Pause
+        </Button>
+        <Button onPress={resumeGame} disabled={gameStatus !== 'paused'}>
+          Resume
+        </Button>
+        <Button onPress={checkTimeRemaining}>Check Time</Button>
+      </View>
+    </View>
+  )
+}
+```
+
+#### Quiz Timer with Auto-Pause
+
+```tsx
+const QuizTimer = () => {
+  const countdownRef = useRef<CountDownRef>(null)
+  const [currentQuestion, setCurrentQuestion] = useState(1)
+  const [isQuizActive, setIsQuizActive] = useState(false)
+
+  const startQuiz = () => {
+    countdownRef.current?.restart()
+    setIsQuizActive(true)
+    setCurrentQuestion(1)
+  }
+
+  const nextQuestion = () => {
+    // Pause timer while transitioning to next question
+    countdownRef.current?.stopCountDown()
+
+    setTimeout(() => {
+      setCurrentQuestion(prev => prev + 1)
+      countdownRef.current?.resumeCountDown()
+    }, 2000) // 2 second break between questions
+  }
+
+  const getTimeStatus = () => {
+    const status = countdownRef.current?.getCountDownStatus()
+    const time = countdownRef.current?.getCurrentTime()
+
+    return {status, time}
+  }
+
+  return (
+    <View>
+      <Text>Question {currentQuestion}</Text>
+      <CountDown
+        ref={countdownRef}
+        value={600} // 10 minutes total
+        onFinish={() => setIsQuizActive(false)}
+      />
+
+      <Button onPress={startQuiz} disabled={isQuizActive}>
+        Start Quiz
+      </Button>
+      <Button onPress={nextQuestion} disabled={!isQuizActive}>
+        Next Question
+      </Button>
+    </View>
+  )
+}
+```
 
 ### Event Countdown
 
