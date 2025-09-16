@@ -3,9 +3,16 @@
   "compilerOptions": {
     "jsx": "react",
     "strict": true,
+    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "rn-base-component": [
+        "../src"
+      ],
+      "rn-base-component/*": [
+        "../src/*"
       ]
     }
   },
@@ -13,6 +20,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "../src/**/*.ts",
+    "../src/**/*.tsx"
   ]
 }

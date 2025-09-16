@@ -1,0 +1,86 @@
+---
+alwaysApply: true
+---
+# Theme and Styling Guidelines
+
+## Theme Architecture
+- Core theme definition: [src/theme/theme.ts](mdc:src/theme/theme.ts)
+- Theme provider: [src/core/BaseProvider.tsx](mdc:src/core/BaseProvider.tsx)
+- Theme hooks: [src/hooks/useTheme.tsx](mdc:src/hooks/useTheme.tsx) and [src/hooks/useBase.tsx](mdc:src/hooks/useBase.tsx)
+- Extended theme utility: [src/core/extendTheme.tsx](mdc:src/core/extendTheme.tsx)
+
+## Styled Components Integration
+- Use styled-components/native for all component styling
+- Extend DefaultTheme interface: `export interface DefaultTheme extends ITheme {}`
+- Access theme in styled components: `${({theme}) => theme.colors.primary}`
+- Use theme-aware CSS helper for complex styling
+
+## Color System
+- Support both light and dark color modes
+- Define colors in theme with semantic names (primary, secondary, background, etc.)
+- Use `theme.colors` for all color references
+- Implement color mode switching through BaseProvider
+- Dark theme colors should be defined in `theme.darkColors`
+
+## Spacing and Layout
+- Use consistent spacing scale from `theme.space`
+- Define breakpoints for responsive design in `theme.breakpoints`
+- Use theme metrics for consistent sizing: `theme.fontSizes`, `theme.lineHeights`
+
+## Component Theming
+- Store component-specific theme overrides in `src/theme/components/`
+- Use theme variants for component styling variations
+- Support size variants through theme configuration
+- Enable theme customization through extendTheme utility
+
+## Styling Best Practices
+```typescript
+// ✅ Good - Theme-aware styled component
+const StyledButton = styled.TouchableOpacity<{variant: string}>`
+  ${({theme, variant}) => css`
+    background-color: ${theme.colors[variant]};
+    padding: ${theme.space.md}px ${theme.space.lg}px;
+    border-radius: ${theme.radii.md}px;
+    
+    ${variant === 'outline' && css`
+      border: 1px solid ${theme.colors.border};
+      background-color: transparent;
+    `}
+  `}
+`
+
+// ✅ Good - Using theme hook
+const MyComponent = () => {
+  const {theme} = useTheme()
+  return (
+    <View style={{backgroundColor: theme.colors.background}}>
+      {/* content */}
+    </View>
+  )
+}
+
+// ❌ Bad - Hardcoded values
+const BadButton = styled.TouchableOpacity`
+  background-color: #007AFF;
+  padding: 12px 16px;
+  border-radius: 8px;
+`
+```
+
+## Theme Customization
+- Use extendTheme to customize default theme
+- Support partial theme overrides
+- Maintain backward compatibility when extending theme
+- Document theme customization in component README files
+
+## Color Mode Support
+- Test components in both light and dark modes
+- Use semantic color names that work in both modes
+- Provide color mode toggle functionality
+- Store color mode preference properly
+
+## Performance Considerations
+- Memoize theme-dependent calculations
+- Use theme context efficiently
+- Avoid recreating theme objects unnecessarily
+- Consider theme switching performance impact

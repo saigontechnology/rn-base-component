@@ -1,0 +1,61 @@
+---
+alwaysApply: true
+---
+# Development Workflow
+
+## Development Scripts
+Available scripts from [package.json](mdc:package.json):
+
+### Code Quality
+- `yarn lint` - Run all linting checks (ESLint, Prettier, TypeScript)
+- `yarn lint:fix` - Auto-fix linting issues
+- `yarn typecheck` - TypeScript type checking only
+- `yarn format` - Format code with Prettier
+
+### Testing
+- `yarn test` - Run Jest tests
+- `yarn update-test` - Update Jest snapshots
+- Coverage reports generated in `coverage/` directory
+
+### Building
+- `yarn prepack` - Build library for distribution using react-native-builder-bob
+- Outputs: `lib/commonjs/`, `lib/module/`, `lib/typescript/`
+- Build config in `react-native-builder-bob` section of package.json
+
+### Example App
+- `yarn example` - Navigate to example directory
+- `yarn bootstrap` - Set up development environment
+- Example app uses Expo for testing components
+
+## Git Workflow
+- Uses Husky for git hooks
+- Lint-staged for pre-commit formatting
+- Conventional commits with commitlint
+- Release process with release-it
+
+## Development Environment Setup
+1. `yarn install` - Install dependencies
+2. `yarn bootstrap` - Set up example app
+3. `yarn example ios` or `yarn example android` - Run example app
+
+## Code Quality Standards
+- ESLint with React Native configuration
+- Prettier for code formatting
+- Strict TypeScript configuration
+- 100% import/export consistency
+
+## Build Targets
+- CommonJS (`lib/commonjs/`) - for Node.js environments
+- ES Modules (`lib/module/`) - for modern bundlers
+- TypeScript definitions (`lib/typescript/`) - for type checking
+
+## Release Process
+- Uses release-it with conventional changelog
+- Automatic version bumping based on commit messages
+- GitHub releases with generated changelogs
+- NPM publishing with proper registry configuration
+
+## File Watching and Development
+- Use `yarn example start` for live development
+- Metro bundler for React Native hot reloading
+- TypeScript compilation in watch mode during development

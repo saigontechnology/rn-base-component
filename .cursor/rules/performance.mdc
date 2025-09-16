@@ -1,0 +1,160 @@
+---
+alwaysApply: true
+---
+# Performance Optimization Guidelines
+
+## React Performance Best Practices
+
+### Memoization
+- Use `React.memo()` for components that receive complex props
+- Use `useMemo()` for expensive calculations
+- Use `useCallback()` for event handlers passed to child components
+- Memoize theme-dependent style calculations
+
+```typescript
+// ✅ Good - Memoized component
+const ExpensiveComponent = React.memo<Props>(({data, onPress}) => {
+  const processedData = useMemo(() => 
+    data.map(item => complexTransformation(item)), [data]
+  )
+  
+  const handlePress = useCallback(() => {
+    onPress(processedData)
+  }, [onPress, processedData])
+  
+  return <View>{/* render */}</View>
+})
+
+// ✅ Good - Memoized theme styles
+const useButtonStyles = (variant: string) => {
+  const {theme} = useTheme()
+  
+  return useMemo(() => ({
+    backgroundColor: theme.colors[variant],
+    padding: theme.space.md,
+    borderRadius: theme.radii.md,
+  }), [theme, variant])
+}
+```
+
+### Styled Components Performance
+- Minimize styled component re-renders
+- Use stable references for theme props
+- Avoid creating styled components inside render functions
+- Use CSS helper for complex conditional styling
+
+```typescript
+// ✅ Good - Stable styled component
+const StyledButton = styled.TouchableOpacity<{variant: string}>`
+  ${({theme, variant}) => css`
+    background-color: ${theme.colors[variant]};
+    /* other styles */
+  `}
+`
+
+// ❌ Bad - Creating styled component in render
+const MyComponent = () => {
+  const StyledView = styled.View`/* styles */` // Don't do this
+  return <StyledView />
+}
+```
+
+## Animation Performance
+- Use react-native-reanimated for smooth animations
+- Prefer transform animations over layout changes
+- Use native driver when possible
+- Avoid animating expensive properties
+
+```typescript
+// ✅ Good - Performant animation
+const animatedStyle = useAnimatedStyle(() => {
+  return {
+    transform: [
+      {translateX: withSpring(translateX.value)},
+      {scale: withTiming(scale.value)},
+    ],
+  }
+})
+
+// ❌ Bad - Layout-thrashing animation
+const badStyle = {
+  left: animatedValue, // Causes layout recalculation
+  width: animatedWidth, // Expensive property to animate
+}
+```
+
+## Bundle Size Optimization
+- Use tree-shaking friendly exports
+- Avoid importing entire libraries
+- Lazy load heavy components when appropriate
+- Keep component dependencies minimal
+
+```typescript
+// ✅ Good - Specific imports
+import {debounce} from 'lodash/debounce'
+import {Platform} from 'react-native'
+
+// ❌ Bad - Full library import
+import _ from 'lodash'
+import * as RN from 'react-native'
+```
+
+## Memory Management
+- Clean up subscriptions and listeners in useEffect cleanup
+- Avoid memory leaks in async operations
+- Use weak references where appropriate
+- Clean up timers and intervals
+
+```typescript
+// ✅ Good - Proper cleanup
+useEffect(() => {
+  const subscription = someListener.subscribe(callback)
+  const timer = setTimeout(delayedAction, 1000)
+  
+  return () => {
+    subscription.unsubscribe()
+    clearTimeout(timer)
+  }
+}, [])
+```
+
+## Rendering Optimization
+- Use FlatList for large lists with proper keyExtractor
+- Implement getItemLayout when possible for FlatList
+- Use windowSize and initialNumToRender appropriately
+- Avoid nested ScrollViews
+
+## Theme and Context Performance
+- Minimize theme context re-renders
+- Use selector patterns for complex theme objects
+- Memoize theme-dependent calculations
+- Avoid creating new objects in theme provider
+
+```typescript
+// ✅ Good - Memoized theme provider
+const BaseProvider = ({children, theme}) => {
+  const contextValue = useMemo(() => ({
+    theme,
+    colorMode: colorModeValue,
+    toggleColorMode,
+  }), [theme, colorModeValue, toggleColorMode])
+  
+  return (
+    <BaseContext.Provider value={contextValue}>
+      {children}
+    </BaseContext.Provider>
+  )
+}
+```
+
+## Image and Asset Optimization
+- Use appropriate image formats and sizes
+- Implement lazy loading for images
+- Use cached images for network resources
+- Optimize SVG assets and icons
+
+## Development vs Production
+- Use React DevTools Profiler during development
+- Measure performance with appropriate tools
+- Test on lower-end devices
+- Use production builds for performance testing
