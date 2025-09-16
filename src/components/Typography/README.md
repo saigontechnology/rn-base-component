@@ -1,15 +1,15 @@
 # Typography Component
 
-A comprehensive typography system component that provides consistent text styling with predefined variants for building hierarchical text layouts in React Native applications.
+A flexible and consistent typography component for React Native applications that provides standardized text styling with built-in design system integration.
 
 ## Features
 
-- 📐 **Typography Scale** - Predefined text variants (h1, h2, regular, bold)
-- 🎨 **Consistent Styling** - Standardized font sizes, weights, and line heights
-- 🎯 **Easy to Use** - Simple variant-based API for quick implementation
-- 🔧 **Flexible** - Supports custom colors and additional styling
-- ♿ **Accessible** - Built-in text accessibility features
-- 🎪 **TypeScript Ready** - Full type definitions and IntelliSense support
+- 🎨 **Predefined Variants** - H1, H2, Regular, and Bold typography styles
+- 🎯 **Theme Integration** - Seamlessly integrates with the design system
+- 🔧 **Customizable** - Override colors, styles, and variants as needed
+- 📱 **Responsive** - Consistent text rendering across different screen sizes
+- ♿ **Accessibility Ready** - Built-in accessibility features
+- 🎪 **Flexible Styling** - Supports all React Native Text properties
 
 ## Installation
 
@@ -26,44 +26,41 @@ import React from 'react'
 import {Typography} from 'rn-base-component'
 
 export default function App() {
-  return <Typography variant="h1">Welcome to our app</Typography>
+  return (
+    <View>
+      <Typography variant="h1">Main Heading</Typography>
+      <Typography variant="h2">Sub Heading</Typography>
+      <Typography variant="regular">Regular body text</Typography>
+      <Typography variant="bold">Bold text</Typography>
+    </View>
+  )
 }
 ```
 
 ## Typography Variants
 
-### Heading 1 (h1)
+### Heading 1 (H1)
 
 ```tsx
-<Typography variant="h1">Large Heading</Typography>
-// Font size: 28, Weight: 700, Line height: 32
+<Typography variant="h1">Page Title or Main Heading</Typography>
 ```
 
-### Heading 2 (h2)
+### Heading 2 (H2)
 
 ```tsx
-<Typography variant="h2">Medium Heading</Typography>
-// Font size: 24, Weight: 700, Line height: 28
+<Typography variant="h2">Section Heading or Subtitle</Typography>
 ```
 
 ### Regular Text
 
 ```tsx
-<Typography variant="regular">Regular body text</Typography>
-// Font size: 16, Weight: 400, Line height: 24
+<Typography variant="regular">This is regular body text for paragraphs and general content.</Typography>
 ```
 
 ### Bold Text
 
 ```tsx
-<Typography variant="bold">Bold body text</Typography>
-// Font size: 16, Weight: bold, Line height: 24
-```
-
-### Default (Regular)
-
-```tsx
-<Typography>Default text (same as regular variant)</Typography>
+<Typography variant="bold">This text is bold for emphasis and highlights.</Typography>
 ```
 
 ## Advanced Usage
@@ -72,46 +69,52 @@ export default function App() {
 
 ```tsx
 <Typography variant="h1" color="#FF6B6B">
-  Red Heading
+  Colored Heading
 </Typography>
 
 <Typography variant="regular" color="#666666">
-  Gray body text
+  Muted text content
 </Typography>
 ```
 
-### With Additional Styling
+### Custom Styling
 
 ```tsx
-;<Typography variant="h2" color="#2196F3" style={styles.styledHeading}>
-  Styled Heading
+;<Typography variant="h2" style={styles.customHeading} numberOfLines={2} ellipsizeMode="tail">
+  Custom styled heading with truncation
 </Typography>
 
 const styles = StyleSheet.create({
-  styledHeading: {
+  customHeading: {
     textAlign: 'center',
-    marginBottom: 20,
+    marginVertical: 20,
     textDecorationLine: 'underline',
   },
 })
 ```
 
-### Combining with React Native Text Props
+### Responsive Typography
 
 ```tsx
-<Typography variant="regular" numberOfLines={3} ellipsizeMode="tail" selectable>
-  This is a long text that will be truncated after three lines and can be selected by the user.
-</Typography>
+const ResponsiveText = ({isLargeScreen}) => (
+  <Typography
+    variant={isLargeScreen ? 'h1' : 'h2'}
+    style={isLargeScreen ? styles.largeText : styles.normalText}>
+    Responsive Typography
+  </Typography>
+)
 ```
 
 ## API Reference
 
 ### TypographyProps
 
-| Prop      | Type                | Default                 | Description                 |
-| --------- | ------------------- | ----------------------- | --------------------------- |
-| `variant` | `TypographyVariant` | `'regular'`             | Typography variant to apply |
-| `color`   | `string`            | `theme.colors.darkText` | Text color                  |
+| Prop      | Type                   | Default     | Description                                  |
+| --------- | ---------------------- | ----------- | -------------------------------------------- |
+| `variant` | `TypographyVariant`    | Theme       | Typography variant (overrides theme default) |
+| `color`   | `string`               | Theme       | Text color (overrides theme default)         |
+| `style`   | `StyleProp<TextStyle>` | `undefined` | Custom styles for the text                   |
+| `...rest` | `TextProps`            | -           | All other React Native Text props            |
 
 ### TypographyVariant
 
@@ -119,76 +122,49 @@ const styles = StyleSheet.create({
 type TypographyVariant = 'h1' | 'h2' | 'regular' | 'bold'
 ```
 
-### Typography Variant Styles
-
-| Variant   | Font Size | Font Weight | Line Height |
-| --------- | --------- | ----------- | ----------- |
-| `h1`      | 28        | 700         | 32          |
-| `h2`      | 24        | 700         | 28          |
-| `regular` | 16        | 400         | 24          |
-| `bold`    | 16        | bold        | 24          |
-
-### Inherited Props
-
-The Typography component also accepts all props from React Native's `TextProps`:
-
-- `style` - Additional styling
-- `numberOfLines` - Limit number of lines
-- `ellipsizeMode` - Text truncation behavior
-- `selectable` - Allow text selection
-- `testID` - Testing identifier
-- And all other React Native Text props
-
-## Layout Examples
+## Usage Patterns
 
 ### Article Layout
 
 ```tsx
-;<View style={styles.articleContainer}>
-  <Typography variant="h1" style={styles.articleTitle}>
-    Article Title
-  </Typography>
+const ArticleLayout = ({article}) => (
+  <ScrollView style={styles.container}>
+    <Typography variant="h1" style={styles.title}>
+      {article.title}
+    </Typography>
 
-  <Typography variant="regular" color="#666666" style={styles.publishDate}>
-    Published on March 15, 2024
-  </Typography>
+    <Typography variant="regular" color="#666" style={styles.meta}>
+      By {article.author} • {article.date}
+    </Typography>
 
-  <Typography variant="h2" style={styles.sectionTitle}>
-    Introduction
-  </Typography>
+    <Typography variant="h2" style={styles.subtitle}>
+      {article.subtitle}
+    </Typography>
 
-  <Typography variant="regular" style={styles.introText}>
-    This is the introduction paragraph of the article. It provides context and overview of what the reader can
-    expect to learn.
-  </Typography>
-
-  <Typography variant="bold" style={styles.keyPointsTitle}>
-    Key Points:
-  </Typography>
-
-  <Typography variant="regular">• Point one with important information</Typography>
-  <Typography variant="regular">• Point two with additional details</Typography>
-</View>
+    {article.content.split('\n').map((paragraph, index) => (
+      <Typography key={index} variant="regular" style={styles.paragraph}>
+        {paragraph}
+      </Typography>
+    ))}
+  </ScrollView>
+)
 
 const styles = StyleSheet.create({
-  articleContainer: {
-    padding: 16,
+  container: {
+    padding: 20,
   },
-  articleTitle: {
+  title: {
     marginBottom: 8,
   },
-  publishDate: {
+  meta: {
+    marginBottom: 20,
+  },
+  subtitle: {
+    marginVertical: 16,
+  },
+  paragraph: {
     marginBottom: 16,
-  },
-  sectionTitle: {
-    marginBottom: 12,
-  },
-  introText: {
-    marginBottom: 16,
-    lineHeight: 26,
-  },
-  keyPointsTitle: {
-    marginBottom: 8,
+    lineHeight: 24,
   },
 })
 ```
@@ -196,196 +172,82 @@ const styles = StyleSheet.create({
 ### Card Content
 
 ```tsx
-;<View style={styles.card}>
-  <Typography variant="h2" style={styles.cardTitle}>
-    Card Title
-  </Typography>
+const ProductCard = ({product}) => (
+  <View style={styles.card}>
+    <Typography variant="bold" style={styles.productName}>
+      {product.name}
+    </Typography>
 
-  <Typography variant="regular" color="#666666" style={styles.cardDescription}>
-    Card description with supporting information
-  </Typography>
+    <Typography variant="regular" color="#666" style={styles.description}>
+      {product.description}
+    </Typography>
 
-  <Typography variant="bold" color="#007AFF">
-    Learn More →
-  </Typography>
-</View>
+    <Typography variant="h2" color="#007AFF" style={styles.price}>
+      ${product.price}
+    </Typography>
+
+    <Typography variant="regular" color="#FF6B6B">
+      {product.stock > 0 ? 'In Stock' : 'Out of Stock'}
+    </Typography>
+  </View>
+)
 
 const styles = StyleSheet.create({
   card: {
     padding: 16,
     backgroundColor: 'white',
     borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    margin: 8,
   },
-  cardTitle: {
+  productName: {
     marginBottom: 8,
   },
-  cardDescription: {
+  description: {
     marginBottom: 12,
   },
+  price: {
+    marginBottom: 8,
+  },
 })
 ```
 
-### Form Section
+### Form Labels and Messages
 
 ```tsx
-;<View style={styles.formSection}>
-  <Typography variant="h2" style={styles.formTitle}>
-    Personal Information
-  </Typography>
+const FormField = ({label, error, required}) => (
+  <View style={styles.fieldContainer}>
+    <Typography variant="bold" style={styles.label}>
+      {label}
+      {required && <Typography color="#FF6B6B"> *</Typography>}
+    </Typography>
 
-  <Typography variant="bold" style={styles.fieldLabel}>
-    Full Name *
-  </Typography>
-  <TextInput placeholder="Enter your full name" />
+    <TextInput style={styles.input} />
 
-  <Typography variant="bold" style={styles.fieldLabelWithMargin}>
-    Email Address *
-  </Typography>
-  <TextInput placeholder="Enter your email" />
-</View>
+    {error && (
+      <Typography variant="regular" color="#FF6B6B" style={styles.error}>
+        {error}
+      </Typography>
+    )}
+  </View>
+)
 
 const styles = StyleSheet.create({
-  formSection: {
-    padding: 16,
-  },
-  formTitle: {
+  fieldContainer: {
     marginBottom: 16,
   },
-  fieldLabel: {
+  label: {
     marginBottom: 4,
   },
-  fieldLabelWithMargin: {
-    marginTop: 16,
-    marginBottom: 4,
-  },
-})
-```
-
-## Color Guidelines
-
-### Semantic Colors
-
-```tsx
-// Primary content
-<Typography color="#333333">Primary text content</Typography>
-
-// Secondary content
-<Typography color="#666666">Secondary information</Typography>
-
-// Tertiary content
-<Typography color="#999999">Helper text or captions</Typography>
-
-// Status colors
-<Typography color="#00AA00">Success message</Typography>
-<Typography color="#FF0000">Error message</Typography>
-<Typography color="#FF9500">Warning message</Typography>
-<Typography color="#007AFF">Link or action text</Typography>
-```
-
-## Theme Integration
-
-The Typography component uses predefined styles but can be customized through the theme:
-
-```tsx
-// Custom typography styles (modify in Typography.tsx)
-export const typographyVariantStyles = {
-  h1: {
-    fontSize: 32, // Larger heading
-    fontWeight: '800', // Extra bold
-    lineHeight: 36,
-  },
-  h2: {
-    fontSize: 26, // Adjusted medium heading
-    fontWeight: '600', // Semi-bold
-    lineHeight: 30,
-  },
-  regular: {
+  input: {
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 4,
+    padding: 12,
     fontSize: 16,
-    fontWeight: '400',
-    lineHeight: 24,
   },
-  bold: {
-    fontSize: 16,
-    fontWeight: '700', // Explicit weight
-    lineHeight: 24,
-  },
-}
-```
-
-## Accessibility Features
-
-### Semantic Headers
-
-```tsx
-<Typography
-  variant="h1"
-  accessibilityRole="header"
-  accessibilityLevel={1}>
-  Main Page Title
-</Typography>
-
-<Typography
-  variant="h2"
-  accessibilityRole="header"
-  accessibilityLevel={2}>
-  Section Title
-</Typography>
-```
-
-### Screen Reader Support
-
-```tsx
-<Typography variant="regular" accessibilityLabel="Welcome message for new users">
-  Welcome! Let's get started.
-</Typography>
-```
-
-## Best Practices
-
-1. **Hierarchy** - Use variants consistently to create clear visual hierarchy
-2. **Contrast** - Ensure sufficient color contrast (4.5:1 for normal text, 3:1 for large text)
-3. **Line Height** - Default line heights provide good readability
-4. **Spacing** - Add appropriate margins between typography elements
-5. **Consistency** - Stick to the predefined variants for consistency
-6. **Performance** - Typography component is optimized for minimal re-renders
-
-## Common Use Cases
-
-### Navigation Headers
-
-```tsx
-;<Typography variant="h1" style={styles.navigationHeader}>
-  Settings
-</Typography>
-
-const styles = StyleSheet.create({
-  navigationHeader: {
-    textAlign: 'center',
-  },
-})
-```
-
-### List Items
-
-```tsx
-;<View style={styles.listItem}>
-  <Typography variant="bold">John Doe</Typography>
-  <Typography variant="regular" color="#666666">
-    Software Engineer
-  </Typography>
-</View>
-
-const styles = StyleSheet.create({
-  listItem: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
+  error: {
+    marginTop: 4,
+    fontSize: 14,
   },
 })
 ```
@@ -393,21 +255,245 @@ const styles = StyleSheet.create({
 ### Status Messages
 
 ```tsx
-<Typography variant="bold" color="#00AA00">
-  ✓ Profile updated successfully
+const StatusMessage = ({type, message}) => {
+  const getColor = () => {
+    switch (type) {
+      case 'success':
+        return '#4CAF50'
+      case 'warning':
+        return '#FF9800'
+      case 'error':
+        return '#F44336'
+      default:
+        return '#666666'
+    }
+  }
+
+  return (
+    <View style={[styles.statusContainer, {borderLeftColor: getColor()}]}>
+      <Typography variant="bold" color={getColor()}>
+        {type.toUpperCase()}
+      </Typography>
+      <Typography variant="regular" style={styles.statusMessage}>
+        {message}
+      </Typography>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  statusContainer: {
+    padding: 12,
+    backgroundColor: '#F8F9FA',
+    borderLeftWidth: 4,
+    marginVertical: 8,
+  },
+  statusMessage: {
+    marginTop: 4,
+  },
+})
+```
+
+## Theme Integration
+
+The Typography component integrates with the theme system and can be customized via theme configuration:
+
+### Theme Configuration
+
+```tsx
+import {extendTheme} from 'rn-base-component'
+
+const customTheme = extendTheme({
+  components: {
+    Typography: {
+      color: '#2D3748', // Default text color
+      variant: 'regular', // Default variant
+      variantStyles: {
+        // Custom variant styles
+        h1: {
+          fontSize: 32,
+          fontWeight: '700',
+          lineHeight: 40,
+        },
+        h2: {
+          fontSize: 28,
+          fontWeight: '700',
+          lineHeight: 34,
+        },
+        regular: {
+          fontSize: 16,
+          fontWeight: '400',
+          lineHeight: 24,
+        },
+        bold: {
+          fontSize: 16,
+          fontWeight: 'bold',
+          lineHeight: 24,
+        },
+      },
+    },
+  },
+})
+```
+
+### Using Theme Values
+
+```tsx
+// Uses theme defaults
+<Typography>Default styled text</Typography>
+
+// Override specific theme values
+<Typography
+  variant="h1"
+  color="#FF6B6B"
+  style={{textAlign: 'center'}}
+>
+  Custom colored heading
 </Typography>
 ```
 
-### Captions and Labels
+### Default Theme Values
 
 ```tsx
-;<Typography variant="regular" color="#999999" style={styles.caption}>
-  Last updated 2 hours ago
+// Default Typography theme configuration
+TypographyTheme: {
+  color: '#27272a',          // base.colors.darkText
+  variant: 'regular',        // Default variant
+  variantStyles: {
+    h1: {
+      fontSize: 28,
+      fontWeight: '700',
+      lineHeight: 32,
+    },
+    h2: {
+      fontSize: 24,
+      fontWeight: '700',
+      lineHeight: 28,
+    },
+    regular: {
+      fontSize: 16,
+      fontWeight: '400',
+      lineHeight: 24,
+    },
+    bold: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      lineHeight: 24,
+    },
+  }
+}
+```
+
+## Typography Scale
+
+### Font Size Guidelines
+
+- **H1**: 28px - Page titles, main headings
+- **H2**: 24px - Section headings, subtitles
+- **Regular**: 16px - Body text, paragraphs
+- **Bold**: 16px - Emphasized body text
+
+### Line Height Recommendations
+
+- **H1**: 32px (1.14x) - Tight spacing for headings
+- **H2**: 28px (1.17x) - Balanced heading spacing
+- **Regular**: 24px (1.5x) - Comfortable reading spacing
+- **Bold**: 24px (1.5x) - Consistent with regular text
+
+## Accessibility
+
+### Screen Reader Support
+
+```tsx
+<Typography
+  variant="h1"
+  accessibilityRole="header"
+  accessibilityLevel={1}
+>
+  Main Page Title
 </Typography>
 
+<Typography
+  variant="h2"
+  accessibilityRole="header"
+  accessibilityLevel={2}
+>
+  Section Heading
+</Typography>
+```
+
+### Semantic HTML Equivalents
+
+```tsx
+// For important announcements
+<Typography
+  variant="bold"
+  accessibilityLiveRegion="polite"
+  accessibilityRole="alert"
+>
+  Form submitted successfully!
+</Typography>
+
+// For descriptive text
+<Typography
+  variant="regular"
+  accessibilityRole="text"
+>
+  Detailed description text
+</Typography>
+```
+
+## Best Practices
+
+1. **Consistent Hierarchy** - Use heading variants in proper order (H1, then H2)
+2. **Readable Contrast** - Ensure sufficient color contrast for accessibility
+3. **Appropriate Line Heights** - Use recommended line heights for readability
+4. **Semantic Usage** - Use appropriate variants for their intended purpose
+5. **Custom Styling** - Use the `style` prop for layout-specific adjustments
+6. **Theme Integration** - Leverage theme values for consistent design
+
+## Advanced Patterns
+
+### Conditional Typography
+
+```tsx
+const ConditionalText = ({condition, children}) => (
+  <Typography variant={condition ? 'bold' : 'regular'} color={condition ? '#007AFF' : '#666666'}>
+    {children}
+  </Typography>
+)
+```
+
+### Truncated Text
+
+```tsx
+const TruncatedHeading = ({text, maxLines = 2}) => (
+  <Typography variant="h2" numberOfLines={maxLines} ellipsizeMode="tail" style={styles.truncated}>
+    {text}
+  </Typography>
+)
+
 const styles = StyleSheet.create({
-  caption: {
-    fontSize: 12,
+  truncated: {
+    width: '100%',
+  },
+})
+```
+
+### Interactive Typography
+
+```tsx
+const InteractiveText = ({onPress, children}) => (
+  <TouchableOpacity onPress={onPress}>
+    <Typography variant="bold" color="#007AFF" style={styles.interactive}>
+      {children}
+    </Typography>
+  </TouchableOpacity>
+)
+
+const styles = StyleSheet.create({
+  interactive: {
+    textDecorationLine: 'underline',
   },
 })
 ```
@@ -416,22 +502,26 @@ const styles = StyleSheet.create({
 
 ### Common Issues
 
-**Text not displaying with correct variant**
+**Text not showing theme styles**
 
-- Check that the variant prop is spelled correctly
-- Verify the variant exists in `typographyVariantStyles`
+- Ensure the component is wrapped in a theme provider
+- Check that theme configuration is properly applied
+- Verify variant name is spelled correctly
 
-**Custom colors not applying**
+**Custom styles not applying**
 
-- Ensure the color prop is a valid color string
-- Check if parent styles are overriding the color
+- Check style object syntax and properties
+- Ensure custom styles don't conflict with variant styles
+- Use array syntax for multiple style objects
 
-**Line height issues**
+**Accessibility warnings**
 
-- Default line heights are optimized for readability
-- Adjust line height in style prop if needed for specific layouts
+- Provide appropriate accessibility roles for headings
+- Use semantic variants for their intended purpose
+- Ensure color contrast meets accessibility standards
 
-**Font weight not showing**
+**Performance issues with large text blocks**
 
-- Some platforms may not support all font weights
-- Ensure the font family supports the specified weight
+- Consider using React Native's Text component directly for very large texts
+- Use `numberOfLines` prop to limit rendering for long content
+- Implement virtualization for very long lists of text content

@@ -8,7 +8,8 @@ import type {
   Insets,
 } from 'react-native'
 import {Image, StyleSheet, TouchableOpacity} from 'react-native'
-import {metrics, hitSlop as defaultHitSlop} from '../../helpers/metrics'
+import {hitSlop as defaultHitSlop} from '../../helpers/metrics'
+import {useTheme} from '../../hooks'
 
 export type IconProps = {
   source: ImageSourcePropType
@@ -26,36 +27,40 @@ export type IconProps = {
 
 export const Icon: React.FunctionComponent<IconProps> = ({
   source,
-  size = metrics.medium,
-  disabled = false,
+  size,
+  disabled,
   color,
   hitSlop = defaultHitSlop,
   style,
-  resizeMode = 'contain',
+  resizeMode,
   testID,
   onPress,
   onLongPress,
   buttonStyle,
-}) => (
-  <TouchableOpacity
-    testID={testID}
-    disabled={(!onPress && !onLongPress) || disabled}
-    onPress={onPress}
-    onLongPress={onLongPress}
-    style={buttonStyle}
-    hitSlop={hitSlop}>
-    <Image
-      testID="icon-image"
-      source={source}
-      style={[
-        {
-          width: size,
-          height: size,
-          tintColor: color,
-        },
-        StyleSheet.flatten(style),
-      ]}
-      resizeMode={resizeMode}
-    />
-  </TouchableOpacity>
-)
+}) => {
+  const IconTheme = useTheme().components.Icon
+
+  return (
+    <TouchableOpacity
+      testID={testID}
+      disabled={(!onPress && !onLongPress) || (disabled ?? IconTheme.disabled)}
+      onPress={onPress}
+      onLongPress={onLongPress}
+      style={buttonStyle ?? IconTheme.buttonStyle}
+      hitSlop={hitSlop}>
+      <Image
+        testID="icon-image"
+        source={source}
+        style={[
+          {
+            width: size ?? IconTheme.size,
+            height: size ?? IconTheme.size,
+            tintColor: color ?? IconTheme.color,
+          },
+          StyleSheet.flatten(style ?? IconTheme.style),
+        ]}
+        resizeMode={resizeMode ?? IconTheme.resizeMode}
+      />
+    </TouchableOpacity>
+  )
+}

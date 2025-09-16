@@ -1,15 +1,16 @@
 # RadioButton Component
 
-A customizable and animated radio button component for React Native applications with built-in label support and smooth touch interactions.
+A customizable radio button component for React Native applications with smooth animations, flexible styling, and comprehensive form integration capabilities.
 
 ## Features
 
-- 🎯 **Single Selection** - Perfect for mutually exclusive options
-- 🎨 **Highly Customizable** - Full control over colors, sizes, and styling
-- 📝 **Label Support** - Built-in text label with custom styling options
-- 🎪 **Smooth Animations** - Bounce effects and responsive interactions
-- 🔧 **Flexible State** - Controlled and uncontrolled modes
-- ♿ **Accessibility Ready** - Screen reader support and proper semantics
+- 🎨 **Customizable Styling** - Configurable sizes, colors, and visual states
+- ⚡ **Smooth Animations** - Bounce effects and state transitions
+- 🏷️ **Label Support** - Built-in text labels with custom styling
+- 🎯 **Theme Integration** - Seamlessly integrates with the design system
+- 📱 **Touch Optimized** - Responsive touch interactions with proper feedback
+- ♿ **Accessibility Ready** - Full accessibility support for screen readers
+- 🔧 **Flexible State Management** - Controlled and uncontrolled modes
 
 ## Installation
 
@@ -22,108 +23,79 @@ yarn add rn-base-component
 ## Basic Usage
 
 ```tsx
-import React from 'react'
+import React, {useState} from 'react'
 import {RadioButton} from 'rn-base-component'
 
 export default function App() {
-  return <RadioButton label="Option 1" onPressButton={isActive => console.log('Selected:', isActive)} />
+  const [selected, setSelected] = useState(false)
+
+  return <RadioButton label="Accept terms and conditions" value={selected} onPressButton={setSelected} />
 }
 ```
 
-## Radio Button Group
+## Advanced Usage
+
+### Radio Button Group
 
 ```tsx
-import React, {useState} from 'react'
-import {View} from 'react-native'
-import {RadioButton} from 'rn-base-component'
-
-export default function RadioGroup() {
-  const [selectedValue, setSelectedValue] = useState('option1')
+const RadioGroup = () => {
+  const [selectedOption, setSelectedOption] = useState('option1')
 
   const options = [
-    {value: 'option1', label: 'Option 1'},
-    {value: 'option2', label: 'Option 2'},
-    {value: 'option3', label: 'Option 3'},
+    {id: 'option1', label: 'Option 1'},
+    {id: 'option2', label: 'Option 2'},
+    {id: 'option3', label: 'Option 3'},
   ]
 
   return (
     <View>
       {options.map(option => (
         <RadioButton
-          key={option.value}
+          key={option.id}
           label={option.label}
-          value={selectedValue === option.value}
-          onPressButton={() => setSelectedValue(option.value)}
-          style={{marginBottom: 12}}
+          value={selectedOption === option.id}
+          onPressButton={() => setSelectedOption(option.id)}
+          wrapperStyle={styles.radioOption}
         />
       ))}
     </View>
   )
 }
-```
 
-## Advanced Usage
+const styles = StyleSheet.create({
+  radioOption: {
+    marginVertical: 8,
+  },
+})
+```
 
 ### Custom Styling
 
 ```tsx
-<RadioButton
-  label="Custom styled radio button"
-  outerSize={50}
-  innerSize={30}
-  ringColor="#007AFF"
-  innerBackgroundColor="#007AFF"
-  onPressButton={handlePress}
-/>
-```
-
-### Controlled Component
-
-```tsx
-import React, {useState} from 'react'
-
-export default function ControlledRadio() {
-  const [isSelected, setIsSelected] = useState(false)
-
-  return (
-    <RadioButton
-      label="Controlled radio button"
-      value={isSelected}
-      onPressButton={() => setIsSelected(!isSelected)}
-    />
-  )
-}
-```
-
-### Custom Text Component
-
-```tsx
 ;<RadioButton
-  textComponent={
-    <View style={styles.customTextContainer}>
-      <Text style={styles.planTitle}>Premium Plan</Text>
-      <Text style={styles.planPrice}>$19.99/month</Text>
-      <Text style={styles.planDescription}>Best value for teams</Text>
-    </View>
-  }
-  onPressButton={handlePress}
+  label="Custom styled radio"
+  outerSize={60}
+  innerSize={30}
+  ringColor="#FF6B6B"
+  innerBackgroundColor="#FF6B6B"
+  style={styles.customRadio}
+  textStyle={styles.customText}
+  wrapperStyle={styles.customWrapper}
 />
 
 const styles = StyleSheet.create({
-  customTextContainer: {
-    marginLeft: 12,
+  customRadio: {
+    borderWidth: 3,
   },
-  planTitle: {
+  customText: {
+    fontSize: 18,
     fontWeight: 'bold',
-    fontSize: 16,
+    color: '#333',
   },
-  planPrice: {
-    color: '#666',
-    fontSize: 14,
-  },
-  planDescription: {
-    color: '#999',
-    fontSize: 12,
+  customWrapper: {
+    padding: 12,
+    backgroundColor: '#F8F9FA',
+    borderRadius: 8,
   },
 })
 ```
@@ -131,343 +103,323 @@ const styles = StyleSheet.create({
 ### Disabled State
 
 ```tsx
-<RadioButton label="Disabled option" disabled disableOpacity={0.3} onPressButton={handlePress} />
+<RadioButton label="Disabled option" disabled={true} disableOpacity={0.3} value={false} />
 ```
 
-### Different Sizes
+### Form Integration
 
 ```tsx
-;<View style={styles.sizeContainer}>
-  <RadioButton label="Small" outerSize={35} innerSize={20} onPressButton={handlePress} />
+const SubscriptionForm = () => {
+  const [plan, setPlan] = useState('')
 
-  <RadioButton label="Medium (Default)" onPressButton={handlePress} />
+  const plans = [
+    {id: 'basic', name: 'Basic Plan', price: '$9.99/month'},
+    {id: 'premium', name: 'Premium Plan', price: '$19.99/month'},
+    {id: 'enterprise', name: 'Enterprise Plan', price: '$49.99/month'},
+  ]
 
-  <RadioButton label="Large" outerSize={55} innerSize={35} onPressButton={handlePress} />
-</View>
+  return (
+    <View style={styles.formContainer}>
+      <Text style={styles.formTitle}>Choose Your Plan</Text>
+
+      {plans.map(planOption => (
+        <View key={planOption.id} style={styles.planOption}>
+          <RadioButton
+            value={plan === planOption.id}
+            onPressButton={() => setPlan(planOption.id)}
+            outerSize={40}
+            innerSize={20}
+            ringColor="#007AFF"
+            innerBackgroundColor="#007AFF"
+          />
+          <View style={styles.planDetails}>
+            <Text style={styles.planName}>{planOption.name}</Text>
+            <Text style={styles.planPrice}>{planOption.price}</Text>
+          </View>
+        </View>
+      ))}
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
-  sizeContainer: {
-    gap: 12,
+  formContainer: {
+    padding: 20,
+  },
+  formTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  planOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
+  planDetails: {
+    marginLeft: 15,
+    flex: 1,
+  },
+  planName: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  planPrice: {
+    color: '#666',
+    marginTop: 2,
   },
 })
 ```
 
 ## API Reference
 
-### IRadioButtonProps
+### RadioButtonProps
 
-| Prop                   | Type                          | Default                 | Description                          |
-| ---------------------- | ----------------------------- | ----------------------- | ------------------------------------ |
-| `wrapperStyle`         | `StyleProp<ViewStyle>`        | `undefined`             | Style for the wrapper container      |
-| `style`                | `StyleProp<ViewStyle>`        | `undefined`             | Style for the radio button ring      |
-| `outerSize`            | `number`                      | `45`                    | Size of the outer ring container     |
-| `innerSize`            | `number`                      | `25`                    | Size of the inner circle             |
-| `ringColor`            | `string`                      | `theme.colors.darkBlue` | Color of the outer ring              |
-| `innerContainerStyle`  | `StyleProp<ViewStyle>`        | `undefined`             | Style for the inner circle container |
-| `isRemainActive`       | `boolean`                     | `undefined`             | Override built-in state management   |
-| `initial`              | `boolean`                     | `undefined`             | Initial activation state             |
-| `innerBackgroundColor` | `string`                      | `theme.colors.darkBlue` | Color when active                    |
-| `onPressButton`        | `(isActive: boolean) => void` | `undefined`             | Press callback                       |
-| `textComponent`        | `React.ReactNode`             | `undefined`             | Custom text component                |
-| `textContainerStyle`   | `StyleProp<ViewStyle>`        | `undefined`             | Style for text container             |
-| `disabled`             | `boolean`                     | `undefined`             | Disable the radio button             |
-| `disableOpacity`       | `number`                      | `0.5`                   | Opacity when disabled                |
-| `textStyle`            | `StyleProp<TextStyle>`        | `undefined`             | Style for the text label             |
-| `label`                | `string`                      | `undefined`             | Text label content                   |
-| `value`                | `boolean`                     | `undefined`             | Controlled value state               |
+| Prop                   | Type                          | Default     | Description                                       |
+| ---------------------- | ----------------------------- | ----------- | ------------------------------------------------- |
+| `outerSize`            | `number`                      | Theme       | Size of the outer ring (overrides theme)          |
+| `innerSize`            | `number`                      | Theme       | Size of the inner circle (overrides theme)        |
+| `ringColor`            | `string`                      | Theme       | Color of the outer ring (overrides theme)         |
+| `innerBackgroundColor` | `string`                      | Theme       | Color of the inner circle when selected           |
+| `disabled`             | `boolean`                     | Theme       | Disable the radio button (overrides theme)        |
+| `disableOpacity`       | `number`                      | Theme       | Opacity when disabled (overrides theme)           |
+| `initial`              | `boolean`                     | Theme       | Initial selected state (overrides theme)          |
+| `value`                | `boolean`                     | `undefined` | Current selected state (controlled mode)          |
+| `onPressButton`        | `(isActive: boolean) => void` | `undefined` | Callback when pressed                             |
+| `label`                | `string`                      | `undefined` | Text label for the radio button                   |
+| `textComponent`        | `React.ReactNode`             | `undefined` | Custom text component                             |
+| `style`                | `StyleProp<ViewStyle>`        | Theme       | Style for the radio ring (overrides theme)        |
+| `wrapperStyle`         | `StyleProp<ViewStyle>`        | Theme       | Style for the wrapper container (overrides theme) |
+| `textStyle`            | `StyleProp<TextStyle>`        | Theme       | Style for the text label (overrides theme)        |
+| `textContainerStyle`   | `StyleProp<ViewStyle>`        | Theme       | Style for the text container (overrides theme)    |
+| `innerContainerStyle`  | `StyleProp<ViewStyle>`        | Theme       | Style for the inner circle container              |
 
-## Form Integration
+## Usage Patterns
 
-### Survey Form
+### Settings Options
 
 ```tsx
-import React, {useState} from 'react'
-import {View, Text} from 'react-native'
-import {RadioButton, Button} from 'rn-base-component'
-
-export default function SurveyForm() {
-  const [satisfaction, setSatisfaction] = useState('')
-  const [frequency, setFrequency] = useState('')
-
-  const satisfactionOptions = [
-    {value: 'very-satisfied', label: 'Very Satisfied'},
-    {value: 'satisfied', label: 'Satisfied'},
-    {value: 'neutral', label: 'Neutral'},
-    {value: 'dissatisfied', label: 'Dissatisfied'},
-  ]
-
-  const frequencyOptions = [
-    {value: 'daily', label: 'Daily'},
-    {value: 'weekly', label: 'Weekly'},
-    {value: 'monthly', label: 'Monthly'},
-    {value: 'rarely', label: 'Rarely'},
-  ]
+const SettingsOptions = () => {
+  const [theme, setTheme] = useState('light')
+  const [notifications, setNotifications] = useState(true)
 
   return (
-    <View style={styles.surveyContainer}>
-      <Text style={styles.sectionTitle}>How satisfied are you with our service?</Text>
+    <View style={styles.settingsContainer}>
+      <Text style={styles.sectionTitle}>Theme</Text>
+      <RadioButton
+        label="Light mode"
+        value={theme === 'light'}
+        onPressButton={() => setTheme('light')}
+        wrapperStyle={styles.settingItem}
+      />
+      <RadioButton
+        label="Dark mode"
+        value={theme === 'dark'}
+        onPressButton={() => setTheme('dark')}
+        wrapperStyle={styles.settingItem}
+      />
 
-      {satisfactionOptions.map(option => (
-        <RadioButton
-          key={option.value}
-          label={option.label}
-          value={satisfaction === option.value}
-          onPressButton={() => setSatisfaction(option.value)}
-          style={styles.radioButtonItem}
-        />
-      ))}
-
-      <Text style={[styles.sectionTitle, styles.secondSection]}>How often do you use our app?</Text>
-
-      {frequencyOptions.map(option => (
-        <RadioButton
-          key={option.value}
-          label={option.label}
-          value={frequency === option.value}
-          onPressButton={() => setFrequency(option.value)}
-          style={styles.radioButtonItem}
-        />
-      ))}
-
-      <Button
-        style={styles.submitButton}
-        disabled={!satisfaction || !frequency}
-        onPress={() => console.log({satisfaction, frequency})}>
-        Submit Survey
-      </Button>
+      <Text style={styles.sectionTitle}>Notifications</Text>
+      <RadioButton
+        label="Enable push notifications"
+        value={notifications}
+        onPressButton={setNotifications}
+        wrapperStyle={styles.settingItem}
+      />
     </View>
   )
-
-  const styles = StyleSheet.create({
-    surveyContainer: {
-      padding: 20,
-    },
-    sectionTitle: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      marginBottom: 16,
-    },
-    secondSection: {
-      marginTop: 24,
-    },
-    radioButtonItem: {
-      marginBottom: 8,
-    },
-    submitButton: {
-      marginTop: 32,
-    },
-  })
 }
+
+const styles = StyleSheet.create({
+  settingsContainer: {
+    padding: 20,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  settingItem: {
+    paddingVertical: 12,
+  },
+})
 ```
 
-### Settings Selection
+### Survey Questions
 
 ```tsx
-const [theme, setTheme] = useState('light')
-const [language, setLanguage] = useState('en')
-
-const themes = [
-  {value: 'light', label: 'Light Theme'},
-  {value: 'dark', label: 'Dark Theme'},
-  {value: 'auto', label: 'Auto (System)'},
-]
-
-return (
-  <View style={styles.themeContainer}>
-    <Text style={styles.sectionTitle}>Theme Preference</Text>
-    {themes.map(option => (
+const SurveyQuestion = ({question, options, value, onChange}) => (
+  <View style={styles.questionContainer}>
+    <Text style={styles.questionText}>{question}</Text>
+    {options.map((option, index) => (
       <RadioButton
-        key={option.value}
-        label={option.label}
-        value={theme === option.value}
-        onPressButton={() => setTheme(option.value)}
-        ringColor="#007AFF"
-        innerBackgroundColor="#007AFF"
-        style={styles.themeOption}
+        key={index}
+        label={option}
+        value={value === index}
+        onPressButton={() => onChange(index)}
+        wrapperStyle={styles.optionWrapper}
+        outerSize={35}
+        innerSize={18}
+        ringColor="#4CAF50"
+        innerBackgroundColor="#4CAF50"
       />
     ))}
   </View>
 )
 
 const styles = StyleSheet.create({
-  themeContainer: {
-    padding: 16,
+  questionContainer: {
+    marginBottom: 30,
   },
-  sectionTitle: {
+  questionText: {
     fontSize: 16,
     fontWeight: '600',
-    marginBottom: 12,
+    marginBottom: 15,
   },
-  themeOption: {
-    marginBottom: 12,
+  optionWrapper: {
+    marginVertical: 8,
+    paddingLeft: 10,
   },
 })
 ```
 
-## Styling Patterns
-
-### Payment Method Selection
+### Payment Methods
 
 ```tsx
-;<View style={styles.paymentContainer}>
-  <RadioButton
-    textComponent={
-      <View style={styles.paymentOption}>
-        <View style={styles.paymentInfo}>
-          <Icon name="credit-card" size={24} color="#333" />
-          <Text style={styles.paymentText}>Credit Card</Text>
-        </View>
-        <Text style={styles.paymentSubtext}>Visa ending in 1234</Text>
-      </View>
-    }
-    value={paymentMethod === 'card'}
-    onPressButton={() => setPaymentMethod('card')}
-  />
+const PaymentMethods = () => {
+  const [selectedMethod, setSelectedMethod] = useState('')
 
-  <RadioButton
-    textComponent={
-      <View style={styles.paymentOption}>
-        <View style={styles.paymentInfo}>
-          <Icon name="paypal" size={24} color="#0070ba" />
-          <Text style={styles.paymentText}>PayPal</Text>
+  const methods = [
+    {id: 'card', name: 'Credit Card', icon: '💳', details: '**** 1234'},
+    {id: 'paypal', name: 'PayPal', icon: '🅿️', details: 'user@example.com'},
+    {id: 'apple', name: 'Apple Pay', icon: '🍎', details: 'Touch ID'},
+  ]
+
+  return (
+    <View style={styles.paymentContainer}>
+      <Text style={styles.paymentTitle}>Payment Method</Text>
+
+      {methods.map(method => (
+        <View key={method.id} style={styles.paymentMethod}>
+          <RadioButton
+            value={selectedMethod === method.id}
+            onPressButton={() => setSelectedMethod(method.id)}
+            outerSize={45}
+            innerSize={25}
+            ringColor="#007AFF"
+            innerBackgroundColor="#007AFF"
+          />
+          <View style={styles.methodInfo}>
+            <Text style={styles.methodIcon}>{method.icon}</Text>
+            <View style={styles.methodDetails}>
+              <Text style={styles.methodName}>{method.name}</Text>
+              <Text style={styles.methodMeta}>{method.details}</Text>
+            </View>
+          </View>
         </View>
-        <Text style={styles.paymentSubtext}>user@example.com</Text>
-      </View>
-    }
-    value={paymentMethod === 'paypal'}
-    onPressButton={() => setPaymentMethod('paypal')}
-  />
-</View>
+      ))}
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   paymentContainer: {
-    padding: 16,
+    padding: 20,
   },
-  paymentOption: {
-    marginLeft: 12,
+  paymentTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
-  paymentInfo: {
+  paymentMethod: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
   },
-  paymentText: {
-    marginLeft: 8,
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  paymentSubtext: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 4,
-  },
-})
-```
-
-### Plan Selection
-
-```tsx
-;<View style={styles.planContainer}>
-  {plans.map(plan => (
-    <RadioButton
-      key={plan.id}
-      textComponent={
-        <View style={styles.planCard}>
-          <Text style={styles.planName}>{plan.name}</Text>
-          <Text style={styles.planPrice}>${plan.price}/month</Text>
-          <Text style={styles.planFeatures}>{plan.features.join(', ')}</Text>
-          {plan.recommended && (
-            <View style={styles.recommendedBadge}>
-              <Text style={styles.recommendedText}>Recommended</Text>
-            </View>
-          )}
-        </View>
-      }
-      value={selectedPlan === plan.id}
-      onPressButton={() => setSelectedPlan(plan.id)}
-      wrapperStyle={[styles.planWrapper, selectedPlan === plan.id && styles.selectedPlan]}
-    />
-  ))}
-</View>
-
-const styles = StyleSheet.create({
-  planContainer: {
-    padding: 16,
-  },
-  planCard: {
-    marginLeft: 12,
+  methodInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 15,
     flex: 1,
   },
-  planName: {
-    fontSize: 18,
-    fontWeight: 'bold',
+  methodIcon: {
+    fontSize: 24,
+    marginRight: 12,
   },
-  planPrice: {
+  methodDetails: {
+    flex: 1,
+  },
+  methodName: {
     fontSize: 16,
-    color: '#007AFF',
     fontWeight: '600',
-    marginTop: 4,
   },
-  planFeatures: {
-    fontSize: 14,
+  methodMeta: {
     color: '#666',
-    marginTop: 8,
-  },
-  recommendedBadge: {
-    backgroundColor: '#34C759',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-    alignSelf: 'flex-start',
-    marginTop: 8,
-  },
-  recommendedText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  planWrapper: {
-    marginBottom: 16,
-    padding: 16,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: '#E0E0E0',
-  },
-  selectedPlan: {
-    borderColor: '#007AFF',
-    backgroundColor: '#F0F8FF',
+    fontSize: 14,
+    marginTop: 2,
   },
 })
 ```
 
-### Compact List
+## Theme Integration
+
+The RadioButton component integrates with the theme system and can be customized via theme configuration:
+
+### Theme Configuration
 
 ```tsx
-;<View style={styles.compactList}>
-  {options.map(option => (
-    <RadioButton
-      key={option.value}
-      text={option.label}
-      value={selected === option.value}
-      onPressButton={() => setSelected(option.value)}
-      outerSize={35}
-      innerSize={20}
-      textStyle={styles.compactText}
-      style={styles.compactItem}
-    />
-  ))}
-</View>
+import {extendTheme} from 'rn-base-component'
 
-const styles = StyleSheet.create({
-  compactList: {
-    padding: 16,
-  },
-  compactText: {
-    fontSize: 14,
-  },
-  compactItem: {
-    marginBottom: 8,
+const customTheme = extendTheme({
+  components: {
+    RadioButton: {
+      outerSize: 50, // Custom outer ring size
+      innerSize: 28, // Custom inner circle size
+      ringColor: '#007AFF', // Custom ring color
+      innerBackgroundColor: '#007AFF', // Custom fill color
+      disabled: false, // Default enabled state
+      disableOpacity: 0.5, // Opacity when disabled
+      initial: false, // Default selection state
+      borderWidth: 2, // Ring border width
+    },
   },
 })
+```
+
+### Using Theme Values
+
+```tsx
+// Uses theme defaults
+<RadioButton label="Default styling" />
+
+// Override specific theme values
+<RadioButton
+  label="Custom styling"
+  outerSize={60}
+  ringColor="#FF6B6B"
+  innerBackgroundColor="#FF6B6B"
+/>
+```
+
+### Default Theme Values
+
+```tsx
+// Default RadioButton theme configuration
+RadioButtonTheme: {
+  outerSize: 45,                    // Default outer ring size
+  innerSize: 25,                    // Default inner circle size
+  ringColor: '#004282',             // base.colors.darkBlue
+  innerBackgroundColor: '#004282',  // base.colors.darkBlue
+  disabled: false,                  // Default enabled
+  disableOpacity: 0.5,              // Half opacity when disabled
+  initial: false,                   // Not selected by default
+  borderWidth: 1,                   // base.borderWidths.little
+}
 ```
 
 ## Accessibility
@@ -476,98 +428,137 @@ const styles = StyleSheet.create({
 
 ```tsx
 <RadioButton
-  label="Accessible option"
-  accessibilityLabel="Select payment method: Credit Card"
-  accessibilityHint="Choose this option to pay with credit card"
+  label="Option 1"
+  accessibilityLabel="First option in the list"
+  accessibilityHint="Tap to select this option"
   accessibilityRole="radio"
-  onPressButton={handlePress}
+  accessibilityState={{selected: isSelected}}
 />
 ```
 
-### Grouped Radio Buttons
+### Radio Button Groups
 
 ```tsx
-<View accessibilityRole="radiogroup" accessibilityLabel="Theme selection">
-  {themes.map(theme => (
+// For radio button groups, use proper labeling
+<View accessibilityRole="radiogroup" accessibilityLabel="Choose your plan">
+  {plans.map(plan => (
     <RadioButton
-      key={theme.value}
-      label={theme.label}
-      value={selectedTheme === theme.value}
-      accessibilityRole="radio"
-      accessibilityState={{selected: selectedTheme === theme.value}}
-      onPressButton={() => setSelectedTheme(theme.value)}
+      key={plan.id}
+      label={plan.name}
+      accessibilityState={{selected: selectedPlan === plan.id}}
+      onPressButton={() => setSelectedPlan(plan.id)}
     />
   ))}
 </View>
 ```
 
-## Animation Customization
+## Animation and Feedback
 
-The RadioButton component uses the Bounceable component for touch animations. You can customize the bounce behavior through the underlying Bounceable props.
-
-## Theme Integration
-
-The RadioButton component integrates with the theme system:
+### Custom Bounce Effects
 
 ```tsx
-// Theme configuration
-const theme = {
-  colors: {
-    darkBlue: '#007AFF', // Default ring and inner colors
-    black: '#000000', // Default text color
-  },
-  spacing: {
-    small: 8, // Default margin for text
-  },
-  fontSizes: {
-    md: 16, // Default text size
-  },
-  borderWidths: {
-    little: 1, // Default border width
-  },
+<RadioButton
+  label="Bouncy radio"
+  bounceEffectIn={0.95} // Scale down to 95% on press
+  bounceEffectOut={1.0} // Scale back to 100%
+  onPressButton={handlePress}
+/>
+```
+
+### State Persistence
+
+```tsx
+const PersistentRadio = () => {
+  const [value, setValue] = useState(false)
+
+  // Keep the radio in a specific state
+  return (
+    <RadioButton
+      label="Always active"
+      isRemainActive={true}
+      initial={true}
+      onPressButton={isActive => {
+        console.log('Radio pressed, state:', isActive)
+        // State remains as set by isRemainActive
+      }}
+    />
+  )
 }
 ```
 
 ## Best Practices
 
-1. **Mutual Exclusivity** - Use radio buttons for mutually exclusive options
-2. **Clear Labels** - Provide clear, descriptive labels for each option
-3. **Grouping** - Visually group related radio buttons
-4. **Default Selection** - Consider providing a sensible default selection
-5. **Accessibility** - Use proper accessibility roles and labels
-6. **Visual Hierarchy** - Use consistent sizing and spacing
+1. **Group Related Options** - Use radio buttons for mutually exclusive choices
+2. **Clear Labels** - Provide descriptive and concise labels
+3. **Consistent Sizing** - Use consistent sizes within the same interface
+4. **Accessibility** - Always provide accessibility labels and roles
+5. **Visual Feedback** - Use animations and color changes for state feedback
+6. **Touch Targets** - Ensure adequate touch target size (minimum 44pt)
+7. **Default Selection** - Consider providing sensible default selections
 
-## Performance Considerations
+## Form Integration
 
-- Use React.memo for radio button groups with many options
-- Avoid complex custom text components for better performance
-- Consider virtualization for very long option lists
-- Optimize touch area calculations for smooth interactions
+### Validation
+
+```tsx
+const FormWithValidation = () => {
+  const [selectedOption, setSelectedOption] = useState('')
+  const [errors, setErrors] = useState({})
+
+  const validateForm = () => {
+    const newErrors = {}
+    if (!selectedOption) {
+      newErrors.option = 'Please select an option'
+    }
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
+  return (
+    <View>
+      <Text style={styles.label}>Required Selection</Text>
+      <RadioButton
+        label="Option A"
+        value={selectedOption === 'a'}
+        onPressButton={() => setSelectedOption('a')}
+        style={errors.option && styles.errorBorder}
+      />
+      <RadioButton
+        label="Option B"
+        value={selectedOption === 'b'}
+        onPressButton={() => setSelectedOption('b')}
+        style={errors.option && styles.errorBorder}
+      />
+      {errors.option && <Text style={styles.errorText}>{errors.option}</Text>}
+    </View>
+  )
+}
+```
 
 ## Troubleshooting
 
 ### Common Issues
 
-**Radio button not responding**
+**Radio button not responding to touch**
 
 - Ensure `onPressButton` callback is provided
 - Check if the component is disabled
-- Verify there are no overlapping touchable components
+- Verify touch target size is adequate
+
+**Animation not working**
+
+- Check bounce effect values are within valid range (0.0 - 1.0)
+- Ensure device supports animations
+- Verify React Native Reanimated is properly installed
 
 **State not updating correctly**
 
-- For controlled components, ensure `value` prop reflects current state
-- Check if `isRemainActive` is interfering with state management
-- Verify callback functions are updating state correctly
+- Use controlled mode with `value` prop for predictable state management
+- Ensure `onPressButton` is updating state correctly
+- Check for conflicts with `isRemainActive` prop
 
-**Styling issues**
+**Styling not applying**
 
-- Check theme configuration for default values
-- Use specific style props instead of generic `style` when possible
-- Ensure parent container styles don't interfere with layout
-
-**Custom text not displaying**
-
-- Verify `textComponent` prop is correctly formatted
-- Check if custom components are properly imported
-- Ensure text component styles don't conflict with container styles
+- Verify style object syntax
+- Check for style conflicts between different style props
+- Use theme configuration for consistent styling across the app

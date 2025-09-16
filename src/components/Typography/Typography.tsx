@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components/native'
 import type {TextProps, TextStyle} from 'react-native'
+import {useTheme} from '../../hooks'
 
 const StyledText = styled.Text<Omit<TypographyProps, 'variant'>>(({theme, color}) => ({
   flexShrink: 1,
@@ -28,7 +29,7 @@ type TypographyProps = {
  * @constant
  * @type {Record<TypographyVariant, TypographyVariantStyles>}
  */
-// TODO: I think this one should be moved to custom components themes
+// Default variant styles - can be overridden by theme
 export const typographyVariantStyles: Record<TypographyVariant, TypographyVariantStyles> = {
   h1: {
     fontSize: 28,
@@ -63,16 +64,24 @@ export const typographyVariantStyles: Record<TypographyVariant, TypographyVarian
  * @returns {JSX.Element} The styled text element.
  */
 export const Typography: React.FC<TypographyProps> = ({
-  variant = 'regular',
+  variant,
+  color,
   style,
   ...rest
 }: TypographyProps): JSX.Element => {
-  const styles = typographyVariantStyles[variant]
+  const TypographyTheme = useTheme().components.Typography
+  const actualVariant = variant ?? TypographyTheme.variant ?? 'regular'
+  const actualColor = color ?? TypographyTheme.color
+
+  // Get variant styles from theme or fallback to default
+  const variantStyles = TypographyTheme.variantStyles[actualVariant] ?? typographyVariantStyles[actualVariant]
+
   return (
     <StyledText
+      color={actualColor}
       style={[
         {
-          ...styles,
+          ...variantStyles,
           ...(typeof style === 'object' ? style : {}),
         },
       ]}

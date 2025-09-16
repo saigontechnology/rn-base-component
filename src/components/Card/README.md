@@ -141,19 +141,22 @@ const styles = StyleSheet.create({
 
 ### CardProps
 
-| Prop       | Type                                                  | Default     | Description                            |
-| ---------- | ----------------------------------------------------- | ----------- | -------------------------------------- |
-| `onPress`  | `() => void`                                          | `undefined` | Callback function when card is pressed |
-| `style`    | `StyleProp<ViewStyle> \| Array<StyleProp<ViewStyle>>` | `undefined` | Custom styles for the card             |
-| `children` | `React.ReactNode`                                     | Required    | Content to be rendered inside the card |
+| Prop              | Type                                                  | Default     | Description                                         |
+| ----------------- | ----------------------------------------------------- | ----------- | --------------------------------------------------- |
+| `onPress`         | `() => void`                                          | `undefined` | Callback function when card is pressed              |
+| `style`           | `StyleProp<ViewStyle> \| Array<StyleProp<ViewStyle>>` | `undefined` | Custom styles for the card                          |
+| `children`        | `React.ReactNode`                                     | Required    | Content to be rendered inside the card              |
+| `padding`         | `number`                                              | Theme       | Padding inside the card (overrides theme default)   |
+| `borderRadius`    | `number`                                              | Theme       | Border radius of the card (overrides theme default) |
+| `backgroundColor` | `string`                                              | Theme       | Background color of the card (overrides theme)      |
 
 ### Default Styling
 
 The Card component comes with default styling from the theme:
 
-- **Padding**: `theme.spacing.slim` (internal padding)
-- **Border Radius**: `metrics.borderRadius`
-- **Background Color**: `theme.colors.cardBackground`
+- **Padding**: `theme.components.Card.padding` (internal padding)
+- **Border Radius**: `theme.components.Card.borderRadius`
+- **Background Color**: `theme.components.Card.backgroundColor`
 - **Touch Opacity**: Low opacity when pressable, none when not pressable
 
 ## Layout Patterns
@@ -338,19 +341,50 @@ const styles = StyleSheet.create({
 
 ## Theme Integration
 
-The Card component integrates with the theme system:
+The Card component integrates with the theme system and can be customized via theme configuration:
+
+### Theme Configuration
 
 ```tsx
-// Theme configuration
-const theme = {
-  spacing: {
-    slim: 16, // Default internal padding
+import {extendTheme} from 'rn-base-component'
+
+const customTheme = extendTheme({
+  components: {
+    Card: {
+      padding: 20, // Custom padding
+      borderRadius: 12, // Custom border radius
+      backgroundColor: '#F8F9FA', // Custom background color
+    },
   },
-  colors: {
-    cardBackground: '#FFFFFF', // Default card background
-  },
-  // Border radius from metrics
-  borderRadius: 8,
+})
+```
+
+### Using Theme Values
+
+```tsx
+// Uses theme defaults
+<Card>
+  <Text>This card uses theme styling</Text>
+</Card>
+
+// Override specific theme values
+<Card
+  padding={24}
+  backgroundColor="#FFFFFF"
+  borderRadius={16}
+>
+  <Text>This card overrides theme values</Text>
+</Card>
+```
+
+### Default Theme Values
+
+```tsx
+// Default Card theme configuration
+CardTheme: {
+  padding: 16,              // theme.spacing.slim
+  borderRadius: 8,          // metrics.borderRadius
+  backgroundColor: '#FFFFFF' // theme.colors.cardBackground
 }
 ```
 

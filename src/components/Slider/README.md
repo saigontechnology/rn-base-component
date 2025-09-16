@@ -1,38 +1,53 @@
 # Slider Component
 
-A comprehensive and highly customizable slider component for React Native with support for single values, ranges, and various interactive features built with React Native Gesture Handler and Reanimated.
+A comprehensive and highly customizable slider component for React Native applications with smooth animations, multiple variants, and extensive styling options.
 
 ## Features
 
-- 🎯 **Multiple Variants** - Single, Range, Fixed, and FixedRange sliders
-- 🎨 **Highly Customizable** - Extensive styling options for all elements
-- ✋ **Gesture Support** - Smooth touch interactions with gesture handling
-- 📊 **Track Points** - Optional visual indicators along the track
-- 🎪 **Smooth Animations** - Built with React Native Reanimated for performance
-- 🔧 **Flexible Configuration** - Support for steps, custom thumbs, and more
-- ♿ **Accessibility Ready** - Screen reader support and proper semantics
+- 🎨 **Multiple Variants** - Basic, Range, Fixed, and FixedRange slider types
+- ⚡ **Smooth Animations** - Fluid interactions with react-native-reanimated
+- 🎯 **Interactive Features** - Tap to seek, track points, and thumb dragging
+- 🏷️ **Value Display** - Optional value labels with custom styling
+- 🎨 **Theme Integration** - Seamlessly integrates with the design system
+- 🔧 **Highly Customizable** - Extensive styling and behavior options
+- ♿ **Accessibility Ready** - Full accessibility support
+- 📱 **Touch Optimized** - Responsive touch interactions with proper hit areas
 
 ## Installation
 
 ```bash
-npm install rn-base-component react-native-gesture-handler react-native-reanimated
+npm install rn-base-component
 # or
-yarn add rn-base-component react-native-gesture-handler react-native-reanimated
+yarn add rn-base-component
 ```
-
-**Note**: Make sure to complete the installation of React Native Gesture Handler and Reanimated following their official documentation.
 
 ## Basic Usage
 
-### Single Value Slider
-
 ```tsx
-import React from 'react'
+import React, {useState} from 'react'
 import {Slider} from 'rn-base-component'
 
 export default function App() {
-  return <Slider minimumValue={0} maximumValue={100} onValueChange={value => console.log('Value:', value)} />
+  const [value, setValue] = useState(50)
+
+  return <Slider minimumValue={0} maximumValue={100} step={1} onValueChange={setValue} />
 }
+```
+
+## Slider Variants
+
+### Basic Slider
+
+```tsx
+const [volume, setVolume] = useState(75)
+
+<Slider
+  minimumValue={0}
+  maximumValue={100}
+  step={5}
+  onValueChange={setVolume}
+  alwaysShowValue={true}
+/>
 ```
 
 ### Range Slider
@@ -40,22 +55,20 @@ export default function App() {
 ```tsx
 <Slider.Range
   minimumValue={0}
-  maximumValue={100}
-  initialLowValue={20}
-  initialHighValue={80}
-  onValueChange={(low, high) => console.log('Range:', low, high)}
+  maximumValue={1000}
+  step={10}
+  initialLowerBound={200}
+  initialUpperBound={800}
+  onValueChange={({lowerBound, upperBound}) => {
+    console.log('Range:', lowerBound, 'to', upperBound)
+  }}
 />
 ```
 
-### Fixed Value Slider
+### Fixed Slider
 
 ```tsx
-<Slider.Fixed
-  minimumValue={0}
-  maximumValue={10}
-  step={1}
-  onValueChange={value => console.log('Fixed value:', value)}
-/>
+<Slider.Fixed minimumValue={0} maximumValue={10} step={1} fixedPosition={5} onValueChange={handleChange} />
 ```
 
 ### Fixed Range Slider
@@ -63,29 +76,15 @@ export default function App() {
 ```tsx
 <Slider.FixedRange
   minimumValue={0}
-  maximumValue={10}
-  step={1}
-  initialLowValue={2}
-  initialHighValue={8}
-  onValueChange={(low, high) => console.log('Fixed range:', low, high)}
+  maximumValue={100}
+  step={5}
+  fixedLowerBound={25}
+  fixedUpperBound={75}
+  onValueChange={handleRangeChange}
 />
 ```
 
 ## Advanced Usage
-
-### With Track Points
-
-```tsx
-<Slider
-  minimumValue={0}
-  maximumValue={100}
-  step={10}
-  showTrackPoint={true}
-  sliderWidth={300}
-  tapToSeek={true}
-  onValueChange={handleValueChange}
-/>
-```
 
 ### Custom Styling
 
@@ -93,228 +92,98 @@ export default function App() {
 ;<Slider
   minimumValue={0}
   maximumValue={100}
-  style={styles.customSlider}
+  step={1}
   trackStyle={styles.customTrack}
   trackedStyle={styles.customTracked}
   thumbStyle={styles.customThumb}
-  thumbSize={{width: 24, height: 24}}
-  onValueChange={handleValueChange}
+  thumbSize={{width: 30, height: 30}}
+  bgColorLabelView="#FF6B6B"
+  labelStyle={styles.customLabel}
+  onValueChange={setValue}
 />
 
 const styles = StyleSheet.create({
-  customSlider: {
-    margin: 20,
-  },
   customTrack: {
-    backgroundColor: '#E0E0E0',
     height: 8,
     borderRadius: 4,
+    backgroundColor: '#E0E0E0',
   },
   customTracked: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FF6B6B',
   },
   customThumb: {
-    backgroundColor: '#007AFF',
-    borderWidth: 2,
-    borderColor: 'white',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 3,
+    borderColor: '#FF6B6B',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
-})
-```
-
-### With Custom Thumb
-
-```tsx
-const CustomThumb = () => (
-  <View style={styles.customThumbContainer}>
-    <Icon name="circle" size={20} color="#FF6B6B" />
-  </View>
-)
-
-<Slider
-  minimumValue={0}
-  maximumValue={100}
-  thumbComponent={<CustomThumb />}
-  onValueChange={handleValueChange}
-/>
-
-const styles = StyleSheet.create({
-  customThumbContainer: {
-    width: 24,
-    height: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-})
-```
-
-### With Value Display
-
-```tsx
-;<Slider
-  minimumValue={0}
-  maximumValue={100}
-  alwaysShowValue={true}
-  bgColorLabelView="#333333"
-  labelStyle={styles.valueLabel}
-  onValueChange={handleValueChange}
-/>
-
-const styles = StyleSheet.create({
-  valueLabel: {
-    color: 'white',
-    fontSize: 12,
+  customLabel: {
+    fontSize: 14,
     fontWeight: 'bold',
+    color: '#FFFFFF',
   },
 })
 ```
-
-### Rounded Values
-
-```tsx
-<Slider minimumValue={0} maximumValue={1} step={0.01} roundToValue={2} onValueChange={handleValueChange} />
-```
-
-## API Reference
-
-### ISliderCommonProps
-
-| Prop               | Type                   | Default                   | Description                        |
-| ------------------ | ---------------------- | ------------------------- | ---------------------------------- |
-| `maximumValue`     | `number`               | `1`                       | Maximum value of the slider        |
-| `minimumValue`     | `number`               | `0`                       | Minimum value of the slider        |
-| `step`             | `number`               | `undefined`               | Step value for discrete increments |
-| `alwaysShowValue`  | `boolean`              | `undefined`               | Always display the current value   |
-| `showTrackPoint`   | `boolean`              | `undefined`               | Show points along the track        |
-| `tapToSeek`        | `boolean`              | `undefined`               | Allow tapping track points to seek |
-| `hitSlopPoint`     | `Insets \| number`     | `hitSlop`                 | Touch area for track points        |
-| `style`            | `StyleProp<ViewStyle>` | `undefined`               | Style for the slider container     |
-| `trackStyle`       | `StyleProp<ViewStyle>` | `undefined`               | Style for the track                |
-| `trackedStyle`     | `StyleProp<ViewStyle>` | `undefined`               | Style for the filled track         |
-| `trackPointStyle`  | `StyleProp<ViewStyle>` | `undefined`               | Style for track points             |
-| `bgColorLabelView` | `string`               | `undefined`               | Background color for value label   |
-| `labelStyle`       | `StyleProp<TextStyle>` | `undefined`               | Style for value label text         |
-| `thumbStyle`       | `StyleProp<ViewStyle>` | `undefined`               | Style for the thumb                |
-| `thumbSize`        | `Size`                 | `{width: 16, height: 16}` | Size of the thumb                  |
-
-### Slider-specific Props
-
-| Prop             | Type                      | Description                          |
-| ---------------- | ------------------------- | ------------------------------------ |
-| `roundToValue`   | `number`                  | Number of decimal places to round to |
-| `thumbComponent` | `React.ReactElement`      | Custom thumb component               |
-| `onValueChange`  | `(value: number) => void` | Value change callback                |
-
-### SliderRange Props
-
-| Prop               | Type                                  | Description                  |
-| ------------------ | ------------------------------------- | ---------------------------- |
-| `initialLowValue`  | `number`                              | Initial low value for range  |
-| `initialHighValue` | `number`                              | Initial high value for range |
-| `onValueChange`    | `(low: number, high: number) => void` | Range change callback        |
-
-### Size Type
-
-```tsx
-type Size = {
-  width: number
-  height: number
-}
-```
-
-## Slider Variants
-
-### Single Value Slider
-
-Standard slider for selecting a single value within a range.
-
-```tsx
-<Slider minimumValue={0} maximumValue={100} step={5} onValueChange={value => setVolume(value)} />
-```
-
-### Range Slider
-
-Allows selection of a range with two thumbs for low and high values.
-
-```tsx
-<Slider.Range
-  minimumValue={0}
-  maximumValue={1000}
-  initialLowValue={200}
-  initialHighValue={800}
-  onValueChange={(low, high) => setPriceRange({min: low, max: high})}
-/>
-```
-
-### Fixed Slider
-
-Slider with discrete step values and visual track points.
-
-```tsx
-<Slider.Fixed
-  minimumValue={1}
-  maximumValue={5}
-  step={1}
-  showTrackPoint={true}
-  sliderWidth={250}
-  onValueChange={value => setRating(value)}
-/>
-```
-
-### Fixed Range Slider
-
-Range slider with discrete steps and track points.
-
-```tsx
-<Slider.FixedRange
-  minimumValue={0}
-  maximumValue={24}
-  step={1}
-  initialLowValue={9}
-  initialHighValue={17}
-  showTrackPoint={true}
-  sliderWidth={300}
-  onValueChange={(start, end) => setTimeRange({start, end})}
-/>
-```
-
-## Common Use Cases
 
 ### Volume Control
 
 ```tsx
-const [volume, setVolume] = useState(50)
+const VolumeControl = () => {
+  const [volume, setVolume] = useState(50)
 
-<View style={styles.volumeContainer}>
-  <Icon name="volume-down" size={20} color="#666" />
-  <Slider
-    style={styles.volumeSlider}
-    minimumValue={0}
-    maximumValue={100}
-    step={1}
-    onValueChange={setVolume}
-    trackStyle={styles.volumeTrack}
-    trackedStyle={styles.volumeTracked}
-    thumbSize={{width: 20, height: 20}}
-  />
-  <Icon name="volume-up" size={20} color="#666" />
-</View>
+  return (
+    <View style={styles.volumeContainer}>
+      <Text style={styles.volumeLabel}>Volume: {volume}%</Text>
+      <Slider
+        minimumValue={0}
+        maximumValue={100}
+        step={1}
+        onValueChange={setVolume}
+        trackStyle={styles.volumeTrack}
+        trackedStyle={styles.volumeTracked}
+        thumbStyle={styles.volumeThumb}
+        alwaysShowValue={false}
+        showTrackPoint={false}
+        tapToSeek={true}
+      />
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   volumeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
+    padding: 20,
   },
-  volumeSlider: {
-    flex: 1,
-    marginHorizontal: 16,
+  volumeLabel: {
+    textAlign: 'center',
+    marginBottom: 20,
+    fontSize: 16,
   },
   volumeTrack: {
+    height: 6,
     backgroundColor: '#E0E0E0',
-    height: 4,
+    borderRadius: 3,
   },
   volumeTracked: {
     backgroundColor: '#007AFF',
+  },
+  volumeThumb: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#007AFF',
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 })
 ```
@@ -322,120 +191,122 @@ const styles = StyleSheet.create({
 ### Price Range Filter
 
 ```tsx
-const [priceRange, setPriceRange] = useState({min: 50, max: 500})
+const PriceRangeFilter = () => {
+  const [priceRange, setPriceRange] = useState({min: 100, max: 500})
 
-<View style={styles.priceFilter}>
-  <Text style={styles.label}>Price Range</Text>
-  <Slider.Range
-    minimumValue={0}
-    maximumValue={1000}
-    initialLowValue={priceRange.min}
-    initialHighValue={priceRange.max}
-    onValueChange={(low, high) => setPriceRange({min: low, max: high})}
-    style={styles.priceSlider}
-  />
-  <View style={styles.priceLabels}>
-    <Text>${priceRange.min}</Text>
-    <Text>${priceRange.max}</Text>
-  </View>
-</View>
+  return (
+    <View style={styles.filterContainer}>
+      <Text style={styles.filterTitle}>Price Range</Text>
+      <Text style={styles.rangeDisplay}>
+        ${priceRange.min} - ${priceRange.max}
+      </Text>
+
+      <Slider.Range
+        minimumValue={0}
+        maximumValue={1000}
+        step={10}
+        initialLowerBound={priceRange.min}
+        initialUpperBound={priceRange.max}
+        onValueChange={({lowerBound, upperBound}) => setPriceRange({min: lowerBound, max: upperBound})}
+        trackStyle={styles.priceTrack}
+        trackedStyle={styles.priceTracked}
+        thumbStyle={styles.priceThumb}
+        showTrackPoint={true}
+        tapToSeek={true}
+      />
+    </View>
+  )
+}
+```
+
+## API Reference
+
+### SliderProps
+
+| Prop               | Type                              | Default     | Description                                        |
+| ------------------ | --------------------------------- | ----------- | -------------------------------------------------- |
+| `minimumValue`     | `number`                          | Theme       | Minimum slider value (overrides theme)             |
+| `maximumValue`     | `number`                          | Theme       | Maximum slider value (overrides theme)             |
+| `step`             | `number`                          | Theme       | Step increment between values (overrides theme)    |
+| `alwaysShowValue`  | `boolean`                         | Theme       | Always show value label (overrides theme)          |
+| `showTrackPoint`   | `boolean`                         | Theme       | Show track points (overrides theme)                |
+| `tapToSeek`        | `boolean`                         | Theme       | Enable tap to seek (overrides theme)               |
+| `hitSlopPoint`     | `Insets`                          | Theme       | Hit area for track points (overrides theme)        |
+| `trackStyle`       | `StyleProp<ViewStyle>`            | Theme       | Style for the track background (overrides theme)   |
+| `trackedStyle`     | `StyleProp<ViewStyle>`            | Theme       | Style for the filled track (overrides theme)       |
+| `trackPointStyle`  | `StyleProp<ViewStyle>`            | Theme       | Style for track points (overrides theme)           |
+| `bgColorLabelView` | `string`                          | Theme       | Background color for value label (overrides theme) |
+| `labelStyle`       | `StyleProp<TextStyle>`            | Theme       | Style for value label text (overrides theme)       |
+| `thumbStyle`       | `StyleProp<ViewStyle>`            | Theme       | Style for the thumb (overrides theme)              |
+| `thumbSize`        | `{width: number, height: number}` | Theme       | Size of the thumb (overrides theme)                |
+| `thumbComponent`   | `React.ReactNode`                 | `undefined` | Custom thumb component                             |
+| `onValueChange`    | `(value: number) => void`         | `undefined` | Callback when value changes                        |
+| `sliderWidth`      | `number`                          | `undefined` | Fixed width for the slider                         |
+| `style`            | `StyleProp<ViewStyle>`            | Theme       | Style for the slider container (overrides theme)   |
+
+## Usage Patterns
+
+### Audio Player Controls
+
+```tsx
+const AudioPlayer = () => {
+  const [position, setPosition] = useState(30)
+  const [duration] = useState(180) // 3 minutes
+
+  const formatTime = seconds => {
+    const mins = Math.floor(seconds / 60)
+    const secs = Math.floor(seconds % 60)
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
+  return (
+    <View style={styles.playerContainer}>
+      <View style={styles.timeContainer}>
+        <Text style={styles.timeText}>{formatTime(position)}</Text>
+        <Text style={styles.timeText}>{formatTime(duration)}</Text>
+      </View>
+
+      <Slider
+        minimumValue={0}
+        maximumValue={duration}
+        step={1}
+        onValueChange={setPosition}
+        trackStyle={styles.audioTrack}
+        trackedStyle={styles.audioTracked}
+        thumbStyle={styles.audioThumb}
+        alwaysShowValue={false}
+        tapToSeek={true}
+      />
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
-  priceFilter: {
-    padding: 16,
+  playerContainer: {
+    padding: 20,
   },
-  label: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
-  },
-  priceSlider: {
-    marginVertical: 16,
-  },
-  priceLabels: {
+  timeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 10,
   },
-})
-```
-
-### Rating Selector
-
-```tsx
-const [rating, setRating] = useState(3)
-
-<View style={styles.ratingContainer}>
-  <Text style={styles.ratingLabel}>Rate this product</Text>
-  <Slider.Fixed
-    minimumValue={1}
-    maximumValue={5}
-    step={1}
-    showTrackPoint={true}
-    tapToSeek={true}
-    sliderWidth={200}
-    onValueChange={setRating}
-    trackPointStyle={styles.ratingPoint}
-  />
-  <Text style={styles.ratingValue}>{rating} stars</Text>
-</View>
-
-const styles = StyleSheet.create({
-  ratingContainer: {
-    alignItems: 'center',
-    padding: 16,
-  },
-  ratingLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 16,
-  },
-  ratingPoint: {
-    backgroundColor: '#FFD700',
-    borderRadius: 10,
-  },
-  ratingValue: {
-    fontSize: 14,
-    marginTop: 12,
-  },
-})
-```
-
-### Time Range Picker
-
-```tsx
-const [timeRange, setTimeRange] = useState({start: 9, end: 17})
-
-<View style={styles.timeContainer}>
-  <Text style={styles.timeLabel}>Working Hours</Text>
-  <Slider.FixedRange
-    minimumValue={0}
-    maximumValue={23}
-    step={1}
-    initialLowValue={timeRange.start}
-    initialHighValue={timeRange.end}
-    showTrackPoint={true}
-    sliderWidth={300}
-    onValueChange={(start, end) => setTimeRange({start, end})}
-  />
-  <Text style={styles.timeDisplay}>
-    {timeRange.start}:00 - {timeRange.end}:00
-  </Text>
-</View>
-
-const styles = StyleSheet.create({
-  timeContainer: {
-    padding: 16,
-    alignItems: 'center',
-  },
-  timeLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 16,
-  },
-  timeDisplay: {
-    fontSize: 14,
-    marginTop: 12,
+  timeText: {
+    fontSize: 12,
     color: '#666',
+  },
+  audioTrack: {
+    height: 4,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 2,
+  },
+  audioTracked: {
+    backgroundColor: '#1DB954', // Spotify green
+  },
+  audioThumb: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: '#1DB954',
   },
 })
 ```
@@ -443,106 +314,191 @@ const styles = StyleSheet.create({
 ### Brightness Control
 
 ```tsx
-const [brightness, setBrightness] = useState(75)
+const BrightnessControl = () => {
+  const [brightness, setBrightness] = useState(80)
 
-<View style={styles.brightnessContainer}>
-  <Icon name="brightness-low" size={20} color="#666" />
-  <Slider
-    style={styles.brightnessSlider}
-    minimumValue={0}
-    maximumValue={100}
-    onValueChange={setBrightness}
-    alwaysShowValue={false}
-    trackStyle={styles.brightnessTrack}
-    trackedStyle={styles.brightnessTracked}
-    thumbStyle={styles.brightnessThumb}
-  />
-  <Icon name="brightness-high" size={20} color="#666" />
-</View>
+  return (
+    <View style={styles.brightnessContainer}>
+      <View style={styles.brightnessHeader}>
+        <Icon name="brightness-low" size={20} color="#666" />
+        <Icon name="brightness-high" size={20} color="#666" />
+      </View>
 
-const styles = StyleSheet.create({
-  brightnessContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-  },
-  brightnessSlider: {
-    flex: 1,
-    marginHorizontal: 12,
-  },
-  brightnessTrack: {
-    backgroundColor: '#333',
-    height: 6,
-  },
-  brightnessTracked: {
-    backgroundColor: '#FFF',
-  },
-  brightnessThumb: {
-    backgroundColor: '#FFF',
-    borderWidth: 1,
-    borderColor: '#333',
+      <Slider
+        minimumValue={0}
+        maximumValue={100}
+        step={1}
+        onValueChange={setBrightness}
+        trackStyle={styles.brightnessTrack}
+        trackedStyle={[styles.brightnessTracked, {opacity: brightness / 100}]}
+        thumbStyle={styles.brightnessThumb}
+        alwaysShowValue={true}
+        bgColorLabelView="rgba(0,0,0,0.8)"
+        labelStyle={styles.brightnessLabel}
+      />
+    </View>
+  )
+}
+```
+
+### Temperature Range
+
+```tsx
+const TemperatureRange = () => {
+  const [tempRange, setTempRange] = useState({min: 18, max: 24})
+
+  return (
+    <View style={styles.tempContainer}>
+      <Text style={styles.tempTitle}>Temperature Range</Text>
+      <Text style={styles.tempDisplay}>
+        {tempRange.min}°C - {tempRange.max}°C
+      </Text>
+
+      <Slider.Range
+        minimumValue={10}
+        maximumValue={35}
+        step={0.5}
+        initialLowerBound={tempRange.min}
+        initialUpperBound={tempRange.max}
+        onValueChange={({lowerBound, upperBound}) => setTempRange({min: lowerBound, max: upperBound})}
+        trackStyle={styles.tempTrack}
+        trackedStyle={styles.tempTracked}
+        thumbStyle={styles.tempThumb}
+      />
+    </View>
+  )
+}
+```
+
+## Theme Integration
+
+The Slider component integrates with the theme system and can be customized via theme configuration:
+
+### Theme Configuration
+
+```tsx
+import {extendTheme} from 'rn-base-component'
+
+const customTheme = extendTheme({
+  components: {
+    Slider: {
+      minimumValue: 0, // Default minimum value
+      maximumValue: 100, // Default maximum value
+      step: 1, // Default step increment
+      alwaysShowValue: false, // Show value label
+      showTrackPoint: false, // Show track markers
+      tapToSeek: true, // Enable tap to seek
+      hitSlopPoint: {
+        // Touch area for points
+        top: 10,
+        bottom: 10,
+        left: 10,
+        right: 10,
+      },
+      trackStyle: {
+        // Track background style
+        height: 4,
+        borderRadius: 2,
+        backgroundColor: '#E0E0E0',
+      },
+      trackedStyle: {
+        // Filled track style
+        backgroundColor: '#007AFF',
+      },
+      trackPointStyle: {
+        // Track point style
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: '#999',
+      },
+      bgColorLabelView: '#007AFF', // Label background
+      labelStyle: {
+        // Label text style
+        color: '#FFFFFF',
+        fontSize: 12,
+        fontWeight: '500',
+      },
+      thumbStyle: {
+        // Thumb style
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+        backgroundColor: '#FFFFFF',
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+      },
+      thumbSize: {width: 20, height: 20}, // Thumb dimensions
+      style: undefined, // Container style
+    },
   },
 })
 ```
 
-## Styling Guidelines
-
-### Track Styling
+### Using Theme Values
 
 ```tsx
-// Thin track
-trackStyle={{
-  backgroundColor: '#E0E0E0',
-  height: 2,
-}}
+// Uses theme defaults
+<Slider onValueChange={setValue} />
 
-// Thick track
-trackStyle={{
-  backgroundColor: '#F0F0F0',
-  height: 8,
-  borderRadius: 4,
-}}
-
-// Rounded track
-trackStyle={{
-  backgroundColor: '#E5E5E5',
-  height: 6,
-  borderRadius: 3,
-}}
+// Override specific theme values
+<Slider
+  minimumValue={0}
+  maximumValue={200}
+  step={5}
+  trackStyle={{height: 8, backgroundColor: '#F0F0F0'}}
+  thumbStyle={{width: 30, height: 30}}
+  onValueChange={setValue}
+/>
 ```
 
-### Thumb Styling
+### Default Theme Values
 
 ```tsx
-// Circular thumb
-thumbStyle={{
-  backgroundColor: '#007AFF',
-  borderRadius: 12,
-}}
-
-// Square thumb
-thumbStyle={{
-  backgroundColor: '#FF6B6B',
-  borderRadius: 2,
-}}
-
-// Bordered thumb
-thumbStyle={{
-  backgroundColor: 'white',
-  borderWidth: 2,
-  borderColor: '#007AFF',
-}}
-```
-
-### Track Points
-
-```tsx
-trackPointStyle={{
-  backgroundColor: '#007AFF',
-  borderRadius: 4,
-  width: 8,
-  height: 8,
-}}
+// Default Slider theme configuration
+SliderTheme: {
+  minimumValue: 0,
+  maximumValue: 100,
+  step: 1,
+  alwaysShowValue: false,
+  showTrackPoint: false,
+  tapToSeek: true,
+  hitSlopPoint: {top: 10, bottom: 10, left: 10, right: 10},
+  trackStyle: {
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#f1f5f9',      // base.colors.backgroundSecondary
+  },
+  trackedStyle: {
+    backgroundColor: '#0e7490',      // base.colors.primary
+  },
+  trackPointStyle: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#3f3f46',     // base.colors.gray
+  },
+  bgColorLabelView: '#0e7490',      // base.colors.primary
+  labelStyle: {
+    color: '#FFFFFF',               // base.colors.white
+    fontSize: 12,                   // base.fontSizes.sm
+  },
+  thumbStyle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',     // base.colors.white
+    shadowColor: '#000000',         // base.colors.black
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  thumbSize: {width: 20, height: 20},
+}
 ```
 
 ## Accessibility
@@ -551,12 +507,19 @@ trackPointStyle={{
 
 ```tsx
 <Slider
+  minimumValue={0}
+  maximumValue={100}
+  step={1}
   accessibilityLabel="Volume control"
   accessibilityHint="Adjust the volume level"
   accessibilityRole="adjustable"
-  minimumValue={0}
-  maximumValue={100}
-  onValueChange={setVolume}
+  accessibilityValue={{
+    min: 0,
+    max: 100,
+    now: currentValue,
+    text: `${currentValue} percent`,
+  }}
+  onValueChange={setCurrentValue}
 />
 ```
 
@@ -564,67 +527,66 @@ trackPointStyle={{
 
 ```tsx
 <Slider.Range
-  accessibilityLabel="Price range filter"
-  accessibilityHint="Set minimum and maximum price values"
   minimumValue={0}
   maximumValue={1000}
-  onValueChange={setPriceRange}
+  accessibilityLabel="Price range filter"
+  accessibilityHint="Set minimum and maximum price range"
+  onValueChange={handleRangeChange}
 />
 ```
 
-## Performance Optimization
+## Performance Considerations
 
-### Debounced Updates
-
-```tsx
-import {useCallback} from 'react'
-import {debounce} from 'lodash'
-
-const debouncedUpdate = useCallback(
-  debounce((value) => {
-    // Expensive operation
-    updateServerValue(value)
-  }, 300),
-  []
-)
-
-<Slider
-  onValueChange={(value) => {
-    setValue(value) // Immediate UI update
-    debouncedUpdate(value) // Debounced server update
-  }}
-/>
-```
-
-### Memoized Components
-
-```tsx
-const SliderComponent = React.memo(({value, onValueChange}) => (
-  <Slider minimumValue={0} maximumValue={100} onValueChange={onValueChange} />
-))
-```
-
-## Theme Integration
-
-The Slider component integrates with the theme system:
-
-```tsx
-// Theme configuration
-const theme = {
-  colors: {
-    primary: '#007AFF', // Default tracked color
-  },
-}
-```
+- Slider animations use `react-native-reanimated` for optimal performance
+- Track rendering is optimized for smooth interactions
+- Consider debouncing `onValueChange` callbacks for expensive operations
+- Use `step` values appropriately to balance precision and performance
 
 ## Best Practices
 
-1. **Appropriate Ranges** - Use meaningful min/max values for your use case
-2. **Step Values** - Choose step values that make sense for the data
-3. **Visual Feedback** - Provide clear visual indicators for current values
-4. **Touch Targets** - Ensure thumbs are large enough for easy interaction
-5. **Performance** - Debounce expensive operations triggered by value changes
-6. **Accessibility** - Provide proper accessibility labels and hints
+1. **Appropriate Steps** - Use reasonable step values for the data range
+2. **Visual Feedback** - Provide clear visual indication of current values
+3. **Touch Targets** - Ensure thumb and track points have adequate touch areas
+4. **Value Display** - Show current values when precision is important
+5. **Accessibility** - Provide meaningful accessibility labels and values
+6. **Performance** - Debounce callbacks for expensive operations
+7. **Consistent Styling** - Use theme values for consistent appearance
+
+## Advanced Features
+
+### Custom Thumb Component
+
+```tsx
+const CustomThumb = ({value}) => (
+  <View style={styles.customThumbContainer}>
+    <View style={styles.customThumbShape} />
+    <Text style={styles.thumbValue}>{value}</Text>
+  </View>
+)
+
+<Slider
+  thumbComponent={<CustomThumb />}
+  onValueChange={setValue}
+/>
+```
+
+### Multiple Sliders Sync
+
+```tsx
+const SyncedSliders = () => {
+  const [masterValue, setMasterValue] = useState(50)
+
+  return (
+    <View>
+      <Text>Master Control</Text>
+      <Slider minimumValue={0} maximumValue={100} onValueChange={setMasterValue} />
+
+      <Text>Synced Control</Text>
+      <Slider minimumValue={0} maximumValue={100} value={masterValue} onValueChange={setMasterValue} />
+    </View>
+  )
+}
+```
 
 ## Troubleshooting
 
@@ -632,30 +594,24 @@ const theme = {
 
 **Slider not responding to touch**
 
-- Ensure React Native Gesture Handler is properly installed and linked
-- Check if the slider container has sufficient height
-- Verify there are no overlapping gesture handlers
+- Ensure proper hit areas are configured with `hitSlopPoint`
+- Check if the slider has adequate dimensions
+- Verify `onValueChange` callback is provided
 
-**Values not updating correctly**
+**Animation performance issues**
 
-- Check if `onValueChange` callback is properly implemented
-- Verify min/max values are set correctly
-- Ensure step values are appropriate for the range
+- Ensure `react-native-reanimated` is properly installed and configured
+- Consider reducing the frequency of `onValueChange` callbacks
+- Use appropriate `step` values to reduce update frequency
 
-**Performance issues**
+**Styling not applying correctly**
 
-- Avoid complex operations in `onValueChange` callback
-- Use debouncing for expensive operations
-- Consider memoizing slider components
+- Check style object syntax and properties
+- Ensure custom styles don't conflict with theme values
+- Use theme configuration for consistent styling across the app
 
-**Track points not showing**
+**Thumb positioning issues**
 
-- Ensure `showTrackPoint` is true and `sliderWidth` is provided
-- Check track point styling is visible
-- Verify step value creates appropriate number of points
-
-**Custom thumb not rendering**
-
-- Verify `thumbComponent` is a valid React element
-- Check if custom thumb has appropriate dimensions
-- Ensure custom thumb doesn't interfere with gesture handling
+- Verify `thumbSize` matches the actual thumb style dimensions
+- Check for layout conflicts with custom thumb components
+- Ensure proper container dimensions for the slider

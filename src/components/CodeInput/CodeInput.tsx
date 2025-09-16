@@ -9,6 +9,7 @@ import React, {
 } from 'react'
 import {KeyboardTypeOptions, StyleProp, TextInput, TextInputProps, TextStyle, ViewStyle} from 'react-native'
 import styled from 'styled-components/native'
+import {useTheme} from '../../hooks'
 import {metrics} from '../../helpers'
 import {Cursor} from './Cursor'
 import {Text} from '../Text/Text'
@@ -103,16 +104,13 @@ interface CodeInputProps extends Omit<TextInputProps, 'value' | 'onChangeText' |
   testID?: string
 }
 
-// Constants
-const DEFAULT_LENGTH = 6
-const DEFAULT_KEYBOARD_TYPE: KeyboardTypeOptions = 'number-pad'
-const DEFAULT_PLACEHOLDER = ''
+// Default constants moved to theme configuration
 
 // Main component
 export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
   (
     {
-      length = DEFAULT_LENGTH,
+      length,
       value: controlledValue,
       onChangeText,
       onSubmit,
@@ -127,31 +125,38 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
       cellWrapperStyle,
       focusCellWrapperStyle,
       customCursor,
-      secureTextEntry = false,
-      keyboardType = DEFAULT_KEYBOARD_TYPE,
-      withCursor = false,
-      placeholder = DEFAULT_PLACEHOLDER,
+      secureTextEntry,
+      keyboardType,
+      withCursor,
+      placeholder,
       placeholderTextColor,
-      placeholderAsDot = false,
+      placeholderAsDot,
       placeholderDotStyle,
-      autoFocus = false,
-      disabled = false,
+      autoFocus,
+      disabled,
       testID = 'code-input',
       ...textInputProps
     },
     ref,
   ) => {
+    const CodeInputTheme = useTheme().components.CodeInput
     const textInputRef = useRef<TextInput>(null)
     const [internalValue, setInternalValue] = useState<CodeInputValue>(controlledValue || '')
     const [isFocused, setIsFocused] = useState(false)
+
+    // Use theme defaults with props override
+    const actualLength = length ?? CodeInputTheme.length
 
     // Use controlled or uncontrolled value
     const code = controlledValue !== undefined ? controlledValue : internalValue
     const isControlled = controlledValue !== undefined
 
     // Validation
-    const isValidLength = useMemo(() => length > 0 && length <= 20, [length])
-    const focusedCellIndex = useMemo(() => Math.min(code.length, length - 1), [code.length, length])
+    const isValidLength = useMemo(() => actualLength > 0 && actualLength <= 20, [actualLength])
+    const focusedCellIndex = useMemo(
+      () => Math.min(code.length, actualLength - 1),
+      [code.length, actualLength],
+    )
 
     // Imperative handle for ref
     useImperativeHandle(ref, () => ({
@@ -334,12 +339,12 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
         return []
       }
 
-      return Array.from({length}, (_, index) => renderCell(index))
-    }, [isValidLength, length, renderCell])
+      return Array.from({length: actualLength}, (_, index) => renderCell(index))
+    }, [isValidLength, actualLength, renderCell])
 
     // Don't render if invalid length
     if (!isValidLength) {
-      console.warn(`CodeInput: Invalid length ${length}. Length must be between 1 and 20.`)
+      console.warn(`CodeInput: Invalid length ${actualLength}. Length must be between 1 and 20.`)
       return null
     }
 
@@ -352,24 +357,24 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
           onChangeText={handleValueChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          maxLength={length}
-          keyboardType={keyboardType}
+          maxLength={actualLength}
+          keyboardType={keyboardType ?? CodeInputTheme.keyboardType}
           textContentType="oneTimeCode"
           autoComplete="sms-otp"
-          autoFocus={autoFocus}
-          editable={!disabled}
+          autoFocus={autoFocus ?? CodeInputTheme.autoFocus}
+          editable={!(disabled ?? CodeInputTheme.disabled)}
           accessible={true}
-          accessibilityLabel={`Code input with ${length} digits`}
-          accessibilityHint={`Enter ${length} digit code`}
+          accessibilityLabel={`Code input with ${actualLength} digits`}
+          accessibilityHint={`Enter ${actualLength} digit code`}
           accessibilityValue={{
-            text: `${code.length} of ${length} digits entered`,
+            text: `${code.length} of ${actualLength} digits entered`,
           }}
           {...textInputProps}
         />
         <CellContainer
           style={cellContainerStyle}
           accessible={true}
-          accessibilityLabel={`Code input cells, ${code.length} of ${length} filled`}>
+          accessibilityLabel={`Code input cells, ${code.length} of ${actualLength} filled`}>
           {cells}
         </CellContainer>
       </Container>

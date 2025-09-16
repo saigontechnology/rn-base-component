@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Cursor renders correctly 1`] = `
+exports[`Cursor Component Basic Rendering renders correctly with default props 1`] = `
 <Text
   style={
     [

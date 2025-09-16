@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import React, { useRef } from 'react'
 import { Alert, StyleSheet, Text, View } from 'react-native'
 import { Button, CountDown, CountDownRef } from 'rn-base-component'
@@ -32,11 +33,10 @@ const HomeScreen = () => {
       </View>
       <CountDown
       ref={countdownRef}  
-      // countDownTo={
-      //   dayjs('2025-09-11T00:00:00')
-      // }
-      value={120}
-      // timeToShow={['D', 'H', 'M', 'S']}
+      countDownTo={
+        dayjs('2025-09-13T00:00:00')
+      }
+      timeToShow={['D', 'H', 'M', 'S']}
       showLabels={true}
       separator=" : "
       // fontSize={20}

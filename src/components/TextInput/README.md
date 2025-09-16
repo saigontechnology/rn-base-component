@@ -180,22 +180,24 @@ const styles = StyleSheet.create({
 
 ### TextInputProps
 
-| Prop                  | Type                   | Default     | Description                    |
-| --------------------- | ---------------------- | ----------- | ------------------------------ |
-| `containerStyle`      | `StyleProp<ViewStyle>` | `undefined` | Style for the outer container  |
-| `editable`            | `boolean`              | `true`      | Whether text is editable       |
-| `inputContainerStyle` | `StyleProp<ViewStyle>` | `undefined` | Style for the input container  |
-| `inputStyle`          | `StyleProp<TextStyle>` | `undefined` | Style for the input component  |
-| `label`               | `string`               | `undefined` | Label text above the input     |
-| `isRequire`           | `boolean`              | `undefined` | Add asterisk beside the label  |
-| `labelStyle`          | `StyleProp<TextStyle>` | `undefined` | Style for the label            |
-| `labelProps`          | `TextProps`            | `undefined` | Additional props for the label |
-| `leftComponent`       | `React.ReactNode`      | `undefined` | Component on the left side     |
-| `rightComponent`      | `React.ReactNode`      | `undefined` | Component on the right side    |
-| `errorText`           | `string`               | `undefined` | Error message to display       |
-| `errorProps`          | `TextProps`            | `undefined` | Props for the error text       |
-| `onFocus`             | `() => void`           | `undefined` | Focus callback                 |
-| `onBlur`              | `() => void`           | `undefined` | Blur callback                  |
+| Prop                  | Type                   | Default     | Description                                     |
+| --------------------- | ---------------------- | ----------- | ----------------------------------------------- |
+| `containerStyle`      | `StyleProp<ViewStyle>` | Theme       | Style for the outer container (overrides theme) |
+| `editable`            | `boolean`              | Theme       | Whether text is editable (overrides theme)      |
+| `inputContainerStyle` | `StyleProp<ViewStyle>` | Theme       | Style for the input container (overrides theme) |
+| `inputStyle`          | `StyleProp<TextStyle>` | Theme       | Style for the input component (overrides theme) |
+| `label`               | `string`               | `undefined` | Label text above the input                      |
+| `isRequire`           | `boolean`              | `undefined` | Add asterisk beside the label                   |
+| `labelStyle`          | `StyleProp<TextStyle>` | Theme       | Style for the label (overrides theme)           |
+| `labelProps`          | `TextProps`            | `undefined` | Additional props for the label                  |
+| `leftComponent`       | `React.ReactNode`      | `undefined` | Component on the left side                      |
+| `rightComponent`      | `React.ReactNode`      | `undefined` | Component on the right side                     |
+| `errorText`           | `string`               | `undefined` | Error message to display                        |
+| `errorProps`          | `TextProps`            | `undefined` | Props for the error text                        |
+| `onFocus`             | `() => void`           | `undefined` | Focus callback                                  |
+| `onBlur`              | `() => void`           | `undefined` | Blur callback                                   |
+| `multiline`           | `boolean`              | Theme       | Enable multiline input (overrides theme)        |
+| `numberOfLines`       | `number`               | Theme       | Number of lines for multiline (overrides theme) |
 
 ### TextInputRef
 
@@ -467,28 +469,97 @@ import {TextInput} from 'rn-base-component'
 
 ## Theme Integration
 
-The TextInput component integrates with the theme system:
+The TextInput component integrates with the theme system and can be customized via theme configuration:
+
+### Theme Configuration
 
 ```tsx
-// Theme configuration
-const theme = {
-  colors: {
-    primaryBorder: '#007AFF',
-    textColor: '#333333',
-    darkTextColor: '#000000',
-    errorText: '#FF3B30',
+import {extendTheme} from 'rn-base-component'
+
+const customTheme = extendTheme({
+  components: {
+    TextInput: {
+      editable: true, // Default editable state
+      numberOfLines: 1, // Default line count
+      multiline: false, // Default multiline state
+      containerStyle: undefined, // Default container style
+      inputContainerStyle: {
+        // Default input container style
+        borderWidth: 1,
+        borderRadius: 8,
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+      },
+      inputStyle: {
+        // Default input text style
+        fontSize: 16,
+        color: '#000000',
+      },
+      labelStyle: {
+        // Default label style
+        fontSize: 14,
+        fontWeight: '500',
+        marginBottom: 4,
+        color: '#333333',
+      },
+      placeholderTextColor: '#999999', // Default placeholder color
+      borderColor: '#E0E0E0', // Default border color
+      focusedBorderColor: '#007AFF', // Border color when focused
+      backgroundColor: '#FFFFFF', // Default background color
+      textColor: '#000000', // Default text color
+      labelColor: '#333333', // Default label color
+      errorColor: '#FF3B30', // Default error color
+    },
   },
-  sizes: {
-    narrow: 44, // Default input height
-    petite: 12, // Small spacing
+})
+```
+
+### Using Theme Values
+
+```tsx
+// Uses theme defaults
+<TextInput placeholder="Default styled input" />
+
+// Override specific theme values with props
+<TextInput
+  placeholder="Custom styled input"
+  inputContainerStyle={{borderRadius: 12}}
+  labelStyle={{fontSize: 16, fontWeight: 'bold'}}
+/>
+```
+
+### Default Theme Values
+
+```tsx
+// Default TextInput theme configuration
+TextInputTheme: {
+  editable: true,
+  numberOfLines: 1,
+  multiline: false,
+  containerStyle: undefined,
+  inputContainerStyle: {
+    borderWidth: 1,
+    borderRadius: 8,                    // metrics.borderRadius
+    paddingHorizontal: 16,              // base.spacing.slim
+    paddingVertical: 12,                // base.spacing.small
   },
-  fontSizes: {
-    xs: 12, // Label font size
-    sm: 16, // Input font size
+  inputStyle: {
+    fontSize: 16,
+    color: '#000000',                   // base.colors.black
   },
-  spacing: {
-    tiny: 4, // Small spacing
+  labelStyle: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginBottom: 4,                    // base.spacing.tiny
+    color: '#27272a',                   // base.colors.darkText
   },
+  placeholderTextColor: '#3f3f46',     // base.colors.gray
+  borderColor: '#454545',              // base.colors.primaryBorder
+  focusedBorderColor: '#0e7490',       // base.colors.primary
+  backgroundColor: '#FFFFFF',          // base.colors.white
+  textColor: '#000000',                // base.colors.black
+  labelColor: '#27272a',               // base.colors.darkText
+  errorColor: '#b91c1c',               // base.colors.error
 }
 ```
 
