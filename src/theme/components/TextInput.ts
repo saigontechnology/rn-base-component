@@ -91,7 +91,6 @@ export const TextInputTheme: TextInputThemeProps = {
   },
   labelStyle: {
     fontSize: 14,
-    fontWeight: '500',
     marginBottom: base.spacing.tiny,
     color: base.colors.darkText,
   },

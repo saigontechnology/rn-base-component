@@ -124,7 +124,6 @@ export const SliderTheme: SliderThemeProps = {
   labelStyle: {
     color: base.colors.white,
     fontSize: 12,
-    fontWeight: '500',
   },
   thumbStyle: {
     backgroundColor: base.colors.white,

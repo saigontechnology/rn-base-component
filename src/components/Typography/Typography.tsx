@@ -33,17 +33,17 @@ type TypographyProps = {
 export const typographyVariantStyles: Record<TypographyVariant, TypographyVariantStyles> = {
   h1: {
     fontSize: 28,
-    fontWeight: '700',
+    fontWeight: 'bold',
     lineHeight: 32,
   },
   h2: {
     fontSize: 24,
-    fontWeight: '700',
+    fontWeight: 'bold',
     lineHeight: 28,
   },
   regular: {
     fontSize: 16,
-    fontWeight: '400',
+    fontWeight: 'normal',
     lineHeight: 24,
   },
   bold: {

@@ -102,7 +102,7 @@ export const CodeInputTheme: CodeInputThemeProps = {
   },
   textStyle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: 'normal',
     color: base.colors.black,
   },
   focusTextStyle: {

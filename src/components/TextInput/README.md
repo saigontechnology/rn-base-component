@@ -498,7 +498,7 @@ const customTheme = extendTheme({
       labelStyle: {
         // Default label style
         fontSize: 14,
-        fontWeight: '500',
+        fontWeight: 'normal',
         marginBottom: 4,
         color: '#333333',
       },
@@ -549,7 +549,7 @@ TextInputTheme: {
   },
   labelStyle: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: 'normal',
     marginBottom: 4,                    // base.spacing.tiny
     color: '#27272a',                   // base.colors.darkText
   },
