@@ -562,6 +562,106 @@ const styles = StyleSheet.create({
 })
 ```
 
+## Theme Customization
+
+The Accordion component supports extensive theming through the global theme system. You can customize all aspects of the accordion's appearance and behavior.
+
+### Default Theme Structure
+
+```typescript
+const AccordionTheme = {
+  container: {
+    paddingBottom: theme.spacing.petite,
+    overflow: 'hidden',
+  },
+  header: {
+    padding: theme.spacing.compact,
+  },
+  title: {
+    fontSize: theme.fontSizes.xl,
+    textAlign: 'center',
+    color: theme.colors.amber,
+    fontWeight: 'bold',
+  },
+  body: {
+    padding: theme.spacing.compact,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  animation: {
+    openDuration: 300,
+    closeDuration: 300,
+  },
+  interactive: {
+    activeOpacity: 0.7,
+  },
+}
+```
+
+### Customizing Theme
+
+```tsx
+import {extendTheme, BaseProvider} from 'rn-base-component'
+
+const customTheme = extendTheme({
+  components: {
+    Accordion: {
+      container: {
+        paddingBottom: 8,
+        overflow: 'hidden',
+      },
+      header: {
+        padding: 20,
+      },
+      title: {
+        fontSize: 18,
+        textAlign: 'left',
+        color: '#2563eb',
+        fontWeight: 'semibold',
+      },
+      body: {
+        padding: 16,
+        justifyContent: 'flex-start',
+        alignItems: 'stretch',
+      },
+      animation: {
+        openDuration: 250,
+        closeDuration: 200,
+      },
+      interactive: {
+        activeOpacity: 0.8,
+      },
+    },
+  },
+})
+
+export default function App() {
+  return (
+    <BaseProvider theme={customTheme}>
+      <YourAccordionComponent />
+    </BaseProvider>
+  )
+}
+```
+
+### Theme Properties
+
+| Property                    | Type                                         | Description                              |
+| --------------------------- | -------------------------------------------- | ---------------------------------------- |
+| `container.paddingBottom`   | `number`                                     | Bottom padding for accordion container   |
+| `container.overflow`        | `'visible' \| 'hidden'`                      | Overflow behavior for container          |
+| `header.padding`            | `number`                                     | Padding for accordion header             |
+| `title.fontSize`            | `number`                                     | Font size for accordion title            |
+| `title.textAlign`           | `'center' \| 'left' \| 'right' \| 'justify'` | Text alignment for title                 |
+| `title.color`               | `string`                                     | Text color for title                     |
+| `title.fontWeight`          | `IFontWeight`                                | Font weight for title                    |
+| `body.padding`              | `number`                                     | Padding for accordion content body       |
+| `body.justifyContent`       | `ViewStyle['justifyContent']`                | Flex justify content for body            |
+| `body.alignItems`           | `ViewStyle['alignItems']`                    | Flex align items for body                |
+| `animation.openDuration`    | `number`                                     | Duration in ms for open animation        |
+| `animation.closeDuration`   | `number`                                     | Duration in ms for close animation       |
+| `interactive.activeOpacity` | `number`                                     | Opacity when accordion header is pressed |
+
 ## Best Practices
 
 1. **Content Organization** - Group related content logically
@@ -570,6 +670,7 @@ const styles = StyleSheet.create({
 4. **Visual Feedback** - Provide clear indicators for expandable sections
 5. **Animation Timing** - Keep animations quick but noticeable
 6. **Accessibility** - Ensure proper accessibility labels and states
+7. **Theme Consistency** - Use theme values for consistent styling across your app
 
 ## Performance Considerations
 

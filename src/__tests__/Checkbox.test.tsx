@@ -1,8 +1,7 @@
 import React from 'react'
 import {render, fireEvent} from '@testing-library/react-native'
 import {Checkbox} from '../components'
-import {ThemeProvider} from 'styled-components/native'
-import {theme} from '../theme'
+import {BaseProvider} from '../core/BaseProvider'
 
 jest.mock('../hooks/useTheme', () => ({
   useTheme: jest.fn(() => ({
@@ -15,8 +14,7 @@ jest.mock('../hooks/useTheme', () => ({
   })),
 }))
 
-const renderComponent = (Component: React.ReactElement) =>
-  render(<ThemeProvider theme={theme}>{Component}</ThemeProvider>)
+const renderWithProvider = (component: React.ReactElement) => render(<BaseProvider>{component}</BaseProvider>)
 
 describe('Checkbox test', () => {
   const onPressMock = jest.fn()
@@ -47,12 +45,12 @@ describe('Checkbox test', () => {
   // })
 
   it('should render correctly', () => {
-    const {getByTestId} = renderComponent(<Checkbox />)
+    const {getByTestId} = renderWithProvider(<Checkbox />)
     expect(getByTestId('container')).toBeDefined()
   })
 
   it('should call on press', () => {
-    const {getByTestId} = renderComponent(<Checkbox onChange={onPressMock} />)
+    const {getByTestId} = renderWithProvider(<Checkbox onChange={onPressMock} />)
     const checkbox = getByTestId('container')
 
     fireEvent.press(checkbox)
@@ -60,7 +58,7 @@ describe('Checkbox test', () => {
   })
 
   it('should change state when pressed', () => {
-    const {getByTestId} = renderComponent(<Checkbox fillColor="#0B0B0B" unfillColor="#00000000" />)
+    const {getByTestId} = renderWithProvider(<Checkbox fillColor="#0B0B0B" unfillColor="#00000000" />)
     const checkbox = getByTestId('container')
     const icon = getByTestId('icon-container')
 
@@ -72,7 +70,7 @@ describe('Checkbox test', () => {
   })
 
   it('should not change state when disabled', () => {
-    const {getByTestId} = renderComponent(<Checkbox disabled={true} unfillColor="#00000000" />)
+    const {getByTestId} = renderWithProvider(<Checkbox disabled={true} unfillColor="#00000000" />)
     const checkbox = getByTestId('container')
     const icon = getByTestId('icon-container')
 
@@ -81,13 +79,13 @@ describe('Checkbox test', () => {
   })
 
   it('label should be null', () => {
-    const {queryByTestId} = render(<Checkbox disableText={true} />)
+    const {queryByTestId} = renderWithProvider(<Checkbox disableText={true} />)
     const label = queryByTestId('label')
     expect(label).toBeNull()
   })
 
   it('label should be set', () => {
-    const {getByTestId} = render(<Checkbox label="checkbox text" />)
+    const {getByTestId} = renderWithProvider(<Checkbox label="checkbox text" />)
     const label = getByTestId('label')
 
     expect(label.props.children).toEqual('checkbox text')

@@ -100,19 +100,19 @@ const styles = StyleSheet.create({
 
 ### IconProps
 
-| Prop          | Type                    | Default          | Description                               |
-| ------------- | ----------------------- | ---------------- | ----------------------------------------- |
-| `source`      | `ImageSourcePropType`   | Required         | Image source for the icon                 |
-| `size`        | `number`                | `metrics.medium` | Width and height of the icon              |
-| `disabled`    | `boolean`               | `false`          | Disable touch interactions                |
-| `color`       | `string`                | `undefined`      | Tint color for the icon                   |
-| `hitSlop`     | `Insets`                | `defaultHitSlop` | Extends the touchable area                |
-| `style`       | `StyleProp<ImageStyle>` | `undefined`      | Custom styles for the icon image          |
-| `resizeMode`  | `ImageResizeMode`       | `'contain'`      | How the image should be resized           |
-| `testID`      | `string`                | `undefined`      | Testing identifier                        |
-| `onPress`     | `() => void`            | `undefined`      | Callback for press events                 |
-| `onLongPress` | `() => void`            | `undefined`      | Callback for long press events            |
-| `buttonStyle` | `StyleProp<ViewStyle>`  | `undefined`      | Custom styles for the touchable container |
+| Prop          | Type                    | Default          | Description                                                 |
+| ------------- | ----------------------- | ---------------- | ----------------------------------------------------------- |
+| `source`      | `ImageSourcePropType`   | Required         | Image source for the icon                                   |
+| `size`        | `number`                | Theme            | Width and height of the icon (overrides theme)              |
+| `disabled`    | `boolean`               | Theme            | Disable touch interactions (overrides theme)                |
+| `color`       | `string`                | Theme            | Tint color for the icon (overrides theme)                   |
+| `hitSlop`     | `Insets`                | `defaultHitSlop` | Extends the touchable area                                  |
+| `style`       | `StyleProp<ImageStyle>` | Theme            | Custom styles for the icon image (overrides theme)          |
+| `resizeMode`  | `ImageResizeMode`       | Theme            | How the image should be resized (overrides theme)           |
+| `testID`      | `string`                | `undefined`      | Testing identifier                                          |
+| `onPress`     | `() => void`            | `undefined`      | Callback for press events                                   |
+| `onLongPress` | `() => void`            | `undefined`      | Callback for long press events                              |
+| `buttonStyle` | `StyleProp<ViewStyle>`  | Theme            | Custom styles for the touchable container (overrides theme) |
 
 ## Icon Patterns
 
@@ -478,3 +478,55 @@ const styles = StyleSheet.create({
 - Use appropriate image resolutions (@2x, @3x for different densities)
 - Check `resizeMode` prop setting
 - Ensure source images are high quality
+
+## Theme Integration
+
+The Icon component integrates with the theme system and can be customized via theme configuration:
+
+### Theme Configuration
+
+```tsx
+import {extendTheme} from 'rn-base-component'
+
+const customTheme = extendTheme({
+  components: {
+    Icon: {
+      size: 24, // Default icon size
+      color: '#333333', // Default icon color
+      disabled: false, // Default disabled state
+      resizeMode: 'contain', // Default resize mode
+      style: undefined, // Default icon image style
+      buttonStyle: undefined, // Default button container style
+    },
+  },
+})
+```
+
+### Using Theme Values
+
+```tsx
+// Uses theme defaults
+<Icon source={require('./assets/star.png')} />
+
+// Override specific theme values
+<Icon
+  source={require('./assets/star.png')}
+  size={32}
+  color="#FFD700"
+  resizeMode="cover"
+/>
+```
+
+### Default Theme Values
+
+```tsx
+// Default Icon theme configuration
+IconTheme: {
+  size: 24,                // metrics.medium
+  color: '#000000',        // base.colors.black
+  disabled: false,         // Default enabled state
+  resizeMode: 'contain',   // Default resize mode
+  style: undefined,        // No default image style
+  buttonStyle: undefined,  // No default button style
+}
+```

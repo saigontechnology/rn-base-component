@@ -1,15 +1,14 @@
 import React from 'react'
 import {render} from '@testing-library/react-native'
-import {Typography, typographyVariantStyles} from '../components'
+import {Typography} from '../components'
+import {typographyVariantStyles} from '../components/Typography/Typography'
 import {BaseProvider} from '../core'
+
+const renderWithProvider = (component: React.ReactElement) => render(<BaseProvider>{component}</BaseProvider>)
 
 describe('Typography Component', () => {
   it('renders text with default style and variant', () => {
-    const {getByText} = render(
-      <BaseProvider>
-        <Typography>Test Text</Typography>
-      </BaseProvider>,
-    )
+    const {getByText} = renderWithProvider(<Typography>Test Text</Typography>)
     const textElement = getByText('Test Text')
 
     // Verify default variant is 'regular'
@@ -18,11 +17,7 @@ describe('Typography Component', () => {
   })
 
   it('applies the specified typography variant style', () => {
-    const {getByText} = render(
-      <BaseProvider>
-        <Typography variant="h1">Test Text</Typography>
-      </BaseProvider>,
-    )
+    const {getByText} = renderWithProvider(<Typography variant="h1">Test Text</Typography>)
     const textElement = getByText('Test Text')
 
     // Verify variant style is applied
@@ -32,11 +27,7 @@ describe('Typography Component', () => {
 
   it('applies custom style', () => {
     const customStyle = {fontSize: 20, color: 'red'}
-    const {getByText} = render(
-      <BaseProvider>
-        <Typography style={customStyle}>Test Text</Typography>
-      </BaseProvider>,
-    )
+    const {getByText} = renderWithProvider(<Typography style={customStyle}>Test Text</Typography>)
     const textElement = getByText('Test Text')
 
     // Verify custom style is applied
@@ -45,11 +36,7 @@ describe('Typography Component', () => {
 
   it('applies specified color', () => {
     const customColor = 'blue'
-    const {getByText} = render(
-      <BaseProvider>
-        <Typography color={customColor}>Test Text</Typography>
-      </BaseProvider>,
-    )
+    const {getByText} = renderWithProvider(<Typography color={customColor}>Test Text</Typography>)
     const textElement = getByText('Test Text')
 
     // Verify color is applied
@@ -57,11 +44,7 @@ describe('Typography Component', () => {
   })
 
   it('renders text correctly', () => {
-    const {getByText} = render(
-      <BaseProvider>
-        <Typography>Test Text</Typography>
-      </BaseProvider>,
-    )
+    const {getByText} = renderWithProvider(<Typography>Test Text</Typography>)
     const textElement = getByText('Test Text')
 
     // Verify text is rendered correctly
