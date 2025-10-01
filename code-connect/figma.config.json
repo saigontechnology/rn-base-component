@@ -1,0 +1,22 @@
+{
+  "codeConnect": {
+    "include": ["components/*.figma.tsx"],
+    "label": "React Native",
+    "parser": "react",
+    "interactiveSetupFigmaFileUrl": "https://www.figma.com/design/JfmuXTpcFBa0xj3JzwNtxx/Saigon-Technology_MobilePortal?node-id=0-1",
+    "documentUrlSubstitutions": {
+      "<FIGMA_BUTTON>": "https://www.figma.com/design/JfmuXTpcFBa0xj3JzwNtxx/Saigon-Technology_MobilePortal?node-id=8-148",
+      "<FIGMA_SLIDER>": "https://www.figma.com/design/JfmuXTpcFBa0xj3JzwNtxx/Saigon-Technology_MobilePortal?node-id=503-11083",
+      "<FIGMA_TEXT_INPUT>": "https://www.figma.com/design/JfmuXTpcFBa0xj3JzwNtxx/Saigon-Technology_MobilePortal?node-id=20-55977",
+      "<FIGMA_CODE_INPUTS>": "https://www.figma.com/design/JfmuXTpcFBa0xj3JzwNtxx/Saigon-Technology_MobilePortal?node-id=141-10638",
+      "<FIGMA_CHECKBOX>": "https://www.figma.com/design/JfmuXTpcFBa0xj3JzwNtxx/Saigon-Technology_MobilePortal?node-id=701-12729",
+      "<FIGMA_CHECKBOXES>": "https://www.figma.com/design/JfmuXTpcFBa0xj3JzwNtxx/Saigon-Technology_MobilePortal?node-id=701-12833",
+      "<FIGMA_RADIO_BUTTON>": "https://www.figma.com/design/JfmuXTpcFBa0xj3JzwNtxx/Saigon-Technology_MobilePortal?node-id=701-12848",
+      "<FIGMA_HORIZONTAL_RADIO_BUTTONS>": "https://www.figma.com/design/JfmuXTpcFBa0xj3JzwNtxx/Saigon-Technology_MobilePortal?node-id=701-13153",
+      "<FIGMA_VERTICAL_RADIO_BUTTONS>": "https://www.figma.com/design/JfmuXTpcFBa0xj3JzwNtxx/Saigon-Technology_MobilePortal?node-id=701-13179",
+      "<FIGMA_PROGRESS_LINEAR>": "https://www.figma.com/design/JfmuXTpcFBa0xj3JzwNtxx/Saigon-Technology_MobilePortal?node-id=709-2582",
+      "<FIGMA_TYPOGRAPHY>": "https://www.figma.com/design/JfmuXTpcFBa0xj3JzwNtxx/Saigon-Technology_MobilePortal?node-id=3-63",
+      "<FIGMA_ACCORDION>": "https://www.figma.com/design/JfmuXTpcFBa0xj3JzwNtxx/Saigon-Technology_MobilePortal?node-id=773-10315"
+    }
+  }
+}
