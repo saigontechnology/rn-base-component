@@ -7,7 +7,9 @@ import {
   ButtonOutline,
   ButtonTransparent,
   Icon,
+  Text,
 } from 'rn-base-component'
+import {StyleSheet} from 'react-native'
 
 const BUTTON_FIGMA_URL = '<FIGMA_BUTTON>'
 const buttonProps = {
@@ -33,6 +35,12 @@ const buttonProps = {
     false: figma.string('button_text'),
   }),
 }
+
+const styles = StyleSheet.create({
+  underline: {
+    textDecorationLine: 'underline',
+  },
+})
 
 figma.connect(ButtonPrimary, BUTTON_FIGMA_URL, {
   variant: {type: 'contained', style: 'primary'},
@@ -60,6 +68,8 @@ figma.connect(ButtonTransparent, BUTTON_FIGMA_URL, {
 
 figma.connect(Button, BUTTON_FIGMA_URL, {
   variant: {type: 'link'},
-  props: buttonProps,
-  example: props => <Button {...props} />,
+  props: {
+    children: figma.string('button_text'),
+  },
+  example: props => <Text {...props} style={styles.underline} />,
 })
