@@ -4,6 +4,7 @@ import {Icon, TextInput, theme} from 'rn-base-component'
 import {StyleSheet} from 'react-native'
 
 const TEXT_INPUT_FIGMA_URL = '<FIGMA_TEXT_INPUT>'
+const SEARCH_INPUT_FIGMA_URL = '<FIGMA_SEARCH_INPUT>'
 
 const styles = StyleSheet.create({
   errorTextProps: {
@@ -64,6 +65,24 @@ const textInputProps = {
   },
 }
 
+const searchInputProps = {
+  placeholder: figma.textContent('Search'),
+  leftComponent: <Icon source={require('@/assets/images/search.png')} />,
+  rightComponent: figma.boolean('voice_control', {
+    true: <Icon source={require('@/assets/images/voice_control.png')} />,
+    false: undefined,
+  }),
+  onFocus: () => {
+    /* TODO: Handle onFocus */
+  },
+  onBlur: () => {
+    /* TODO: Handle onBlur */
+  },
+  onChangeText: () => {
+    /* TODO: Handle onChangeText */
+  },
+}
+
 figma.connect(TextInput, TEXT_INPUT_FIGMA_URL, {
   variant: {style: 'filled'},
   props: textInputProps,
@@ -80,4 +99,9 @@ figma.connect(TextInput.Outlined, TEXT_INPUT_FIGMA_URL, {
   variant: {style: 'outline'},
   props: textInputProps,
   example: props => <TextInput.Outlined {...props} />,
+})
+
+figma.connect(TextInput, SEARCH_INPUT_FIGMA_URL, {
+  props: searchInputProps,
+  example: props => <TextInput {...props} />,
 })
