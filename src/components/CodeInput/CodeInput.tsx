@@ -7,12 +7,21 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import {KeyboardTypeOptions, StyleProp, TextInput, TextInputProps, TextStyle, ViewStyle} from 'react-native'
+import {
+  KeyboardTypeOptions,
+  StyleProp,
+  TextInput,
+  TextInputProps,
+  TextProps,
+  TextStyle,
+  ViewStyle,
+} from 'react-native'
 import styled from 'styled-components/native'
 import {useTheme} from '../../hooks'
 import {metrics} from '../../helpers'
 import {Cursor} from './Cursor'
 import {Text} from '../Text/Text'
+import {ErrorText, HelperText} from './components'
 
 // Types
 type CodeInputValue = string
@@ -102,6 +111,63 @@ interface CodeInputProps extends Omit<TextInputProps, 'value' | 'onChangeText' |
 
   /** Test ID for the component */
   testID?: string
+
+  /** Style for outer container */
+  containerStyle?: StyleProp<ViewStyle>
+
+  /** Label text displayed above the code input */
+  label?: string
+
+  /** Custom label component to replace default label text */
+  labelComponent?: ReactNode
+
+  /** Styling for the label */
+  labelStyle?: StyleProp<TextStyle>
+
+  /** Props to be passed to the label Text component */
+  labelProps?: TextProps
+
+  /** Show asterisk beside label for required fields */
+  isRequire?: boolean
+
+  /** Helper text displayed below the code input */
+  helperText?: string
+
+  /** Custom helper component to replace default helper text */
+  helperComponent?: ReactNode
+
+  /** Props to be passed to the helper text component */
+  helperTextProps?: TextProps
+
+  /** Error text displayed below the code input */
+  errorText?: string
+
+  /** Props to be passed to the error text component */
+  errorProps?: TextProps
+
+  /** Enable error state styling */
+  error?: boolean
+
+  /** Style for cell in error state */
+  errorCellStyle?: StyleProp<ViewStyle>
+
+  /** Enable success state styling */
+  success?: boolean
+
+  /** Style for cell in success state */
+  successCellStyle?: StyleProp<ViewStyle>
+
+  /** Style for cell in disabled state */
+  disabledCellStyle?: StyleProp<ViewStyle>
+
+  /** Style for cell in active state */
+  activeCellStyle?: StyleProp<ViewStyle>
+
+  /** React node to be rendered on the left side of the code input */
+  leftComponent?: ReactNode
+
+  /** React node to be rendered on the right side of the code input */
+  rightComponent?: ReactNode
 }
 
 // Default constants moved to theme configuration
@@ -135,6 +201,25 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
       autoFocus,
       disabled,
       testID = 'code-input',
+      containerStyle,
+      label,
+      labelComponent,
+      labelStyle,
+      labelProps,
+      isRequire,
+      helperText,
+      helperComponent,
+      helperTextProps,
+      errorText,
+      errorProps,
+      error,
+      errorCellStyle,
+      success,
+      successCellStyle,
+      disabledCellStyle,
+      activeCellStyle,
+      leftComponent,
+      rightComponent,
       ...textInputProps
     },
     ref,
@@ -295,7 +380,15 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
         const isCellFocused = isFocused && cellIndex === focusedCellIndex
         const hasCellValue = Boolean(cellValue)
 
-        const cellStyles = [cellStyle, hasCellValue && filledCellStyle, isCellFocused && focusCellStyle]
+        // Apply styles in priority order: disabled > error > success > focused > filled > default
+        const cellStyles = [
+          cellStyle,
+          hasCellValue && filledCellStyle,
+          isCellFocused && (activeCellStyle ?? focusCellStyle),
+          success && (successCellStyle ?? CodeInputTheme.successCellStyle),
+          error && (errorCellStyle ?? CodeInputTheme.errorCellStyle),
+          disabled && (disabledCellStyle ?? CodeInputTheme.disabledCellStyle),
+        ]
 
         const wrapperStyles = [cellWrapperStyle, isCellFocused && focusCellWrapperStyle]
 
@@ -311,7 +404,11 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
               accessibilityLabel={`Code input cell ${cellIndex + 1} of ${length}${
                 cellValue ? `, contains ${cellValue}` : ', empty'
               }`}
-              accessibilityHint={`Tap to ${cellValue ? 'clear and ' : ''}enter code digit`}>
+              accessibilityHint={`Tap to ${cellValue ? 'clear and ' : ''}enter code digit`}
+              accessibilityState={{
+                disabled: !!disabled,
+                selected: isCellFocused,
+              }}>
               {renderCellContent(cellIndex, cellValue)}
             </Cell>
           </CellWrapperStyled>
@@ -324,13 +421,20 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
         cellStyle,
         filledCellStyle,
         focusCellStyle,
+        activeCellStyle,
         cellWrapperStyle,
         focusCellWrapperStyle,
         handleCellPress,
         disabled,
+        error,
+        success,
+        errorCellStyle,
+        successCellStyle,
+        disabledCellStyle,
         length,
         testID,
         renderCellContent,
+        CodeInputTheme,
       ],
     )
 
@@ -349,34 +453,74 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
     }
 
     return (
-      <Container testID={testID}>
-        <HiddenTextInput
-          testID={`${testID}-hidden-input`}
-          ref={textInputRef}
-          value={code}
-          onChangeText={handleValueChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          maxLength={actualLength}
-          keyboardType={keyboardType ?? CodeInputTheme.keyboardType}
-          textContentType="oneTimeCode"
-          autoComplete="sms-otp"
-          autoFocus={autoFocus ?? CodeInputTheme.autoFocus}
-          editable={!(disabled ?? CodeInputTheme.disabled)}
-          accessible={true}
-          accessibilityLabel={`Code input with ${actualLength} digits`}
-          accessibilityHint={`Enter ${actualLength} digit code`}
-          accessibilityValue={{
-            text: `${code.length} of ${actualLength} digits entered`,
-          }}
-          {...textInputProps}
-        />
-        <CellContainer
-          style={cellContainerStyle}
-          accessible={true}
-          accessibilityLabel={`Code input cells, ${code.length} of ${actualLength} filled`}>
-          {cells}
-        </CellContainer>
+      <Container testID={testID} style={containerStyle}>
+        {labelComponent ? (
+          <LabelContainer testID={`${testID}-label-container`}>
+            {labelComponent}
+            {isRequire && <RequiredStar testID={`${testID}-required`}> *</RequiredStar>}
+          </LabelContainer>
+        ) : (
+          label && (
+            <LabelText
+              testID={`${testID}-label`}
+              style={labelStyle ?? CodeInputTheme.labelStyle}
+              {...labelProps}>
+              {label}
+              {isRequire && <RequiredStar testID={`${testID}-required`}> *</RequiredStar>}
+            </LabelText>
+          )
+        )}
+        <InputWrapper>
+          <HiddenTextInput
+            testID={`${testID}-hidden-input`}
+            ref={textInputRef}
+            value={code}
+            onChangeText={handleValueChange}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            maxLength={actualLength}
+            keyboardType={keyboardType ?? CodeInputTheme.keyboardType}
+            textContentType="oneTimeCode"
+            autoComplete="sms-otp"
+            autoFocus={autoFocus ?? CodeInputTheme.autoFocus}
+            editable={!(disabled ?? CodeInputTheme.disabled)}
+            accessible={true}
+            accessibilityLabel={`Code input with ${actualLength} digits${error ? ', error' : ''}${
+              success ? ', success' : ''
+            }${disabled ? ', disabled' : ''}`}
+            accessibilityHint={`Enter ${actualLength} digit code`}
+            accessibilityValue={{
+              text: `${code.length} of ${actualLength} digits entered`,
+            }}
+            accessibilityState={{
+              disabled: !!disabled,
+            }}
+            {...textInputProps}
+          />
+          <ComponentRow>
+            {!!leftComponent && leftComponent}
+            <CellContainer
+              style={cellContainerStyle}
+              accessible={true}
+              accessibilityLabel={`Code input cells, ${code.length} of ${actualLength} filled${
+                error ? ', error' : ''
+              }${success ? ', success' : ''}${disabled ? ', disabled' : ''}`}
+              accessibilityState={{
+                disabled: !!disabled,
+              }}>
+              {cells}
+            </CellContainer>
+            {!!rightComponent && rightComponent}
+          </ComponentRow>
+        </InputWrapper>
+        {!!errorText && <ErrorText errorText={errorText} errorProps={errorProps} />}
+        {!errorText && (!!helperText || !!helperComponent) && (
+          <HelperText
+            helperText={helperText}
+            helperComponent={helperComponent}
+            helperTextProps={helperTextProps}
+          />
+        )}
       </Container>
     )
   },
@@ -385,8 +529,31 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
 CodeInput.displayName = 'CodeInput'
 
 // Styled components
-const Container = styled.View({
+const Container = styled.View({})
+
+const InputWrapper = styled.View({
   position: 'relative',
+})
+
+const LabelContainer = styled.View(({theme}) => ({
+  marginBottom: theme?.spacing?.tiny || 8,
+  flexDirection: 'row',
+  alignItems: 'center',
+}))
+
+const LabelText = styled.Text(({theme}) => ({
+  fontSize: theme?.fontSizes?.sm || 14,
+  color: theme?.colors?.darkText || '#333',
+  marginBottom: theme?.spacing?.tiny || 8,
+}))
+
+const RequiredStar = styled.Text(({theme}) => ({
+  color: theme?.colors?.errorText || '#ff0000',
+}))
+
+const ComponentRow = styled.View({
+  flexDirection: 'row',
+  alignItems: 'center',
 })
 
 const CellWrapperStyled = styled.View({})

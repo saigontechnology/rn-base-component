@@ -79,6 +79,30 @@ export type CodeInputThemeProps = {
    * Disable input
    */
   disabled: boolean
+  /**
+   * Style for outer container
+   */
+  containerStyle?: StyleProp<ViewStyle>
+  /**
+   * Styling for the label
+   */
+  labelStyle?: StyleProp<TextStyle>
+  /**
+   * Style for cell in error state
+   */
+  errorCellStyle?: StyleProp<ViewStyle>
+  /**
+   * Style for cell in success state
+   */
+  successCellStyle?: StyleProp<ViewStyle>
+  /**
+   * Style for cell in disabled state
+   */
+  disabledCellStyle?: StyleProp<ViewStyle>
+  /**
+   * Style for cell in active state (alias for focusCellStyle)
+   */
+  activeCellStyle?: StyleProp<ViewStyle>
 }
 
 export const CodeInputTheme: CodeInputThemeProps = {
@@ -134,4 +158,27 @@ export const CodeInputTheme: CodeInputThemeProps = {
   },
   autoFocus: false,
   disabled: false,
+  containerStyle: undefined,
+  labelStyle: {
+    fontSize: 14,
+    color: base.colors.darkText,
+    marginBottom: 8,
+  },
+  errorCellStyle: {
+    borderColor: base.colors.error,
+    borderWidth: 2,
+  },
+  successCellStyle: {
+    borderColor: base.colors.success,
+    borderWidth: 2,
+  },
+  disabledCellStyle: {
+    backgroundColor: '#f5f5f5',
+    borderColor: base.colors.primaryBorder,
+    opacity: 0.5,
+  },
+  activeCellStyle: {
+    borderColor: base.colors.primary,
+    borderWidth: 2,
+  },
 }
