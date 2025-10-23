@@ -460,7 +460,7 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
             {isRequire && <RequiredStar testID={`${testID}-required`}> *</RequiredStar>}
           </LabelContainer>
         ) : (
-          label && (
+          !!label && (
             <LabelText
               testID={`${testID}-label`}
               style={labelStyle ?? CodeInputTheme.labelStyle}
