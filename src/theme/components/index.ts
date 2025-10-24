@@ -7,6 +7,7 @@ import {
 } from './Button'
 import {CheckboxTheme} from './Checkbox'
 import {TextTheme} from './Text'
+import {TextInputTheme} from './TextInput'
 
 export default {
   Button: ButtonTheme,
@@ -14,6 +15,7 @@ export default {
   ButtonPrimary: ButtonPrimaryTheme,
   ButtonSecondary: ButtonSecondaryTheme,
   ButtonTransparent: ButtonTransparentTheme,
+  TextInput: TextInputTheme,
   Checkbox: CheckboxTheme,
   Text: TextTheme,
 }
