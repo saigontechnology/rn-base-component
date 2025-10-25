@@ -6,12 +6,13 @@ import type {
   TextStyle,
   ViewStyle,
 } from 'react-native'
-import {TextInput as RNTextInput, View} from 'react-native'
+import {TextInput as RNTextInput, StyleSheet, View} from 'react-native'
 import styled from 'styled-components/native'
 import TextInputOutlined from './TextInputOutlined'
 import {CustomIcon, CustomIconProps, Error} from './components'
 import {isIOS} from '../../helpers'
 import TextInputFlat from './TextInputFlat'
+import {useTheme} from '../../hooks'
 
 export interface TextInputProps extends RNTextInputProperties {
   /** Style for container */
@@ -96,6 +97,7 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
     },
     ref,
   ) => {
+    const TextInputTheme = useTheme().components.TextInput
     const inputRef = useRef<RNTextInput>(null)
 
     useImperativeHandle(ref, () => ({
@@ -109,15 +111,21 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
     }, [])
 
     return (
-      <View style={containerStyle}>
+      <View style={[StyleSheet.flatten(TextInputTheme.containerStyle), StyleSheet.flatten(containerStyle)]}>
         {!!label && (
-          <Title testID="test-title" style={labelStyle} {...labelProps}>
+          <Title
+            testID="test-title"
+            style={[StyleSheet.flatten(TextInputTheme.labelStyle), StyleSheet.flatten(labelStyle)]}
+            {...labelProps}>
             {label}
             {!!isRequire && <StarText testID="test-startText"> *</StarText>}
           </Title>
         )}
         <TouchableContainer
-          style={inputContainerStyle}
+          style={[
+            StyleSheet.flatten(TextInputTheme.inputContainerStyle),
+            StyleSheet.flatten(inputContainerStyle),
+          ]}
           activeOpacity={1}
           onPress={handleFocus}
           disabled={editable}>
@@ -125,7 +133,7 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
           <TextInputComponent
             testID="test-TextInputComponent"
             ref={inputRef}
-            style={inputStyle}
+            style={[StyleSheet.flatten(TextInputTheme.inputStyle), StyleSheet.flatten(inputStyle)]}
             editable={editable}
             multiline={multiline}
             numberOfLines={numberOfLines}
