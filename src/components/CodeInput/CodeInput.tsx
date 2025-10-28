@@ -170,8 +170,6 @@ interface CodeInputProps extends Omit<TextInputProps, 'value' | 'onChangeText' |
   rightComponent?: ReactNode
 }
 
-// Default constants moved to theme configuration
-
 // Main component
 export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
   (
@@ -230,7 +228,7 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
     const [isFocused, setIsFocused] = useState(false)
 
     // Use theme defaults with props override
-    const actualLength = length ?? CodeInputTheme.length
+    const actualLength = length ?? 6 // Default length is 6
 
     // Use controlled or uncontrolled value
     const code = controlledValue !== undefined ? controlledValue : internalValue
@@ -479,11 +477,11 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
             onFocus={handleFocus}
             onBlur={handleBlur}
             maxLength={actualLength}
-            keyboardType={keyboardType ?? CodeInputTheme.keyboardType}
+            keyboardType={keyboardType ?? 'number-pad'}
             textContentType="oneTimeCode"
             autoComplete="sms-otp"
-            autoFocus={autoFocus ?? CodeInputTheme.autoFocus}
-            editable={!(disabled ?? CodeInputTheme.disabled)}
+            autoFocus={autoFocus}
+            editable={!disabled}
             accessible={true}
             accessibilityLabel={`Code input with ${actualLength} digits${error ? ', error' : ''}${
               success ? ', success' : ''

@@ -1,12 +1,8 @@
-import type {StyleProp, ViewStyle, TextStyle, KeyboardTypeOptions} from 'react-native'
+import type {StyleProp, ViewStyle, TextStyle} from 'react-native'
 import {metrics} from '../../helpers'
 import base from '../base'
 
 export type CodeInputThemeProps = {
-  /**
-   * Number of code input cells
-   */
-  length: number
   /**
    * Style for individual cell
    */
@@ -44,41 +40,13 @@ export type CodeInputThemeProps = {
    */
   focusCellWrapperStyle?: StyleProp<ViewStyle>
   /**
-   * Enable secure text entry mode
-   */
-  secureTextEntry: boolean
-  /**
-   * Keyboard type for input
-   */
-  keyboardType: KeyboardTypeOptions
-  /**
-   * Show cursor in focused cell
-   */
-  withCursor: boolean
-  /**
-   * Placeholder text for empty cells
-   */
-  placeholder?: string
-  /**
    * Color for placeholder text
    */
   placeholderTextColor: string
   /**
-   * Render placeholder as dot instead of text
-   */
-  placeholderAsDot: boolean
-  /**
    * Style for placeholder dot
    */
   placeholderDotStyle?: StyleProp<ViewStyle>
-  /**
-   * Auto focus on mount
-   */
-  autoFocus: boolean
-  /**
-   * Disable input
-   */
-  disabled: boolean
   /**
    * Style for outer container
    */
@@ -106,7 +74,6 @@ export type CodeInputThemeProps = {
 }
 
 export const CodeInputTheme: CodeInputThemeProps = {
-  length: 6,
   cellStyle: {
     width: 50,
     height: 50,
@@ -144,20 +111,13 @@ export const CodeInputTheme: CodeInputThemeProps = {
   },
   cellWrapperStyle: undefined,
   focusCellWrapperStyle: undefined,
-  secureTextEntry: false,
-  keyboardType: 'number-pad',
-  withCursor: true,
-  placeholder: undefined,
   placeholderTextColor: base.colors.gray,
-  placeholderAsDot: false,
   placeholderDotStyle: {
     width: 6,
     height: 6,
     borderRadius: 3,
     backgroundColor: base.colors.gray,
   },
-  autoFocus: false,
-  disabled: false,
   containerStyle: undefined,
   labelStyle: {
     fontSize: 14,
