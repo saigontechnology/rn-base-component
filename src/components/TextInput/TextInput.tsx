@@ -6,13 +6,14 @@ import type {
   TextStyle,
   ViewStyle,
 } from 'react-native'
-import {TextInput as RNTextInput, View} from 'react-native'
+import {TextInput as RNTextInput, StyleSheet, View} from 'react-native'
 import styled from 'styled-components/native'
 import TextInputOutlined from './TextInputOutlined'
 import {CustomIcon, CustomIconProps, Error} from './components'
 import {isIOS} from '../../helpers'
 import {useTheme} from '../../hooks'
 import TextInputFlat from './TextInputFlat'
+import {useTheme} from '../../hooks'
 
 export interface TextInputProps extends RNTextInputProperties {
   /** Style for container */
