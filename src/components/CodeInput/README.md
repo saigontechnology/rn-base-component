@@ -168,26 +168,89 @@ const styles = StyleSheet.create({
 
 ### CodeInputProps
 
-| Prop                   | Type                     | Default     | Description                                   |
-| ---------------------- | ------------------------ | ----------- | --------------------------------------------- |
-| `length`               | `number`                 | Theme       | Number of input cells (overrides theme)       |
-| `value`                | `string`                 | `''`        | Current input value                           |
-| `onChangeText`         | `(code: string) => void` | `undefined` | Callback when code changes                    |
-| `onSubmit`             | `(code: string) => void` | `undefined` | Callback when code is complete                |
-| `onClear`              | `() => void`             | `undefined` | Callback when code is cleared                 |
-| `cellStyle`            | `StyleProp<ViewStyle>`   | Theme       | Style for individual cells (overrides theme)  |
-| `filledCellStyle`      | `StyleProp<ViewStyle>`   | Theme       | Style for cells with values (overrides theme) |
-| `focusCellStyle`       | `StyleProp<ViewStyle>`   | Theme       | Style for focused cell (overrides theme)      |
-| `textStyle`            | `StyleProp<TextStyle>`   | Theme       | Style for cell text (overrides theme)         |
-| `focusTextStyle`       | `StyleProp<TextStyle>`   | Theme       | Style for focused cell text (overrides theme) |
-| `secureTextEntry`      | `boolean`                | Theme       | Enable secure input mode (overrides theme)    |
-| `keyboardType`         | `KeyboardTypeOptions`    | Theme       | Keyboard type to show (overrides theme)       |
-| `withCursor`           | `boolean`                | Theme       | Show cursor in focused cell (overrides theme) |
-| `placeholder`          | `string`                 | Theme       | Placeholder text for empty cells              |
-| `placeholderTextColor` | `string`                 | Theme       | Color for placeholder text (overrides theme)  |
-| `placeholderAsDot`     | `boolean`                | Theme       | Render placeholder as dot (overrides theme)   |
-| `autoFocus`            | `boolean`                | Theme       | Auto focus on mount (overrides theme)         |
-| `disabled`             | `boolean`                | Theme       | Disable input (overrides theme)               |
+#### Core Props
+
+| Prop           | Type                     | Default     | Description                    |
+| -------------- | ------------------------ | ----------- | ------------------------------ |
+| `length`       | `number`                 | Theme       | Number of input cells          |
+| `value`        | `string`                 | `''`        | Current input value            |
+| `onChangeText` | `(code: string) => void` | `undefined` | Callback when code changes     |
+| `onSubmit`     | `(code: string) => void` | `undefined` | Callback when code is complete |
+| `onClear`      | `() => void`             | `undefined` | Callback when code is cleared  |
+| `autoFocus`    | `boolean`                | Theme       | Auto focus on mount            |
+| `disabled`     | `boolean`                | Theme       | Disable input                  |
+| `keyboardType` | `KeyboardTypeOptions`    | Theme       | Keyboard type to show          |
+| `testID`       | `string`                 | `undefined` | Test ID for the component      |
+
+#### Styling Props
+
+| Prop                    | Type                   | Default     | Description                           |
+| ----------------------- | ---------------------- | ----------- | ------------------------------------- |
+| `containerStyle`        | `StyleProp<ViewStyle>` | `undefined` | Style for outer container             |
+| `cellContainerStyle`    | `StyleProp<ViewStyle>` | `undefined` | Style for container holding all cells |
+| `cellStyle`             | `StyleProp<ViewStyle>` | Theme       | Style for individual cells            |
+| `cellWrapperStyle`      | `StyleProp<ViewStyle>` | `undefined` | Style for wrapper around each cell    |
+| `filledCellStyle`       | `StyleProp<ViewStyle>` | Theme       | Style for cells with values           |
+| `focusCellStyle`        | `StyleProp<ViewStyle>` | Theme       | Style for focused cell                |
+| `focusCellWrapperStyle` | `StyleProp<ViewStyle>` | `undefined` | Style for wrapper around focused cell |
+| `activeCellStyle`       | `StyleProp<ViewStyle>` | `undefined` | Style for cell in active state        |
+| `errorCellStyle`        | `StyleProp<ViewStyle>` | `undefined` | Style for cell in error state         |
+| `successCellStyle`      | `StyleProp<ViewStyle>` | `undefined` | Style for cell in success state       |
+| `disabledCellStyle`     | `StyleProp<ViewStyle>` | `undefined` | Style for cell in disabled state      |
+
+#### Text & Secure Entry Props
+
+| Prop                   | Type                   | Default     | Description                      |
+| ---------------------- | ---------------------- | ----------- | -------------------------------- |
+| `textStyle`            | `StyleProp<TextStyle>` | Theme       | Style for cell text              |
+| `focusTextStyle`       | `StyleProp<TextStyle>` | Theme       | Style for focused cell text      |
+| `secureTextEntry`      | `boolean`              | Theme       | Enable secure input mode         |
+| `secureViewStyle`      | `StyleProp<ViewStyle>` | `undefined` | Style for secure text entry dots |
+| `placeholder`          | `string`               | Theme       | Placeholder text for empty cells |
+| `placeholderTextColor` | `string`               | Theme       | Color for placeholder text       |
+| `placeholderAsDot`     | `boolean`              | Theme       | Render placeholder as dot        |
+| `placeholderDotStyle`  | `StyleProp<ViewStyle>` | `undefined` | Style for placeholder dot        |
+
+#### Cursor Props
+
+| Prop           | Type              | Default     | Description                 |
+| -------------- | ----------------- | ----------- | --------------------------- |
+| `withCursor`   | `boolean`         | Theme       | Show cursor in focused cell |
+| `customCursor` | `() => ReactNode` | `undefined` | Custom cursor component     |
+
+#### Label Props
+
+| Prop             | Type                   | Default     | Description                               |
+| ---------------- | ---------------------- | ----------- | ----------------------------------------- |
+| `label`          | `string`               | `undefined` | Label text displayed above the code input |
+| `labelComponent` | `ReactNode`            | `undefined` | Custom label component to replace default |
+| `labelStyle`     | `StyleProp<TextStyle>` | `undefined` | Styling for the label                     |
+| `labelProps`     | `TextProps`            | `undefined` | Props passed to the label Text component  |
+| `isRequire`      | `boolean`              | `undefined` | Show asterisk beside label for required   |
+
+#### Helper & Error Text Props
+
+| Prop              | Type        | Default     | Description                                |
+| ----------------- | ----------- | ----------- | ------------------------------------------ |
+| `helperText`      | `string`    | `undefined` | Helper text displayed below the code input |
+| `helperComponent` | `ReactNode` | `undefined` | Custom helper component to replace default |
+| `helperTextProps` | `TextProps` | `undefined` | Props passed to the helper text component  |
+| `errorText`       | `string`    | `undefined` | Error text displayed below the code input  |
+| `errorProps`      | `TextProps` | `undefined` | Props passed to the error text component   |
+
+#### State Props
+
+| Prop      | Type      | Default     | Description                  |
+| --------- | --------- | ----------- | ---------------------------- |
+| `error`   | `boolean` | `undefined` | Enable error state styling   |
+| `success` | `boolean` | `undefined` | Enable success state styling |
+
+#### Component Props
+
+| Prop             | Type        | Default     | Description                                    |
+| ---------------- | ----------- | ----------- | ---------------------------------------------- |
+| `leftComponent`  | `ReactNode` | `undefined` | React node rendered on the left side of input  |
+| `rightComponent` | `ReactNode` | `undefined` | React node rendered on the right side of input |
 
 ## Usage Patterns
 
@@ -284,6 +347,132 @@ const OTPInput = () => {
 }
 ```
 
+### Error State Handling
+
+```tsx
+const CodeInputWithError = () => {
+  const [code, setCode] = useState('')
+  const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+
+  const handleCodeChange = (newCode: string) => {
+    setCode(newCode)
+    // Clear error when user types
+    if (error) {
+      setError(false)
+      setErrorMessage('')
+    }
+  }
+
+  const handleCodeSubmit = async (finalCode: string) => {
+    try {
+      await verifyCode(finalCode)
+      // Success handling
+      navigation.navigate('Success')
+    } catch (err) {
+      setError(true)
+      setErrorMessage('Invalid code. Please try again.')
+      setCode('')
+    }
+  }
+
+  return (
+    <CodeInput
+      length={6}
+      value={code}
+      onChangeText={handleCodeChange}
+      onSubmit={handleCodeSubmit}
+      error={error}
+      errorText={errorMessage}
+      errorCellStyle={styles.errorCell}
+      label="Verification Code"
+      isRequire={true}
+      helperText="Enter the 6-digit code sent to your phone"
+    />
+  )
+}
+
+const styles = StyleSheet.create({
+  errorCell: {
+    borderColor: '#FF3B30',
+    borderWidth: 2,
+    backgroundColor: '#FFF5F5',
+  },
+})
+```
+
+### Success State Handling
+
+```tsx
+const CodeInputWithSuccess = () => {
+  const [code, setCode] = useState('')
+  const [success, setSuccess] = useState(false)
+
+  const handleCodeSubmit = async (finalCode: string) => {
+    const isValid = await verifyCode(finalCode)
+
+    if (isValid) {
+      setSuccess(true)
+      setTimeout(() => {
+        navigation.navigate('NextScreen')
+      }, 1000)
+    }
+  }
+
+  return (
+    <CodeInput
+      length={6}
+      value={code}
+      onChangeText={setCode}
+      onSubmit={handleCodeSubmit}
+      success={success}
+      successCellStyle={styles.successCell}
+      label="Verification Code"
+      disabled={success}
+    />
+  )
+}
+
+const styles = StyleSheet.create({
+  successCell: {
+    borderColor: '#34C759',
+    borderWidth: 2,
+    backgroundColor: '#F0FFF4',
+  },
+})
+```
+
+### With Left & Right Components
+
+```tsx
+import {View, TouchableOpacity} from 'react-native'
+import Icon from 'react-native-vector-icons/Ionicons'
+
+const CodeInputWithComponents = () => {
+  const [code, setCode] = useState('')
+
+  const handleClear = () => {
+    setCode('')
+  }
+
+  return (
+    <CodeInput
+      length={6}
+      value={code}
+      onChangeText={setCode}
+      leftComponent={<Icon name="lock-closed" size={24} color="#666" style={{marginRight: 8}} />}
+      rightComponent={
+        code.length > 0 && (
+          <TouchableOpacity onPress={handleClear} style={{marginLeft: 8}}>
+            <Icon name="close-circle" size={24} color="#999" />
+          </TouchableOpacity>
+        )
+      }
+    />
+  )
+}
+```
+
 ### Bank PIN with Secure Display
 
 ```tsx
@@ -371,9 +560,31 @@ const customTheme = extendTheme({
         fontSize: 18,
         fontWeight: '600',
       },
+      labelStyle: {
+        // Label text styling
+        fontSize: 14,
+        fontWeight: '500',
+        color: '#333',
+      },
+      errorCellStyle: {
+        // Style for cells in error state
+        borderColor: '#FF3B30',
+        borderWidth: 2,
+      },
+      successCellStyle: {
+        // Style for cells in success state
+        borderColor: '#34C759',
+        borderWidth: 2,
+      },
+      disabledCellStyle: {
+        // Style for cells in disabled state
+        opacity: 0.5,
+        backgroundColor: '#F5F5F5',
+      },
       secureTextEntry: false, // Secure input mode
       keyboardType: 'number-pad', // Keyboard type
       autoFocus: false, // Auto focus behavior
+      disabled: false, // Disabled state
       placeholderTextColor: '#999999', // Placeholder color
     },
   },
@@ -409,15 +620,40 @@ CodeInputTheme: {
     borderRadius: 8,              // metrics.borderRadius
     backgroundColor: '#FFFFFF',   // base.colors.white
   },
+  filledCellStyle: {
+    borderColor: '#007AFF',       // Highlight when filled
+  },
+  focusCellStyle: {
+    borderColor: '#007AFF',       // Highlight when focused
+    borderWidth: 2,
+  },
   textStyle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#000000',            // base.colors.black
   },
+  labelStyle: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#333333',            // Label text color
+  },
+  errorCellStyle: {
+    borderColor: '#FF3B30',      // Error state
+    borderWidth: 2,
+  },
+  successCellStyle: {
+    borderColor: '#34C759',      // Success state
+    borderWidth: 2,
+  },
+  disabledCellStyle: {
+    opacity: 0.5,                // Disabled state
+    backgroundColor: '#F5F5F5',
+  },
   secureTextEntry: false,
   keyboardType: 'number-pad',
   autoFocus: false,
   disabled: false,
+  placeholderTextColor: '#999999',
 }
 ```
 

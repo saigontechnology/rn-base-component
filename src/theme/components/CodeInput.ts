@@ -1,12 +1,8 @@
-import type {StyleProp, ViewStyle, TextStyle, KeyboardTypeOptions} from 'react-native'
+import type {StyleProp, ViewStyle, TextStyle} from 'react-native'
 import {metrics} from '../../helpers'
 import base from '../base'
 
 export type CodeInputThemeProps = {
-  /**
-   * Number of code input cells
-   */
-  length: number
   /**
    * Style for individual cell
    */
@@ -44,45 +40,40 @@ export type CodeInputThemeProps = {
    */
   focusCellWrapperStyle?: StyleProp<ViewStyle>
   /**
-   * Enable secure text entry mode
-   */
-  secureTextEntry: boolean
-  /**
-   * Keyboard type for input
-   */
-  keyboardType: KeyboardTypeOptions
-  /**
-   * Show cursor in focused cell
-   */
-  withCursor: boolean
-  /**
-   * Placeholder text for empty cells
-   */
-  placeholder?: string
-  /**
    * Color for placeholder text
    */
   placeholderTextColor: string
-  /**
-   * Render placeholder as dot instead of text
-   */
-  placeholderAsDot: boolean
   /**
    * Style for placeholder dot
    */
   placeholderDotStyle?: StyleProp<ViewStyle>
   /**
-   * Auto focus on mount
+   * Style for outer container
    */
-  autoFocus: boolean
+  containerStyle?: StyleProp<ViewStyle>
   /**
-   * Disable input
+   * Styling for the label
    */
-  disabled: boolean
+  labelStyle?: StyleProp<TextStyle>
+  /**
+   * Style for cell in error state
+   */
+  errorCellStyle?: StyleProp<ViewStyle>
+  /**
+   * Style for cell in success state
+   */
+  successCellStyle?: StyleProp<ViewStyle>
+  /**
+   * Style for cell in disabled state
+   */
+  disabledCellStyle?: StyleProp<ViewStyle>
+  /**
+   * Style for cell in active state (alias for focusCellStyle)
+   */
+  activeCellStyle?: StyleProp<ViewStyle>
 }
 
 export const CodeInputTheme: CodeInputThemeProps = {
-  length: 6,
   cellStyle: {
     width: 50,
     height: 50,
@@ -120,18 +111,34 @@ export const CodeInputTheme: CodeInputThemeProps = {
   },
   cellWrapperStyle: undefined,
   focusCellWrapperStyle: undefined,
-  secureTextEntry: false,
-  keyboardType: 'number-pad',
-  withCursor: true,
-  placeholder: undefined,
   placeholderTextColor: base.colors.gray,
-  placeholderAsDot: false,
   placeholderDotStyle: {
     width: 6,
     height: 6,
     borderRadius: 3,
     backgroundColor: base.colors.gray,
   },
-  autoFocus: false,
-  disabled: false,
+  containerStyle: undefined,
+  labelStyle: {
+    fontSize: 14,
+    color: base.colors.darkText,
+    marginBottom: 8,
+  },
+  errorCellStyle: {
+    borderColor: base.colors.error,
+    borderWidth: 2,
+  },
+  successCellStyle: {
+    borderColor: base.colors.success,
+    borderWidth: 2,
+  },
+  disabledCellStyle: {
+    backgroundColor: '#f5f5f5',
+    borderColor: base.colors.primaryBorder,
+    opacity: 0.5,
+  },
+  activeCellStyle: {
+    borderColor: base.colors.primary,
+    borderWidth: 2,
+  },
 }
