@@ -11,6 +11,7 @@ import styled from 'styled-components/native'
 import TextInputOutlined from './TextInputOutlined'
 import {CustomIcon, CustomIconProps, Error} from './components'
 import {isIOS} from '../../helpers'
+import {useTheme} from '../../hooks'
 import TextInputFlat from './TextInputFlat'
 import {useTheme} from '../../hooks'
 
@@ -111,32 +112,26 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
     }, [])
 
     return (
-      <View style={[StyleSheet.flatten(TextInputTheme.containerStyle), StyleSheet.flatten(containerStyle)]}>
+      <View style={containerStyle ?? TextInputTheme.containerStyle}>
         {!!label && (
-          <Title
-            testID="test-title"
-            style={[StyleSheet.flatten(TextInputTheme.labelStyle), StyleSheet.flatten(labelStyle)]}
-            {...labelProps}>
+          <Title testID="test-title" style={labelStyle ?? TextInputTheme.labelStyle} {...labelProps}>
             {label}
             {!!isRequire && <StarText testID="test-startText"> *</StarText>}
           </Title>
         )}
         <TouchableContainer
-          style={[
-            StyleSheet.flatten(TextInputTheme.inputContainerStyle),
-            StyleSheet.flatten(inputContainerStyle),
-          ]}
+          style={inputContainerStyle ?? TextInputTheme.inputContainerStyle}
           activeOpacity={1}
           onPress={handleFocus}
-          disabled={editable}>
+          disabled={editable ?? TextInputTheme.editable}>
           {!!leftComponent && leftComponent}
           <TextInputComponent
             testID="test-TextInputComponent"
             ref={inputRef}
-            style={[StyleSheet.flatten(TextInputTheme.inputStyle), StyleSheet.flatten(inputStyle)]}
-            editable={editable}
-            multiline={multiline}
-            numberOfLines={numberOfLines}
+            style={inputStyle ?? TextInputTheme.inputStyle}
+            editable={editable ?? TextInputTheme.editable}
+            multiline={multiline ?? TextInputTheme.multiline}
+            numberOfLines={numberOfLines ?? TextInputTheme.numberOfLines}
             onChangeText={onChangeText}
             onFocus={onFocus}
             onSubmitEditing={onSubmitEditing}

@@ -1,0 +1,119 @@
+---
+alwaysApply: true
+---
+# Accessibility Guidelines
+
+## Core Accessibility Requirements
+All components must be accessible and follow React Native accessibility best practices.
+
+## Required Accessibility Props
+- `testID` - For automated testing and element identification
+- `accessible` - Mark components as accessible elements
+- `accessibilityLabel` - Descriptive text for screen readers
+- `accessibilityHint` - Additional context when needed
+- `accessibilityRole` - Semantic role (button, text, image, etc.)
+- `accessibilityState` - Dynamic states (disabled, selected, checked)
+
+## Component-Specific Guidelines
+
+### Interactive Components (Button, TouchableOpacity)
+```typescript
+<Button
+  testID="submit-button"
+  accessibilityRole="button"
+  accessibilityLabel="Submit form"
+  accessibilityHint="Submits the current form data"
+  accessibilityState={{disabled: isDisabled}}
+>
+  Submit
+</Button>
+```
+
+### Form Elements (TextInput, Checkbox, RadioButton)
+```typescript
+<TextInput
+  testID="email-input"
+  accessibilityRole="textbox"
+  accessibilityLabel="Email address"
+  accessibilityHint="Enter your email address"
+  placeholder="email@example.com"
+/>
+
+<Checkbox
+  testID="agree-checkbox"
+  accessibilityRole="checkbox"
+  accessibilityLabel="Agree to terms"
+  accessibilityState={{checked: isChecked}}
+/>
+```
+
+### Informational Components (Text, Icon)
+```typescript
+<Icon
+  name="warning"
+  accessibilityRole="image"
+  accessibilityLabel="Warning icon"
+/>
+
+<Text
+  accessibilityRole="text"
+  testID="error-message"
+>
+  Error: Invalid input
+</Text>
+```
+
+## Color and Contrast
+- Ensure sufficient color contrast (WCAG 2.1 AA standards)
+- Don't rely solely on color to convey information
+- Support high contrast mode preferences
+- Test in both light and dark themes
+
+## Focus Management
+- Ensure proper focus order for keyboard navigation
+- Provide visible focus indicators
+- Handle focus trapping in modals/overlays
+- Support focus management in complex components
+
+## Screen Reader Support
+- Provide meaningful content descriptions
+- Use semantic HTML equivalents where possible
+- Group related elements with proper labeling
+- Handle dynamic content announcements
+
+## Testing Accessibility
+- Test with screen readers (TalkBack on Android, VoiceOver on iOS)
+- Verify keyboard navigation works properly
+- Check color contrast ratios
+- Test with high contrast and large text settings
+- Use accessibility inspector tools
+
+## Common Patterns
+```typescript
+// Grouping related elements
+<View
+  accessibilityRole="group"
+  accessibilityLabel="User profile section"
+>
+  <Text accessibilityRole="header">Profile</Text>
+  <Text>User details...</Text>
+</View>
+
+// Custom accessibility announcements
+const announceChange = (message: string) => {
+  AccessibilityInfo.announceForAccessibility(message)
+}
+
+// Conditional accessibility
+<Button
+  accessibilityLabel={isLoading ? "Loading..." : "Submit"}
+  accessibilityState={{busy: isLoading}}
+>
+  {isLoading ? "Loading..." : "Submit"}
+</Button>
+```
+
+## Documentation Requirements
+- Document accessibility features in component README files
+- Include accessibility examples in component demos
+- Test and document keyboard shortcuts where applicable

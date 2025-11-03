@@ -1,0 +1,37 @@
+---
+alwaysApply: true
+---
+
+# RN Base Component Library - Project Structure
+
+This is a React Native base component library with the following key architecture:
+
+## Core Entry Points
+- Main entry: [src/index.tsx](mdc:src/index.tsx) - exports all components, core, hooks, and theme
+- Components index: [src/components/index.ts](mdc:src/components/index.ts) - exports all available components
+- Core functionality: [src/core/index.ts](mdc:src/core/index.ts) - BaseProvider and theme extension utilities
+- Theme system: [src/theme/index.ts](mdc:src/theme/index.ts) - theme definitions and configuration
+- Hooks: [src/hooks/index.ts](mdc:src/hooks/index.ts) - useTheme and useBase hooks
+
+## Package Configuration
+- Package definition: [package.json](mdc:package.json) - uses react-native-builder-bob for multi-format builds
+- TypeScript config: [tsconfig.json](mdc:tsconfig.json) - strict TypeScript settings with path mapping
+- Build output: `lib/` directory with commonjs, module, and typescript formats
+
+## Component Architecture
+Each component follows a consistent structure:
+- Main component file (e.g., `Button.tsx`)
+- Variant components (e.g., `ButtonPrimary.tsx`, `ButtonOutline.tsx`)
+- Barrel export in `index.ts`
+- Documentation in `README.md`
+- Type definitions in separate files when complex
+
+## Theme System
+- Uses styled-components with custom theme interface
+- [src/core/BaseProvider.tsx](mdc:src/core/BaseProvider.tsx) - provides theme context and color mode switching
+- Supports light/dark mode with automatic theme switching
+- Centralized color, spacing, and component styling definitions
+
+## Example App
+- Located in `example/` directory using Expo
+- Demonstrates component usage and integration patterns

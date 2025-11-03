@@ -10,8 +10,8 @@ import Animated, {
   Easing,
   interpolate,
 } from 'react-native-reanimated'
-import {metrics, deviceWidth} from '../../helpers/metrics'
-import {theme} from '../../theme'
+import {deviceWidth} from '../../helpers/metrics'
+import {useTheme} from '../../hooks'
 
 interface IProgressProps {
   /**
@@ -62,14 +62,15 @@ const ProgressComponent = forwardRef<View, IProgressProps>(
     {
       width,
       value = 0,
-      size = metrics.small,
-      borderRadius = 0,
-      filledTrackColor = theme.colors.primary,
-      backgroundColor = theme.colors.gray,
+      size,
+      borderRadius,
+      filledTrackColor,
+      backgroundColor,
       isIndeterminateProgress = false,
     },
     ref,
   ) => {
+    const ProgressTheme = useTheme().components.Progress
     const [progressWidth, setProgressWidth] = useState(0)
     const translateX = useSharedValue(-screenWidth)
     const animation = useSharedValue(0)
@@ -115,22 +116,20 @@ const ProgressComponent = forwardRef<View, IProgressProps>(
     return (
       <ProgressWrapper
         ref={ref}
-        size={size}
+        size={size ?? ProgressTheme.size}
         testID="progress-wrapper"
         onLayout={onLayout}
-        {...{
-          backgroundColor,
-          borderRadius,
-          width,
-        }}>
+        backgroundColor={backgroundColor ?? ProgressTheme.backgroundColor ?? '#ccc'}
+        borderRadius={borderRadius ?? ProgressTheme.borderRadius ?? 0}
+        width={width ?? ProgressTheme.width}>
         <Animated.View
           testID="filled-track"
           style={[
             progressStyle,
             {
-              backgroundColor: filledTrackColor,
-              borderRadius,
-              height: size,
+              backgroundColor: filledTrackColor ?? ProgressTheme.filledTrackColor,
+              borderRadius: borderRadius ?? ProgressTheme.borderRadius,
+              height: size ?? ProgressTheme.size,
               width: progressWidth,
             },
           ]}

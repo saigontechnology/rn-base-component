@@ -1,38 +1,33 @@
-const path = require('path')
-const escape = require('escape-string-regexp')
-const exclusionList = require('metro-config/src/defaults/exclusionList')
-const pak = require('../package.json')
+// example/metro.config.js
+const path = require('path');
+const { getDefaultConfig } = require('expo/metro-config');
 
-const root = path.resolve(__dirname, '..')
+const projectRoot = __dirname;
+const workspaceRoot = path.resolve(projectRoot, '..');
 
-const modules = Object.keys({
-  ...pak.peerDependencies,
-})
+const config = getDefaultConfig(projectRoot);
 
-module.exports = {
-  projectRoot: __dirname,
-  watchFolders: [root],
+// Watch the parent directory (the library source code)
+config.watchFolders = [workspaceRoot];
 
-  // We need to make sure that only one version is loaded for peerDependencies
-  // So we block them at the root, and alias them to the versions in example's node_modules
-  resolver: {
-    blacklistRE: exclusionList(
-      modules.map(m => new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`)),
-    ),
+// Add aliases to resolve to source code during development
+config.resolver.alias = {
+  'rn-base-component': path.resolve(workspaceRoot, 'src'),
+};
 
-    extraNodeModules: modules.reduce((acc, name) => {
-      acc[name] = path.join(__dirname, 'node_modules', name)
-      return acc
-    }, {}),
-    resolverMainFields: ['sbmodern', 'react-native', 'browser', 'main'],
-  },
+// Node modules resolution order
+config.resolver.nodeModulesPaths = [
+  path.resolve(projectRoot, 'node_modules'),
+  path.resolve(workspaceRoot, 'node_modules'),
+];
 
-  transformer: {
-    getTransformOptions: async () => ({
-      transform: {
-        experimentalImportSupport: false,
-        inlineRequires: false,
-      },
-    }),
-  },
-}
+// Include source extensions for better resolution
+config.resolver.sourceExts = [...config.resolver.sourceExts, 'ts', 'tsx'];
+
+// Disable hierarchical lookup for better performance
+config.resolver.disableHierarchicalLookup = true;
+
+// For better Metro performance with monorepo
+config.resolver.platforms = ['ios', 'android', 'native', 'web'];
+
+module.exports = config;

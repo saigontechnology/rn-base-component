@@ -3,6 +3,7 @@ import {LayoutAnimation, TouchableOpacity} from 'react-native'
 import styled from 'styled-components/native'
 import type {CommonAccordionProps, Section} from './Accordion'
 import {toggleAnimation} from './ToggleAnimation'
+import {useTheme} from '../../hooks'
 
 export interface AccordionItemProps extends PropsWithChildren<CommonAccordionProps> {
   /**
@@ -38,6 +39,9 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
   renderContent,
   children,
 }) => {
+  const theme = useTheme()
+  const AccordionTheme = theme.components.Accordion
+
   const content = useMemo(() => {
     if (expanded) {
       return renderContent ? (
@@ -74,13 +78,32 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
   )
 
   const onPressItem = useCallback(() => {
-    LayoutAnimation.configureNext(toggleAnimation(openAnimation, closeAnimation, openDuration, closeDuration))
+    LayoutAnimation.configureNext(
+      toggleAnimation(
+        openAnimation,
+        closeAnimation,
+        openDuration ?? AccordionTheme.animation.openDuration,
+        closeDuration ?? AccordionTheme.animation.closeDuration,
+      ),
+    )
     onPress(keyExtractorItem)
-  }, [closeAnimation, closeDuration, keyExtractorItem, onPress, openAnimation, openDuration])
+  }, [
+    closeAnimation,
+    closeDuration,
+    keyExtractorItem,
+    onPress,
+    openAnimation,
+    openDuration,
+    AccordionTheme.animation.openDuration,
+    AccordionTheme.animation.closeDuration,
+  ])
 
   return (
     <AccordionContainer key={keyExtractorItem} style={itemContainerStyle}>
-      <TouchableOpacity testID="accordion-item" activeOpacity={0.7} onPress={onPressItem}>
+      <TouchableOpacity
+        testID="accordion-item"
+        activeOpacity={AccordionTheme.interactive.activeOpacity}
+        onPress={onPressItem}>
         {header}
       </TouchableOpacity>
       {content}
@@ -89,23 +112,25 @@ export const AccordionItem: React.FC<AccordionItemProps> = ({
 }
 
 const AccordionContainer = styled.View(({theme}) => ({
-  paddingBottom: theme?.spacing?.petite,
-  overflow: 'hidden',
+  paddingBottom: theme?.components?.Accordion?.container?.paddingBottom ?? theme?.spacing?.petite,
+  overflow: theme?.components?.Accordion?.container?.overflow ?? 'hidden',
 }))
 
 const AccordionHeader = styled.View(({theme}) => ({
-  padding: theme?.spacing?.compact,
+  padding: theme?.components?.Accordion?.header?.padding ?? theme?.spacing?.compact,
 }))
 
 const Title = styled.Text(({theme}) => ({
-  fontSize: theme?.fontSizes?.xl,
-  textAlign: 'center',
-  color: theme?.colors?.amber,
-  fontWeight: theme?.fontWeights?.bold,
+  fontSize: theme?.components?.Accordion?.title?.fontSize ?? theme?.fontSizes?.xl,
+  textAlign: theme?.components?.Accordion?.title?.textAlign ?? 'center',
+  color: theme?.components?.Accordion?.title?.color ?? theme?.colors?.amber,
+  fontWeight:
+    theme?.fontWeights?.[theme?.components?.Accordion?.title?.fontWeight ?? 'bold'] ??
+    theme?.fontWeights?.bold,
 }))
 
 const AccordionBody = styled.View(({theme}) => ({
-  padding: theme?.spacing?.compact,
-  justifyContent: 'center',
-  alignItems: 'center',
+  padding: theme?.components?.Accordion?.body?.padding ?? theme?.spacing?.compact,
+  justifyContent: theme?.components?.Accordion?.body?.justifyContent ?? 'center',
+  alignItems: theme?.components?.Accordion?.body?.alignItems ?? 'center',
 }))
