@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo} from 'react'
 import {Gesture, GestureHandlerRootView} from 'react-native-gesture-handler'
-import {hitSlop, metrics, responsiveHeight} from '../../helpers/metrics'
+import {responsiveHeight} from '../../helpers/metrics'
 import {SliderFixedRange, SliderFixedRangeProps} from './SliderFixedRange'
 import {Thumb, Track, TrackPoint} from './components'
 import styled from 'styled-components/native'
@@ -22,8 +22,6 @@ import {
   runOnJS,
 } from 'react-native-reanimated'
 import {
-  DEFAULT_MAXIMUM_VALUE,
-  DEFAULT_MINIMUM_VALUE,
   DEFAULT_STEP,
   DURATION,
   FIRST_POINT,
@@ -143,8 +141,8 @@ type SliderComponentProps = React.FC<SliderProps> & {
 }
 
 export const Slider: SliderComponentProps = ({
-  minimumValue = DEFAULT_MINIMUM_VALUE,
-  maximumValue = DEFAULT_MAXIMUM_VALUE,
+  minimumValue,
+  maximumValue,
   step,
   roundToValue,
   style,
@@ -157,13 +155,24 @@ export const Slider: SliderComponentProps = ({
   thumbComponent,
   showTrackPoint,
   tapToSeek,
-  hitSlopPoint = hitSlop,
+  hitSlopPoint,
   sliderWidth,
-  thumbSize = {width: metrics.medium, height: metrics.medium},
+  thumbSize,
   trackPointStyle,
   onValueChange = () => null,
 }: SliderProps) => {
   const theme = useTheme()
+  const SliderTheme = theme.components.Slider
+
+  // Apply theme defaults
+  const actualMinimumValue = minimumValue ?? SliderTheme.minimumValue
+  const actualMaximumValue = maximumValue ?? SliderTheme.maximumValue
+  const actualStep = step ?? SliderTheme.step
+  const actualAlwaysShowValue = alwaysShowValue ?? SliderTheme.alwaysShowValue
+  const actualShowTrackPoint = showTrackPoint ?? SliderTheme.showTrackPoint
+  const actualTapToSeek = tapToSeek ?? SliderTheme.tapToSeek
+  const actualHitSlopPoint = hitSlopPoint ?? SliderTheme.hitSlopPoint
+  const actualThumbSize = thumbSize ?? SliderTheme.thumbSize
   const sliderInfo = useSharedValue<SliderInfo>({
     range: INIT_VALUE,
     trackWidth: INIT_VALUE,
@@ -172,11 +181,11 @@ export const Slider: SliderComponentProps = ({
   const progress = useSharedValue<number>(INIT_VALUE)
   const prevPositionX = useSharedValue<number>(INIT_VALUE)
   const opacity = useSharedValue(INIT_VALUE)
-  const stepValue = useMemo(() => step || DEFAULT_STEP, [step])
+  const stepValue = useMemo(() => actualStep || DEFAULT_STEP, [actualStep])
 
   const totalPoint = useMemo(
-    () => (maximumValue - minimumValue) / stepValue,
-    [maximumValue, minimumValue, stepValue],
+    () => (actualMaximumValue - actualMinimumValue) / stepValue,
+    [actualMaximumValue, actualMinimumValue, stepValue],
   )
 
   /**
@@ -204,24 +213,24 @@ export const Slider: SliderComponentProps = ({
 
       // When sliding the thumb across a distance shorter than the track's width
       if (progressing < MINIMUM_TRACK_WIDTH) {
-        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, minimumValue)
+        runOnJS(updateSlider)(MINIMUM_TRACK_WIDTH, actualMinimumValue)
       }
       // When sliding the thumb over the track's width
       else if (progressing > trackWidth) {
-        runOnJS(updateSlider)(trackWidth, maximumValue)
+        runOnJS(updateSlider)(trackWidth, actualMaximumValue)
       } else {
-        const value = progressing / (trackWidth / (maximumValue - minimumValue))
-        runOnJS(updateSlider)(progressing, value + minimumValue)
+        const value = progressing / (trackWidth / (actualMaximumValue - actualMinimumValue))
+        runOnJS(updateSlider)(progressing, value + actualMinimumValue)
       }
     })
     .onEnd(() => {
       const {range} = sliderInfo.value
       let value = roundToValue ? sliderValue.value.toFixed(roundToValue) : sliderValue.value
       opacity.value = INVISIBLE
-      if (step) {
+      if (actualStep) {
         // Calculate the ratio of the current thumb position with respect to the entire range of the slider
         const progressRatio = Math.round(progress.value / range)
-        value = minimumValue + progressRatio * stepValue
+        value = actualMinimumValue + progressRatio * stepValue
         const roundedProgress = progressRatio * range
         runOnJS(updateSlider)(roundedProgress, value)
       }
@@ -287,45 +296,45 @@ export const Slider: SliderComponentProps = ({
     (pointIndex: number) => {
       const curPoint = pointIndex + FIRST_POINT
       const positionPoint = sliderInfo.value.range * curPoint
-      const value = minimumValue + curPoint * stepValue
+      const value = actualMinimumValue + curPoint * stepValue
 
       updateSlider(positionPoint, value)
       onValueChange(value)
     },
-    [minimumValue, onValueChange, sliderInfo.value.range, stepValue, updateSlider],
+    [actualMinimumValue, onValueChange, sliderInfo.value.range, stepValue, updateSlider],
   )
 
   return (
     <GestureHandlerRootView testID="slider">
-      <Container style={[!!sliderWidth && {width: sliderWidth}, style]}>
-        <Track style={trackStyle} onLayout={getTrackWidth} />
-        {!!showTrackPoint && (
+      <Container style={[!!sliderWidth && {width: sliderWidth}, style ?? SliderTheme.style]}>
+        <Track style={trackStyle ?? SliderTheme.trackStyle} onLayout={getTrackWidth} />
+        {!!actualShowTrackPoint && (
           <TrackPoint
-            sliderWidth={sliderWidth}
+            sliderWidth={sliderWidth ?? 200}
             totalPoint={totalPoint}
-            hitSlopPoint={hitSlopPoint}
-            activeOpacity={tapToSeek ? 0 : 1}
-            trackPointStyle={trackPointStyle}
-            onPressPoint={(point: number) => tapToSeek && onPressPoint(point)}
+            hitSlopPoint={actualHitSlopPoint}
+            activeOpacity={actualTapToSeek ? 0 : 1}
+            trackPointStyle={trackPointStyle ?? SliderTheme.trackPointStyle}
+            onPressPoint={(point: number) => actualTapToSeek && onPressPoint(point)}
           />
         )}
         <Track
           style={StyleSheet.flatten([
             StyleSheet.absoluteFillObject,
             {backgroundColor: theme?.colors?.primary},
-            trackedStyle,
+            trackedStyle ?? SliderTheme.trackedStyle,
             animatedTrackStyle,
           ])}
         />
         <Thumb
-          text={minimumValue?.toString()}
-          bgColorLabelView={bgColorLabelView}
-          labelStyle={labelStyle}
-          alwaysShowValue={alwaysShowValue}
-          thumbSize={thumbSize}
+          text={actualMinimumValue?.toString()}
+          bgColorLabelView={bgColorLabelView ?? SliderTheme.bgColorLabelView}
+          labelStyle={labelStyle ?? SliderTheme.labelStyle}
+          alwaysShowValue={actualAlwaysShowValue}
+          thumbSize={actualThumbSize}
           thumbComponent={thumbComponent}
           animatedProps={animatedProps}
-          thumbStyle={[thumbStyle, {left: -thumbSize.width / 2}]}
+          thumbStyle={[thumbStyle ?? SliderTheme.thumbStyle, {left: -actualThumbSize.width / 2}]}
           animatedThumbStyle={animatedThumbStyle}
           opacityStyle={opacityStyle}
           onGestureEvent={handler}

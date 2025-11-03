@@ -13,6 +13,7 @@ yarn add --dev jest
 ```
 
 ## Setup
+
 Create file **jest.config.json** then adding these lines
 
 ```
@@ -42,15 +43,20 @@ Create file **jest.config.json** then adding these lines
 
 `transform`: {...} specifies the transformation process that Jest should apply to the files it is testing. The code transforms JavaScript files using Babel and TypeScript files using ts-jest.
 
-`testRegex`: "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$" specifies the regular expression pattern for test files. In this case, Jest will look for files with a .test.ts, .test.tsx, or .test.js extension in the /__tests__ directory, or with a .spec.ts, .spec.tsx, or .spec.js extension.
+`testRegex`: "(/**tests**/.\*|\\.(test|spec))\\.(ts|tsx|js)$" specifies the regular expression pattern for test files. In this case, Jest will look for files with a .test.ts, .test.tsx, or .test.js extension in the /**tests** directory, or with a .spec.ts, .spec.tsx, or .spec.js extension.
 
 `testPathIgnorePatterns`: ["\\.snap$", "<rootDir>/node_modules/"] lists the file paths that Jest should ignore when running tests. In this case, it is ignoring .snap files and files in the node_modules directory.
 
 `cacheDirectory`: ".jest/cache" specifies the directory where Jest should store its cache files.
 
 ## Feedback
+
 If you have any feedback, please reach out to us at ...
+
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)
+
 ## Support
+
 For support, email ... or join our Slack channel.

@@ -2,6 +2,9 @@ import React from 'react'
 import {render, fireEvent} from '@testing-library/react-native'
 import {RadioButton} from '../components'
 import {StyleSheet} from 'react-native'
+import {BaseProvider} from '../core/BaseProvider'
+
+const renderWithProvider = (component: React.ReactElement) => render(<BaseProvider>{component}</BaseProvider>)
 
 describe('RadioButton test', () => {
   const onPressMock = jest.fn()
@@ -11,12 +14,12 @@ describe('RadioButton test', () => {
   })
 
   it('should render correctly', () => {
-    const {getByTestId} = render(<RadioButton />)
+    const {getByTestId} = renderWithProvider(<RadioButton />)
     expect(getByTestId('container')).toBeDefined()
   })
 
   it('should call on press', () => {
-    const {getByTestId} = render(<RadioButton onPress={onPressMock} />)
+    const {getByTestId} = renderWithProvider(<RadioButton onPress={onPressMock} />)
     const radioButton = getByTestId('bounceable')
 
     fireEvent.press(radioButton)
@@ -24,7 +27,7 @@ describe('RadioButton test', () => {
   })
 
   it('should change state when pressed', () => {
-    const {getByTestId} = render(<RadioButton />)
+    const {getByTestId} = renderWithProvider(<RadioButton />)
     const radionButton = getByTestId('bounceable')
     const circle = getByTestId('circle')
 
@@ -40,7 +43,7 @@ describe('RadioButton test', () => {
   })
 
   it('should not change state when disabled', () => {
-    const {getByTestId} = render(<RadioButton onPress={onPressMock} disable={true} />)
+    const {getByTestId} = renderWithProvider(<RadioButton onPress={onPressMock} disabled={true} />)
     const radioButton = getByTestId('bounceable')
 
     fireEvent.press(radioButton)
@@ -48,14 +51,14 @@ describe('RadioButton test', () => {
   })
 
   it('should be active state when initial is set to true', () => {
-    const {getByTestId} = render(<RadioButton initial={true} />)
+    const {getByTestId} = renderWithProvider(<RadioButton initial={true} />)
     const circle = getByTestId('circle')
 
     expect(circle.props.style.backgroundColor).toBe('#004282')
   })
 
   it('should be remain state', () => {
-    const {getByTestId} = render(<RadioButton isRemainActive={true} />)
+    const {getByTestId} = renderWithProvider(<RadioButton isRemainActive={true} />)
     const radionButton = getByTestId('bounceable')
     const circle = getByTestId('circle')
 

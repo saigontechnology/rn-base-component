@@ -9,7 +9,6 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
-    "importsNotUsedAsValues": "error",
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "lib": [
@@ -29,12 +28,6 @@
     "strict": true,
     "target": "esnext"
   },
-  "include": [
-    ".eslintrc.js",
-    "babel.config.js",
-    "**/*.js",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": []
+  "include": [".eslintrc.js", "babel.config.js", "**/*.js", "**/*.ts", "**/*.tsx"],
+  "exclude": ["example/**/*", "node_modules", "lib", "coverage"]
 }

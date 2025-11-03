@@ -1,0 +1,88 @@
+---
+alwaysApply: true
+---
+# Testing Guidelines
+
+## Testing Framework Setup
+- Use Jest with React Native Testing Library as configured in [jest.config.js](mdc:jest.config.js)
+- Setup file: [jest.setup.js](mdc:jest.setup.js) and [jest.setupFilesAfterEnv.ts](mdc:jest.setupFilesAfterEnv.ts)
+- Mock definitions in [src/__mocks__/](mdc:src/__mocks__/) directory
+- Test files located in [src/__tests__/](mdc:src/__tests__/) directory
+
+## Test File Naming
+- Use `.test.tsx` for component tests
+- Use `.test.ts` for utility/hook tests
+- Name tests after the component/module being tested (e.g., `Button.test.tsx`)
+- Store test files in `src/__tests__/` directory
+
+## Component Testing Standards
+- Test component rendering with default props
+- Test all prop variations and combinations
+- Test user interactions (press, change, etc.)
+- Test accessibility features (testID, accessibility labels)
+- Test theme integration and styling variants
+
+## Testing Patterns
+```typescript
+import React from 'react'
+import {render, fireEvent} from '@testing-library/react-native'
+import {Button} from '../components/Button'
+import {BaseProvider} from '../core/BaseProvider'
+
+const renderWithProvider = (component: React.ReactElement) => {
+  return render(
+    <BaseProvider>
+      {component}
+    </BaseProvider>
+  )
+}
+
+describe('Button Component', () => {
+  it('renders correctly with default props', () => {
+    const {getByText} = renderWithProvider(<Button>Test Button</Button>)
+    expect(getByText('Test Button')).toBeTruthy()
+  })
+
+  it('handles press events', () => {
+    const mockPress = jest.fn()
+    const {getByText} = renderWithProvider(
+      <Button onPress={mockPress}>Press Me</Button>
+    )
+    
+    fireEvent.press(getByText('Press Me'))
+    expect(mockPress).toHaveBeenCalledTimes(1)
+  })
+
+  it('applies correct styles for variants', () => {
+    const {getByTestId} = renderWithProvider(
+      <Button variant="primary" testID="primary-button">Primary</Button>
+    )
+    
+    const button = getByTestId('primary-button')
+    // Test styling expectations
+  })
+})
+```
+
+## Snapshot Testing
+- Use snapshots sparingly, only for complex component structures
+- Update snapshots when making intentional changes: `yarn update-test`
+- Store snapshots in `src/__tests__/__snapshots__/` directory
+
+## Coverage Requirements
+- Aim for high test coverage on public APIs
+- Focus on testing behavior, not implementation details
+- Test edge cases and error conditions
+- Ensure theme provider integration works correctly
+
+## Mock Strategy
+- Mock external dependencies in `src/__mocks__/`
+- Mock react-native-reanimated as shown in [src/__mocks__/react-native-reanimated.js](mdc:src/__mocks__/react-native-reanimated.js)
+- Use jest.fn() for function props and callbacks
+- Mock complex native modules when needed
+
+## Accessibility Testing
+- Test that components have proper accessibility props
+- Verify screen reader compatibility
+- Test keyboard navigation where applicable
+- Use accessibility testing utilities from Testing Library

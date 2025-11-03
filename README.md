@@ -2,6 +2,10 @@
 
 A comprehensive React Native component library with modern, customizable, and accessible components.
 
+## 📖 Documentation
+
+🌐 **[Complete Documentation Website](https://rn-base-component-docs.vercel.app/)** - Interactive documentation with examples and API references
+
 ## Features
 
 - 🎯 **Modern Components** - Built with the latest React Native patterns
@@ -19,7 +23,7 @@ Before you install `rn-base-component`, make sure you have the following prerequ
 - [styled-components](https://styled-components.com/)
 - [react-native-gesture-handler](https://docs.swmansion.com/react-native-gesture-handler/)
 
-You can install these dependencies using npm or yarn (note: Current, we dont support react-native-reanimated v3 and styled-components 6.*):
+You can install these dependencies using npm or yarn (note: Current, we dont support react-native-reanimated v3 and styled-components 6.\*):
 
 ```sh
 npm install react-native-reanimated styled-components react-native-gesture-handler
@@ -41,20 +45,14 @@ npm install rn-base-component
 
 ```tsx
 import React from 'react'
-import { BaseProvider, Button, CodeInput } from 'rn-base-component'
+import {BaseProvider, Button, CodeInput} from 'rn-base-component'
 
 export default function App() {
   return (
     <BaseProvider>
-      <Button onPress={() => console.log('Pressed!')}>
-        Click Me
-      </Button>
-      
-      <CodeInput
-        length={6}
-        onSubmit={(code) => console.log('Code:', code)}
-        autoFocus
-      />
+      <Button onPress={() => console.log('Pressed!')}>Click Me</Button>
+
+      <CodeInput length={6} onSubmit={code => console.log('Code:', code)} autoFocus />
     </BaseProvider>
   )
 }
@@ -62,72 +60,149 @@ export default function App() {
 
 ## Components
 
+🔗 **[📚 Complete Component Documentation](src/components/README.md)** - Comprehensive guide to all components with examples, API references, and best practices.
+
 ### Input Components
 
 #### CodeInput
+
 A highly customizable and accessible code input component for OTP, PIN, and verification codes.
 
 **Features:**
-- 🎯 Flexible length (1-20 digits)
-- 🔒 Secure text entry mode
-- 🎨 Extensive styling options
-- ♿ Full accessibility support
-- 🎮 Controlled/uncontrolled modes
-- 📱 Mobile-optimized keyboard handling
 
-**Quick Example:**
+- 🎯 Flexible length (1-20 digits) • 🔒 Secure text entry mode • 🎨 Extensive styling options
+- ♿ Full accessibility support • 🎮 Controlled/uncontrolled modes • 📱 Mobile-optimized keyboard handling
+
 ```tsx
-<CodeInput
-  length={6}
-  onSubmit={(code) => verifyOTP(code)}
-  placeholderAsDot
-  secureTextEntry
-  autoFocus
-/>
+<CodeInput length={6} onSubmit={code => verifyOTP(code)} placeholderAsDot secureTextEntry autoFocus />
 ```
 
-[📖 **Full CodeInput Documentation**](src/components/CodeInput/README.md)
-
-### Form Components
-
-#### Button
-Customizable button component with multiple variants.
+[📖 **CodeInput Documentation**](src/components/CodeInput/README.md)
 
 #### TextInput
-Enhanced text input with validation and styling options.
+
+Enhanced text input with multiple variants, validation, and icon support.
+
+```tsx
+<TextInput.Outlined label="Email" placeholder="Enter email" errorText={error} />
+```
+
+[📖 **TextInput Documentation**](src/components/TextInput/README.md)
 
 #### Checkbox
-Accessible checkbox component with custom styling.
+
+Animated checkbox component with custom styling and label support.
+
+```tsx
+<Checkbox label="Accept terms" onChange={setAccepted} />
+```
+
+[📖 **Checkbox Documentation**](src/components/Checkbox/README.md)
 
 #### RadioButton
-Radio button component with group support.
+
+Radio button component for mutually exclusive selections.
+
+```tsx
+<RadioButton text="Option 1" value={selected === 'option1'} onPressButton={() => setSelected('option1')} />
+```
+
+[📖 **RadioButton Documentation**](src/components/RadioButton/README.md)
+
+#### Slider
+
+Interactive slider for value selection with single and range variants.
+
+```tsx
+<Slider minimumValue={0} maximumValue={100} onValueChange={setValue} />
+<Slider.Range initialLowValue={20} initialHighValue={80} onValueChange={(low, high) => setRange({low, high})} />
+```
+
+[📖 **Slider Documentation**](src/components/Slider/README.md)
+
+### UI Components
+
+#### Button
+
+Customizable button component with multiple variants and icon support.
+
+```tsx
+<Button onPress={handlePress}>Primary Button</Button>
+<ButtonOutline onPress={handlePress}>Outline Button</ButtonOutline>
+```
+
+[📖 **Button Documentation**](src/components/Button/README.md)
+
+#### Card
+
+Flexible card container for content organization with optional touch interactions.
+
+```tsx
+<Card onPress={navigateToDetails}>
+  <Text>Card content</Text>
+</Card>
+```
+
+[📖 **Card Documentation**](src/components/Card/README.md)
+
+#### Icon
+
+Versatile icon component with touch interactions and customizable styling.
+
+```tsx
+<Icon source={require('./icon.png')} size={24} onPress={handlePress} />
+```
+
+[📖 **Icon Documentation**](src/components/Icon/README.md)
 
 ### Layout Components
 
-#### Card
-Flexible card component for content organization.
-
 #### Accordion
-Collapsible content sections with smooth animations.
+
+Collapsible content sections with smooth animations and custom rendering.
+
+```tsx
+<Accordion sections={faqSections} expandMultiple={false} />
+```
+
+[📖 **Accordion Documentation**](src/components/Accordion/README.md)
 
 ### Feedback Components
 
 #### Progress
-Progress indicators for loading states.
 
-#### Slider
-Interactive slider components for value selection.
+Progress indicators for loading states with determinate and indeterminate modes.
 
-### Display Components
+```tsx
+<Progress value={65} filledTrackColor="#4CAF50" />
+<Progress isIndeterminateProgress />
+```
+
+[📖 **Progress Documentation**](src/components/Progress/README.md)
+
+### Typography Components
 
 #### Text
-Enhanced text component with typography support.
+
+Enhanced text component with theme integration and multiple variants.
+
+```tsx
+<Text color="#007AFF">Colored text</Text>
+<TextBold>Bold text</TextBold>
+```
+
+[📖 **Text Documentation**](src/components/Text/README.md)
 
 #### Typography
-Consistent typography system.
 
-#### Icon
-Icon component with customizable styles.
+Consistent typography system with predefined variants.
+
+```tsx
+<Typography variant="h1">Large Heading</Typography>
+<Typography variant="regular">Body text</Typography>
+```
+
+[📖 **Typography Documentation**](src/components/Typography/README.md)
 
 ## Development
 
@@ -148,10 +223,41 @@ yarn example update-stories
 
 ## Documentation
 
-### Component Documentation
-- [CodeInput](src/components/CodeInput/README.md) - Code input component for OTP/PIN entry
+### 📚 Component Documentation
 
-### Development Guides
+🔗 **[Complete Components Guide](src/components/README.md)** - Comprehensive overview of all components
+
+#### Individual Component Documentation
+
+**Input Components:**
+
+- [CodeInput](src/components/CodeInput/README.md) - OTP/PIN code input component
+- [TextInput](src/components/TextInput/README.md) - Enhanced text input with variants
+- [Checkbox](src/components/Checkbox/README.md) - Animated checkbox component
+- [RadioButton](src/components/RadioButton/README.md) - Radio button for single selection
+- [Slider](src/components/Slider/README.md) - Interactive value slider
+
+**UI Components:**
+
+- [Button](src/components/Button/README.md) - Customizable button with variants
+- [Card](src/components/Card/README.md) - Flexible content container
+- [Icon](src/components/Icon/README.md) - Versatile icon component
+
+**Layout Components:**
+
+- [Accordion](src/components/Accordion/README.md) - Collapsible content sections
+
+**Feedback Components:**
+
+- [Progress](src/components/Progress/README.md) - Progress indicators
+
+**Typography Components:**
+
+- [Text](src/components/Text/README.md) - Enhanced text component
+- [Typography](src/components/Typography/README.md) - Typography system
+
+### 🛠️ Development Guides
+
 - [Jest Configuration](docs/jest-config.md) - Testing setup and configuration
 - [Theme System](docs/theme.md) - Theming and customization guide
 - [Component Text](docs/component-text.md) - Text component guidelines
@@ -161,7 +267,7 @@ yarn example update-stories
 The library includes a comprehensive theming system:
 
 ```tsx
-import { BaseProvider, extendTheme } from 'rn-base-component'
+import {BaseProvider, extendTheme} from 'rn-base-component'
 
 const customTheme = extendTheme({
   colors: {
@@ -176,11 +282,7 @@ const customTheme = extendTheme({
 })
 
 export default function App() {
-  return (
-    <BaseProvider theme={customTheme}>
-      {/* Your app components */}
-    </BaseProvider>
-  )
+  return <BaseProvider theme={customTheme}>{/* Your app components */}</BaseProvider>
 }
 ```
 
@@ -189,7 +291,7 @@ export default function App() {
 All components are built with TypeScript and include comprehensive type definitions:
 
 ```tsx
-import { CodeInputRef, CodeInputProps } from 'rn-base-component'
+import {CodeInputRef, CodeInputProps} from 'rn-base-component'
 
 const codeInputRef = useRef<CodeInputRef>(null)
 
