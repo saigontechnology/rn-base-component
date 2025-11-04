@@ -7,7 +7,6 @@ export const InteractivePlayground = () => {
   const playgroundRef = useRef<TextInputRef>(null)
   const [playgroundValue, setPlaygroundValue] = useState('')
   const [hasError, setHasError] = useState(false)
-  const [hasSuccess, setHasSuccess] = useState(false)
   const [isDisabled, setIsDisabled] = useState(false)
   const [isRequired, setIsRequired] = useState(false)
 
@@ -17,18 +16,11 @@ export const InteractivePlayground = () => {
 
   const handlePlaygroundSubmit = () => {
     Alert.alert('Text Submitted', `You entered: ${playgroundValue}`)
-    setHasSuccess(true)
     setHasError(false)
   }
 
   const toggleError = () => {
     setHasError(!hasError)
-    setHasSuccess(false)
-  }
-
-  const toggleSuccess = () => {
-    setHasSuccess(!hasSuccess)
-    setHasError(false)
   }
 
   const toggleDisabled = () => setIsDisabled(!isDisabled)
@@ -38,7 +30,6 @@ export const InteractivePlayground = () => {
     playgroundRef.current?.clear()
     setPlaygroundValue('')
     setHasError(false)
-    setHasSuccess(false)
   }
 
   const focusInput = () => {
@@ -74,15 +65,7 @@ export const InteractivePlayground = () => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[demoStyles.controlButton, hasSuccess && demoStyles.controlButtonSecondary]}
-            onPress={toggleSuccess}
-          >
-            <Text style={demoStyles.controlButtonText}>
-              {hasSuccess ? 'Remove Success' : 'Add Success'}
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={demoStyles.controlButton} onPress={toggleDisabled}>
+            style={demoStyles.controlButton} onPress={toggleDisabled}>
             <Text style={demoStyles.controlButtonText}>
               {isDisabled ? 'Enable' : 'Disable'}
             </Text>
