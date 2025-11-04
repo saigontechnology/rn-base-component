@@ -306,15 +306,16 @@ export const Slider: SliderComponentProps = ({
 
   return (
     <GestureHandlerRootView testID="slider">
-      <Container style={[!!sliderWidth && {width: sliderWidth}, style ?? SliderTheme.style]}>
-        <Track style={trackStyle ?? SliderTheme.trackStyle} onLayout={getTrackWidth} />
+      <Container
+        style={[!!sliderWidth && {width: sliderWidth}, SliderTheme.style, StyleSheet.flatten(style)]}>
+        <Track style={[SliderTheme.trackStyle, StyleSheet.flatten(trackStyle)]} onLayout={getTrackWidth} />
         {!!actualShowTrackPoint && (
           <TrackPoint
             sliderWidth={sliderWidth ?? 200}
             totalPoint={totalPoint}
             hitSlopPoint={actualHitSlopPoint}
             activeOpacity={actualTapToSeek ? 0 : 1}
-            trackPointStyle={trackPointStyle ?? SliderTheme.trackPointStyle}
+            trackPointStyle={[SliderTheme.trackPointStyle, StyleSheet.flatten(trackPointStyle)]}
             onPressPoint={(point: number) => actualTapToSeek && onPressPoint(point)}
           />
         )}
@@ -329,12 +330,16 @@ export const Slider: SliderComponentProps = ({
         <Thumb
           text={actualMinimumValue?.toString()}
           bgColorLabelView={bgColorLabelView ?? SliderTheme.bgColorLabelView}
-          labelStyle={labelStyle ?? SliderTheme.labelStyle}
+          labelStyle={[SliderTheme.labelStyle, StyleSheet.flatten(labelStyle)]}
           alwaysShowValue={actualAlwaysShowValue}
           thumbSize={actualThumbSize}
           thumbComponent={thumbComponent}
           animatedProps={animatedProps}
-          thumbStyle={[thumbStyle ?? SliderTheme.thumbStyle, {left: -actualThumbSize.width / 2}]}
+          thumbStyle={[
+            SliderTheme.thumbStyle,
+            StyleSheet.flatten(thumbStyle),
+            {left: -actualThumbSize.width / 2},
+          ]}
           animatedThumbStyle={animatedThumbStyle}
           opacityStyle={opacityStyle}
           onGestureEvent={handler}

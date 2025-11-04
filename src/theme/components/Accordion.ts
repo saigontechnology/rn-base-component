@@ -1,8 +1,12 @@
+import type {StyleProp, ViewStyle} from 'react-native'
 import base from '../base'
-import type {ViewStyle} from 'react-native'
 import type {IFontWeight} from '../base/typography'
 
 export interface AccordionThemeProps {
+  /**
+   * Style for the wrapper container
+   */
+  wrapperStyle?: StyleProp<ViewStyle>
   // Container styles
   container: {
     paddingBottom: number
@@ -42,6 +46,7 @@ export interface AccordionThemeProps {
 }
 
 export const AccordionTheme: AccordionThemeProps = {
+  wrapperStyle: undefined,
   container: {
     paddingBottom: base.spacing.petite,
     overflow: 'hidden',
