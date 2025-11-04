@@ -11,7 +11,7 @@ export interface BaseProviderProps {
   theme?: ITheme
 }
 
-export const BaseProvider = ({children, theme = defaultTheme}: BaseProviderProps) => {
+export const BaseProvider: React.FC<BaseProviderProps> = ({children, theme = defaultTheme}) => {
   const [colorModeValue, setColorModeValue] = useState(theme?.config.initialColorMode)
 
   const isLight = useMemo(() => colorModeValue === 'light', [colorModeValue])
