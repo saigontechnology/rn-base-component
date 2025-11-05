@@ -22,7 +22,7 @@ export const IconsAndComponents = () => {
       <View style={demoStyles.example}>
         <Text style={demoStyles.exampleTitle}>Right Icon Component</Text>
         <CodeInput
-          length={6}
+          length={5}
           label="Verification Code"
           value="123456"
           rightComponent={<CheckIcon />}
