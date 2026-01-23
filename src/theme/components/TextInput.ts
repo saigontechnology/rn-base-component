@@ -72,6 +72,10 @@ export type TextInputThemeProps = Pick<TextInputProps, 'editable' | 'numberOfLin
    * Font size for error text
    */
   errorFontSize: number
+  /**
+   * Auto focus the input by touching it's container
+   */
+  focusOnTouch: boolean
 }
 
 export const TextInputTheme: TextInputThemeProps = {
@@ -107,4 +111,5 @@ export const TextInputTheme: TextInputThemeProps = {
   fontSize: 16,
   labelFontSize: 14,
   errorFontSize: 12,
+  focusOnTouch: false,
 }
