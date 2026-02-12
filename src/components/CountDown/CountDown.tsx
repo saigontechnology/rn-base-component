@@ -211,6 +211,7 @@ export const CountDown = forwardRef<CountDownRef, CountDownProps>(
 
         if (count === 0 && !allowNegative) {
           setStatus('finished')
+          setCountDownTime(0)
           return
         }
 

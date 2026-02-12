@@ -5,6 +5,8 @@ import type {
   TextProps,
   TextStyle,
   ViewStyle,
+  TouchableOpacityProps,
+  ViewProps,
 } from 'react-native'
 import {TextInput as RNTextInput, TouchableOpacity, View} from 'react-native'
 import styled from 'styled-components/native'
@@ -56,7 +58,7 @@ export interface TextInputProps extends RNTextInputProperties {
 
   /** Callback that is called when the text input is blurred */
   onBlur?: () => void
-  
+
   /** If true, the text input will be focused when the user touches the input */
   focusOnTouch?: boolean
 }
@@ -116,10 +118,15 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
 
     const componentFocusOnTouch = focusOnTouch ?? TextInputTheme.focusOnTouch ?? false
 
-    const ContainerComponent = componentFocusOnTouch ? TouchableOpacity : View
+    const ContainerComponent = componentFocusOnTouch
+      ? (TouchableOpacity as React.JSXElementConstructor<TouchableOpacityProps>)
+      : (View as React.JSXElementConstructor<ViewProps>)
 
     return (
-      <ContainerComponent style={containerStyle ?? TextInputTheme.containerStyle} onPress={componentFocusOnTouch ? handleFocus : undefined} activeOpacity={1}>
+      <ContainerComponent
+        style={containerStyle ?? TextInputTheme.containerStyle}
+        onPress={componentFocusOnTouch ? handleFocus : undefined}
+        activeOpacity={1}>
         {!!label && (
           <Title testID="test-title" style={labelStyle ?? TextInputTheme.labelStyle} {...labelProps}>
             {label}
