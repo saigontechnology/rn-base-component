@@ -1,4 +1,12 @@
-import React, {forwardRef, ForwardRefExoticComponent, useCallback, useImperativeHandle, useRef} from 'react'
+import React, {
+  forwardRef,
+  ForwardRefExoticComponent,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react'
 import type {
   StyleProp,
   TextInputProps as RNTextInputProperties,
@@ -8,7 +16,7 @@ import type {
   TouchableOpacityProps,
   ViewProps,
 } from 'react-native'
-import {TextInput as RNTextInput, TouchableOpacity, View} from 'react-native'
+import {Animated, TextInput as RNTextInput, TouchableOpacity, View} from 'react-native'
 import styled from 'styled-components/native'
 import TextInputOutlined from './TextInputOutlined'
 import {CustomIcon, CustomIconProps, Error} from './components'
@@ -61,6 +69,9 @@ export interface TextInputProps extends RNTextInputProperties {
 
   /** If true, the text input will be focused when the user touches the input */
   focusOnTouch?: boolean
+
+  /** If true, the label will animate from placeholder position to top-left when focused or has value */
+  animatedLabel?: boolean
 }
 
 interface CompoundedComponent
@@ -76,6 +87,8 @@ export interface InputContainerProps {
   multiline?: boolean
   isFocused?: boolean
 }
+
+const ANIMATION_DURATION = 150
 
 export const TextInput = forwardRef<TextInputRef, TextInputProps>(
   (
@@ -99,12 +112,42 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
       onSubmitEditing,
       onBlur,
       focusOnTouch,
+      animatedLabel,
+      value,
+      defaultValue,
+      placeholder,
       ...rest
     },
     ref,
   ) => {
     const TextInputTheme = useTheme().components.TextInput
     const inputRef = useRef<RNTextInput>(null)
+
+    // Track focus state and internal value for animated label
+    const [isFocused, setIsFocused] = useState(false)
+    const [hasValue, setHasValue] = useState(!!value || !!defaultValue)
+
+    // Animated value for label position (0 = placeholder position, 1 = top position)
+    const labelAnimatedValue = useRef(new Animated.Value(!!value || !!defaultValue ? 1 : 0)).current
+
+    // Update hasValue when controlled value changes
+    useEffect(() => {
+      if (value !== undefined) {
+        setHasValue(!!value)
+      }
+    }, [value])
+
+    // Animate label when focus or value changes
+    useEffect(() => {
+      if (animatedLabel && label) {
+        const shouldAnimate = isFocused || hasValue
+        Animated.timing(labelAnimatedValue, {
+          toValue: shouldAnimate ? 1 : 0,
+          duration: ANIMATION_DURATION,
+          useNativeDriver: false,
+        }).start()
+      }
+    }, [isFocused, hasValue, animatedLabel, label, labelAnimatedValue])
 
     useImperativeHandle(ref, () => ({
       focus: () => inputRef.current?.focus(),
@@ -116,18 +159,62 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
       inputRef.current?.focus()
     }, [])
 
+    const handleInputFocus = useCallback(() => {
+      setIsFocused(true)
+      onFocus?.()
+    }, [onFocus])
+
+    const handleInputBlur = useCallback(() => {
+      setIsFocused(false)
+      onBlur?.()
+    }, [onBlur])
+
+    const handleChangeText = useCallback(
+      (text: string) => {
+        setHasValue(!!text)
+        onChangeText?.(text)
+      },
+      [onChangeText],
+    )
+
     const componentFocusOnTouch = focusOnTouch ?? TextInputTheme.focusOnTouch ?? false
 
     const ContainerComponent = componentFocusOnTouch
       ? (TouchableOpacity as React.JSXElementConstructor<TouchableOpacityProps>)
       : (View as React.JSXElementConstructor<ViewProps>)
 
+    // Determine if we should show animated label
+    const showAnimatedLabel = animatedLabel && !!label
+
+    // Animated styles for label
+    const animatedLabelStyle = showAnimatedLabel
+      ? {
+          transform: [
+            {
+              translateY: labelAnimatedValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, -24],
+              }),
+            },
+            {
+              scale: labelAnimatedValue.interpolate({
+                inputRange: [0, 1],
+                outputRange: [1, 0.85],
+              }),
+            },
+          ],
+        }
+      : {}
+
+    // When animatedLabel is true, placeholder should be empty
+    const effectivePlaceholder = showAnimatedLabel ? '' : placeholder
+
     return (
       <ContainerComponent
         style={containerStyle ?? TextInputTheme.containerStyle}
         onPress={componentFocusOnTouch ? handleFocus : undefined}
         activeOpacity={1}>
-        {!!label && (
+        {!!label && !showAnimatedLabel && (
           <Title testID="test-title" style={labelStyle ?? TextInputTheme.labelStyle} {...labelProps}>
             {label}
             {!!isRequire && <StarText testID="test-startText"> *</StarText>}
@@ -139,19 +226,35 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
           onPress={handleFocus}
           disabled={editable ?? TextInputTheme.editable}>
           {!!leftComponent && leftComponent}
-          <TextInputComponent
-            testID="test-TextInputComponent"
-            ref={inputRef}
-            style={inputStyle ?? TextInputTheme.inputStyle}
-            editable={editable ?? TextInputTheme.editable}
-            multiline={multiline ?? TextInputTheme.multiline}
-            numberOfLines={numberOfLines ?? TextInputTheme.numberOfLines}
-            onChangeText={onChangeText}
-            onFocus={onFocus}
-            onSubmitEditing={onSubmitEditing}
-            onBlur={onBlur}
-            {...rest}
-          />
+          <InputWrapper>
+            {showAnimatedLabel && (
+              <AnimatedLabelContainer
+                style={animatedLabelStyle}
+                pointerEvents="none"
+                testID="test-animated-label">
+                <AnimatedLabelText style={labelStyle ?? TextInputTheme.labelStyle} {...labelProps}>
+                  {label}
+                  {!!isRequire && <StarText testID="test-startText"> *</StarText>}
+                </AnimatedLabelText>
+              </AnimatedLabelContainer>
+            )}
+            <TextInputComponent
+              testID="test-TextInputComponent"
+              ref={inputRef}
+              style={inputStyle ?? TextInputTheme.inputStyle}
+              editable={editable ?? TextInputTheme.editable}
+              multiline={multiline ?? TextInputTheme.multiline}
+              numberOfLines={numberOfLines ?? TextInputTheme.numberOfLines}
+              onChangeText={handleChangeText}
+              onFocus={handleInputFocus}
+              onSubmitEditing={onSubmitEditing}
+              onBlur={handleInputBlur}
+              value={value}
+              defaultValue={defaultValue}
+              placeholder={effectivePlaceholder}
+              {...rest}
+            />
+          </InputWrapper>
           {!!rightComponent && rightComponent}
         </TouchableContainer>
         {!!errorText && <Error errorProps={errorProps} errorText={errorText} />}
@@ -165,6 +268,23 @@ const TouchableContainer = styled.TouchableOpacity(({theme}) => ({
   borderColor: theme?.colors?.primaryBorder,
   height: theme?.sizes?.narrow,
   alignItems: 'center',
+}))
+
+const InputWrapper = styled.View({
+  flex: 1,
+  justifyContent: 'center',
+})
+
+const AnimatedLabelContainer = styled(Animated.View)({
+  position: 'absolute',
+  left: 0,
+  right: 0,
+  transformOrigin: 'left center',
+})
+
+const AnimatedLabelText = styled(Animated.Text)(({theme}) => ({
+  fontSize: theme?.fontSizes?.sm,
+  color: theme?.colors?.textColor,
 }))
 
 const Title = styled.Text(({theme}) => ({
