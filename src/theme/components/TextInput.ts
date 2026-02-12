@@ -75,7 +75,16 @@ export type TextInputThemeProps = Pick<TextInputProps, 'editable' | 'numberOfLin
   /**
    * Auto focus the input by touching it's container
    */
-  focusOnTouch: boolean
+  focusOnTouch?: boolean
+  /**
+   * Distance between the label and the input
+   */
+  animatedLabelDistance?: number
+
+  /**
+   * Style for the animated label
+   */
+  animatedLabelStyle?: StyleProp<TextStyle>
 }
 
 export const TextInputTheme: TextInputThemeProps = {
@@ -112,4 +121,9 @@ export const TextInputTheme: TextInputThemeProps = {
   labelFontSize: 14,
   errorFontSize: 12,
   focusOnTouch: false,
+  animatedLabelDistance: 12,
+  animatedLabelStyle: {
+    fontSize: 16,
+    color: base.colors.black,
+  },
 }
