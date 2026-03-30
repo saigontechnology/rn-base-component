@@ -1,4 +1,5 @@
 import React from 'react'
+import {StyleSheet} from 'react-native'
 import styled from 'styled-components/native'
 import type {TextProps, TextStyle} from 'react-native'
 import {useTheme} from '../../hooks'
@@ -79,12 +80,7 @@ export const Typography: React.FC<TypographyProps> = ({
   return (
     <StyledText
       color={actualColor}
-      style={[
-        {
-          ...variantStyles,
-          ...(typeof style === 'object' ? style : {}),
-        },
-      ]}
+      style={[TypographyTheme.style, variantStyles, StyleSheet.flatten(style)]}
       {...rest}
     />
   )

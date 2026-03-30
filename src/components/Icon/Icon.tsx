@@ -46,7 +46,7 @@ export const Icon: React.FunctionComponent<IconProps> = ({
       disabled={(!onPress && !onLongPress) || (disabled ?? IconTheme.disabled)}
       onPress={onPress}
       onLongPress={onLongPress}
-      style={buttonStyle ?? IconTheme.buttonStyle}
+      style={[IconTheme.buttonStyle, StyleSheet.flatten(buttonStyle)]}
       hitSlop={hitSlop}>
       <Image
         testID="icon-image"
@@ -57,7 +57,8 @@ export const Icon: React.FunctionComponent<IconProps> = ({
             height: size ?? IconTheme.size,
             tintColor: color ?? IconTheme.color,
           },
-          StyleSheet.flatten(style ?? IconTheme.style),
+          IconTheme.style,
+          StyleSheet.flatten(style),
         ]}
         resizeMode={resizeMode ?? IconTheme.resizeMode}
       />
