@@ -553,6 +553,7 @@ const RequiredStar = styled.Text(({theme}) => ({
 const ComponentRow = styled.View({
   flexDirection: 'row',
   alignItems: 'center',
+  justifyContent: 'center',
 })
 
 const CellWrapperStyled = styled.View({})
