@@ -6,7 +6,7 @@ import type {
   TextStyle,
   ViewStyle,
 } from 'react-native'
-import {TextInput as RNTextInput, StyleSheet, View} from 'react-native'
+import {TextInput as RNTextInput, TouchableOpacity, StyleSheet, View} from 'react-native'
 import styled from 'styled-components/native'
 import TextInputOutlined from './TextInputOutlined'
 import {CustomIcon, CustomIconProps, Error} from './components'
@@ -56,6 +56,9 @@ export interface TextInputProps extends RNTextInputProperties {
 
   /** Callback that is called when the text input is blurred */
   onBlur?: () => void
+
+  /** If true, the text input will be focused when the user touches the input */
+  focusOnTouch?: boolean
 }
 
 interface CompoundedComponent
@@ -93,6 +96,7 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
       onFocus,
       onSubmitEditing,
       onBlur,
+      focusOnTouch,
       ...rest
     },
     ref,
@@ -110,8 +114,15 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
       inputRef.current?.focus()
     }, [])
 
+    const componentFocusOnTouch = focusOnTouch ?? TextInputTheme.focusOnTouch ?? false
+
+    const ContainerComponent = componentFocusOnTouch ? TouchableOpacity : View
+
     return (
-      <View style={[TextInputTheme.containerStyle, StyleSheet.flatten(containerStyle)]}>
+      <ContainerComponent
+        style={[TextInputTheme.containerStyle, StyleSheet.flatten(containerStyle)]}
+        onPress={componentFocusOnTouch ? handleFocus : undefined}
+        activeOpacity={1}>
         {!!label && (
           <Title
             testID="test-title"
@@ -143,7 +154,7 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
           {!!rightComponent && rightComponent}
         </TouchableContainer>
         {!!errorText && <Error errorProps={errorProps} errorText={errorText} />}
-      </View>
+      </ContainerComponent>
     )
   },
 ) as CompoundedComponent
