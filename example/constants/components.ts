@@ -27,9 +27,10 @@ export const COMPONENTS: ComponentItem[] = [
     id: 'text-input',
     name: 'TextInput',
     description: 'Text input fields with flat and outlined variants',
+    route: '/text-input',
     icon: '📝',
     category: 'Input',
-    status: 'Coming Soon',
+    status: 'Complete',
   },
   {
     id: 'button',
