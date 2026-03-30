@@ -7,6 +7,7 @@ import {
   ImageStyle,
   ImageSourcePropType,
   TouchableWithoutFeedbackProps,
+  StyleSheet,
 } from 'react-native'
 import Animated, {
   useAnimatedStyle,
@@ -211,7 +212,7 @@ export const Checkbox = forwardRef<ICheckboxMethods, ICheckboxProps>(
     return (
       <Container
         testID="container"
-        style={style}
+        style={[CheckboxTheme.style, StyleSheet.flatten(style)]}
         disabled={disabled}
         onPressIn={bounceInEffect}
         onPressOut={bounceOutEffect}

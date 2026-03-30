@@ -10,6 +10,7 @@ import React, {
 import {
   KeyboardTypeOptions,
   StyleProp,
+  StyleSheet,
   TextInput,
   TextInputProps,
   TextProps,
@@ -451,7 +452,7 @@ export const CodeInput = forwardRef<CodeInputRef, CodeInputProps>(
     }
 
     return (
-      <Container testID={testID} style={containerStyle}>
+      <Container testID={testID} style={[CodeInputTheme.containerStyle, StyleSheet.flatten(containerStyle)]}>
         {labelComponent ? (
           <LabelContainer testID={`${testID}-label-container`}>
             {labelComponent}

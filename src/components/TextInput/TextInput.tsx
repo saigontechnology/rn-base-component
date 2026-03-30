@@ -6,7 +6,7 @@ import type {
   TextStyle,
   ViewStyle,
 } from 'react-native'
-import {TextInput as RNTextInput, TouchableOpacity, View} from 'react-native'
+import {TextInput as RNTextInput, TouchableOpacity, StyleSheet, View} from 'react-native'
 import styled from 'styled-components/native'
 import TextInputOutlined from './TextInputOutlined'
 import {CustomIcon, CustomIconProps, Error} from './components'
@@ -56,7 +56,7 @@ export interface TextInputProps extends RNTextInputProperties {
 
   /** Callback that is called when the text input is blurred */
   onBlur?: () => void
-  
+
   /** If true, the text input will be focused when the user touches the input */
   focusOnTouch?: boolean
 }
@@ -79,7 +79,7 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
   (
     {
       containerStyle,
-      editable,
+      editable = true,
       inputContainerStyle,
       inputStyle,
       label,
@@ -119,23 +119,29 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
     const ContainerComponent = componentFocusOnTouch ? TouchableOpacity : View
 
     return (
-      <ContainerComponent style={containerStyle ?? TextInputTheme.containerStyle} onPress={componentFocusOnTouch ? handleFocus : undefined} activeOpacity={1}>
+      <ContainerComponent
+        style={[TextInputTheme.containerStyle, StyleSheet.flatten(containerStyle)]}
+        onPress={componentFocusOnTouch ? handleFocus : undefined}
+        activeOpacity={1}>
         {!!label && (
-          <Title testID="test-title" style={labelStyle ?? TextInputTheme.labelStyle} {...labelProps}>
+          <Title
+            testID="test-title"
+            style={[TextInputTheme.labelStyle, StyleSheet.flatten(labelStyle)]}
+            {...labelProps}>
             {label}
             {!!isRequire && <StarText testID="test-startText"> *</StarText>}
           </Title>
         )}
         <TouchableContainer
-          style={inputContainerStyle ?? TextInputTheme.inputContainerStyle}
+          style={[TextInputTheme.inputContainerStyle, StyleSheet.flatten(inputContainerStyle)]}
           activeOpacity={1}
           onPress={handleFocus}
-          disabled={editable ?? TextInputTheme.editable}>
+          disabled={!editable}>
           {!!leftComponent && leftComponent}
           <TextInputComponent
             testID="test-TextInputComponent"
             ref={inputRef}
-            style={inputStyle ?? TextInputTheme.inputStyle}
+            style={[TextInputTheme.inputStyle, StyleSheet.flatten(inputStyle)]}
             editable={editable ?? TextInputTheme.editable}
             multiline={multiline ?? TextInputTheme.multiline}
             numberOfLines={numberOfLines ?? TextInputTheme.numberOfLines}
@@ -156,7 +162,7 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
 const TouchableContainer = styled.TouchableOpacity(({theme}) => ({
   flexDirection: 'row',
   borderColor: theme?.colors?.primaryBorder,
-  height: theme?.sizes?.narrow,
+  height: theme?.sizes?.average,
   alignItems: 'center',
 }))
 

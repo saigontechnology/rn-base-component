@@ -1,4 +1,4 @@
-import type {TextStyle} from 'react-native'
+import type {StyleProp, TextStyle} from 'react-native'
 import base from '../base'
 // Define types locally since TypographyProps is not exported
 export type TypographyVariant = 'h1' | 'h2' | 'regular' | 'bold'
@@ -12,6 +12,10 @@ export type TypographyThemeProps = Pick<TypographyProps, 'color' | 'variant'> & 
    * Default typography variant styles
    */
   variantStyles: Record<TypographyVariant, TextStyle>
+  /**
+   * Default style for typography component
+   */
+  style?: StyleProp<TextStyle>
 }
 
 export const TypographyTheme: TypographyThemeProps = {
@@ -39,4 +43,5 @@ export const TypographyTheme: TypographyThemeProps = {
       lineHeight: 24,
     },
   },
+  style: undefined,
 }
