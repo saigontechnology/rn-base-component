@@ -158,8 +158,8 @@ export const RadioButton = forwardRef<View, IRadioButtonProps>(
         <LabelTextView
           disabled={!!(disabled ?? RadioButtonTheme.disabled)}
           disableOpacity={disableOpacity ?? RadioButtonTheme.disableOpacity}
-          style={textContainerStyle ?? RadioButtonTheme.textContainerStyle}>
-          <LabelText style={textStyle ?? RadioButtonTheme.textStyle}>{label}</LabelText>
+          style={[RadioButtonTheme.textContainerStyle, StyleSheet.flatten(textContainerStyle)]}>
+          <LabelText style={[RadioButtonTheme.textStyle, StyleSheet.flatten(textStyle)]}>{label}</LabelText>
         </LabelTextView>
       ) : null)
 
@@ -170,7 +170,9 @@ export const RadioButton = forwardRef<View, IRadioButtonProps>(
     }
 
     return (
-      <RadioButtonWrapper testID="container" style={wrapperStyle ?? RadioButtonTheme.wrapperStyle}>
+      <RadioButtonWrapper
+        testID="container"
+        style={[RadioButtonTheme.wrapperStyle, StyleSheet.flatten(wrapperStyle)]}>
         <Bounceable
           testID="bounceable"
           ref={ref}
@@ -187,7 +189,8 @@ export const RadioButton = forwardRef<View, IRadioButtonProps>(
                 disabled ?? RadioButtonTheme.disabled ? disableOpacity ?? RadioButtonTheme.disableOpacity : 1,
               borderWidth: RadioButtonTheme.borderWidth,
             },
-            style ?? RadioButtonTheme.style,
+            RadioButtonTheme.style,
+            style,
           ])}
           onPress={handlePress}
           {...rest}>
@@ -197,7 +200,7 @@ export const RadioButton = forwardRef<View, IRadioButtonProps>(
             inner={inner}
             isActive={!!(value ?? isActive)}
             innerBackgroundColor={innerBackgroundColor ?? RadioButtonTheme.innerBackgroundColor ?? '#007AFF'}
-            style={innerContainerStyle ?? RadioButtonTheme.innerContainerStyle}
+            style={[RadioButtonTheme.innerContainerStyle, StyleSheet.flatten(innerContainerStyle)]}
             testID="circle"
           />
         </Bounceable>
