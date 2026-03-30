@@ -5,6 +5,8 @@ import type {
   TextProps,
   TextStyle,
   ViewStyle,
+  TouchableOpacityProps,
+  ViewProps,
 } from 'react-native'
 import {TextInput as RNTextInput, TouchableOpacity, StyleSheet, View} from 'react-native'
 import styled from 'styled-components/native'
@@ -116,7 +118,9 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
 
     const componentFocusOnTouch = focusOnTouch ?? TextInputTheme.focusOnTouch ?? false
 
-    const ContainerComponent = componentFocusOnTouch ? TouchableOpacity : View
+    const ContainerComponent = componentFocusOnTouch
+      ? (TouchableOpacity as React.JSXElementConstructor<TouchableOpacityProps>)
+      : (View as React.JSXElementConstructor<ViewProps>)
 
     return (
       <ContainerComponent
