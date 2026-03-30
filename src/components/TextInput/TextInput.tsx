@@ -76,7 +76,7 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
   (
     {
       containerStyle,
-      editable,
+      editable = true,
       inputContainerStyle,
       inputStyle,
       label,
