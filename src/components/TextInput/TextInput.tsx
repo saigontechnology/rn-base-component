@@ -100,7 +100,7 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
   (
     {
       containerStyle,
-      editable,
+      editable = true,
       inputContainerStyle,
       inputStyle,
       label,
@@ -236,7 +236,7 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
           style={[TextInputTheme.inputContainerStyle, StyleSheet.flatten(inputContainerStyle)]}
           activeOpacity={1}
           onPress={handleFocus}
-          disabled={editable ?? TextInputTheme.editable}>
+          disabled={!editable}>
           {!!leftComponent && leftComponent}
           <InputWrapper>
             {showAnimatedLabel && (
@@ -261,7 +261,7 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
               testID="test-TextInputComponent"
               ref={inputRef}
               style={[textInputBasedStyle, TextInputTheme.inputStyle, StyleSheet.flatten(inputStyle)]}
-              editable={editable ?? TextInputTheme.editable}
+              editable={editable}
               multiline={multiline ?? TextInputTheme.multiline}
               numberOfLines={numberOfLines ?? TextInputTheme.numberOfLines}
               onChangeText={handleChangeText}
@@ -285,7 +285,7 @@ export const TextInput = forwardRef<TextInputRef, TextInputProps>(
 const TouchableContainer = styled.TouchableOpacity(({theme}) => ({
   flexDirection: 'row',
   borderColor: theme?.colors?.primaryBorder,
-  height: theme?.sizes?.narrow,
+  height: theme?.sizes?.average,
   alignItems: 'center',
 }))
 

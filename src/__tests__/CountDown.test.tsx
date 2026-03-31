@@ -1,4 +1,5 @@
 import React from 'react'
+import {StyleSheet} from 'react-native'
 import {render, act, waitFor} from '@testing-library/react-native'
 import dayjs from 'dayjs'
 import {CountDown, CountDownRef} from '../components/CountDown'
@@ -365,7 +366,8 @@ describe('CountDown Component', () => {
       const {getByText} = renderWithProvider(<CountDown value={30} fontSize={24} textColor="#FF0000" />)
 
       const countdownText = getByText('30s')
-      expect(countdownText.props.style).toMatchObject({
+      const flatStyle = StyleSheet.flatten(countdownText.props.style)
+      expect(flatStyle).toMatchObject({
         fontSize: 24,
         color: '#FF0000',
       })

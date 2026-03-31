@@ -1,4 +1,5 @@
 import React, {PropsWithChildren} from 'react'
+import {StyleSheet} from 'react-native'
 import type {StyleProp, ViewStyle} from 'react-native'
 import styled from 'styled-components/native'
 import {activeOpacity} from '../../helpers'
@@ -45,7 +46,7 @@ export const Card: React.FC<CardProps> = ({
     <CardWrapper
       onPress={onPress}
       activeOpacity={onPress ? activeOpacity.low : activeOpacity.none}
-      style={style}
+      style={[CardTheme.style, StyleSheet.flatten(style)]}
       padding={padding ?? CardTheme.padding}
       borderRadius={borderRadius ?? CardTheme.borderRadius}
       backgroundColor={backgroundColor ?? CardTheme.backgroundColor}

@@ -88,7 +88,6 @@ export type TextInputThemeProps = Pick<TextInputProps, 'editable' | 'numberOfLin
 }
 
 export const TextInputTheme: TextInputThemeProps = {
-  editable: true,
   numberOfLines: 1,
   multiline: false,
   containerStyle: undefined,

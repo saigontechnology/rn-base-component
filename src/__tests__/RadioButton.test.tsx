@@ -54,7 +54,7 @@ describe('RadioButton test', () => {
     const {getByTestId} = renderWithProvider(<RadioButton initial={true} />)
     const circle = getByTestId('circle')
 
-    expect(circle.props.style.backgroundColor).toBe('#004282')
+    expect(StyleSheet.flatten(circle.props.style).backgroundColor).toBe('#004282')
   })
 
   it('should be remain state', () => {
@@ -65,6 +65,6 @@ describe('RadioButton test', () => {
     fireEvent.press(radionButton)
     expect(onPressMock).not.toHaveBeenCalled()
 
-    expect(circle.props.style.backgroundColor).toBe('transparent')
+    expect(StyleSheet.flatten(circle.props.style).backgroundColor).toBe('transparent')
   })
 })

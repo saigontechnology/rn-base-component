@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import React, {forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState} from 'react'
-import {type ViewProps, type TextStyle, type StyleProp} from 'react-native'
+import {type ViewProps, type TextStyle, type StyleProp, StyleSheet} from 'react-native'
 import styled from 'styled-components/native'
 import dayjs from 'dayjs'
 import {Text} from '../Text/Text'
@@ -282,7 +282,7 @@ export const CountDown = forwardRef<CountDownRef, CountDownProps>(
           fontSize={fontSize || CountDownTheme.fontSize}
           color={textColor || CountDownTheme.textColor}
           fontFamily={fontFamily || CountDownTheme.fontFamily}
-          style={textStyle || CountDownTheme.textStyle}>
+          style={[CountDownTheme.textStyle, StyleSheet.flatten(textStyle)]}>
           {value}
         </TimeText>
         {showLabels && (
@@ -290,7 +290,7 @@ export const CountDown = forwardRef<CountDownRef, CountDownProps>(
             fontSize={CountDownTheme.labelFontSize}
             color={textColor || CountDownTheme.labelColor}
             fontFamily={fontFamily || CountDownTheme.fontFamily}
-            style={unitTextStyle || CountDownTheme.unitTextStyle}>
+            style={[CountDownTheme.unitTextStyle, StyleSheet.flatten(unitTextStyle)]}>
             {timeLabels[unit.toLowerCase() as keyof typeof timeLabels]}
           </LabelText>
         )}
@@ -299,7 +299,7 @@ export const CountDown = forwardRef<CountDownRef, CountDownProps>(
             fontSize={fontSize || CountDownTheme.fontSize}
             color={textColor || CountDownTheme.textColor}
             fontFamily={fontFamily || CountDownTheme.fontFamily}
-            style={textStyle || CountDownTheme.textStyle}>
+            style={[CountDownTheme.textStyle, StyleSheet.flatten(textStyle)]}>
             {separator}
           </SeparatorText>
         )}
@@ -320,7 +320,7 @@ export const CountDown = forwardRef<CountDownRef, CountDownProps>(
 
       return (
         <CountDownContainer
-          style={style}
+          style={[CountDownTheme.style, StyleSheet.flatten(style)]}
           testID={testID}
           accessible={accessible}
           accessibilityRole={accessibilityRole}
@@ -333,7 +333,7 @@ export const CountDown = forwardRef<CountDownRef, CountDownProps>(
               fontSize={fontSize || CountDownTheme.fontSize}
               color={textColor || CountDownTheme.textColor}
               fontFamily={fontFamily || CountDownTheme.fontFamily}
-              style={textStyle || CountDownTheme.textStyle}>
+              style={[CountDownTheme.textStyle, StyleSheet.flatten(textStyle)]}>
               -
             </SeparatorText>
           )}
@@ -359,7 +359,7 @@ export const CountDown = forwardRef<CountDownRef, CountDownProps>(
       : `Countdown: ${countDownTime} seconds`
     return (
       <SimpleCountDownContainer
-        style={style}
+        style={[CountDownTheme.style, StyleSheet.flatten(style)]}
         testID={testID}
         accessible={accessible}
         accessibilityRole={accessibilityRole}
@@ -369,7 +369,7 @@ export const CountDown = forwardRef<CountDownRef, CountDownProps>(
           color={textColor || CountDownTheme.textColor}
           fontSize={fontSize || CountDownTheme.fontSize}
           fontFamily={fontFamily || CountDownTheme.fontFamily}
-          style={textStyle || CountDownTheme.textStyle}>
+          style={[CountDownTheme.textStyle, StyleSheet.flatten(textStyle)]}>
           {countDownTime}s
         </SimpleCountDownText>
       </SimpleCountDownContainer>
