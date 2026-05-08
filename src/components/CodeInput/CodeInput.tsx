@@ -58,6 +58,8 @@ interface CodeInputProps extends TextInputProps {
   onClear?: () => void
 
   clearOtpLabel?: string
+
+  splitDigits?: number
 }
 
 const DEFAULT_LENGTH = 6
@@ -79,6 +81,7 @@ export const CodeInput: React.FC<CodeInputProps> = ({
   placeholderTextColor,
   onClear,
   clearOtpLabel,
+  splitDigits = 3,
   ...rest
 }) => {
   const textInputRef = useRef<TextInput>(null)
@@ -175,12 +178,14 @@ export const CodeInput: React.FC<CodeInputProps> = ({
               {renderCell(isFocused, code[index])}
             </Cell>
           </View>
-          {!!(index === 2) && <Text style={styles.dash}>-</Text>}
+          {splitDigits > 0 && (index + 1) % splitDigits === 0 && index !== length - 1 && (
+            <Text style={styles.dash}>-</Text>
+          )}
         </View>,
       )
     }
     return cells
-  }, [length, code, cellStyle, filledCellStyle, focusCellStyle, renderCell, handleCellPress])
+  }, [length, code, cellStyle, filledCellStyle, focusCellStyle, splitDigits, renderCell, handleCellPress])
 
   return (
     <View>
